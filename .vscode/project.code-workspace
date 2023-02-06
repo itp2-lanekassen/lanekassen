@@ -1,0 +1,24 @@
+{
+  "folders": [
+    {
+      "name": "ROOT",
+      "path": "../"
+    },
+    {
+      "name": "frontend",
+      "path": "../frontend/"
+    },
+    {
+      "name": "backend",
+      "path": "../backend/"
+    },
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      "./frontend"
+    ],
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true 
+    }
+  }
+}
