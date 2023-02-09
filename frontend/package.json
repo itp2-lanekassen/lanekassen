@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "18"
+  },
+  "engineStrict": true,
   "scripts": {
     "prepare": "cd .. && husky install frontend/.husky",
     "dev": "vite",
