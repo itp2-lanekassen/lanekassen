@@ -1,3 +1,4 @@
+using Lanekassen.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lanekassen.Controllers;

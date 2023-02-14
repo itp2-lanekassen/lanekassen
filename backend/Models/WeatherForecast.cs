@@ -1,4 +1,4 @@
-namespace Lanekassen;
+namespace Lanekassen.Models;
 
 public class WeatherForecast {
   public DateTime Date { get; set; }
