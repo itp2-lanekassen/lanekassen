@@ -1,0 +1,33 @@
+root = true
+
+# All files
+[*]
+indent_style = space
+
+# C# files
+[*.cs]
+
+#### Core EditorConfig Options ####
+
+# Indentation and spacing
+indent_size = 2
+tab_width = 2
+
+# New line preferences
+insert_final_newline = true
+
+csharp_new_line_before_catch = false
+csharp_new_line_before_else = false
+csharp_new_line_before_finally = false
+csharp_new_line_before_members_in_anonymous_types = false
+csharp_new_line_before_members_in_object_initializers = false
+csharp_new_line_before_open_brace = none
+csharp_new_line_between_query_expression_clauses = false
+
+csharp_style_namespace_declarations = file_scoped
+
+# Default severity for analyzer diagnostics with category 'Style' (escalated to build warnings)
+dotnet_analyzer_diagnostic.category-Style.severity = warning
+
+[/Models/**]
+dotnet_diagnostic.CS8618.severity = none
