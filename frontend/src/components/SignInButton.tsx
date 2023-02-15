@@ -11,7 +11,7 @@ export const SignInButton = () => {
   const handleLogin = (loginType: string) => {
     if (loginType === 'redirect') {
       instance.loginRedirect(loginRequest).catch((e) => {
-        console.error;
+        console.error(e);
       });
     }
   };
