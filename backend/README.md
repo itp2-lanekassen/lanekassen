@@ -7,12 +7,16 @@ Running .NET 6
 Open postgres cli and enter:
 
 ```sql
--- create the database
+-- Create the database
 create database lanekassen;
--- create the user
+-- Create the user
 create user lanekassen_admin with password 'lanekassen-2023';
--- add user to database
+-- Add user to database
 grant all privileges on database lanekassen to lanekassen_admin;
+-- Change to new database 
+\c lanekassen
+-- Grant rights
+grant all on schema public to lanekassen_admin;
 ```
 
 Installing entity framework:
