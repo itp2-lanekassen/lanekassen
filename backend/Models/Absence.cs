@@ -1,6 +1,7 @@
 namespace Lanekassen.Models;
 
-public class Absence : BaseEntity {
+public class Absence {
+  public int AbsenceId { get; set; }
   public DateTime StartDate { get; set; }
   public DateTime EndDate { get; set; }
   public string? Comment { get; set; }
