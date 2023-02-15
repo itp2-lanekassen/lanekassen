@@ -6,8 +6,9 @@ public class User : BaseEntity {
   public string Email { get; set; } = "";
   public string EmploymentType { get; set; } = "";
   public bool Admin { get; set; }
-  public virtual Role Role { get; set; }
-  public virtual Team Team { get; set; }
   public virtual Section Section { get; set; }
-  public virtual SubjectField SubjectField { get; set; }
+  public virtual ICollection<SubjectField> SubjectFields { get; set; }
+  public virtual ICollection<Role>? Roles { get; set; }
+  public virtual ICollection<Team>? Teams { get; set; }
+  public virtual ICollection<Absence>? Absences { get; set; }
 }

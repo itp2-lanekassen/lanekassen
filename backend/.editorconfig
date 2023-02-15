@@ -28,3 +28,6 @@ csharp_style_namespace_declarations = file_scoped
 
 # Default severity for analyzer diagnostics with category 'Style' (escalated to build warnings)
 dotnet_analyzer_diagnostic.category-Style.severity = warning
+
+[/Models/**]
+dotnet_diagnostic.CS8618.severity = none
