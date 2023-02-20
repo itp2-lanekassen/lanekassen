@@ -1,5 +1,9 @@
+
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Lanekassen.Models;
 
+[Table("SubjectField")]
 public class SubjectField {
   public int SubjectFieldId { get; set; }
   public string Name { get; set; } = "";

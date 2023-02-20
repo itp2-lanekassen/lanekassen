@@ -35,6 +35,23 @@ namespace Lanekassen.Migrations
                     b.HasIndex("SectionsSectionId");
 
                     b.ToTable("DepartmentSection");
+
+                    b.HasData(
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            SectionsSectionId = 706969
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            SectionsSectionId = 706970
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            SectionsSectionId = 706971
+                        });
                 });
 
             modelBuilder.Entity("Lanekassen.Models.Absence", b =>
@@ -445,6 +462,18 @@ namespace Lanekassen.Migrations
                     b.HasIndex("SectionId");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 666969,
+                            Admin = false,
+                            Email = "john@doe.com",
+                            EmploymentType = 0,
+                            FirstName = "John",
+                            LastName = "Doe",
+                            SectionId = 706969
+                        });
                 });
 
             modelBuilder.Entity("RoleUser", b =>
@@ -460,6 +489,13 @@ namespace Lanekassen.Migrations
                     b.HasIndex("UsersUserId");
 
                     b.ToTable("RoleUser");
+
+                    b.HasData(
+                        new
+                        {
+                            RolesRoleId = 736969,
+                            UsersUserId = 666969
+                        });
                 });
 
             modelBuilder.Entity("SubjectFieldUser", b =>
@@ -475,6 +511,13 @@ namespace Lanekassen.Migrations
                     b.HasIndex("UsersUserId");
 
                     b.ToTable("SubjectFieldUser");
+
+                    b.HasData(
+                        new
+                        {
+                            SubjectFieldsSubjectFieldId = 716969,
+                            UsersUserId = 666969
+                        });
                 });
 
             modelBuilder.Entity("TeamUser", b =>
@@ -490,6 +533,13 @@ namespace Lanekassen.Migrations
                     b.HasIndex("UsersUserId");
 
                     b.ToTable("TeamUser");
+
+                    b.HasData(
+                        new
+                        {
+                            TeamsTeamId = 726969,
+                            UsersUserId = 666969
+                        });
                 });
 
             modelBuilder.Entity("DepartmentSection", b =>

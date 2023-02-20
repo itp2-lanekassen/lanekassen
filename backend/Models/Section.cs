@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Lanekassen.Models;
 
+[Table("Section")]
 public class Section {
   public int SectionId { get; set; }
   public string Name { get; set; } = "";

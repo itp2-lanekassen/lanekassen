@@ -12,7 +12,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add Database context
-builder.Services.AddDbContext<ApiDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("LanekassenDB")));
+builder.Services.AddDbContext<ApiDbContext>(opt => {
+  opt.UseNpgsql(builder.Configuration.GetConnectionString("LanekassenDB"));
+  opt.EnableSensitiveDataLogging(true);
+});
+
+
+
 
 WebApplication app = builder.Build();
 

@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lanekassen.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InititalCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -316,6 +316,16 @@ namespace Lanekassen.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "DepartmentSection",
+                columns: new[] { "DepartmentsDepartmentId", "SectionsSectionId" },
+                values: new object[,]
+                {
+                    { 696969, 706969 },
+                    { 696969, 706970 },
+                    { 696969, 706971 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "SubjectField",
                 columns: new[] { "SubjectFieldId", "DepartmentId", "Name" },
                 values: new object[,]
@@ -330,6 +340,26 @@ namespace Lanekassen.Migrations
                     { 716976, 696969, "IT Brukerstøtte" },
                     { 716977, 696969, "Rekruttering og kompetanse" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "UserId", "Admin", "Email", "EmploymentType", "FirstName", "LastName", "SectionId" },
+                values: new object[] { 666969, false, "john@doe.com", 0, "John", "Doe", 706969 });
+
+            migrationBuilder.InsertData(
+                table: "RoleUser",
+                columns: new[] { "RolesRoleId", "UsersUserId" },
+                values: new object[] { 736969, 666969 });
+
+            migrationBuilder.InsertData(
+                table: "SubjectFieldUser",
+                columns: new[] { "SubjectFieldsSubjectFieldId", "UsersUserId" },
+                values: new object[] { 716969, 666969 });
+
+            migrationBuilder.InsertData(
+                table: "TeamUser",
+                columns: new[] { "TeamsTeamId", "UsersUserId" },
+                values: new object[] { 726969, 666969 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Absence_TypeAbsenceTypeId",

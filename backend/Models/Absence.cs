@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Lanekassen.Models;
 
+[Table("Absence")]
 public class Absence {
   public int AbsenceId { get; set; }
   public DateTime StartDate { get; set; }

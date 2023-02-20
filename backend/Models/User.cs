@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Lanekassen.Models;
 
+[Table("User")]
 public class User {
   public int UserId { get; set; }
   public string FirstName { get; set; } = "";
@@ -12,4 +15,6 @@ public class User {
   public virtual ICollection<Role>? Roles { get; set; }
   public virtual ICollection<Team>? Teams { get; set; }
   public virtual ICollection<Absence>? Absences { get; set; }
+
+  
 }
