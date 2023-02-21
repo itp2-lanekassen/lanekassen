@@ -9,13 +9,13 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lanekassen.Migrations
 {
     /// <inheritdoc />
-    public partial class InititalCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AbsenceType",
+                name: "AbsenceTypes",
                 columns: table => new
                 {
                     AbsenceTypeId = table.Column<int>(type: "integer", nullable: false)
@@ -26,11 +26,11 @@ namespace Lanekassen.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AbsenceType", x => x.AbsenceTypeId);
+                    table.PrimaryKey("PK_AbsenceTypes", x => x.AbsenceTypeId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Department",
+                name: "Departments",
                 columns: table => new
                 {
                     DepartmentId = table.Column<int>(type: "integer", nullable: false)
@@ -40,11 +40,11 @@ namespace Lanekassen.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Department", x => x.DepartmentId);
+                    table.PrimaryKey("PK_Departments", x => x.DepartmentId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "Roles",
                 columns: table => new
                 {
                     RoleId = table.Column<int>(type: "integer", nullable: false)
@@ -53,11 +53,11 @@ namespace Lanekassen.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.RoleId);
+                    table.PrimaryKey("PK_Roles", x => x.RoleId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Section",
+                name: "Sections",
                 columns: table => new
                 {
                     SectionId = table.Column<int>(type: "integer", nullable: false)
@@ -66,11 +66,11 @@ namespace Lanekassen.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Section", x => x.SectionId);
+                    table.PrimaryKey("PK_Sections", x => x.SectionId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Team",
+                name: "Teams",
                 columns: table => new
                 {
                     TeamId = table.Column<int>(type: "integer", nullable: false)
@@ -79,11 +79,11 @@ namespace Lanekassen.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Team", x => x.TeamId);
+                    table.PrimaryKey("PK_Teams", x => x.TeamId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubjectField",
+                name: "SubjectFields",
                 columns: table => new
                 {
                     SubjectFieldId = table.Column<int>(type: "integer", nullable: false)
@@ -93,11 +93,11 @@ namespace Lanekassen.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubjectField", x => x.SubjectFieldId);
+                    table.PrimaryKey("PK_SubjectFields", x => x.SubjectFieldId);
                     table.ForeignKey(
-                        name: "FK_SubjectField_Department_DepartmentId",
+                        name: "FK_SubjectFields_Departments_DepartmentId",
                         column: x => x.DepartmentId,
-                        principalTable: "Department",
+                        principalTable: "Departments",
                         principalColumn: "DepartmentId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -113,45 +113,44 @@ namespace Lanekassen.Migrations
                 {
                     table.PrimaryKey("PK_DepartmentSection", x => new { x.DepartmentsDepartmentId, x.SectionsSectionId });
                     table.ForeignKey(
-                        name: "FK_DepartmentSection_Department_DepartmentsDepartmentId",
+                        name: "FK_DepartmentSection_Departments_DepartmentsDepartmentId",
                         column: x => x.DepartmentsDepartmentId,
-                        principalTable: "Department",
+                        principalTable: "Departments",
                         principalColumn: "DepartmentId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DepartmentSection_Section_SectionsSectionId",
+                        name: "FK_DepartmentSection_Sections_SectionsSectionId",
                         column: x => x.SectionsSectionId,
-                        principalTable: "Section",
+                        principalTable: "Sections",
                         principalColumn: "SectionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Email = table.Column<string>(type: "text", nullable: false),
                     EmploymentType = table.Column<int>(type: "integer", nullable: false),
                     Admin = table.Column<bool>(type: "boolean", nullable: false),
-                    SectionId = table.Column<int>(type: "integer", nullable: false)
+                    SectionId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.UserId);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_User_Section_SectionId",
+                        name: "FK_Users_Sections_SectionId",
                         column: x => x.SectionId,
-                        principalTable: "Section",
-                        principalColumn: "SectionId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Sections",
+                        principalColumn: "SectionId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Absence",
+                name: "Absences",
                 columns: table => new
                 {
                     AbsenceId = table.Column<int>(type: "integer", nullable: false)
@@ -159,22 +158,21 @@ namespace Lanekassen.Migrations
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: true),
-                    TypeAbsenceTypeId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    AbsenceTypeId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Absence", x => x.AbsenceId);
+                    table.PrimaryKey("PK_Absences", x => x.AbsenceId);
                     table.ForeignKey(
-                        name: "FK_Absence_AbsenceType_TypeAbsenceTypeId",
-                        column: x => x.TypeAbsenceTypeId,
-                        principalTable: "AbsenceType",
-                        principalColumn: "AbsenceTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Absences_AbsenceTypes_AbsenceTypeId",
+                        column: x => x.AbsenceTypeId,
+                        principalTable: "AbsenceTypes",
+                        principalColumn: "AbsenceTypeId");
                     table.ForeignKey(
-                        name: "FK_Absence_User_UserId",
+                        name: "FK_Absences_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -190,15 +188,15 @@ namespace Lanekassen.Migrations
                 {
                     table.PrimaryKey("PK_RoleUser", x => new { x.RolesRoleId, x.UsersUserId });
                     table.ForeignKey(
-                        name: "FK_RoleUser_Role_RolesRoleId",
+                        name: "FK_RoleUser_Roles_RolesRoleId",
                         column: x => x.RolesRoleId,
-                        principalTable: "Role",
+                        principalTable: "Roles",
                         principalColumn: "RoleId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RoleUser_User_UsersUserId",
+                        name: "FK_RoleUser_Users_UsersUserId",
                         column: x => x.UsersUserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -214,15 +212,15 @@ namespace Lanekassen.Migrations
                 {
                     table.PrimaryKey("PK_SubjectFieldUser", x => new { x.SubjectFieldsSubjectFieldId, x.UsersUserId });
                     table.ForeignKey(
-                        name: "FK_SubjectFieldUser_SubjectField_SubjectFieldsSubjectFieldId",
+                        name: "FK_SubjectFieldUser_SubjectFields_SubjectFieldsSubjectFieldId",
                         column: x => x.SubjectFieldsSubjectFieldId,
-                        principalTable: "SubjectField",
+                        principalTable: "SubjectFields",
                         principalColumn: "SubjectFieldId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SubjectFieldUser_User_UsersUserId",
+                        name: "FK_SubjectFieldUser_Users_UsersUserId",
                         column: x => x.UsersUserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -238,31 +236,31 @@ namespace Lanekassen.Migrations
                 {
                     table.PrimaryKey("PK_TeamUser", x => new { x.TeamsTeamId, x.UsersUserId });
                     table.ForeignKey(
-                        name: "FK_TeamUser_Team_TeamsTeamId",
+                        name: "FK_TeamUser_Teams_TeamsTeamId",
                         column: x => x.TeamsTeamId,
-                        principalTable: "Team",
+                        principalTable: "Teams",
                         principalColumn: "TeamId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeamUser_User_UsersUserId",
+                        name: "FK_TeamUser_Users_UsersUserId",
                         column: x => x.UsersUserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "AbsenceType",
+                table: "AbsenceTypes",
                 columns: new[] { "AbsenceTypeId", "Code", "ColorCode", "Name" },
                 values: new object[,]
                 {
-                    { 746969, "T", "", "Tilgjengelig fravær" },
-                    { 746970, "F", "", "Utilgjengelig fravær" },
-                    { 746971, "P/S", "", "Permisjon/Sykmelding" }
+                    { 746969, "T", "#bada55", "Tilgjengelig fravær" },
+                    { 746970, "F", "#bada55", "Utilgjengelig fravær" },
+                    { 746971, "P/S", "#bada55", "Permisjon/Sykmelding" }
                 });
 
             migrationBuilder.InsertData(
-                table: "Department",
+                table: "Departments",
                 columns: new[] { "DepartmentId", "Abbreviation", "Name" },
                 values: new object[,]
                 {
@@ -275,7 +273,7 @@ namespace Lanekassen.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Role",
+                table: "Roles",
                 columns: new[] { "RoleId", "Name" },
                 values: new object[,]
                 {
@@ -291,7 +289,7 @@ namespace Lanekassen.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Section",
+                table: "Sections",
                 columns: new[] { "SectionId", "Name" },
                 values: new object[,]
                 {
@@ -301,7 +299,7 @@ namespace Lanekassen.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Team",
+                table: "Teams",
                 columns: new[] { "TeamId", "Name" },
                 values: new object[,]
                 {
@@ -326,7 +324,7 @@ namespace Lanekassen.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "SubjectField",
+                table: "SubjectFields",
                 columns: new[] { "SubjectFieldId", "DepartmentId", "Name" },
                 values: new object[,]
                 {
@@ -342,7 +340,7 @@ namespace Lanekassen.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "User",
+                table: "Users",
                 columns: new[] { "UserId", "Admin", "Email", "EmploymentType", "FirstName", "LastName", "SectionId" },
                 values: new object[] { 666969, false, "john@doe.com", 0, "John", "Doe", 706969 });
 
@@ -362,13 +360,13 @@ namespace Lanekassen.Migrations
                 values: new object[] { 726969, 666969 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Absence_TypeAbsenceTypeId",
-                table: "Absence",
-                column: "TypeAbsenceTypeId");
+                name: "IX_Absences_AbsenceTypeId",
+                table: "Absences",
+                column: "AbsenceTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Absence_UserId",
-                table: "Absence",
+                name: "IX_Absences_UserId",
+                table: "Absences",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -382,8 +380,8 @@ namespace Lanekassen.Migrations
                 column: "UsersUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubjectField_DepartmentId",
-                table: "SubjectField",
+                name: "IX_SubjectFields_DepartmentId",
+                table: "SubjectFields",
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
@@ -397,8 +395,8 @@ namespace Lanekassen.Migrations
                 column: "UsersUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_SectionId",
-                table: "User",
+                name: "IX_Users_SectionId",
+                table: "Users",
                 column: "SectionId");
         }
 
@@ -406,7 +404,7 @@ namespace Lanekassen.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Absence");
+                name: "Absences");
 
             migrationBuilder.DropTable(
                 name: "DepartmentSection");
@@ -421,25 +419,25 @@ namespace Lanekassen.Migrations
                 name: "TeamUser");
 
             migrationBuilder.DropTable(
-                name: "AbsenceType");
+                name: "AbsenceTypes");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "SubjectField");
+                name: "SubjectFields");
 
             migrationBuilder.DropTable(
-                name: "Team");
+                name: "Teams");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Department");
+                name: "Departments");
 
             migrationBuilder.DropTable(
-                name: "Section");
+                name: "Sections");
         }
     }
 }

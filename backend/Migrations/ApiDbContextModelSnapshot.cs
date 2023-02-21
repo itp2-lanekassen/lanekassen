@@ -62,6 +62,9 @@ namespace Lanekassen.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AbsenceId"));
 
+                    b.Property<int?>("AbsenceTypeId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Comment")
                         .HasColumnType("text");
 
@@ -71,19 +74,16 @@ namespace Lanekassen.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("TypeAbsenceTypeId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("AbsenceId");
 
-                    b.HasIndex("TypeAbsenceTypeId");
+                    b.HasIndex("AbsenceTypeId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Absence");
+                    b.ToTable("Absences");
                 });
 
             modelBuilder.Entity("Lanekassen.Models.AbsenceType", b =>
@@ -108,28 +108,28 @@ namespace Lanekassen.Migrations
 
                     b.HasKey("AbsenceTypeId");
 
-                    b.ToTable("AbsenceType");
+                    b.ToTable("AbsenceTypes");
 
                     b.HasData(
                         new
                         {
                             AbsenceTypeId = 746969,
                             Code = "T",
-                            ColorCode = "",
+                            ColorCode = "#bada55",
                             Name = "Tilgjengelig fravær"
                         },
                         new
                         {
                             AbsenceTypeId = 746970,
                             Code = "F",
-                            ColorCode = "",
+                            ColorCode = "#bada55",
                             Name = "Utilgjengelig fravær"
                         },
                         new
                         {
                             AbsenceTypeId = 746971,
                             Code = "P/S",
-                            ColorCode = "",
+                            ColorCode = "#bada55",
                             Name = "Permisjon/Sykmelding"
                         });
                 });
@@ -152,7 +152,7 @@ namespace Lanekassen.Migrations
 
                     b.HasKey("DepartmentId");
 
-                    b.ToTable("Department");
+                    b.ToTable("Departments");
 
                     b.HasData(
                         new
@@ -207,7 +207,7 @@ namespace Lanekassen.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -271,7 +271,7 @@ namespace Lanekassen.Migrations
 
                     b.HasKey("SectionId");
 
-                    b.ToTable("Section");
+                    b.ToTable("Sections");
 
                     b.HasData(
                         new
@@ -310,7 +310,7 @@ namespace Lanekassen.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("SubjectField");
+                    b.ToTable("SubjectFields");
 
                     b.HasData(
                         new
@@ -383,7 +383,7 @@ namespace Lanekassen.Migrations
 
                     b.HasKey("TeamId");
 
-                    b.ToTable("Team");
+                    b.ToTable("Teams");
 
                     b.HasData(
                         new
@@ -448,20 +448,22 @@ namespace Lanekassen.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(0);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnOrder(1);
 
-                    b.Property<int>("SectionId")
+                    b.Property<int?>("SectionId")
                         .HasColumnType("integer");
 
                     b.HasKey("UserId");
 
                     b.HasIndex("SectionId");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
@@ -561,9 +563,7 @@ namespace Lanekassen.Migrations
                 {
                     b.HasOne("Lanekassen.Models.AbsenceType", "Type")
                         .WithMany("Absences")
-                        .HasForeignKey("TypeAbsenceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AbsenceTypeId");
 
                     b.HasOne("Lanekassen.Models.User", "User")
                         .WithMany("Absences")
@@ -591,9 +591,7 @@ namespace Lanekassen.Migrations
                 {
                     b.HasOne("Lanekassen.Models.Section", "Section")
                         .WithMany("Users")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SectionId");
 
                     b.Navigation("Section");
                 });
