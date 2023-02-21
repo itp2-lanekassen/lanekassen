@@ -1,11 +1,20 @@
 {
-  "UserId": 0,
-  "FirstName": "Ola",
-  "LastName": "Nordmann",
-  "Email": "ola@nordmann.com",
-  "EmploymentType": 0,
-  "Admin": false,
-  "SectionId": 706969,
-  "SubjectFields": [716969]
+  "firstName": "Ola",
+  "lastName": "Nordmann",
+  "email": "Ola@nordmann.no",
+  "employmentType": 1,
+  "admin": true,
+  "sectionId": 706971,
+  "subjectFields": [
+    716974
+  ],
+  "roles": [
+    736971
+  ],
+  "teams": [
+    726969
+  ],
+  "absences": [
+    0
+  ]
 }
-
