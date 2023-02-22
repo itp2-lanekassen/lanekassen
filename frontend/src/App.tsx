@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PageLayout } from './components/PageLayout';
+import { PageLayout } from './pages/PageLayout';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { Button } from 'react-bootstrap';
 import { loginRequest } from './authConfig';
