@@ -4,7 +4,8 @@ import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/
 import { loginRequest } from './authConfig';
 import { ProfileData } from './components/ProfileData';
 import { callMsGraph } from './graph';
-import RegisterButton from './components/RegisterButton';
+import RegisterButton from './components/SubmitButton';
+import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
 
 function ProfileContent() {
   const { instance, accounts } = useMsal();
@@ -47,7 +48,7 @@ function App() {
   return (
     <PageLayout>
       <AuthenticatedTemplate>
-        <RegisterButton />
+        <FirstTimeRegisterForm />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <p>You are not signed in! Please sign in.</p>
