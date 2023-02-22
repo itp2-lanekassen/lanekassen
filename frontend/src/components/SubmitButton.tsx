@@ -1,6 +1,7 @@
+import { ISubmitButton } from '@/types/types';
 import '../index.css';
 
-export default function SubmitButton(buttonText: string, handleClick: () => void) {
+export default function SubmitButton({ buttonText, handleClick }: ISubmitButton) {
   return (
     <div>
       <button
