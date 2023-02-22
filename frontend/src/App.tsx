@@ -45,16 +45,7 @@ function ProfileContent() {
 }
 
 function App() {
-  return (
-    <PageLayout>
-      <AuthenticatedTemplate>
-        <FirstTimeRegisterForm />
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
-        <p>You are not signed in! Please sign in.</p>
-      </UnauthenticatedTemplate>
-    </PageLayout>
-  );
+  return <FirstTimeRegisterForm />;
 }
 
 export default App;
