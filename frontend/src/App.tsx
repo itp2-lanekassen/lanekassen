@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap';
 import { loginRequest } from './authConfig';
 import { ProfileData } from './components/ProfileData';
 import { callMsGraph } from './graph';
+import RegisterButton from './components/RegisterButton';
 
 function ProfileContent() {
   const { instance, accounts } = useMsal();
@@ -49,7 +50,7 @@ function App() {
   return (
     <PageLayout>
       <AuthenticatedTemplate>
-        <ProfileContent />
+        <RegisterButton />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <p>You are not signed in! Please sign in.</p>
