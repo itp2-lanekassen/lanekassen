@@ -111,4 +111,15 @@ public class RoleController : ControllerBase {
     Role? role = await _context.Roles.FindAsync(id);
     return role == null ? BadRequest("Invalid role id") : Ok(role);
   }
+
+  [HttpGet("{id}/users")]
+  public async Task<IActionResult> GetRoleUsers(int id) {
+    Role? role = await _context.Roles.FindAsync(id);
+    if (role == null) {
+      return BadRequest("Invalid role id");
+    }
+
+    List<User> users = await _context.Users.Where(u => u.Roles.Contains(role)).ToListAsync();
+    return Ok(users);
+  }
 }

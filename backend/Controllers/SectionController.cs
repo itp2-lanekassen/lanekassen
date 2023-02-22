@@ -117,7 +117,7 @@ public class SectionController : ControllerBase {
     return section == null ? BadRequest("Invalid section id") : Ok(section.Users);
   }
 
-  [HttpGet("{id}/users/{userId}")]
+/*   [HttpGet("{id}/users/{userId}")]
   public async Task<IActionResult> GetSectionUser(int id, int userId) {
     Section? section = await _context.Sections.FindAsync(id);
     if (section == null) {
@@ -193,10 +193,10 @@ public class SectionController : ControllerBase {
             error = ex.Message
           }
       );
-    }
+    } 
 
     return Ok();
-  }
+}*/
 
 
 

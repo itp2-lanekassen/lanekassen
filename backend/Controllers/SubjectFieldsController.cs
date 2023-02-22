@@ -110,5 +110,12 @@ public class SubjectFieldsController : ControllerBase {
     return subjectField == null ? BadRequest("Invalid subject field id") : Ok(subjectField);
   }
 
+  [HttpGet("{id}/users")]
+  public async Task<IActionResult> GetSubjectFieldUsers(int id) {
+    SubjectField? subjectField = await _context.SubjectFields.FindAsync(id);
+    return subjectField == null ? BadRequest("Invalid subject field id") : Ok(subjectField.Users);
+  }
+
+
 
 }

@@ -112,4 +112,15 @@ public class TeamController : ControllerBase {
     return team == null ? BadRequest("Invalid team id") : Ok(team);
   }
 
+  [HttpGet("{id}/users")]
+  public async Task<IActionResult> GetTeamUsers(int id) {
+    Team? team = await _context.Teams.FindAsync(id);
+    if (team == null) {
+      return BadRequest("Invalid team id");
+    }
+
+    List<User> users = await _context.Users.Where(u => team.Users.Contains(u)).ToListAsync();
+    return Ok(users);
+  }
+
 }
