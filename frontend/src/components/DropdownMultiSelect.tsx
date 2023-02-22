@@ -16,7 +16,7 @@ export default function DropdownMultiSelect() {
         isMulti
         theme={(theme) => ({
           ...theme,
-          borderRadius: 15,
+          borderRadius: 20,
           colors: {
             ...theme.colors,
             primary25: '#F6F0F9',
