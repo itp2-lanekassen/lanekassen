@@ -3,7 +3,7 @@ import '../index.css';
 export default function RegisterButton() {
   return (
     <div>
-      <button className="button">Registrer deg</button>
+      <button className="flex text-white rounded-md bg-primary">Registrer deg</button>
     </div>
   );
 }

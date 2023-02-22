@@ -1,5 +1,4 @@
 import { useMsal } from '@azure/msal-react';
-import Button from 'react-bootstrap/Button';
 import { loginRequest } from '../authConfig';
 
 /**
@@ -16,8 +15,8 @@ export const SignInButton = () => {
     }
   };
   return (
-    <Button variant="secondary" className="ml-auto" onClick={() => handleLogin('redirect')}>
+    <button className="ml-auto" onClick={() => handleLogin('redirect')}>
       Sign in using Redirect
-    </Button>
+    </button>
   );
 };

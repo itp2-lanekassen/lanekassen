@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { PageLayout } from './pages/PageLayout';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import { Button } from 'react-bootstrap';
 import { loginRequest } from './authConfig';
 import { ProfileData } from './components/ProfileData';
 import { callMsGraph } from './graph';
@@ -38,9 +37,7 @@ function ProfileContent() {
       {graphData ? (
         <ProfileData graphData={graphData} />
       ) : (
-        <Button variant="secondary" onClick={RequestProfileData}>
-          Request Profile Information
-        </Button>
+        <button onClick={RequestProfileData}>Request Profile Information</button>
       )}
     </>
   );
