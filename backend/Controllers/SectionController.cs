@@ -125,11 +125,7 @@ public class SectionController : ControllerBase {
     }
 
     User? user = await _context.Users.FindAsync(userId);
-    if (user == null) {
-      return BadRequest("Invalid user id");
-    }
-
-    return !section.Users.Contains(user) ? BadRequest("User is not in section") : Ok(user);
+    return user == null ? BadRequest("Invalid user id") : !section.Users.Contains(user) ? BadRequest("User is not in section") : Ok(user);
   }
 
   [HttpPost("{id}/users/{userId}")]

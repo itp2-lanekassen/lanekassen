@@ -5,4 +5,5 @@ public class AbsenceTypeDTO {
   public string Code { get; set; } = "";
   public string ColorCode { get; set; } = "";
   public ICollection<int>? Absences { get; set; }
+  
 }

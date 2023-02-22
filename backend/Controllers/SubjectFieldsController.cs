@@ -25,6 +25,7 @@ public class SubjectFieldsController : ControllerBase {
 
     SubjectField? newSubjectField = new() {
       Name = subjectField.Name,
+      Users = await _context.Users.Where(u => subjectField.Users.Contains(u.UserId)).ToListAsync(),
     };
 
     try {
@@ -56,6 +57,7 @@ public class SubjectFieldsController : ControllerBase {
     }
 
     existingSubjectField.Name = subjectField.Name;
+    existingSubjectField.Users = await _context.Users.Where(u => subjectField.Users.Contains(u.UserId)).ToListAsync();
 
     try {
       _ = await _context.SaveChangesAsync();
