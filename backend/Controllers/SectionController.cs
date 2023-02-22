@@ -26,6 +26,7 @@ public class SectionController : ControllerBase {
     Section? newSection = new() {
       Name = section.Name,
       Users = await _context.Users.Where(u => section.Users.Contains(u.UserId)).ToListAsync(),
+      Departments = await _context.Departments.Where(d => section.Departments.Contains(d.DepartmentId)).ToListAsync()
     };
 
     try {
@@ -58,6 +59,7 @@ public class SectionController : ControllerBase {
 
     existingSection.Name = section.Name;
     existingSection.Users = await _context.Users.Where(u => section.Users.Contains(u.UserId)).ToListAsync();
+    existingSection.Departments = await _context.Departments.Where(d => section.Departments.Contains(d.DepartmentId)).ToListAsync();
 
     try {
       _ = _context.Sections.Update(existingSection);

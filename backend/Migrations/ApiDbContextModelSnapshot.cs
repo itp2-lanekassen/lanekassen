@@ -63,6 +63,7 @@ namespace Lanekassen.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AbsenceId"));
 
                     b.Property<int?>("AbsenceTypeId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("Comment")
@@ -571,9 +572,11 @@ namespace Lanekassen.Migrations
 
             modelBuilder.Entity("Lanekassen.Models.Absence", b =>
                 {
-                    b.HasOne("Lanekassen.Models.AbsenceType", "Type")
+                    b.HasOne("Lanekassen.Models.AbsenceType", "AbsenceType")
                         .WithMany("Absences")
-                        .HasForeignKey("AbsenceTypeId");
+                        .HasForeignKey("AbsenceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Lanekassen.Models.User", "User")
                         .WithMany("Absences")
@@ -581,7 +584,7 @@ namespace Lanekassen.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Type");
+                    b.Navigation("AbsenceType");
 
                     b.Navigation("User");
                 });

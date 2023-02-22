@@ -56,14 +56,22 @@ public class ApiDbContext : DbContext {
 
     _ = modelBuilder.Entity<SubjectField>().HasData(
       subjectField1,
-      new { SubjectFieldId = 716970, Name = "Applikasjonsdrift", department1.DepartmentId },
-      new { SubjectFieldId = 716971, Name = "Systemutvikling og test", department1.DepartmentId },
-      new { SubjectFieldId = 716972, Name = "Informasjonssikkerhet", department1.DepartmentId },
-      new { SubjectFieldId = 716973, Name = "Data og informasjonsforvaltning", department1.DepartmentId },
-      new { SubjectFieldId = 716974, Name = "Leverandørstyring og økonomi", department1.DepartmentId },
-      new { SubjectFieldId = 716975, Name = "Drift og avtaleeierskap", department1.DepartmentId },
-      new { SubjectFieldId = 716976, Name = "IT Brukerstøtte", department1.DepartmentId },
-      new { SubjectFieldId = 716977, Name = "Rekruttering og kompetanse", department1.DepartmentId }
+      new SubjectField { SubjectFieldId = 716970, Name = "Applikasjonsdrift", DepartmentId = department1.DepartmentId },
+      new SubjectField { SubjectFieldId = 716971, Name = "Systemutvikling og test", DepartmentId = department1.DepartmentId },
+      new SubjectField { SubjectFieldId = 716972, Name = "Informasjonssikkerhet", DepartmentId = department1.DepartmentId },
+      new SubjectField { SubjectFieldId = 716973, Name = "Data og informasjonsforvaltning", DepartmentId = department1.DepartmentId },
+      new SubjectField { SubjectFieldId = 716974, Name = "Leverandørstyring og økonomi", DepartmentId = department1.DepartmentId },
+      new SubjectField { SubjectFieldId = 716975, Name = "Drift og avtaleeierskap", DepartmentId = department1.DepartmentId },
+      new SubjectField { SubjectFieldId = 716976, Name = "IT Brukerstøtte", DepartmentId = department1.DepartmentId },
+      new SubjectField { SubjectFieldId = 716977, Name = "Rekruttering og kompetanse", DepartmentId = department1.DepartmentId }
+
+    /*       new { SubjectFieldId = 716971, Name = "Systemutvikling og test", department1.DepartmentId },
+          new { SubjectFieldId = 716972, Name = "Informasjonssikkerhet", department1.DepartmentId },
+          new { SubjectFieldId = 716973, Name = "Data og informasjonsforvaltning", department1.DepartmentId },
+          new { SubjectFieldId = 716974, Name = "Leverandørstyring og økonomi", department1.DepartmentId },
+          new { SubjectFieldId = 716975, Name = "Drift og avtaleeierskap", department1.DepartmentId },
+          new { SubjectFieldId = 716976, Name = "IT Brukerstøtte", department1.DepartmentId },
+          new { SubjectFieldId = 716977, Name = "Rekruttering og kompetanse", department1.DepartmentId } */
     );
 
     _ = modelBuilder.Entity<User>(e => {
@@ -86,6 +94,7 @@ public class ApiDbContext : DbContext {
           new { UsersUserId = 666969, TeamsTeamId = team1.TeamId }
         ));
 
+
       _ = e
         .HasMany(user => user.Roles)
         .WithMany(role => role.Users)
@@ -99,6 +108,22 @@ public class ApiDbContext : DbContext {
         .UsingEntity(j => j.HasData(
           new { UsersUserId = 666969, SubjectFieldsSubjectFieldId = subjectField1.SubjectFieldId }
         ));
+
+      /*       _ = e
+              .HasMany(user => user.Absences)
+              .WithOne(absence => absence.User)
+              .HasForeignKey(absence => absence.UserId)
+              .OnDelete(DeleteBehavior.Cascade);
+
+            _ = modelBuilder.Entity<Absence>()
+                .HasOne(absence => absence.User)
+                .WithMany(user => user.Absences)
+                .HasForeignKey(absence => absence.UserId);
+
+            _ = modelBuilder.Entity<Absence>()
+                .HasOne(absence => absence.AbsenceType)
+                .WithMany(absenceType => absenceType.Absences)
+                .HasForeignKey(absence => absence.AbsenceTypeId); */
 
     });
 

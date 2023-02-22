@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lanekassen.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230221201239_InititalCreate")]
+    [Migration("20230222204707_InititalCreate")]
     partial class InititalCreate
     {
         /// <inheritdoc />
@@ -66,6 +66,7 @@ namespace Lanekassen.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AbsenceId"));
 
                     b.Property<int?>("AbsenceTypeId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("Comment")
@@ -87,6 +88,16 @@ namespace Lanekassen.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Absences");
+
+                    b.HasData(
+                        new
+                        {
+                            AbsenceId = 756969,
+                            AbsenceTypeId = 746969,
+                            EndDate = new DateTime(1, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),
+                            StartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            UserId = 666969
+                        });
                 });
 
             modelBuilder.Entity("Lanekassen.Models.AbsenceType", b =>
@@ -564,9 +575,11 @@ namespace Lanekassen.Migrations
 
             modelBuilder.Entity("Lanekassen.Models.Absence", b =>
                 {
-                    b.HasOne("Lanekassen.Models.AbsenceType", "Type")
+                    b.HasOne("Lanekassen.Models.AbsenceType", "AbsenceType")
                         .WithMany("Absences")
-                        .HasForeignKey("AbsenceTypeId");
+                        .HasForeignKey("AbsenceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Lanekassen.Models.User", "User")
                         .WithMany("Absences")
@@ -574,7 +587,7 @@ namespace Lanekassen.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Type");
+                    b.Navigation("AbsenceType");
 
                     b.Navigation("User");
                 });

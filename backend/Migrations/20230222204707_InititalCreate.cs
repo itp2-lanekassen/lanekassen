@@ -159,7 +159,7 @@ namespace Lanekassen.Migrations
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    AbsenceTypeId = table.Column<int>(type: "integer", nullable: true)
+                    AbsenceTypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -168,7 +168,8 @@ namespace Lanekassen.Migrations
                         name: "FK_Absences_AbsenceTypes_AbsenceTypeId",
                         column: x => x.AbsenceTypeId,
                         principalTable: "AbsenceTypes",
-                        principalColumn: "AbsenceTypeId");
+                        principalColumn: "AbsenceTypeId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Absences_Users_UserId",
                         column: x => x.UserId,
@@ -343,6 +344,11 @@ namespace Lanekassen.Migrations
                 table: "Users",
                 columns: new[] { "UserId", "Admin", "Email", "EmploymentType", "FirstName", "LastName", "SectionId" },
                 values: new object[] { 666969, false, "john@doe.com", 0, "John", "Doe", 706969 });
+
+            migrationBuilder.InsertData(
+                table: "Absences",
+                columns: new[] { "AbsenceId", "AbsenceTypeId", "Comment", "EndDate", "StartDate", "UserId" },
+                values: new object[] { 756969, 746969, null, new DateTime(1, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 666969 });
 
             migrationBuilder.InsertData(
                 table: "RoleUser",

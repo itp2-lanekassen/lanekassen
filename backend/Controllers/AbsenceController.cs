@@ -27,7 +27,8 @@ public class AbsenceController : ControllerBase {
       StartDate = absence.StartDate,
       EndDate = absence.EndDate,
       Comment = absence.Comment,
-      AbsenceTypeId = absence.AbsenceTypeId
+      AbsenceTypeId = absence.AbsenceTypeId,
+      UserId = absence.UserId
     };
 
     try {
@@ -62,6 +63,7 @@ public class AbsenceController : ControllerBase {
     existingAbsence.EndDate = absence.EndDate;
     existingAbsence.AbsenceTypeId = absence.AbsenceTypeId;
     existingAbsence.Comment = absence.Comment;
+    existingAbsence.UserId = absence.UserId;
 
     try {
       _ = await _context.SaveChangesAsync();
