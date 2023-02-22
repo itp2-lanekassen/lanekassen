@@ -32,7 +32,15 @@ dotnet ef migrations add InititalCreate
 dotnet ef database update 
 ```
 
-## Running the application
+## Running in development
+
+This will reload the application when making changes. *Changes in `program.cs` may not work without a full restart*
+
+```bash
+dotnet watch run
+```
+
+## Running for production
 
 ```bash
 dotnet run

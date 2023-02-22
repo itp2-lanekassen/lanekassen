@@ -2,8 +2,8 @@ namespace Lanekassen.Models;
 
 public class Department {
   public int DepartmentId { get; set; }
-  public string Name { get; set; } = "";
-  public string Abbreviation { get; set; } = "";
-  public virtual ICollection<Section> Sections { get; set; }
-  public virtual ICollection<SubjectField> SubjectFields { get; set; }
+  public string Name { get; set; } = null!;
+  public string Abbreviation { get; set; } = null!;
+  public List<SubjectField> SubjectFields { get; set; } = null!;
+  public ICollection<Section> Sections { get; set; } = null!;
 }
