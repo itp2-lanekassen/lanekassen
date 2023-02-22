@@ -126,9 +126,13 @@ public class ApiDbContext : DbContext {
     );
 
     _ = modelBuilder.Entity<AbsenceType>().HasData(
-      new AbsenceType { AbsenceTypeId = 746969, Name = "Tilgjengelig fravær", Code = "T", ColorCode = "#bada55" }, 
+      new AbsenceType { AbsenceTypeId = 746969, Name = "Tilgjengelig fravær", Code = "T", ColorCode = "#bada55" },
       new AbsenceType { AbsenceTypeId = 746970, Name = "Utilgjengelig fravær", Code = "F", ColorCode = "#bada55" },
       new AbsenceType { AbsenceTypeId = 746971, Name = "Permisjon/Sykmelding", Code = "P/S", ColorCode = "#bada55" }
+    );
+
+    _ = modelBuilder.Entity<Absence>().HasData(
+      new Absence { AbsenceId = 756969, StartDate = new DateTime().ToUniversalTime(), EndDate = new DateTime().ToUniversalTime().AddDays(2), UserId = 666969, AbsenceTypeId = 746969 }
     );
   }
 }
