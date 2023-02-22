@@ -1,69 +1,147 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import url('https://fonts.googleapis.com/css?family=Rubik:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
+@layer base {
+  /* Maybe this should just be black? */
+  html { @apply text-grey-darkest; }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  h1 { @apply heading-xl; }
+  h2 { @apply heading-lg; }
+  h3 { @apply heading-md; }
+  h4 { @apply heading-sm; }
+  h5 { @apply heading-xs-medium; }
+  h6 { @apply heading-2xs; }
+
+  a { @apply body-link; }
+
+  button { @apply button; }
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@layer components {
+  .heading-xl {
+    @apply font-header font-medium text-primary;
+    font-size: 3.375rem;
+    line-height: 1.185;
+    letter-spacing: -0.0156em;
   }
-  a:hover {
-    color: #747bff;
+
+  .heading-lg {
+    @apply font-header font-medium text-primary;
+    font-size: 2rem;
+    line-height: 1.294;
+    letter-spacing: -0.0083em;
   }
-  button {
-    background-color: #f9f9f9;
+
+  .heading-md {
+    @apply font-header font-medium text-primary;
+    font-size: 1.875rem;
+    line-height: 1.333;
+    letter-spacing: 0em;
+  }
+
+  .heading-sm {
+    @apply font-header font-medium text-primary;
+    font-size: 1.5rem;
+    line-height: 1.416;
+    letter-spacing: 0.0073em;
+  }
+
+  .heading-xs {
+    @apply font-header text-primary;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    letter-spacing: 0.0075;
+  }
+
+  .heading-xs-medium {
+    @apply heading-xs font-medium;
+  }
+
+  .heading-2xs {
+    @apply font-header text-primary font-medium;
+    font-size: 1.125rem;
+    line-height: 1.1625;
+    letter-spacing: 0.0075em;
+  }
+
+  .heading-2xs-tight {
+    @apply heading-2xs;
+    letter-spacing: 1;
+  }
+
+  .heading-3xs {
+    @apply font-header font-bold;
+    line-height: 1.4;
+    letter-spacing: 0.01071em;
+  }
+
+  .subheading {
+    @apply font-header text-primary;
+    font-size: 1.75rem;
+    line-height: 1.333;
+    letter-spacing: 0em;
+  }
+
+  .subheading-medium {
+    @apply subheading font-medium;
+  }
+
+  .preamble {
+    font-size: 1.125rem;
+    line-height: 1.45;
+    letter-spacing: 0.0938em;
+  }
+
+  .body-bold {
+    @apply font-bold;
+    letter-spacing: 0.01071em;
+  }
+
+  .body-tight {
+    line-height: 1.4;
+  }
+
+  .body-tight-bold {
+    @apply body-tight font-bold;
+    letter-spacing: 0.01071em;
+  }
+
+  .body-xtight {
+    line-height: 1;
+  }
+
+  .body-xtight-bold {
+    @apply body-xtight font-bold;
+    letter-spacing: 0.01071em;
+  }
+
+  .body-link {
+    @apply text-primary hover:text-primary-dark underline cursor-pointer;
+  }
+
+  .caption {
+    @apply italic;
+    line-height: 1.4;
+  }
+
+  .body-overline {
+    @apply uppercase;
+    line-height: 1.4;
+    letter-spacing: 0.0833em;
+  }
+
+  .button {
+    @apply font-header;
+    line-height: 1.3;
+    letter-spacing: 0.003em;
+  }
+
+  .button-medium {
+    @apply button font-medium;
+    letter-spacing: 0.005;
   }
 }

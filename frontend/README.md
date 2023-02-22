@@ -18,6 +18,26 @@ npm run dev
 
 Server will be started on <http://localhost:3000>
 
+### Extensions
+
+Recommended extensions are:
+
+- Tailwind CSS IntelliSense
+- ESLint
+
+The following should be added to `settings.json` for the extensions to work properly:
+
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true 
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}
+```
+
 ## Production
 
 Install dependencies:
