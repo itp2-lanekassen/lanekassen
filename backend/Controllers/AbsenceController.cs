@@ -27,7 +27,6 @@ public class AbsenceController : ControllerBase {
       StartDate = absence.StartDate,
       EndDate = absence.EndDate,
       Comment = absence.Comment,
-      UserId = absence.UserId,
       AbsenceTypeId = absence.AbsenceTypeId
     };
 
@@ -61,7 +60,6 @@ public class AbsenceController : ControllerBase {
 
     existingAbsence.StartDate = absence.StartDate;
     existingAbsence.EndDate = absence.EndDate;
-    existingAbsence.UserId = absence.UserId;
     existingAbsence.AbsenceTypeId = absence.AbsenceTypeId;
     existingAbsence.Comment = absence.Comment;
 
