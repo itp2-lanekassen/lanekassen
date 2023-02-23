@@ -345,6 +345,11 @@ namespace Lanekassen.Migrations
                 values: new object[] { 666969, false, "john@doe.com", 0, "John", "Doe", 706969 });
 
             migrationBuilder.InsertData(
+                table: "Absences",
+                columns: new[] { "AbsenceId", "AbsenceTypeId", "Comment", "EndDate", "StartDate", "UserId" },
+                values: new object[] { 756969, 746969, null, new DateTime(1, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 666969 });
+
+            migrationBuilder.InsertData(
                 table: "RoleUser",
                 columns: new[] { "RolesRoleId", "UsersUserId" },
                 values: new object[] { 736969, 666969 });
