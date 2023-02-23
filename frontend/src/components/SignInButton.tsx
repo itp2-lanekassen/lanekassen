@@ -1,6 +1,9 @@
 import { useMsal } from '@azure/msal-react';
+<<<<<<< HEAD
 import 'tailwindcss/colors';
 import 'tailwindcss/tailwind.css';
+=======
+>>>>>>> 9185cf3 (remove bootstrap)
 import { loginRequest } from '../authConfig';
 
 /**
