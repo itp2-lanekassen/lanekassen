@@ -1,6 +1,7 @@
+import { IDropdown } from '@/types/types';
 import Select from 'react-select';
 
-export default function DropdownMultiSelect() {
+export default function DropdownMultiSelect({ placeholder }: IDropdown) {
   const options = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
@@ -14,7 +15,7 @@ export default function DropdownMultiSelect() {
       <Select
         className="text-primary w-80"
         options={options}
-        placeholder={<div className="">Avdeling</div>}
+        placeholder={<div className="">{placeholder}</div>}
         isMulti
         theme={(theme) => ({
           ...theme,
@@ -22,7 +23,9 @@ export default function DropdownMultiSelect() {
           colors: {
             ...theme.colors,
             primary25: '#F6F0F9',
-            primary: '#590689'
+            primary: '#590689',
+            danger: '#590689',
+            dangerLight: '#D8BCE6'
           }
         })}
       />
