@@ -24,7 +24,13 @@ export default function DropdownMultiSelect({ placeholder }: IDropdown) {
             primary25: '#F6F0F9',
             primary: '#590689',
             danger: '#590689',
-            dangerLight: '#D8BCE6'
+            dangerLight: '#D8BCE6',
+            neutral20: '#590689',
+            neutral30: '#590689',
+            neutral50: '#410464',
+            neutral40: '',
+            neutral60: '#590689',
+            neutral80: '#410464'
           }
         })}
       />
