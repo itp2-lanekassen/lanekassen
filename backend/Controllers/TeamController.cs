@@ -119,7 +119,7 @@ public class TeamController : ControllerBase {
       return BadRequest("Invalid team id");
     }
 
-    List<User> users = await _context.Users.Where(u => team.Users.Contains(u)).ToListAsync();
+    List<User> users = await _context.Users.Where(u => u.Teams.Contains(team)).ToListAsync();
     return Ok(users);
   }
 

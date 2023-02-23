@@ -109,6 +109,8 @@ public class ApiDbContext : DbContext {
           new { UsersUserId = 666969, SubjectFieldsSubjectFieldId = subjectField1.SubjectFieldId }
         ));
 
+        
+
       /*       _ = e
               .HasMany(user => user.Absences)
               .WithOne(absence => absence.User)

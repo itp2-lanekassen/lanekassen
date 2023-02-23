@@ -159,7 +159,7 @@ namespace Lanekassen.Migrations
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    AbsenceTypeId = table.Column<int>(type: "integer", nullable: false)
+                    AbsenceTypeId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -168,8 +168,7 @@ namespace Lanekassen.Migrations
                         name: "FK_Absences_AbsenceTypes_AbsenceTypeId",
                         column: x => x.AbsenceTypeId,
                         principalTable: "AbsenceTypes",
-                        principalColumn: "AbsenceTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AbsenceTypeId");
                     table.ForeignKey(
                         name: "FK_Absences_Users_UserId",
                         column: x => x.UserId,

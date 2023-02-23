@@ -27,6 +27,7 @@ public class SubjectFieldsController : ControllerBase {
       Name = subjectField.Name,
       Users = await _context.Users.Where(u => subjectField.Users.Contains(u.UserId)).ToListAsync(),
       //Departments = await _context.Departments.Where(d => subjectField.Departments.Contains(d.DepartmentId)).ToListAsync()
+      Departments = await _context.Departments.Where(d => subjectField.Departments.Contains(d.DepartmentId)).FirstOrDefaultAsync()
     };
 
     try {
@@ -59,7 +60,7 @@ public class SubjectFieldsController : ControllerBase {
 
     existingSubjectField.Name = subjectField.Name;
     existingSubjectField.Users = await _context.Users.Where(u => subjectField.Users.Contains(u.UserId)).ToListAsync();
-    //existingSubjectField.Departments = await _context.Departments.Where(d => subjectField.Departments.Contains(d.DepartmentId)).ToListAsync();
+    existingSubjectField.Departments = await _context.Departments.Where(d => subjectField.Departments.Contains(d.DepartmentId)).FirstOrDefaultAsync();
 
     try {
       _ = await _context.SaveChangesAsync();
@@ -115,7 +116,13 @@ public class SubjectFieldsController : ControllerBase {
   [HttpGet("{id}/users")]
   public async Task<IActionResult> GetSubjectFieldUsers(int id) {
     SubjectField? subjectField = await _context.SubjectFields.FindAsync(id);
-    return subjectField == null ? BadRequest("Invalid subject field id") : Ok(subjectField.Users);
+
+    if (subjectField == null) {
+      return BadRequest("Invalid subject field id");
+    }
+
+    List<User> users = await _context.Users.Where(u => u.SubjectFields.Contains(subjectField)).ToListAsync();
+    return Ok(users);
   }
 
 

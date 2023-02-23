@@ -116,7 +116,14 @@ public class SectionController : ControllerBase {
   [HttpGet("{id}/users")]
   public async Task<IActionResult> GetSectionUsers(int id) {
     Section? section = await _context.Sections.FindAsync(id);
-    return section == null ? BadRequest("Invalid section id") : Ok(section.Users);
+
+    if (section == null) {
+      return BadRequest("Invalid section id");
+    }
+
+    //List<User> users = await _context.Users.Where(u => u.Sections.Contains(section)).ToListAsync();
+    List<User> users = await _context.Users.Where(u => u.SectionId == id).ToListAsync();
+    return Ok(users);
   }
 
 /*   [HttpGet("{id}/users/{userId}")]
