@@ -7,12 +7,14 @@ export default function DropdownMultiSelect() {
     { value: 'vanilla', label: 'Vanilla' }
   ];
 
+  //const options = listname.map((variable) => ({ label: variable, value: variable }));
+
   return (
     <div>
       <Select
-        className="text-primary border-primary focus:border-primary w-80"
+        className="text-primary w-80"
         options={options}
-        placeholder="Avdeling"
+        placeholder={<div className="">Avdeling</div>}
         isMulti
         theme={(theme) => ({
           ...theme,
