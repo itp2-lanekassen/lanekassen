@@ -15,7 +15,7 @@ export default function DropdownMultiSelect({ placeholder }: IDropdown) {
       <Select
         className="text-primary w-80"
         options={options}
-        placeholder={<div className="">{placeholder}</div>}
+        placeholder={placeholder}
         theme={(theme) => ({
           ...theme,
           borderRadius: 20,
