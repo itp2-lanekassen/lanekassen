@@ -29,6 +29,7 @@ public class UserController : ControllerBase {
     }
 
     User? newUser = new() {
+      AzureId = user.AzureId,
       FirstName = user.FirstName,
       LastName = user.LastName,
       Email = user.Email,
@@ -142,6 +143,13 @@ public class UserController : ControllerBase {
   [HttpGet("{id}")]
   public async Task<IActionResult> GetUserById(int id) {
     User? user = await _context.Users.FindAsync(id);
+    return user == null ? NotFound() : Ok(user);
+  }
+
+  //get user by azure id
+  [HttpGet("azure/{azureId}")]
+  public async Task<IActionResult> GetUserByAzureId(string azureId) {
+    User? user = await _context.Users.FirstOrDefaultAsync(u => u.AzureId == azureId);
     return user == null ? NotFound() : Ok(user);
   }
 
