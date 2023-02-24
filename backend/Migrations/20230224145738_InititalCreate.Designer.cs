@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lanekassen.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230223154144_InititalCreate")]
+    [Migration("20230224145738_InititalCreate")]
     partial class InititalCreate
     {
         /// <inheritdoc />
@@ -452,6 +452,11 @@ namespace Lanekassen.Migrations
                     b.Property<bool>("Admin")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("AzureId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnOrder(0);
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -461,8 +466,7 @@ namespace Lanekassen.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(0);
+                        .HasColumnType("text");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -483,6 +487,7 @@ namespace Lanekassen.Migrations
                         {
                             UserId = 666969,
                             Admin = false,
+                            AzureId = "This-is-a-fake-azure-id",
                             Email = "john@doe.com",
                             EmploymentType = 0,
                             FirstName = "John",

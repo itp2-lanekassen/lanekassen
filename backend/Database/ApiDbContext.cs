@@ -78,6 +78,7 @@ public class ApiDbContext : DbContext {
       _ = e.HasData(
         new {
           UserId = 666969,
+          AzureId = "This-is-a-fake-azure-id",
           FirstName = "John",
           LastName = "Doe",
           Email = "john@doe.com",
