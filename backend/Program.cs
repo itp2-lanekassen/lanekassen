@@ -23,7 +23,14 @@ builder.Services.AddDbContext<ApiDbContext>(
   .EnableSensitiveDataLogging(true)
 );
 
-
+// Allow CORS from http://127.0.0.1:3000/
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        builder => builder.AllowAnyOrigin() // AllowAnyOrigin() is not recommended for production
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
 
 
 WebApplication app = builder.Build();
@@ -36,8 +43,13 @@ if (app.Environment.IsDevelopment()) {
 
 app.UseHttpsRedirection();
 
+// Use CORS middleware
+app.UseCors("AllowAnyOrigin");
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 app.Run();
