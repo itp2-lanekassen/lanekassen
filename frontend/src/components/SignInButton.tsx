@@ -1,5 +1,4 @@
 import { useMsal } from '@azure/msal-react';
-import Button from 'react-bootstrap/Button';
 import { loginRequest } from '../authConfig';
 
 /**
@@ -10,14 +9,21 @@ export const SignInButton = () => {
 
   const handleLogin = (loginType: string) => {
     if (loginType === 'redirect') {
-      instance.loginRedirect(loginRequest).catch((e) => {
+      instance.loginRedirect(loginRequest).catch((e: unknown) => {
         console.error(e);
       });
     }
   };
   return (
-    <Button variant="secondary" className="ml-auto" onClick={() => handleLogin('redirect')}>
-      Sign in using Redirect
-    </Button>
+    <button
+      className=" hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      onClick={() => handleLogin('redirect')}
+    >
+      Logg inn med Microsoft Azure
+    </button>
+    //Put in button
+    // <Button> className="ml-auto" onClick={() => handleLogin('redirect')}>
+    //   Sign in using Redirect
+    // </Button>
   );
 };
