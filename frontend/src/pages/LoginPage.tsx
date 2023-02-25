@@ -112,8 +112,10 @@ function MyComponent() {
 
   return (
     <div>
-      <h1>Test page. Gå i console.</h1>
-      <button onClick={getUser}>Sign In</button>
+      <h1>Gå i console. Utfør knappene i rekkefølge og sjekk i databasen.</h1>
+      <br />
+      <p>ps. Husk å sette opp databasen på nytt først. Er hardkodet inn data. </p>
+      <button onClick={getUser}>Get user</button>
       <br />
       <br />
       <button onClick={postUser}>Post user</button>
