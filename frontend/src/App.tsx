@@ -37,7 +37,7 @@ function ProfileContent() {
         <ProfileData graphData={graphData} />
       ) : (
         <button
-          className="primary-light hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-primary-light hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => RequestProfileData()}
         >
           Request profile information
@@ -53,9 +53,7 @@ function App() {
       <AuthenticatedTemplate>
         <ProfileContent />
       </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
-        <p>You are not signed in! Please sign in.</p>
-      </UnauthenticatedTemplate>
+      <UnauthenticatedTemplate></UnauthenticatedTemplate>
     </PageLayout>
   );
 }

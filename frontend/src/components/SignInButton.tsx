@@ -1,4 +1,6 @@
 import { useMsal } from '@azure/msal-react';
+import 'tailwindcss/colors';
+import 'tailwindcss/tailwind.css';
 import { loginRequest } from '../authConfig';
 
 /**
@@ -16,14 +18,10 @@ export const SignInButton = () => {
   };
   return (
     <button
-      className=" hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      className="bg-primary-light hover:scale-110 text-grey-lightest font-Rubik Medium py-2 px-4 rounded position: relative"
       onClick={() => handleLogin('redirect')}
     >
       Logg inn med Microsoft Azure
     </button>
-    //Put in button
-    // <Button> className="ml-auto" onClick={() => handleLogin('redirect')}>
-    //   Sign in using Redirect
-    // </Button>
   );
 };
