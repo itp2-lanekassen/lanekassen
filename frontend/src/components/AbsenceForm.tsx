@@ -1,7 +1,6 @@
 import Button from '@material-tailwind/react/components/Button';
 import * as React from 'react';
 import '../index.css';
-//import {CloseIcon} from '@mui/icons-material/Close';
 
 type ModalProps = {
   isOpen: boolean;
