@@ -23,7 +23,15 @@ builder.Services.AddDbContext<ApiDbContext>(
   .EnableSensitiveDataLogging(true)
 );
 
-
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin",
+        builder => builder.SetIsOriginAllowed(_ => true)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials());
+});
 
 
 WebApplication app = builder.Build();
@@ -35,6 +43,9 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.UseHttpsRedirection();
+
+// Use CORS middleware
+app.UseCors("AllowAnyOrigin");
 
 app.UseAuthorization();
 
