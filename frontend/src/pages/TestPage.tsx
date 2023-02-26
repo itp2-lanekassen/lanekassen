@@ -1,8 +1,61 @@
 import * as msal from '@azure/msal-browser';
 import axios from 'axios';
 /* import { msalConfig } from '@/authConfig'; */
+import { backendUrl } from '../types/types';
+import {
+  getAllUsers,
+  getUserById,
+  getUserByAzureId,
+  postUser,
+  updateUser,
+  deleteUser
+} from '../API/UserAPI';
 
-const backendUrl = 'https://localhost:7184';
+import {
+  getAllAbsenceTypes,
+  getAbsenceTypeById,
+  postAbsenceType,
+  updateAbsenceType,
+  deleteAbsenceType
+} from '../API/AbsenceTypeAPI';
+
+import {
+  getAllAbsences,
+  getAbsenceById,
+  postAbsence,
+  updateAbsence,
+  deleteAbsence
+} from '../API/AbsenceAPI';
+
+import {
+  getAllDepartments,
+  getDepartmentById,
+  postDepartment,
+  updateDepartment,
+  deleteDepartment
+} from '../API/DepartmentAPI';
+
+import {
+  getAllSections,
+  getSectionById,
+  postSection,
+  updateSection,
+  deleteSection
+} from '../API/SectionAPI';
+
+import { getAllTeams, getTeamById, postTeam, updateTeam, deleteTeam } from '../API/TeamAPI';
+
+import { getAllRoles, getRoleById, postRole, updateRole, deleteRole } from '../API/RoleAPI';
+
+import {
+  getAllSubjectFields,
+  getSubjectFieldById,
+  postSubjectField,
+  updateSubjectField,
+  deleteSubjectField
+} from '../API/SubjectFieldAPI';
+
+//const backendUrl = 'https://localhost:7184';
 //const backendUrl = 'http://localhost:5178';
 /* const msalApp = new msal.PublicClientApplication(msalConfig); */
 
@@ -11,7 +64,7 @@ const loginRequest = {
 };
 
 function MyComponent() {
-  const deleteUser = async () => {
+  const deleteUser2 = async () => {
     const userId = 666969;
 
     axios
@@ -24,7 +77,7 @@ function MyComponent() {
       });
   };
 
-  const updateUser = async () => {
+  const updateUser2 = async () => {
     const userToBeUpdated = {
       azureId: 'Updated user',
       firstName: 'updated',
@@ -52,7 +105,7 @@ function MyComponent() {
       });
   };
 
-  const postUser = async () => {
+  const postUser2 = async () => {
     const user = {
       azureId: 'New-user-azure-id',
       firstName: 'Test',
@@ -78,7 +131,7 @@ function MyComponent() {
       });
   };
 
-  const getUser = async () => {
+  const getUser2 = async () => {
     try {
       //const loginResponse = await msalApp.loginPopup(loginRequest);
       //const accessToken = loginResponse.accessToken;
@@ -110,12 +163,24 @@ function MyComponent() {
     }
   };
 
+  const getUser3 = async () => {
+    const userId = 'string';
+    const user = await getUserById(666970);
+
+    if (user != null || user != undefined) {
+      console.log('User exists');
+      console.log(user.data);
+    } else {
+      console.error('Data is null or undefined');
+    }
+  };
+
   return (
     <div>
       <h1>Gå i console. Utfør knappene i rekkefølge og sjekk i databasen.</h1>
       <br />
       <p>ps. Husk å sette opp databasen på nytt først. Er hardkodet inn data. </p>
-      <button onClick={getUser}>Get user</button>
+      <button onClick={getUser3}>Get user</button>
       <br />
       <br />
       <button onClick={postUser}>Post user</button>

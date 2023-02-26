@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import { loginRequest } from './authConfig';
 import { ProfileData } from './components/ProfileData';
 import { callMsGraph } from './graph'; */
-import LoginPage from './pages/LoginPage';
+import TestPage from './pages/TestPage';
 
 /* function ProfileContent() {
   const { instance, accounts } = useMsal();
@@ -56,7 +56,7 @@ function App() {
         <p>You are not signed in! Please sign in.</p>
       </UnauthenticatedTemplate>
     </PageLayout> */
-    <LoginPage />
+    <TestPage />
   );
 }
 
