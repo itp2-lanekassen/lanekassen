@@ -11,7 +11,7 @@ export default function DropdownMultiSelect({ placeholder }: IDropdown) {
   //const options = listname.map((variable) => ({ label: variable, value: variable }));
 
   return (
-    <div>
+    <div className="mb-4">
       <Select
         className="text-primary w-80"
         options={options}
