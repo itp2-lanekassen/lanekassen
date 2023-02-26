@@ -75,6 +75,11 @@ module.exports = {
     fontFamily: {
       sans: ['Roboto', ...defaultTheme.fontFamily.sans],
       header: ['Rubik', ...defaultTheme.fontFamily.sans]
+    },
+    screens: {
+      'mobile': '320px',
+      'tablet': '481px',
+      'sm': '769px'
     }
   },
   plugins: []

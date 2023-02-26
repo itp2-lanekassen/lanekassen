@@ -17,10 +17,14 @@ export default function FirstTimeRegisterForm() {
   return (
     <div className="max-w-full">
       <div className="flex flex-1 flex-col items-center">
-        <img className="w-[70vw]" src={ellipse} alt="" />
+        <img
+          className="sm:w-[70vw] mobile:w-[90vw] sm:h-[20vh] mobile:h-[15vh]"
+          src={ellipse}
+          alt=""
+        />
         <h1 className="mt-[-100px]">Første registrering</h1>
       </div>
-      <div className="flex flex-1 flex-col items-center mt-20">
+      <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
         <Dropdown placeholder="Avdeling" />
         <Dropdown placeholder="Seksjon" />
         <DropdownMultiSelect placeholder="Fagområde" />
