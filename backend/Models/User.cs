@@ -5,6 +5,7 @@ namespace Lanekassen.Models;
 public class User {
   public int UserId { get; set; }
   [Column(Order = 0)]
+  public string AzureId { get; set; } = null!;
   public string FirstName { get; set; } = null!;
   [Column(Order = 1)]
   public string LastName { get; set; } = null!;
