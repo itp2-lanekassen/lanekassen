@@ -10,10 +10,10 @@ export interface User {
   admin: boolean;
   sectionId: number;
   section: Section;
-  absences: Absence[];
+  absences?: Absence[];
   subjectField: SubjectField[];
-  roles: Role[];
-  teams: Team[];
+  roles?: Role[];
+  teams?: Team[];
 }
 
 export interface Absence {
@@ -32,13 +32,13 @@ export interface AbsenceType {
   name: string;
   code: string;
   colorCode: string;
-  absences: Absence[];
+  absences?: Absence[];
 }
 
 export interface Section {
   id: number;
   name: string;
-  users: User[];
+  users?: User[];
   departmentId: number;
   department: Department[];
 }
@@ -56,19 +56,19 @@ export interface SubjectField {
   name: string;
   departmentid: number;
   departments: Department[];
-  users: User[];
+  users?: User[];
 }
 
 export interface Role {
   id: number;
   name: string;
-  users: User[];
+  users?: User[];
 }
 
 export interface Team {
   id: number;
   name: string;
-  users: User[];
+  users?: User[];
 }
 
 export interface EmploymentType {
