@@ -5,17 +5,23 @@ import ellipse from '@/media/Ellipse 1.png';
 
 export default function FirstTimeRegisterForm() {
   return (
-    <div>
-      <img src={ellipse} alt="" />
+    <div className="max-w-full">
+      <img className="w-[70vw] content-center" src={ellipse} alt="" />
       <h1 className="">Første registrering</h1>
-      <DropdownMultiSelect placeholder={'Avdeling'} />
-      <Dropdown placeholder={'Seksjon'} />
-      <SubmitButton
-        buttonText="Registrer deg"
-        handleClick={function (): void {
-          throw new Error('Function not implemented.');
-        }}
-      />
+      <div className="items-center">
+        <Dropdown placeholder="Avdeling" />
+        <Dropdown placeholder="Seksjon" />
+        <DropdownMultiSelect placeholder="Fagområde" />
+        <DropdownMultiSelect placeholder="Team" />
+        <DropdownMultiSelect placeholder="Rolle" />
+        <Dropdown placeholder="Ansattforhold" />
+        <SubmitButton
+          buttonText="Registrer deg"
+          handleClick={function (): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
+      </div>
     </div>
   );
 }
