@@ -1,8 +1,12 @@
-import * as React from "react";
+import Button from '@material-tailwind/react/components/Button';
+import * as React from 'react';
+import '../index.css';
+//import {CloseIcon} from '@mui/icons-material/Close';
 
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  children: React.ReactNode;
 };
 
 type FormValues = {
@@ -12,16 +16,15 @@ type FormValues = {
   radio: string;
 };
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+const ModalForm: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const [formValues, setFormValues] = React.useState<FormValues>({
-    input1: "",
-    input2: "",
-    input3: "",
-    radio: ""
+    input1: '',
+    input2: '',
+    input3: '',
+    radio: ''
   });
-  const [errors, setErrors] = React.useState<Partial<FormValues>>({});
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value
@@ -37,134 +40,124 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newErrors: Partial<FormValues> = {};
-    if (!formValues.input1) {
-      newErrors.input1 = "This field is required";
-    }
-    if (!formValues.input2) {
-      newErrors.input2 = "This field is required";
-    }
-    if (!formValues.radio) {
-      newErrors.radio = "Please select an option";
-    }
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      // submit form
-      console.log("Form submitted:", formValues);
-      onClose();
-    }
+    // eslint-disable-next-line no-console
+    console.log('Form submitted:', formValues);
+    onClose();
   };
 
   return (
     <>
       {isOpen && (
-        <div className="modal">
-          <div className="modal__overlay" onClick={onClose} />
-          <div className="modal__content">
-            <h2 className="modal__title">Modal Title</h2>
-            <form className="modal__form" onSubmit={handleSubmit}>
-              <div className="modal__field">
-                <label htmlFor="input1">
-                  Input 1<span className="modal__required">*</span>
+        <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+          <div className="modal-overlay pointer-events-none" onClick={onClose} />
+          <div className="relative w-auto my-6 mx-auto max-w-3xl bg-white px-10 pt-10 pb-5 rounded-[40px] ">
+            <h2 className="modal-title text-center ">Fraværsskjema</h2>
+            <form className="modal-form" onSubmit={handleSubmit}>
+              <div className="modal-field">
+                <label htmlFor="input1" className="block heading-xs">
+                  Fra
                 </label>
                 <input
-                  type="text"
+                  type="date"
                   id="input1"
                   name="input1"
                   value={formValues.input1}
                   onChange={handleInputChange}
-                  className="modal__input"
+                  className="modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary"
+                  required
                 />
-                {errors.input1 && (
-                  <div className="modal__error">{errors.input1}</div>
-                )}
               </div>
-              <div className="modal__field">
-                <label htmlFor="input2">
-                  Input 2<span className="modal__required">*</span>
+              <div className="modal-field">
+                <label htmlFor="input2" className="block heading-xs">
+                  Til
                 </label>
                 <input
-                  type="text"
+                  type="date"
                   id="input2"
                   name="input2"
                   value={formValues.input2}
                   onChange={handleInputChange}
-                  className="modal__input"
+                  className="modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary"
+                  required
                 />
-                {errors.input2 && (
-                  <div className="modal__error">{errors.input2}</div>
-                )}
               </div>
-              <div className="modal__field">
-                <label htmlFor="input3">Input 3</label>
-                <input
-                  type="text"
+              <div className="modal-field">
+                <div className="heading-xs block pb-2">Type fravær</div>
+                <div className="bg-card-one-dark rounded-[20px] py-4 flex flex-col px-10">
+                  <label className="inline-flex items-center heading-2xs">
+                    <input
+                      type="radio"
+                      className="form-radio h-4 w-4 accent-primary"
+                      name="radio"
+                      value="option1"
+                      checked={formValues.radio === 'option1'}
+                      onChange={handleRadioChange}
+                    />
+                    <span className="ml-2 ">Tilgjengelig</span>
+                  </label>
+
+                  <label className="inline-flex items-center heading-2xs">
+                    <input
+                      type="radio"
+                      className="h-4 w-4 accent-primary"
+                      name="radio"
+                      value="option2"
+                      checked={formValues.radio === 'option2'}
+                      onChange={handleRadioChange}
+                      required
+                    />
+                    <span className="ml-2 ">Ikke tilgjengelig</span>
+                  </label>
+
+                  <label className="inline-flex items-center heading-2xs">
+                    <input
+                      type="radio"
+                      className="form-radio h-4 w-4 accent-primary"
+                      name="radio"
+                      value="option3"
+                      checked={formValues.radio === 'option3'}
+                      onChange={handleRadioChange}
+                    />
+                    <span className="ml-2">Permisjon/sykemeldt</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="modal-field">
+                <label htmlFor="input3" className="block heading-xs pb-2 pt-3">
+                  Personlig notis
+                </label>
+                <textarea
                   id="input3"
                   name="input3"
                   value={formValues.input3}
                   onChange={handleInputChange}
-                  className="modal__input"
+                  className="modal-input w-full border-2 rounded-[20px] border-primary"
+                  rows={3}
                 />
               </div>
-              <div className="modal__field">
-                <div>Radio buttons</div>
-                {errors.radio && (
-                  <div className="modal__error">{errors.radio}</div>
-                )}
-                <div className="modal__radio-group">
-                  <label>
-                    <input
-                      type="radio"
-                      name="radio"
-                      value="option1"
-                      checked={formValues.radio === "option1"}
-                      onChange={handleRadioChange}
-                      required
-                    />
-                    Option 1
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="radio"
-                      value="option2"
-                      checked={formValues.radio === "option2"}
-                      onChange={handleRadioChange}
-                      required
-                    />
-                    Option 2
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="radio"
-                      value="option3"
-                      checked={formValues.radio === "option3"}
-                      onChange={handleRadioChange}
-                      required
-                    />
-                    Option 3
-                  </label>
-                </div>
-              </div>
-              <div className="modal__buttons">
-                <button
-                  type="button"
-                  className="modal__cancel-button"
-                  onClick={onClose}
+              <div className="modal-buttons relative flex flex-col items-center justify-center pt-5">
+                <Button
+                  type="submit"
+                  className="modal-submit-button button heading-xs px-4 py-2 rounded-full bg-primary text-white "
                 >
-                  Cancel
-                </button>
-                <button type="submit" className="modal__submit-button">
-                  Submit
-                </button>
+                  Legg til
+                </Button>
               </div>
             </form>
+            <button
+              type="button"
+              className="modal-cancel-button absolute top-5 right-5 text-primary"
+              onClick={onClose}
+            >
+              X
+            </button>
           </div>
         </div>
       )}
+      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
     </>
   );
 };
 
-export default Modal;
+export default ModalForm;
