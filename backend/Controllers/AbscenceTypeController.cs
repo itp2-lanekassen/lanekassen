@@ -27,7 +27,7 @@ public class AbsenceTypeController : ControllerBase {
       Name = absenceType.Name,
       Code = absenceType.Code,
       ColorCode = absenceType.ColorCode,
-      Absences = await _context.Absences.Where(a => absenceType.Absences.Contains(a.AbsenceId)).ToListAsync(),
+      Absences = await _context.Absences.Where(a => absenceType.Absences!.Contains(a.AbsenceId)).ToListAsync(),
     };
 
     try {
@@ -61,7 +61,7 @@ public class AbsenceTypeController : ControllerBase {
     existingAbsenceType.Name = absenceType.Name;
     existingAbsenceType.Code = absenceType.Code;
     existingAbsenceType.ColorCode = absenceType.ColorCode;
-    existingAbsenceType.Absences = await _context.Absences.Where(a => absenceType.Absences.Contains(a.AbsenceId)).ToListAsync();
+    existingAbsenceType.Absences = await _context.Absences.Where(a => absenceType.Absences!.Contains(a.AbsenceId)).ToListAsync();
 
     try {
       _ = _context.AbsenceTypes.Update(existingAbsenceType);

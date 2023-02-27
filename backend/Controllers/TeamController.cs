@@ -25,7 +25,7 @@ public class TeamController : ControllerBase {
 
     Team? newTeam = new() {
       Name = team.Name,
-      Users = await _context.Users.Where(u => team.Users.Contains(u.UserId)).ToListAsync(),
+      Users = await _context.Users.Where(u => team.Users!.Contains(u.UserId)).ToListAsync(),
     };
 
     try {
@@ -57,7 +57,7 @@ public class TeamController : ControllerBase {
     }
 
     existingTeam.Name = team.Name;
-    existingTeam.Users = await _context.Users.Where(u => team.Users.Contains(u.UserId)).ToListAsync();
+    existingTeam.Users = await _context.Users.Where(u => team.Users!.Contains(u.UserId)).ToListAsync();
 
     try {
       _ = _context.Teams.Update(existingTeam);

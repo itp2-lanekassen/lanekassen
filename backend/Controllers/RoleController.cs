@@ -25,7 +25,7 @@ public class RoleController : ControllerBase {
 
     Role? newRole = new() {
       Name = role.Name,
-      Users = await _context.Users.Where(u => role.Users.Contains(u.UserId)).ToListAsync(),
+      Users = await _context.Users.Where(u => role.Users!.Contains(u.UserId)).ToListAsync(),
     };
 
     try {
@@ -57,7 +57,7 @@ public class RoleController : ControllerBase {
     }
 
     existingRole.Name = role.Name;
-    existingRole.Users = await _context.Users.Where(u => role.Users.Contains(u.UserId)).ToListAsync();
+    existingRole.Users = await _context.Users.Where(u => role.Users!.Contains(u.UserId)).ToListAsync();
 
     try {
       _ = _context.Roles.Update(existingRole);
