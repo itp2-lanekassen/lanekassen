@@ -37,9 +37,9 @@ public class UserController : ControllerBase {
       Admin = user.Admin,
       Section = section,
       SubjectFields = await _context.SubjectFields.Where(sf => user.SubjectFields.Contains(sf.SubjectFieldId)).ToListAsync(),
-      Roles = await _context.Roles.Where(r => user.Roles.Contains(r.RoleId)).ToListAsync(),
-      Teams = await _context.Teams.Where(t => user.Teams.Contains(t.TeamId)).ToListAsync(),
-      Absences = await _context.Absences.Where(a => user.Absences.Contains(a.AbsenceId)).ToListAsync(),
+      Roles = await _context.Roles.Where(r => user.Roles!.Contains(r.RoleId)).ToListAsync(),
+      Teams = await _context.Teams.Where(t => user.Teams!.Contains(t.TeamId)).ToListAsync(),
+      Absences = await _context.Absences.Where(a => user.Absences!.Contains(a.AbsenceId)).ToListAsync(),
     };
 
     try {
@@ -95,9 +95,9 @@ public class UserController : ControllerBase {
     userToUpdate.Admin = user.Admin;
     userToUpdate.Section = section;
     userToUpdate.SubjectFields = await _context.SubjectFields.Where(sf => user.SubjectFields.Contains(sf.SubjectFieldId)).ToListAsync();
-    userToUpdate.Roles = await _context.Roles.Where(r => user.Roles.Contains(r.RoleId)).ToListAsync();
-    userToUpdate.Teams = await _context.Teams.Where(t => user.Teams.Contains(t.TeamId)).ToListAsync();
-    userToUpdate.Absences = await _context.Absences.Where(a => user.Absences.Contains(a.AbsenceId)).ToListAsync();
+    userToUpdate.Roles = await _context.Roles.Where(r => user.Roles!.Contains(r.RoleId)).ToListAsync();
+    userToUpdate.Teams = await _context.Teams.Where(t => user.Teams!.Contains(t.TeamId)).ToListAsync();
+    userToUpdate.Absences = await _context.Absences.Where(a => user.Absences!.Contains(a.AbsenceId)).ToListAsync();
 
     try {
       _ = await _context.SaveChangesAsync();

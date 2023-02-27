@@ -19,7 +19,7 @@ export function postUser(user: NewUser): Promise<AxiosResponse<User>> {
   return axios.post(url, user);
 }
 
-export function updateUser(userId: number, user: User): Promise<AxiosResponse<User>> {
+export function updateUser(userId: number, user: NewUser): Promise<AxiosResponse<User>> {
   return axios.put(`${url}/${userId}`, user);
 }
 

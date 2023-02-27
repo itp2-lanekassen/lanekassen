@@ -113,42 +113,14 @@ function MyComponent() {
       email: 'test@doe.no',
       employmentType: 0,
       admin: false,
-      sectionId: 706969
-
-      /*       section: {
-        id: 706969,
-        name: 'Test',
-        departmentId: 706969,
-        department: {
-          id: 706969,
-          name: 'Test',
-          abbrieviation: 'Test',
-          sections: [0]
-        }
-      }, */
-
-      /*       subjectFields: {
-        id: 0,
-        name: 'Test',
-        departmentid: 0,
-        department: {
-          id: 0,
-          name: 'Test',
-          abbrieviation: 'Test'
-        }
-      } */
+      sectionId: 706969,
+      subjectFields: [716969],
+      roles: [736970],
+      teams: [726972],
+      absences: []
     };
     postUser(user);
   };
-
-  /*     axios
-      .post(`${backendUrl}/User`, user)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error(error);
-      }); */
 
   const getUser2 = async () => {
     try {
