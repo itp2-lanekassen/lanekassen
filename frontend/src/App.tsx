@@ -1,14 +1,11 @@
-/* import { useState } from 'react';
-import { PageLayout } from './components/PageLayout';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { useState } from 'react';
 import { loginRequest } from './authConfig';
 import { PageLayout } from './components/PageLayout';
 import { ProfileData } from './components/ProfileData';
-import { callMsGraph } from './graph'; */
-import LoginPage from './pages/LoginPage';
+import { callMsGraph } from './graph';
 
-/* function ProfileContent() {
+function ProfileContent() {
   const { instance, accounts } = useMsal();
   const [graphData, setGraphData] = useState(null);
 
@@ -48,18 +45,16 @@ import LoginPage from './pages/LoginPage';
       )}
     </>
   );
-} */
+}
 
 function App() {
   return (
-    /*     <PageLayout>
+    <PageLayout>
       <AuthenticatedTemplate>
         <ProfileContent />
       </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
-      </UnauthenticatedTemplate>
-    </PageLayout> */
-    <LoginPage />
+      <UnauthenticatedTemplate></UnauthenticatedTemplate>
+    </PageLayout>
   );
 }
 
