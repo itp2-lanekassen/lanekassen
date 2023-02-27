@@ -92,6 +92,7 @@ const ModalForm: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                       value="option1"
                       checked={formValues.radio === 'option1'}
                       onChange={handleRadioChange}
+                      required
                     />
                     <span className="ml-2 ">Tilgjengelig</span>
                   </label>
@@ -117,6 +118,7 @@ const ModalForm: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                       value="option3"
                       checked={formValues.radio === 'option3'}
                       onChange={handleRadioChange}
+                      required
                     />
                     <span className="ml-2">Permisjon/sykemeldt</span>
                   </label>
