@@ -1,14 +1,14 @@
 import { IDropdown } from '@/types/types';
 import Select from 'react-select';
 
-export default function DropdownMultiSelect({ placeholder }: IDropdown) {
+export default function DropdownMultiSelect({ placeholder, listOfOptions }: IDropdown) {
   const options = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' }
   ];
 
-  //const options = listname.map((variable) => ({ label: variable, value: variable }));
+  //const options = listOfOptions.map((variable) => ({ label: variable, value: variable }));
 
   return (
     <div className="mb-4">

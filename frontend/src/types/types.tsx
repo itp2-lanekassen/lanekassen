@@ -5,4 +5,5 @@ export interface ISubmitButton {
 
 export interface IDropdown {
   placeholder: string;
+  listOfOptions: string[];
 }

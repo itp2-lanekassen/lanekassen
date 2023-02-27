@@ -6,7 +6,7 @@ import ellipse from '@/media/Ellipse 1.png';
 /*
 TODO: 
 pass correct handleclick function to SubmitButton
-pass correct data to the dropdown menus
+pass correct data to listOfOptions (retrieve from database)
 */
 
 /**
@@ -25,12 +25,12 @@ export default function FirstTimeRegisterForm() {
         <h1 className="mt-[-100px]">Første registrering</h1>
       </div>
       <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
-        <Dropdown placeholder="Avdeling" />
-        <Dropdown placeholder="Seksjon" />
-        <DropdownMultiSelect placeholder="Fagområde" />
-        <DropdownMultiSelect placeholder="Team" />
-        <DropdownMultiSelect placeholder="Rolle" />
-        <Dropdown placeholder="Ansattforhold" />
+        <Dropdown placeholder="Avdeling" listOfOptions={[]} />
+        <Dropdown placeholder="Seksjon" listOfOptions={[]} />
+        <DropdownMultiSelect placeholder="Fagområde" listOfOptions={[]} />
+        <DropdownMultiSelect placeholder="Team" listOfOptions={[]} />
+        <DropdownMultiSelect placeholder="Rolle" listOfOptions={[]} />
+        <Dropdown placeholder="Ansattforhold" listOfOptions={[]} />
         <SubmitButton
           buttonText="Registrer deg"
           handleClick={function (): void {
