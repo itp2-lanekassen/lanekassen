@@ -1,13 +1,11 @@
-/* import { useState } from 'react';
-import { PageLayout } from './components/PageLayout';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import { Button } from 'react-bootstrap';
+import { useState } from 'react';
 import { loginRequest } from './authConfig';
+import { PageLayout } from './components/PageLayout';
 import { ProfileData } from './components/ProfileData';
-import { callMsGraph } from './graph'; */
-import TestPage from './pages/TestPage';
+import { callMsGraph } from './graph';
 
-/* function ProfileContent() {
+function ProfileContent() {
   const { instance, accounts } = useMsal();
   const [graphData, setGraphData] = useState(null);
 
@@ -22,11 +20,11 @@ import TestPage from './pages/TestPage';
     // Silently acquires an access token which is then attached to a request for Microsoft Graph data
     instance
       .acquireTokenSilent(request)
-      .then((response) => {
+      .then((response: { accessToken: any }) => {
         callMsGraph(response.accessToken).then((response2) => setGraphData(response2));
       })
       .catch(() => {
-        instance.acquireTokenPopup(request).then((response3) => {
+        instance.acquireTokenPopup(request).then((response3: { accessToken: any }) => {
           callMsGraph(response3.accessToken).then((response4) => setGraphData(response4));
         });
       });
@@ -38,25 +36,25 @@ import TestPage from './pages/TestPage';
       {graphData ? (
         <ProfileData graphData={graphData} />
       ) : (
-        <Button variant="secondary" onClick={RequestProfileData}>
-          Request Profile Information
-        </Button>
+        <button
+          className="bg-primary-light hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => RequestProfileData()}
+        >
+          Request profile information
+        </button>
       )}
     </>
   );
-} */
+}
 
 function App() {
   return (
-    /*     <PageLayout>
+    <PageLayout>
       <AuthenticatedTemplate>
         <ProfileContent />
       </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
-        <p>You are not signed in! Please sign in.</p>
-      </UnauthenticatedTemplate>
-    </PageLayout> */
-    <TestPage />
+      <UnauthenticatedTemplate></UnauthenticatedTemplate>
+    </PageLayout>
   );
 }
 

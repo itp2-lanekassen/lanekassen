@@ -1,5 +1,4 @@
 import { useMsal } from '@azure/msal-react';
-import Button from 'react-bootstrap/Button';
 
 /**
  * Renders a button which, when selected, will redirect the page to the logout prompt
@@ -16,8 +15,11 @@ export const SignOutButton = () => {
   };
 
   return (
-    <Button variant="secondary" className="ml-auto" onClick={() => handleLogout('redirect')}>
-      Sign out using Redirect
-    </Button>
+    <button
+      className="bg-primary-light hover:scale-110 text-grey-lightest font-Rubik Medium py-2 px-4 rounded position: relative"
+      onClick={() => handleLogout('redirect')}
+    >
+      Logg ut
+    </button>
   );
 };
