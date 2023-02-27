@@ -111,25 +111,44 @@ function MyComponent() {
       firstName: 'Test',
       lastName: 'post',
       email: 'test@doe.no',
-      employmentType: 1,
+      employmentType: 0,
       admin: false,
-      sectionId: 706969,
-      subjectField: 'IT',
-      subjectFields: [0],
-      roles: [0],
-      teams: [0],
-      absences: [0]
-    };
+      sectionId: 706969
 
-    axios
+      /*       section: {
+        id: 706969,
+        name: 'Test',
+        departmentId: 706969,
+        department: {
+          id: 706969,
+          name: 'Test',
+          abbrieviation: 'Test',
+          sections: [0]
+        }
+      }, */
+
+      /*       subjectFields: {
+        id: 0,
+        name: 'Test',
+        departmentid: 0,
+        department: {
+          id: 0,
+          name: 'Test',
+          abbrieviation: 'Test'
+        }
+      } */
+    };
+    postUser(user);
+  };
+
+  /*     axios
       .post(`${backendUrl}/User`, user)
       .then((response) => {
         console.log(response);
       })
       .catch((error) => {
         console.error(error);
-      });
-  };
+      }); */
 
   const getUser2 = async () => {
     try {
@@ -165,7 +184,7 @@ function MyComponent() {
 
   const getUser3 = async () => {
     const userId = 'string';
-    const user = await getUserById(666970);
+    const user = await getUserById(666969);
 
     if (user != null || user != undefined) {
       console.log('User exists');
@@ -183,13 +202,13 @@ function MyComponent() {
       <button onClick={getUser3}>Get user</button>
       <br />
       <br />
-      <button onClick={postUser}>Post user</button>
+      <button onClick={postUser2}>Post user</button>
       <br />
       <br />
-      <button onClick={updateUser}>Update user</button>
+      {/*       <button onClick={updateUser}>Update user</button>
       <br />
       <br />
-      <button onClick={deleteUser}>Delete user</button>
+      <button onClick={deleteUser}>Delete user</button> */}
     </div>
   );
 }

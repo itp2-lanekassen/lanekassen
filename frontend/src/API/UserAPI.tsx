@@ -1,4 +1,4 @@
-import { User, backendUrl } from '../types/types';
+import { User, backendUrl, NewUser } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const url = `${backendUrl}/User`;
@@ -15,7 +15,7 @@ export function getUserByAzureId(azureId: string): Promise<AxiosResponse<User>> 
   return axios.get(`${url}/azure/${azureId}`);
 }
 
-export function postUser(user: User): Promise<AxiosResponse<User>> {
+export function postUser(user: NewUser): Promise<AxiosResponse<User>> {
   return axios.post(url, user);
 }
 

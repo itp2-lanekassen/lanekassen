@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lanekassen.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230224145738_InititalCreate")]
+    [Migration("20230227085347_InititalCreate")]
     partial class InititalCreate
     {
         /// <inheritdoc />

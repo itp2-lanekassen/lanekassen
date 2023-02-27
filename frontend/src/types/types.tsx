@@ -6,15 +6,53 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  employmentType: EmploymentType;
+  employmentType: number; // EmploymentType;
   admin: boolean;
   sectionId: number;
-  section: Section;
+  //section: Section;
   absences?: Absence[];
-  subjectField: SubjectField[];
+  subjectFields?: SubjectField[];
   roles?: Role[];
   teams?: Team[];
 }
+
+export interface NewUser {
+  azureId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  employmentType: number; // EmploymentType;
+  admin: boolean;
+  sectionId: number;
+  //section: Section;
+  absences?: Absence[];
+  subjectFields: SubjectField[];
+  roles?: Role[];
+  teams?: Team[];
+}
+
+/*  Må være på dette formatet for å poste ny bruker
+{
+  "azureId": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "email": "string",
+  "employmentType": 0,
+  "admin": true,
+  "sectionId": 0,
+  "subjectFields": [
+    0
+  ],
+  "roles": [
+    0
+  ],
+  "teams": [
+    0
+  ],
+  "absences": [
+    0
+  ]
+} */
 
 export interface Absence {
   id: number;
@@ -40,7 +78,7 @@ export interface Section {
   name: string;
   users?: User[];
   departmentId: number;
-  department: Department[];
+  departments: Department[];
 }
 
 export interface Department {
