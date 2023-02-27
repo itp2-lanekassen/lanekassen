@@ -1,6 +1,12 @@
 import { IDropdown } from '@/types/types';
 import Select from 'react-select';
 
+/**
+ *
+ * @param placeholder is the "title" of the dropdown
+ * @param listOfOptions is list of options retrieved from database
+ * @returns dropdown component
+ */
 export default function DropdownMultiSelect({ placeholder, listOfOptions }: IDropdown) {
   const options = [
     { value: 'chocolate', label: 'Chocolate' },

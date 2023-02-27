@@ -1,6 +1,12 @@
 import { ISubmitButton } from '@/types/types';
 import '../index.css';
 
+/**
+ *
+ * @param buttonText the text on the button
+ * @param handleClick the onClick function
+ * @returns the big purple button that is used for submitting forms
+ */
 export default function SubmitButton({ buttonText, handleClick }: ISubmitButton) {
   return (
     <div>
