@@ -15,8 +15,11 @@ export const SignOutButton = () => {
   };
 
   return (
-    <button className="ml-auto" onClick={() => handleLogout('redirect')}>
-      Sign out using Redirect
+    <button
+      className="bg-primary-light hover:scale-110 text-grey-lightest font-Rubik Medium py-2 px-4 rounded position: relative"
+      onClick={() => handleLogout('redirect')}
+    >
+      Logg ut
     </button>
   );
 };

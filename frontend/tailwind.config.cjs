@@ -5,6 +5,9 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      scale: {
+        115: '1.15'
+      },
       colors: {
         // Primary
         'primary-dark': '#26023B',
@@ -67,10 +70,13 @@ module.exports = {
       }
     },
     fontSize: {
-      base: ['1rem', {
-        lineHeight: 1.625,
-        letterSpacing: '0.00938em'
-      }]
+      base: [
+        '1rem',
+        {
+          lineHeight: 1.625,
+          letterSpacing: '0.00938em'
+        }
+      ]
     },
     fontFamily: {
       sans: ['Roboto', ...defaultTheme.fontFamily.sans],

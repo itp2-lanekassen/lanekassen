@@ -130,10 +130,11 @@ namespace Lanekassen.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    AzureId = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     EmploymentType = table.Column<int>(type: "integer", nullable: false),
                     Admin = table.Column<bool>(type: "boolean", nullable: false),
@@ -341,8 +342,13 @@ namespace Lanekassen.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "UserId", "Admin", "Email", "EmploymentType", "FirstName", "LastName", "SectionId" },
-                values: new object[] { 666969, false, "john@doe.com", 0, "John", "Doe", 706969 });
+                columns: new[] { "UserId", "Admin", "AzureId", "Email", "EmploymentType", "FirstName", "LastName", "SectionId" },
+                values: new object[] { 666969, false, "This-is-a-fake-azure-id", "john@doe.com", 0, "John", "Doe", 706969 });
+
+            migrationBuilder.InsertData(
+                table: "Absences",
+                columns: new[] { "AbsenceId", "AbsenceTypeId", "Comment", "EndDate", "StartDate", "UserId" },
+                values: new object[] { 756969, 746969, null, new DateTime(1, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 666969 });
 
             migrationBuilder.InsertData(
                 table: "RoleUser",
