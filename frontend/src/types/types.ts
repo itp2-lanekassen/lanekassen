@@ -29,6 +29,14 @@ export interface Absence {
   comment?: string;
 }
 
+export interface NewAbsence {
+  startDate: string; // 0001-01-01T00:00:00
+  endDate: string;
+  absenceTypeId: number;
+  userId: number;
+  comment?: string;
+}
+
 export interface Department {
   departmentId: number;
   name: string;
