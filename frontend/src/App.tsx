@@ -1,11 +1,11 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { useState } from 'react';
 import { loginRequest } from './authConfig';
-import { PageLayout } from './components/PageLayout';
 import { ProfileData } from './components/ProfileData';
 import { callMsGraph } from './graph';
 import RegisterButton from './components/SubmitButton';
 import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
+import { PageLayout } from './pages/PageLayout';
 
 function ProfileContent() {
   const { instance, accounts } = useMsal();
@@ -50,14 +50,7 @@ function ProfileContent() {
 }
 
 function App() {
-  return (
-    <PageLayout>
-      <AuthenticatedTemplate>
-        <ProfileContent />
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate></UnauthenticatedTemplate>
-    </PageLayout>
-  );
+  return <FirstTimeRegisterForm />;
 }
 
 export default App;
