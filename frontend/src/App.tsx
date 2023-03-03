@@ -1,19 +1,30 @@
-import { useState } from 'react';
-import ModalForm from './components/AbsenceForm';
-import './index.css';
+import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
+import { PageLayout } from './components/PageLayout';
+import logo from './assets/lanekassen_logo.png';
+import { SignInButton } from './components/SignInButton';
+import UserContextProvider from './context/UserContext';
+import CalendarPage from './pages/CalendarPage';
 
 function App() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-
   return (
-    <div>
-      <h1 className="bg-primary">My App</h1>
-      <button onClick={openModal}>Open Modal</button>
-      {isOpen && <ModalForm isOpen={isOpen} onClose={closeModal} />}
-    </div>
+    <PageLayout>
+      <UnauthenticatedTemplate>
+        <center>
+          <img
+            src={logo}
+            alt="Logo"
+            className="object-contain h-14"
+            style={{ bottom: '75px', position: 'relative' }}
+          />
+          <SignInButton />
+        </center>
+      </UnauthenticatedTemplate>
+      <AuthenticatedTemplate>
+        <UserContextProvider>
+          <CalendarPage />
+        </UserContextProvider>
+      </AuthenticatedTemplate>
+    </PageLayout>
   );
 }
 
