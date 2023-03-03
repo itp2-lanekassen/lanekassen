@@ -1,4 +1,4 @@
-import { IDropdown } from '@/types/types';
+import { IDropdown } from '../types/types';
 import Select from 'react-select';
 
 /**
@@ -7,14 +7,13 @@ import Select from 'react-select';
  * @param listOfOptions is list of options retrieved from database
  * @returns dropdown component
  */
-export default function DropdownMultiSelect({ placeholder, listOfOptions }: IDropdown) {
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ];
 
-  //const options = listOfOptions.map((variable) => ({ label: variable, value: variable }));
+export default function Dropdown({ handleChange, placeholder, listOfOptions }: IDropdown) {
+  const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
+
+  const handleOnChange = (selectedOption: any) => {
+    handleChange(selectedOption.value);
+  };
 
   return (
     <div className="mb-4">
@@ -22,6 +21,7 @@ export default function DropdownMultiSelect({ placeholder, listOfOptions }: IDro
         className="text-primary w-80"
         options={options}
         placeholder={placeholder}
+        onChange={handleOnChange}
         theme={(theme) => ({
           ...theme,
           borderRadius: 20,

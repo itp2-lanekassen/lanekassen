@@ -1,3 +1,5 @@
+import { ChangeEvent } from 'react';
+
 export const backendUrl = 'https://localhost:7184';
 
 export interface Role {
@@ -15,8 +17,18 @@ export interface Team {
 export interface SubjectField {
   subjectFieldId: number;
   name: string;
-  departments?: Department[];
+  departmentId: number;
 }
+
+/* 
+{
+    "subjectFieldId": 716969,
+    "name": "Virksomhetsarkitektur og Prosjektledelse",
+    "departmentId": 696969,
+    "departments": null,
+    "users": null
+  },
+   */
 
 export interface Absence {
   absenceId: number;
@@ -91,7 +103,16 @@ export interface ISubmitButton {
   handleClick: () => void;
 }
 
-export interface IDropdown {
+export interface IDropdownMultiSelect {
+  onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+  handleChange: (value: number[]) => void;
   placeholder: string;
-  listOfOptions: Promise<string[]>;
+  listOfOptions: { name: string; id: number }[];
+}
+
+export interface IDropdown {
+  onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+  handleChange: (value: number) => void;
+  placeholder: string;
+  listOfOptions: { name: string; id: number }[];
 }

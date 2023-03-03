@@ -1,7 +1,7 @@
 import { backendUrl, SubjectField } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
-const url = `${backendUrl}/SubjectField`;
+const url = `${backendUrl}/SubjectFields`;
 
 export function getAllSubjectFields(): Promise<AxiosResponse<SubjectField[]>> {
   return axios.get(url);

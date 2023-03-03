@@ -1,5 +1,5 @@
-import { IDropdown } from '@/types/types';
-import Select from 'react-select';
+import { IDropdown, IDropdownMultiSelect } from '../types/types';
+import Select, { MultiValue, ActionMeta } from 'react-select';
 
 /**
  *
@@ -7,16 +7,22 @@ import Select from 'react-select';
  * @param listOfOptions is list of options retrieved from database
  * @returns dropdown component where multiselect is possible
  */
-export default function DropdownMultiSelect({ placeholder, listOfOptions }: IDropdown) {
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ];
 
-  //console.log(listOfOptions);
+interface IOption {
+  label: string;
+  value: number;
+}
+export default function DropdownMultiSelect({
+  handleChange,
+  placeholder,
+  listOfOptions
+}: IDropdownMultiSelect) {
+  const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
-  //const options = listOfOptions.map((variable: any) => ({ label: variable, value: variable }));
+  const handleOnChange = (selectedOptions: MultiValue<IOption>) => {
+    const selectedValues = selectedOptions ? selectedOptions.map((option) => option.value) : [];
+    handleChange(selectedValues);
+  };
 
   return (
     <div className="mb-4">
@@ -25,6 +31,7 @@ export default function DropdownMultiSelect({ placeholder, listOfOptions }: IDro
         options={options}
         placeholder={placeholder}
         isMulti
+        onChange={handleOnChange}
         theme={(theme) => ({
           ...theme,
           borderRadius: 20,
