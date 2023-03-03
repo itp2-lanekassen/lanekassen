@@ -32,31 +32,37 @@ export default function FirstTimeRegisterForm() {
     employmentType: []
   });
 
-  const [selectedDepartment, setSelectedDepartment] = useState<number>(69);
-  const [selectedSection, setSelectedSection] = useState<number>(69);
+  const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
+  const [selectedSection, setSelectedSection] = useState<number>(-1);
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
-  const [selectedEmploymentType, setEmploymentType] = useState<number>(0);
+  const [selectedEmploymentType, setEmploymentType] = useState<number>(-1);
 
   const fetchData = async () => {
-    const roles = await getAllRoles();
-    const teams = await getAllTeams();
-    const section = await getAllSections();
-    const department = await getAllDepartments();
-    const subjectFields = await getAllSubjectFields();
-    const employmentType = ['Ansatt', 'Konsulent'];
+    try {
+      const [roles, teams, sections, departments, subjectFields] = await Promise.all([
+        getAllRoles(),
+        getAllTeams(),
+        getAllSections(),
+        getAllDepartments(),
+        getAllSubjectFields()
+      ]);
+      const employmentType = ['Ansatt', 'Konsulent'];
 
-    const newData = {
-      roles: roles?.data?.map((r) => ({ id: r.roleId, name: r.name })) ?? [],
-      subjectFields:
-        subjectFields?.data?.map((s) => ({ id: s.subjectFieldId, name: s.name })) ?? [],
-      teams: teams?.data?.map((t) => ({ id: t.teamId, name: t.name })) ?? [],
-      departments: department?.data?.map((d) => ({ id: d.departmentId, name: d.name })) ?? [],
-      sections: section?.data?.map((s) => ({ id: s.sectionId, name: s.name })) ?? [],
-      employmentType: employmentType.map((e, i) => ({ id: i, name: e }))
-    };
-    setData(newData);
+      const newData = {
+        roles: roles?.data?.map((r) => ({ id: r.roleId, name: r.name })) ?? [],
+        subjectFields:
+          subjectFields?.data?.map((s) => ({ id: s.subjectFieldId, name: s.name })) ?? [],
+        teams: teams?.data?.map((t) => ({ id: t.teamId, name: t.name })) ?? [],
+        departments: departments?.data?.map((d) => ({ id: d.departmentId, name: d.name })) ?? [],
+        sections: sections?.data?.map((s) => ({ id: s.sectionId, name: s.name })) ?? [],
+        employmentType: employmentType.map((e, i) => ({ id: i, name: e }))
+      };
+      setData(newData);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -64,17 +70,21 @@ export default function FirstTimeRegisterForm() {
   }, []);
 
   const handleClick = () => {
-    // validate that department, section, subjectFields are not empty
-    if (selectedDepartment === 69) {
+    // validate that department, section, subjectFields and employmentype are not empty
+    if (selectedDepartment === -1) {
       alert('Avdeling må velges');
       return;
     }
-    if (selectedSection === 69) {
+    if (selectedSection === -1) {
       alert('Seksjon må velges');
       return;
     }
     if (selectedSubjectFields.length === 0) {
       alert('Fagområde må velges');
+      return;
+    }
+    if (selectedEmploymentType === -1) {
+      alert('Ansettelsesform må velges');
       return;
     }
 
