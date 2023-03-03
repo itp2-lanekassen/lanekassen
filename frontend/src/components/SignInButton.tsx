@@ -1,6 +1,4 @@
 import { useMsal } from '@azure/msal-react';
-import 'tailwindcss/colors';
-import 'tailwindcss/tailwind.css';
 import { loginRequest } from '../authConfig';
 
 /**

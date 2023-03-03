@@ -117,6 +117,17 @@ public class AbsenceController : ControllerBase {
     return absence == null ? BadRequest("Invalid absence id") : Ok(absence);
   }
 
+  [HttpGet("user/{id}")]
+  public async Task<IActionResult> GetAbsenceForUser(int id) {
+    List<Absence> absences = await _context.Absences.Where(a => a.UserId == id).ToListAsync();
+
+    foreach (Absence absence in absences) {
+      _context.Entry(absence).Reference(a => a.Type).Load();
+    }
+
+    return Ok(absences);
+  }
+
 
 
 }
