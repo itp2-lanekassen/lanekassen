@@ -13,8 +13,8 @@ export default function SubmitButton({
   disabled
 }: ISubmitButton & { disabled?: boolean }) {
   const title = disabled
-    ? 'Fyll ut avdeling, seksjon, fagområde og ansattsforhold'
-    : 'Trykk for å registrer bruker';
+    ? 'Fyll ut avdeling, seksjon, fagområde og ansattforhold'
+    : 'Trykk for å registrere bruker';
   return (
     <div>
       <button
