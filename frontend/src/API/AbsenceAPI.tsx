@@ -26,6 +26,10 @@ export function deleteAbsence(absenceId: number): Promise<AxiosResponse<Absence>
   return axios.delete(`${url}/${absenceId}`);
 }
 
+export async function getAbsencesByUserId(userId: number): Promise<AxiosResponse<Absence[]>> {
+  return axios.get(`${url}/user/${userId}`);
+}
+
 export default {
   getAllAbsences,
   getAbsenceById,
