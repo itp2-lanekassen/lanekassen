@@ -80,26 +80,8 @@ export default function FirstTimeRegisterForm() {
   }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
 
   const handleClick = () => {
-    // validate that department, section, subjectFields and employmentype are not empty
-    if (selectedDepartment === -1) {
-      alert('Avdeling må velges');
-      return;
-    }
-    if (selectedSection === -1) {
-      alert('Seksjon må velges');
-      return;
-    }
-    if (selectedSubjectFields.length === 0) {
-      alert('Fagområde må velges');
-      return;
-    }
-    if (selectedEmploymentType === -1) {
-      alert('Ansettelsesform må velges');
-      return;
-    }
-
     const newUser = {
-      // TODO: remove hardcoded values
+      // TODO: remove hardcoded values and get from azure
       azureId: 'test-azure-id',
       firstName: 'test',
       lastName: 'test',
