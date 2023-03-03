@@ -1,5 +1,4 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
-import { PageLayout } from './components/PageLayout';
 import logo from './assets/lanekassen_logo.png';
 import { SignInButton } from './components/SignInButton';
 import UserContextProvider from './context/UserContext';
@@ -7,7 +6,7 @@ import CalendarPage from './pages/CalendarPage';
 
 function App() {
   return (
-    <PageLayout>
+    <>
       <UnauthenticatedTemplate>
         <center>
           <img
@@ -24,7 +23,7 @@ function App() {
           <CalendarPage />
         </UserContextProvider>
       </AuthenticatedTemplate>
-    </PageLayout>
+    </>
   );
 }
 
