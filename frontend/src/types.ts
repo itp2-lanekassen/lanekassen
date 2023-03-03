@@ -1,5 +1,3 @@
-export const backendUrl = 'https://localhost:7184';
-
 export interface Role {
   roleId: number;
   name: string;
@@ -26,14 +24,6 @@ export interface Absence {
   type: AbsenceType;
   userId: number;
   user?: User;
-  comment?: string;
-}
-
-export interface NewAbsence {
-  startDate: string; // 0001-01-01T00:00:00
-  endDate: string;
-  absenceTypeId: number;
-  userId: number;
   comment?: string;
 }
 
@@ -79,17 +69,4 @@ export interface User {
 export enum EmploymentType {
   Ansatt,
   Konsulent
-}
-
-export interface NewUser {
-  azureId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  employmentType: EmploymentType;
-  admin: boolean;
-  sectionId: number;
-  subjectFields: number[];
-  roles?: number[];
-  teams?: number[];
 }

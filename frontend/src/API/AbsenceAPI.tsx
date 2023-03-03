@@ -1,4 +1,4 @@
-import { backendUrl, Absence } from '../types/types';
+import { backendUrl, Absence, NewAbsence } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const url = `${backendUrl}/Absence`;
@@ -11,7 +11,7 @@ export function getAbsenceById(absenceId: number): Promise<AxiosResponse<Absence
   return axios.get(`${url}/${absenceId}`);
 }
 
-export function postAbsence(absence: Absence): Promise<AxiosResponse<Absence>> {
+export function postAbsence(absence: NewAbsence): Promise<AxiosResponse<Absence>> {
   return axios.post(url, absence);
 }
 
@@ -24,6 +24,10 @@ export function updateAbsence(
 
 export function deleteAbsence(absenceId: number): Promise<AxiosResponse<Absence>> {
   return axios.delete(`${url}/${absenceId}`);
+}
+
+export async function getAbsencesByUserId(userId: number): Promise<AxiosResponse<Absence[]>> {
+  return axios.get(`${url}/user/${userId}`);
 }
 
 export default {
