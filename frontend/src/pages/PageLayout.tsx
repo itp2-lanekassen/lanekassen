@@ -6,7 +6,7 @@ import logo from '../assets/lanekassen_logo.png';
 /**
  * Renders the navbar component with a sign-in button if a user is not authenticated
  */
-export const PageLayout = (props: { children: any }) => {
+export const PageLayout = () => {
   const isAuthenticated = useIsAuthenticated();
 
   return (
