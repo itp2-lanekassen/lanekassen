@@ -5,6 +5,7 @@ import { User } from '@/types';
 import { getAllUsers } from '@/API/UserAPI';
 import { useUserContext } from '@/context/UserContext';
 import CalendarRow from '@/components/CalendarRow';
+import { ArrowForward, ArrowBack } from '@mui/icons-material';
 
 export type Column = Record<number, string[]>;
 
@@ -45,24 +46,28 @@ const CalendarPage = () => {
   return (
     <main className="grid place-items-center p-10">
       <div className="calendar-view">
-        <button className="rounded-full bg-secondary-light px-3 py-1 button-medium text-white row-span-2 row-start-1 whitespace-nowrap mb-1 mr-4">
+        <button className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white row-span-2 row-start-1 whitespace-nowrap mb-1 mr-4 text-center">
           Se din fraværsoversikt
         </button>
         {Object.entries(calendarColumns).map(([week, days], i) => (
           <div key={week} className="contents">
-            <div className="heading-xs col-span-5 row-start-1 w-full bg-primary text-white text-center relative">
-              Uke&nbsp;{week}
+            <h6 className="col-span-5 row-start-1 w-full bg-primary-light text-white text-center relative flex items-center justify-center">
               {i === 0 && (
-                <div className="absolute arrow-left top-0 -translate-x-full -left-0.5 border-r-primary" />
+                <button className="text-sm absolute left-0">
+                  <ArrowBack />
+                </button>
               )}
+              Uke&nbsp;{week}
               {i === Object.keys(calendarColumns).length - 1 && (
-                <div className="absolute arrow-right top-0 translate-x-full -right-0.5 border-l-primary" />
+                <button className="text-sm absolute right-0">
+                  <ArrowForward />
+                </button>
               )}
-            </div>
+            </h6>
             {days.map((d) => (
               <div
                 key={String(week) + d}
-                className={`font-header text-primary text-sm px-2 w-full text-center mb-1 ${
+                className={`font-header text-primary text-xs px-0.5 w-full text-center mb-1 ${
                   i % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark'
                 }`}
               >
