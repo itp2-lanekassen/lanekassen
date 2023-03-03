@@ -8,13 +8,15 @@ import Select from 'react-select';
  * @returns dropdown component where multiselect is possible
  */
 export default function DropdownMultiSelect({ placeholder, listOfOptions }: IDropdown) {
-  /*const options = [
+  const options = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' }
-  ];*/
+  ];
 
-  const options = listOfOptions.map((variable) => ({ label: variable, value: variable }));
+  //console.log(listOfOptions);
+
+  //const options = listOfOptions.map((variable: any) => ({ label: variable, value: variable }));
 
   return (
     <div className="mb-4">

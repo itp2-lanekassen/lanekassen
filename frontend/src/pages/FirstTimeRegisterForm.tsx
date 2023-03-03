@@ -18,21 +18,20 @@ pass correct data to listOfOptions (retrieve from database)
 export default function FirstTimeRegisterForm() {
   /*const allRoles = getAllRoles();
   console.log(allRoles);*/
-  const listOfRoles: string[] = [];
 
   const allRoles = async () => {
     const roles = await getAllRoles();
+    const listOfRoles: string[] = [];
     if (roles != null || roles != undefined) {
       roles.data.forEach((element) => {
-        //console.log(element.name);
         listOfRoles.push(element.name);
       });
     } else {
       console.error('Data is null or undefined');
     }
+    //console.log(listOfRoles);
+    return listOfRoles;
   };
-
-  //console.log(listOfRoles);
 
   return (
     <div className="max-w-full">
@@ -45,12 +44,12 @@ export default function FirstTimeRegisterForm() {
         <h1 className="mt-[-100px]">Første registrering</h1>
       </div>
       <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
-        <Dropdown placeholder="Avdeling" listOfOptions={[]} />
-        <Dropdown placeholder="Seksjon" listOfOptions={[]} />
-        <DropdownMultiSelect placeholder="Fagområde" listOfOptions={[]} />
-        <DropdownMultiSelect placeholder="Team" listOfOptions={[]} />
-        <DropdownMultiSelect placeholder="Rolle" listOfOptions={listOfRoles} />
-        <Dropdown placeholder="Ansattforhold" listOfOptions={[]} />
+        <Dropdown placeholder="Avdeling" listOfOptions={allRoles()} />
+        <Dropdown placeholder="Seksjon" listOfOptions={allRoles()} />
+        <DropdownMultiSelect placeholder="Fagområde" listOfOptions={allRoles()} />
+        <DropdownMultiSelect placeholder="Team" listOfOptions={allRoles()} />
+        <DropdownMultiSelect placeholder="Rolle" listOfOptions={allRoles()} />
+        <Dropdown placeholder="Ansattforhold" listOfOptions={allRoles()} />
         <SubmitButton buttonText="Registrer deg" handleClick={allRoles} />
       </div>
     </div>
