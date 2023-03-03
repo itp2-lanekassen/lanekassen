@@ -3,6 +3,7 @@ import logo from './assets/lanekassen_logo.png';
 import { SignInButton } from './components/SignInButton';
 import UserContextProvider from './context/UserContext';
 import CalendarPage from './pages/CalendarPage';
+import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>
         <UserContextProvider>
-          <CalendarPage />
+          <FirstTimeRegisterForm />
         </UserContextProvider>
       </AuthenticatedTemplate>
     </>
