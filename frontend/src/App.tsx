@@ -1,8 +1,9 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
-import logo from './assets/lanekassen_logo.png';
 import { SignInButton } from './components/SignInButton';
+import GlobalContextProvider from './context/GlobalContext';
 import UserContextProvider from './context/UserContext';
 import CalendarPage from './pages/CalendarPage';
+import logo from './assets/lanekassen_logo.png';
 import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
 
 function App() {

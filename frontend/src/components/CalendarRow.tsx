@@ -1,4 +1,6 @@
 import { getAbsencesByUserId } from '@/API/AbsenceAPI';
+import { useGlobalContext } from '@/context/GlobalContext';
+import { useUserContext } from '@/context/UserContext';
 import { Column } from '@/pages/CalendarPage';
 import { Absence, User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
@@ -21,6 +23,15 @@ function getBgColor(absences: Absence[] = [], day: string) {
 }
 
 const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps) => {
+  const { currentUser } = useUserContext();
+  const { openAbsenceForm } = useGlobalContext();
+
+  const handleRowClick = (day: string) => {
+    if (!(isCurrentUser || currentUser.admin)) return;
+
+    openAbsenceForm(moment(day, 'DD.MM.YY').format('yyyy-MM-DD'));
+  };
+
   const { isLoading, data: absences } = useQuery(['absences', { userId: user?.userId }], async () =>
     user ? (await getAbsencesByUserId(user.userId)).data : []
   );
@@ -50,6 +61,8 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
                 getBgColor(absences, day) ? '' : j % 2 ? 'bg-card-two' : 'bg-card-one'
               }`}
               style={getBgColor(absences, day)}
+              role="button"
+              onClick={() => handleRowClick(day)}
             />
           ))}
         </div>
