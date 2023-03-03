@@ -39,6 +39,8 @@ export default function FirstTimeRegisterForm() {
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
   const [selectedEmploymentType, setEmploymentType] = useState<number>(-1);
 
+  const [isDisabled, setIsDisabled] = useState(true);
+
   const fetchData = async () => {
     try {
       const [roles, teams, sections, departments, subjectFields] = await Promise.all([
@@ -68,6 +70,14 @@ export default function FirstTimeRegisterForm() {
   useEffect(() => {
     fetchData();
   }, []);
+  useEffect(() => {
+    setIsDisabled(
+      selectedDepartment === -1 ||
+        selectedSection === -1 ||
+        selectedSubjectFields.length === 0 ||
+        selectedEmploymentType === -1
+    );
+  }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
 
   const handleClick = () => {
     // validate that department, section, subjectFields and employmentype are not empty
@@ -132,6 +142,11 @@ export default function FirstTimeRegisterForm() {
           listOfOptions={data.subjectFields.map((s) => ({ name: s.name, id: s.id }))}
           handleChange={(e) => setSelectedSubjectFields(e)}
         />
+        <Dropdown
+          placeholder="Ansattforhold"
+          listOfOptions={data.employmentType.map((e) => ({ name: e.name, id: e.id }))}
+          handleChange={(e) => setEmploymentType(e)}
+        />
         <DropdownMultiSelect
           placeholder="Team"
           listOfOptions={data.teams.map((t) => ({ name: t.name, id: t.id }))}
@@ -142,12 +157,8 @@ export default function FirstTimeRegisterForm() {
           listOfOptions={data.roles.map((r) => ({ name: r.name, id: r.id }))}
           handleChange={(e) => setSelectedRoles(e)}
         />
-        <Dropdown
-          placeholder="Ansattforhold"
-          listOfOptions={data.employmentType.map((e) => ({ name: e.name, id: e.id }))}
-          handleChange={(e) => setEmploymentType(e)}
-        />
-        <SubmitButton buttonText="Registrer deg" handleClick={handleClick} />
+
+        <SubmitButton buttonText="Registrer deg" handleClick={handleClick} disabled={isDisabled} />
       </div>
     </div>
   );

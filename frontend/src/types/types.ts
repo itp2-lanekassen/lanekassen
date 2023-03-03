@@ -95,6 +95,7 @@ export interface NewUser {
 }
 
 export interface ISubmitButton {
+  disabled: boolean;
   buttonText: string;
   handleClick: () => void;
 }
