@@ -46,7 +46,7 @@ const UserContextProvider: FC<UserContextProps> = (props) => {
     data: currentUser
   } = useQuery(
     ['current-user'],
-    // Should be azureUser.id
+    // TODO: use actual id - azureUser.id
     async () => (await getUserByAzureId(azureId)).data,
     {
       retry: false
@@ -55,10 +55,8 @@ const UserContextProvider: FC<UserContextProps> = (props) => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  // handle some redirect
-  if (isError) window.location.replace('/login');
-
-  // TODO: if !isLoading && !data redirect to register
+  // TODO: if (!isLoading && !data) || isError redirect to register
+  // if (isError || (!isLoading && !data)) redirect('/login');
 
   return (
     <UserContext.Provider value={{ azureUser, currentUser }}>{props.children}</UserContext.Provider>
