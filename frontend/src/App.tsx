@@ -4,6 +4,7 @@ import GlobalContextProvider from './context/GlobalContext';
 import UserContextProvider from './context/UserContext';
 import CalendarPage from './pages/CalendarPage';
 import logo from './assets/lanekassen_logo.png';
+import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
 
 function App() {
   return (
@@ -21,9 +22,7 @@ function App() {
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>
         <UserContextProvider>
-          <GlobalContextProvider>
-            <CalendarPage />
-          </GlobalContextProvider>
+          <FirstTimeRegisterForm />
         </UserContextProvider>
       </AuthenticatedTemplate>
     </>
