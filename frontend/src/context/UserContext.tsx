@@ -12,11 +12,11 @@ interface UserContextProps {
 }
 
 interface UserContextType {
-  azureUser?: AzureAdUser;
-  currentUser?: User;
+  azureUser: AzureAdUser;
+  currentUser: User;
 }
 
-const UserContext = createContext<UserContextType>({});
+const UserContext = createContext<UserContextType>({} as UserContextType);
 
 export const useUserContext = (): UserContextType => useContext(UserContext);
 
@@ -25,7 +25,7 @@ const UserContextProvider: FC<UserContextProps> = (props) => {
 
   const azureId = 'This-is-a-fake-azure-id';
 
-  const { data: azureUser } = useQuery(
+  const azureUser = useQuery(
     ['azure-ad-user'],
     async () => {
       const token = (
@@ -40,11 +40,7 @@ const UserContextProvider: FC<UserContextProps> = (props) => {
     { retry: false }
   );
 
-  const {
-    isLoading,
-    isError,
-    data: currentUser
-  } = useQuery(
+  const currentUser = useQuery(
     ['current-user'],
     // TODO: use actual id - azureUser.id
     async () => (await getUserByAzureId(azureId)).data,
@@ -53,13 +49,16 @@ const UserContextProvider: FC<UserContextProps> = (props) => {
     }
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (azureUser.isLoading || currentUser.isLoading) return <div>Loading...</div>;
+  if (azureUser.isError || currentUser.isError) return <div>Error :/</div>;
 
   // TODO: if (!isLoading && !data) || isError redirect to register
   // if (isError || (!isLoading && !data)) redirect('/login');
 
   return (
-    <UserContext.Provider value={{ azureUser, currentUser }}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={{ azureUser: azureUser.data, currentUser: currentUser.data }}>
+      {props.children}
+    </UserContext.Provider>
   );
 };
 
