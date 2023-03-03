@@ -1,5 +1,5 @@
-import { IDropdown, IDropdownMultiSelect } from '../types/types';
-import Select, { MultiValue, ActionMeta } from 'react-select';
+import { IDropdownMultiSelect } from '../types/types';
+import Select, { MultiValue } from 'react-select';
 
 /**
  *
