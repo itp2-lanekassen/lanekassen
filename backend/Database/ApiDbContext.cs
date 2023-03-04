@@ -66,22 +66,6 @@ public class ApiDbContext : DbContext {
             new { RolesRoleId = 736977, DepartmentsDepartmentId = department1.DepartmentId }
           ));
 
-/*         _ = e
-        .HasMany(department => department.SubjectFields)
-        .WithOne(subjectField => subjectField.Departments)
-        .HasForeignKey(subjectField => subjectField.DepartmentId)
-        .UsingEntity(j => j.HasData(
-            new { SubjectFieldsSubjectFieldId = subjectField1.SubjectFieldId, DepartmentsDepartmentId = department1.DepartmentId },
-            new { SubjectFieldsSubjectFieldId = 716970, DepartmentsDepartmentId = department1.DepartmentId },
-            new { SubjectFieldsSubjectFieldId = 716971, DepartmentsDepartmentId = department1.DepartmentId },
-            new { SubjectFieldsSubjectFieldId = 716972, DepartmentsDepartmentId = department1.DepartmentId },
-            new { SubjectFieldsSubjectFieldId = 716973, DepartmentsDepartmentId = department1.DepartmentId },
-            new { SubjectFieldsSubjectFieldId = 716974, DepartmentsDepartmentId = department1.DepartmentId },
-            new { SubjectFieldsSubjectFieldId = 716975, DepartmentsDepartmentId = department1.DepartmentId },
-            new { SubjectFieldsSubjectFieldId = 716976, DepartmentsDepartmentId = department1.DepartmentId },
-            new { SubjectFieldsSubjectFieldId = 716977, DepartmentsDepartmentId = department1.DepartmentId }
-          )); */
-
       _ = e.HasData(
         department1,
         new() { DepartmentId = 696970, Name = "Utdanningsstøtte", Abbreviation = "UA" },
@@ -100,17 +84,6 @@ public class ApiDbContext : DbContext {
       new() { SectionId = 706971, Name = "Hjemmekollega" }
     );
 
-/*     _ = modelBuilder.Entity<SubjectField>().HasData(
-      subjectField1,
-      new SubjectField { SubjectFieldId = 716970, Name = "Applikasjonsdrift"},
-      new SubjectField { SubjectFieldId = 716971, Name = "Systemutvikling og test"},
-      new SubjectField { SubjectFieldId = 716972, Name = "Informasjonssikkerhet"},
-      new SubjectField { SubjectFieldId = 716973, Name = "Data og informasjonsforvaltning"},
-      new SubjectField { SubjectFieldId = 716974, Name = "Leverandørstyring og økonomi"},
-      new SubjectField { SubjectFieldId = 716975, Name = "Drift og avtaleeierskap"},
-      new SubjectField { SubjectFieldId = 716976, Name = "IT Brukerstøtte"},
-      new SubjectField { SubjectFieldId = 716977, Name = "Rekruttering og kompetanse"}
-    ); */
 
         _ = modelBuilder.Entity<SubjectField>().HasData(
       subjectField1,
