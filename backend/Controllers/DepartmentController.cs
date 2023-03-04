@@ -151,7 +151,7 @@ public class DepartmentController : ControllerBase {
     if (department == null) {
       return BadRequest("Invalid department id");
     }
-    List<SubjectField> subjectFields = await _context.SubjectFields.Where(u => u.Department == department).ToListAsync();
+    List<SubjectField> subjectFields = await _context.SubjectFields.Where(u => u.DepartmentId == department.DepartmentId).ToListAsync();
     return Ok(subjectFields);
   }
 
