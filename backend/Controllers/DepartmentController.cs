@@ -112,4 +112,48 @@ public class DepartmentController : ControllerBase {
     Department? existingDepartment = await _context.Departments.FindAsync(id);
     return existingDepartment == null ? BadRequest("Invalid department id") : Ok(existingDepartment);
   }
+
+  [HttpGet("{id}/sections")]
+  public async Task<IActionResult> GetDepartmentSections(int id) {
+    Department? department = await _context.Departments.FindAsync(id);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+    List<Section> sections = await _context.Sections.Where(u => u.Departments.Contains(department)).ToListAsync();
+    return Ok(sections);
+  }
+
+  [HttpGet("{id}/teams")]
+  public async Task<IActionResult> GetDepartmentTeams(int id) {
+    Department? department = await _context.Departments.FindAsync(id);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+    List<Team> teams = await _context.Teams.Where(u => u.Departments.Contains(department)).ToListAsync();
+    return Ok(teams);
+  }
+
+  [HttpGet("{id}/roles")]
+  public async Task<IActionResult> GetDepartmentRoles(int id) {
+    Department? department = await _context.Departments.FindAsync(id);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+    List<Role> roles = await _context.Roles.Where(u => u.Departments.Contains(department)).ToListAsync();
+    return Ok(roles);
+  }
+
+
+
+  [HttpGet("{id}/subjectfields")]
+  public async Task<IActionResult> GetDepartmentSubjectFields(int id) {
+    Department? department = await _context.Departments.FindAsync(id);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+    List<SubjectField> subjectFields = await _context.SubjectFields.Where(u => u.Department == department).ToListAsync();
+    return Ok(subjectFields);
+  }
+
+
 }
