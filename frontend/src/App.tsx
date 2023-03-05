@@ -9,7 +9,7 @@ import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
 function App() {
   return (
     <>
-{/*       <UnauthenticatedTemplate>
+      {/*       <UnauthenticatedTemplate>
         <center>
           <img
             src={logo}

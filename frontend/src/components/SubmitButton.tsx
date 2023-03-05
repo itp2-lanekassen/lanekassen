@@ -5,6 +5,8 @@ import '../index.css';
  *
  * @param buttonText the text on the button
  * @param handleClick the onClick function
+ * @param disabled whether the button is disabled or not
+ * @param disabledTitle the title of the button when it is disabled
  * @returns the big purple button that is used for submitting forms
  */
 export default function SubmitButton({

@@ -103,12 +103,14 @@ export interface ISubmitButton {
 
 export interface IDropdownMultiSelect {
   handleChange: (value: number[]) => void;
+  value: number[];
   placeholder: string;
   listOfOptions: { name: string; id: number }[];
 }
 
 export interface IDropdown {
   handleChange: (value: number) => void;
+  value: number;
   placeholder: string;
   listOfOptions: { name: string; id: number }[];
 }

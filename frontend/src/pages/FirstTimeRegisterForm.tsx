@@ -39,6 +39,8 @@ export default function FirstTimeRegisterForm() {
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(-1);
 
+  const [isReset, setIsReset] = useState(false);
+
   const [isDisabled, setIsDisabled] = useState(true);
 
   const fetchData = async () => {
@@ -82,17 +84,24 @@ export default function FirstTimeRegisterForm() {
     }
   };
 
+  const handleReset = () => {
+    setIsReset(true);
+    resetStatesOnDepartmentChange();
+    setIsReset(false);
+  };
   function resetStatesOnDepartmentChange() {
-    setSelectedSection(-1);
-    setSelectedSubjectFields([]);
-    setSelectedTeams([]);
-    setSelectedRoles([]);
-    setData({
-      roles: [],
-      subjectFields: [],
-      teams: [],
-      sections: []
-    });
+    if (selectedDepartment !== -1) {
+      setSelectedSection(-1);
+      setSelectedSubjectFields([]);
+      setSelectedTeams([]);
+      setSelectedRoles([]);
+      setData({
+        roles: [],
+        subjectFields: [],
+        teams: [],
+        sections: []
+      });
+    }
   }
 
   useEffect(() => {
@@ -101,7 +110,7 @@ export default function FirstTimeRegisterForm() {
   }, []);
 
   useEffect(() => {
-    resetStatesOnDepartmentChange();
+    handleReset();
     if (selectedDepartment !== -1) fetchData();
   }, [selectedDepartment]);
 
@@ -148,31 +157,37 @@ export default function FirstTimeRegisterForm() {
           placeholder="Ansattforhold"
           listOfOptions={employmentType.map((e) => ({ name: e.name, id: e.id }))}
           handleChange={(e) => setSelectedEmploymentType(e)}
+          value={selectedEmploymentType}
         />
         <Dropdown
           placeholder="Avdeling"
           listOfOptions={department.map((d) => ({ name: d.name, id: d.id }))}
           handleChange={(e) => setSelectedDepartment(e)}
+          value={selectedDepartment}
         />
         <Dropdown
           placeholder="Seksjon"
           listOfOptions={data.sections.map((s) => ({ name: s.name, id: s.id }))}
           handleChange={(e) => setSelectedSection(e)}
+          value={isReset ? -1 : selectedSection}
         />
         <DropdownMultiSelect
           placeholder="Fagområde"
           listOfOptions={data.subjectFields.map((s) => ({ name: s.name, id: s.id }))}
           handleChange={(e) => setSelectedSubjectFields(e)}
+          value={isReset ? [] : selectedSubjectFields}
         />
         <DropdownMultiSelect
           placeholder="Team"
           listOfOptions={data.teams.map((t) => ({ name: t.name, id: t.id }))}
           handleChange={(e) => setSelectedTeams(e)}
+          value={isReset ? [] : selectedTeams}
         />
         <DropdownMultiSelect
           placeholder="Rolle"
           listOfOptions={data.roles.map((r) => ({ name: r.name, id: r.id }))}
           handleChange={(e) => setSelectedRoles(e)}
+          value={isReset ? [] : selectedRoles}
         />
 
         <SubmitButton
