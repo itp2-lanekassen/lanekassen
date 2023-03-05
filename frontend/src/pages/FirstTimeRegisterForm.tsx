@@ -31,16 +31,13 @@ export default function FirstTimeRegisterForm() {
   });
   const [department, setDepartment] = useState<{ id: number; name: string }[]>([]);
   const [employmentType, setEmploymentType] = useState<{ id: number; name: string }[]>([]);
-
   const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
   const [selectedSection, setSelectedSection] = useState<number>(-1);
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(-1);
-
   const [isReset, setIsReset] = useState(false);
-
   const [isDisabled, setIsDisabled] = useState(true);
 
   const fetchData = async () => {
@@ -89,6 +86,7 @@ export default function FirstTimeRegisterForm() {
     resetStatesOnDepartmentChange();
     setIsReset(false);
   };
+
   function resetStatesOnDepartmentChange() {
     if (selectedDepartment !== -1) {
       setSelectedSection(-1);
@@ -109,11 +107,13 @@ export default function FirstTimeRegisterForm() {
     fetchDepartments();
   }, []);
 
+  // Fetch data when department is selected
   useEffect(() => {
     handleReset();
     if (selectedDepartment !== -1) fetchData();
   }, [selectedDepartment]);
 
+  // Validate that required fields are filled out
   useEffect(() => {
     setIsDisabled(
       selectedDepartment === -1 ||
@@ -124,22 +124,21 @@ export default function FirstTimeRegisterForm() {
   }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
 
   const handleClick = () => {
-    const newUser = {
-      // TODO: remove hardcoded values and get from azure
+    const newUser: NewUser = {
+      // TODO: Remove hardcoded values and replace it with values from Azure
       azureId: 'test-azure-id',
       firstName: 'test',
       lastName: 'test',
       email: 'test@test.no',
       admin: false,
       sectionId: selectedSection,
-      department: selectedDepartment,
       subjectFields: selectedSubjectFields,
       teams: selectedTeams,
       roles: selectedRoles,
-      employmentType: selectedEmploymentType,
-      absences: []
+      employmentType: selectedEmploymentType
     };
-    postUser(newUser as NewUser);
+    postUser(newUser);
+    // TODO: Redirect to home page
   };
 
   return (
