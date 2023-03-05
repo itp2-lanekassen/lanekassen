@@ -149,7 +149,7 @@ export default function FirstTimeRegisterForm() {
           src={ellipse}
           alt=""
         />
-        <h1 className="mt-[-100px]">Første registrering</h1>
+        <h1 className="mt-[-100px]">Registrering</h1>
       </div>
       <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
         <Dropdown
