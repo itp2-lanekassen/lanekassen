@@ -10,11 +10,11 @@ import '../index.css';
 export default function SubmitButton({
   buttonText,
   handleClick,
-  disabled
-}: ISubmitButton & { disabled?: boolean }) {
-  const title = disabled
-    ? 'Fyll ut avdeling, seksjon, fagområde og ansattforhold'
-    : 'Trykk for å registrere bruker';
+  disabled,
+  disabledTitle
+}: ISubmitButton & { disabled?: boolean; disabledTitle?: string }) {
+  const enabledTitle = '';
+
   return (
     <div>
       <button
@@ -24,7 +24,7 @@ export default function SubmitButton({
         }`}
         onClick={handleClick}
         disabled={disabled}
-        title={title}
+        title={disabled ? disabledTitle : enabledTitle}
       >
         {buttonText}
       </button>
