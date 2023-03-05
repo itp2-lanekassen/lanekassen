@@ -11,6 +11,26 @@ export function getDepartmentById(departmentId: number): Promise<AxiosResponse<D
   return axios.get(`${url}/${departmentId}`);
 }
 
+export function getSectionsByDepartmentId(
+  departmentId: number
+): Promise<AxiosResponse<Department>> {
+  return axios.get(`${url}/${departmentId}/sections`);
+}
+
+export function getSubjectFieldsByDepartmentId(
+  departmentId: number
+): Promise<AxiosResponse<Department>> {
+  return axios.get(`${url}/${departmentId}/subjectFields`);
+}
+
+export function getTeamsByDepartmentId(departmentId: number): Promise<AxiosResponse<Department>> {
+  return axios.get(`${url}/${departmentId}/teams`);
+}
+
+export function getRolesByDepartmentId(departmentId: number): Promise<AxiosResponse<Department>> {
+  return axios.get(`${url}/${departmentId}/roles`);
+}
+
 export function postDepartment(department: Department): Promise<AxiosResponse<Department>> {
   return axios.post(url, department);
 }
@@ -31,5 +51,9 @@ export default {
   getDepartmentById,
   postDepartment,
   updateDepartment,
-  deleteDepartment
+  deleteDepartment,
+  getSectionsByDepartmentId,
+  getSubjectFieldsByDepartmentId,
+  getTeamsByDepartmentId,
+  getRolesByDepartmentId
 };

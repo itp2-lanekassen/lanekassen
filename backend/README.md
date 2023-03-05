@@ -32,6 +32,13 @@ dotnet ef migrations add InititalCreate
 dotnet ef database update 
 ```
 
+For adding a migration:
+
+```bash
+dotnet ef migrations add <name>
+dotnet ef database update 
+```
+
 ## Running in development
 
 This will reload the application when making changes. *Changes in `program.cs` may not work without a full restart*

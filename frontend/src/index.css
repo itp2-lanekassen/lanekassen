@@ -144,4 +144,30 @@
     @apply button font-medium;
     letter-spacing: 0.005;
   }
+
+  .calendar-view {
+    @apply grid place-content-center place-items-center gap-0.5;
+    grid-template-columns: 15% repeat(20, 1fr);
+  }
+
+
+  .arrow-right {
+    width: 0; 
+    height: 0; 
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    
+    border-left-width: 25px;
+    border-left-style: solid;
+  }
+  
+  .arrow-left {
+    width: 0; 
+    height: 0; 
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent; 
+    
+    border-right-width: 25px;
+    border-right-style: solid;
+  }
 }
