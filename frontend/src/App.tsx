@@ -1,11 +1,13 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
 import { SignInButton } from './components/SignInButton';
-import GlobalContextProvider from './context/GlobalContext';
 import UserContextProvider from './context/UserContext';
 import FilterContextProvider from './context/FilterContext';
 import CalendarPage from './pages/CalendarPage';
 import logo from './assets/lanekassen_logo.png';
 import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
+import { Routes, Route, HashRouter } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
+import GlobalContextProvider from './context/GlobalContext';
 
 function App() {
   return (
@@ -18,7 +20,18 @@ function App() {
             className="object-contain h-14"
             style={{ bottom: '75px', position: 'relative' }}
           />
-          <SignInButton />
+          <HashRouter>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <RecoilRoot>
+                    <SignInButton />
+                  </RecoilRoot>
+                }
+              ></Route>
+            </Routes>
+          </HashRouter>
         </center>
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>

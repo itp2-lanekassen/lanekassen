@@ -1,17 +1,20 @@
 import { useMsal } from '@azure/msal-react';
 import { loginRequest } from '../authConfig';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Renders a button which, when selected, will redirect the page to the login prompt
  */
 export const SignInButton = () => {
   const { instance } = useMsal();
+  const navigate = useNavigate();
 
   const handleLogin = (loginType: string) => {
     if (loginType === 'redirect') {
       instance.loginRedirect(loginRequest).catch((e: unknown) => {
         console.error(e);
       });
+      navigate('/register');
     }
   };
   return (

@@ -15,10 +15,6 @@ import { useGlobalContext } from '@/context/GlobalContext';
 import { useUserContext } from '@/context/UserContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-/**
- *
- * @returns component that is the page for first-time registering
- */
 export default function FirstTimeRegisterForm() {
   const queryClient = useQueryClient();
 
