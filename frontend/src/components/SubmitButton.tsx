@@ -5,16 +5,18 @@ import '../index.css';
  *
  * @param buttonText the text on the button
  * @param handleClick the onClick function
+ * @param disabled whether the button is disabled or not
+ * @param disabledTitle the title of the button when it is disabled
  * @returns the big purple button that is used for submitting forms
  */
 export default function SubmitButton({
   buttonText,
   handleClick,
-  disabled
-}: ISubmitButton & { disabled?: boolean }) {
-  const title = disabled
-    ? 'Fyll ut avdeling, seksjon, fagområde og ansattforhold'
-    : 'Trykk for å registrere bruker';
+  disabled,
+  disabledTitle
+}: ISubmitButton & { disabled?: boolean; disabledTitle?: string }) {
+  const enabledTitle = '';
+
   return (
     <div>
       <button
@@ -24,7 +26,7 @@ export default function SubmitButton({
         }`}
         onClick={handleClick}
         disabled={disabled}
-        title={title}
+        title={disabled ? disabledTitle : enabledTitle}
       >
         {buttonText}
       </button>

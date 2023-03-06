@@ -5,6 +5,8 @@ import Select, { MultiValue } from 'react-select';
  *
  * @param placeholder is the "title" of the dropdown
  * @param listOfOptions is list of options retrieved from database
+ * @param handleChange is the function that is called when a new option is selected
+ * @param value is the value of the selected option
  * @returns dropdown component where multiselect is possible
  */
 
@@ -15,7 +17,8 @@ interface IOption {
 export default function DropdownMultiSelect({
   handleChange,
   placeholder,
-  listOfOptions
+  listOfOptions,
+  value
 }: IDropdownMultiSelect) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
@@ -31,6 +34,7 @@ export default function DropdownMultiSelect({
         options={options}
         placeholder={placeholder}
         isMulti
+        value={value ? options.filter((option) => value.includes(option.value)) : []}
         onChange={handleOnChange}
         theme={(theme) => ({
           ...theme,
