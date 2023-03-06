@@ -24,7 +24,7 @@ function App() {
       <AuthenticatedTemplate>
         <UserContextProvider>
           <GlobalContextProvider>
-            Router view here
+            {/* Router view here */}
             <FirstTimeRegisterForm />
           </GlobalContextProvider>
         </UserContextProvider>
