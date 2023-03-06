@@ -89,6 +89,7 @@ export interface NewUser {
   employmentType: EmploymentType;
   admin: boolean;
   sectionId: number;
+  departmentId: number;
   subjectFields: number[];
   roles?: number[];
   teams?: number[];
