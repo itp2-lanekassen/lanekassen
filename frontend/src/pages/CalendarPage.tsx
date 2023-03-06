@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useQuery } from '@tanstack/react-query';
-import { User } from '@/types';
+import { User } from '@/types/types';
 import { getAllUsers } from '@/API/UserAPI';
 import { useUserContext } from '@/context/UserContext';
 import CalendarRow from '@/components/CalendarRow';
