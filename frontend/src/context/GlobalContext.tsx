@@ -41,7 +41,10 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
   const teams = useQuery(['teams'], async () => (await getAllTeams()).data);
   const sections = useQuery(['sections'], async () => (await getAllSections()).data);
   const departments = useQuery(['departments'], async () => (await getAllDepartments()).data);
-  const subjectFields = useQuery(['subjectFields'], async () => (await getAllSubjectFields()).data);
+  const subjectFields = useQuery(
+    ['subject-fields'],
+    async () => (await getAllSubjectFields()).data
+  );
 
   const [showAbsenceForm, setShowAbsenceForm] = useState(false);
   const [date, setDate] = useState<string>();
