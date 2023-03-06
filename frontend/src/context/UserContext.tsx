@@ -49,11 +49,13 @@ const UserContextProvider: FC<UserContextProps> = (props) => {
     }
   );
 
-  if (azureUser.isLoading || currentUser.isLoading) return <div>Loading...</div>;
-  if (azureUser.isError || currentUser.isError) return <div>Error :/</div>;
+  if (azureUser.isLoading) return <div>Henter bruker fra Azure AD...</div>;
+  if (azureUser.isError) return <div>Noe gikk galt: {String(azureUser.error)}</div>;
 
-  // TODO: if (!isLoading && !data) || isError redirect to register
-  // if (isError || (!isLoading && !data)) redirect('/login');
+  if (currentUser.isLoading) return <div>Laster bruker...</div>;
+  if (currentUser.isError) return <div>Noe gikk galt: {String(currentUser.data)}</div>;
+
+  // if (!currentUser.data) redirect('/login');
 
   return (
     <UserContext.Provider value={{ azureUser: azureUser.data, currentUser: currentUser.data }}>
