@@ -10,7 +10,7 @@ import TestPage from './pages/TestPage';
 function App() {
   return (
     <>
-{/*       <UnauthenticatedTemplate>
+      <UnauthenticatedTemplate>
         <center>
           <img
             src={logo}
@@ -24,12 +24,12 @@ function App() {
       <AuthenticatedTemplate>
         <UserContextProvider>
           <GlobalContextProvider>
-            {/* Router view here */}
+            Router view here
             <FirstTimeRegisterForm />
           </GlobalContextProvider>
         </UserContextProvider>
-      </AuthenticatedTemplate> */}
-      <TestPage />
+      </AuthenticatedTemplate>
+      {/* <TestPage /> */}
     </>
   );
 }
