@@ -152,6 +152,47 @@ public class UserController : ControllerBase {
     return user == null ? NotFound() : Ok(user);
   }
 
+  [HttpGet("filter")]
+  public async Task<IActionResult> FilterUsers(
+    [FromQuery(Name = "excludeIds")] List<int> ExcludeIds,
+    // [FromQuery(Name = "departments")] List<int> Departments,
+    [FromQuery(Name = "sections")] List<int> Sections,
+    [FromQuery(Name = "teams")] List<int> Teams,
+    [FromQuery(Name = "roles")] List<int> Roles,
+    [FromQuery(Name = "subjectFields")] List<int> SubjectFields
+  ) {
+    IQueryable<User> users = _context.Users;
+
+    if (ExcludeIds.Count > 0) {
+      users = users.Where(u => !ExcludeIds.Contains(u.UserId));
+    }
+
+    // TODO: add departments on user type
+    // if (Departments.Count > 0) {
+    //   users = users.Where(u => Departments.Contains(u.DepartmentId));
+    // }
+
+    if (Sections.Count > 0) {
+      users = users.Where(u => Sections.Contains(u.Section.SectionId));
+    }
+
+    if (Teams.Count > 0) {
+      users = users.Where(u => u.Teams.Any(t => Teams.Contains(t.TeamId)));
+    }
+
+    if (Roles.Count > 0) {
+      users = users.Where(u => u.Roles.Any(r => Roles.Contains(r.RoleId)));
+    }
+
+    if (SubjectFields.Count > 0) {
+      users = users.Where(u => u.SubjectFields.Any(sf => SubjectFields.Contains(sf.SubjectFieldId)));
+    }
+
+    List<User> result = await users.ToListAsync();
+
+    return Ok(result);
+  }
+
 
 }
 
