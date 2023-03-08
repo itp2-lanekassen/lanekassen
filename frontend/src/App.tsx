@@ -5,7 +5,7 @@ import UserContextProvider from './context/UserContext';
 import CalendarPage from './pages/CalendarPage';
 import logo from './assets/lanekassen_logo.png';
 import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
-import TestPage from './pages/TestPage';
+import FilterContextProvider from './context/FilterContext';
 
 function App() {
   return (
@@ -24,12 +24,13 @@ function App() {
       <AuthenticatedTemplate>
         <UserContextProvider>
           <GlobalContextProvider>
-            Router view here
-            <FirstTimeRegisterForm />
+            <FilterContextProvider>
+              {/* Router view here */}
+              <FirstTimeRegisterForm />
+            </FilterContextProvider>
           </GlobalContextProvider>
         </UserContextProvider>
       </AuthenticatedTemplate>
-      {/* <TestPage /> */}
     </>
   );
 }
