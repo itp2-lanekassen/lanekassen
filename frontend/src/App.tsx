@@ -5,11 +5,12 @@ import UserContextProvider from './context/UserContext';
 import CalendarPage from './pages/CalendarPage';
 import logo from './assets/lanekassen_logo.png';
 import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
+import TestPage from './pages/TestPage';
 
 function App() {
   return (
     <>
-      <UnauthenticatedTemplate>
+{/*       <UnauthenticatedTemplate>
         <center>
           <img
             src={logo}
@@ -24,7 +25,8 @@ function App() {
         <UserContextProvider>
           <FirstTimeRegisterForm />
         </UserContextProvider>
-      </AuthenticatedTemplate>
+      </AuthenticatedTemplate> */}
+      <TestPage />
     </>
   );
 }

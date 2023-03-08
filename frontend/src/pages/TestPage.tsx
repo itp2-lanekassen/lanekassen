@@ -155,6 +155,9 @@ function MyComponent() {
   };
 
   const getUser3 = async () => {
+    const test = import.meta.env.VITE_API_URL;
+    console.log(test);
+
     const userId = 'string';
     const user = await getUserById(666969);
 
