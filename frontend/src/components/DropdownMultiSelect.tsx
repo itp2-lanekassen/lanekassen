@@ -1,5 +1,5 @@
-import { IDropdownMultiSelect } from '../types/types';
 import Select, { MultiValue } from 'react-select';
+import { IDropdownMultiSelect } from '../types/types';
 
 /**
  *
@@ -18,7 +18,8 @@ export default function DropdownMultiSelect({
   handleChange,
   placeholder,
   listOfOptions,
-  value
+  value,
+  isDisabled
 }: IDropdownMultiSelect) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
@@ -30,6 +31,7 @@ export default function DropdownMultiSelect({
   return (
     <div className="mb-4">
       <Select
+        isDisabled={isDisabled}
         className="text-primary w-80"
         options={options}
         placeholder={placeholder}

@@ -1,5 +1,5 @@
-import { IDropdown } from '../types/types';
 import Select from 'react-select';
+import { IDropdown } from '../types/types';
 
 /**
  *
@@ -10,7 +10,13 @@ import Select from 'react-select';
  * @returns dropdown component
  */
 
-export default function Dropdown({ handleChange, placeholder, listOfOptions, value }: IDropdown) {
+export default function Dropdown({
+  handleChange,
+  placeholder,
+  listOfOptions,
+  value,
+  isDisabled
+}: IDropdown) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
   const handleOnChange = (selectedOption: any) => {
@@ -20,6 +26,7 @@ export default function Dropdown({ handleChange, placeholder, listOfOptions, val
   return (
     <div className="mb-4">
       <Select
+        isDisabled={isDisabled}
         className="text-primary w-80"
         options={options}
         placeholder={placeholder}
