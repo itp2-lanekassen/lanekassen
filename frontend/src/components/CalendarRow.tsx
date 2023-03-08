@@ -38,7 +38,7 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
     isLoading,
     isError,
     error
-  } = useQuery(['absences', { userId: user?.userId }], async () =>
+  } = useQuery(['absences', { userId: user?.userId, fromDate, toDate }], async () =>
     user ? (await getAbsencesByUserId(user.userId, fromDate, toDate)).data : []
   );
 
