@@ -29,6 +29,29 @@ export function deleteUser(userId: number): Promise<AxiosResponse<User>> {
   return axios.delete(`${url}/${userId}`);
 }
 
+export function filterUsers(
+  filters: Partial<{
+    excludeIds: number[];
+    departments: number[];
+    sections: number[];
+    teams: number[];
+    roles: number[];
+    subjectFields: number[];
+  }>
+): Promise<AxiosResponse<User[]>> {
+  const query = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, val]) => {
+    if (val) {
+      val.forEach((id) => query.append(key, String(id)));
+    }
+  });
+
+  const queryStr = query.toString();
+
+  return axios.get(`${url}/filter${queryStr.length ? '?' : ''}${queryStr}`);
+}
+
 export default {
   getAllUsers,
   getUserById,
