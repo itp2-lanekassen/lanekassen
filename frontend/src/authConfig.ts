@@ -1,6 +1,6 @@
 export const msalConfig = {
   auth: {
-    clientId: import.meta.env.CLIENT_ID,
+    clientId: import.meta.env.VITE_CLIENT_ID,
     authority: `https://login.microsoftonline.com/${import.meta.env.VITE_AUTHORITY}`, // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
     redirectUri: import.meta.env.VITE_REDIRECT_URI
   },
