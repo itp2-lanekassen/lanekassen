@@ -5,5 +5,4 @@ public class Team {
   public string Name { get; set; } = null!;
   public ICollection<User> Users { get; set; } = null!;
   public ICollection<Department> Departments { get; set; } = null!;
-  
 }
