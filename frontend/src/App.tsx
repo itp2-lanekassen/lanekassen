@@ -2,10 +2,10 @@ import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-reac
 import { SignInButton } from './components/SignInButton';
 import GlobalContextProvider from './context/GlobalContext';
 import UserContextProvider from './context/UserContext';
+import FilterContextProvider from './context/FilterContext';
 import CalendarPage from './pages/CalendarPage';
 import logo from './assets/lanekassen_logo.png';
 import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
-import FilterContextProvider from './context/FilterContext';
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
           <GlobalContextProvider>
             <FilterContextProvider>
               {/* Router view here */}
-              <FirstTimeRegisterForm />
+              <CalendarPage />
             </FilterContextProvider>
           </GlobalContextProvider>
         </UserContextProvider>

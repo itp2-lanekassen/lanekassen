@@ -33,24 +33,24 @@ export default function FirstTimeRegisterForm() {
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(-1);
   const [isDisabled, setIsDisabled] = useState(true);
 
-  const { data: roles } = useQuery(
-    ['roles', { departmentId: selectedDepartment }],
-    async () => (await getRolesByDepartmentId(selectedDepartment)).data
+  const { data: roles } = useQuery(['roles', { departmentId: selectedDepartment }], async () =>
+    selectedDepartment === -1 ? [] : (await getRolesByDepartmentId(selectedDepartment)).data
   );
 
-  const { data: teams } = useQuery(
-    ['teams', { departmentId: selectedDepartment }],
-    async () => (await getTeamsByDepartmentId(selectedDepartment)).data
+  const { data: teams } = useQuery(['teams', { departmentId: selectedDepartment }], async () =>
+    selectedDepartment === -1 ? [] : (await getTeamsByDepartmentId(selectedDepartment)).data
   );
 
-  const { data: sections } = useQuery(
-    ['section', { departmentId: selectedDepartment }],
-    async () => (await getSectionsByDepartmentId(selectedDepartment)).data
+  const { data: sections } = useQuery(['section', { departmentId: selectedDepartment }], async () =>
+    selectedDepartment === -1 ? [] : (await getSectionsByDepartmentId(selectedDepartment)).data
   );
 
   const { data: subjectFields } = useQuery(
     ['subject-fields', { departmentId: selectedDepartment }],
-    async () => (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
+    async () =>
+      selectedDepartment === -1
+        ? []
+        : (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
   );
 
   const { mutate: registerUser } = useMutation({
