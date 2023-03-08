@@ -3,8 +3,23 @@ import axios, { AxiosResponse } from 'axios';
 
 const url = `${backendUrl}/Absence`;
 
-export function getAllAbsences(): Promise<AxiosResponse<Absence[]>> {
-  return axios.get(url);
+export function getAllAbsences(
+  fromDate?: string,
+  toDate?: string
+): Promise<AxiosResponse<Absence[]>> {
+  const query = new URLSearchParams();
+
+  if (fromDate) {
+    query.append('fromDate', fromDate);
+  }
+
+  if (toDate) {
+    query.append('toDate', toDate);
+  }
+
+  const queryStr = query.toString();
+
+  return axios.get(`${url}${queryStr.length ? '?' : ''}${queryStr}`);
 }
 
 export function getAbsenceById(absenceId: number): Promise<AxiosResponse<Absence>> {
@@ -26,8 +41,24 @@ export function deleteAbsence(absenceId: number): Promise<AxiosResponse<Absence>
   return axios.delete(`${url}/${absenceId}`);
 }
 
-export async function getAbsencesByUserId(userId: number): Promise<AxiosResponse<Absence[]>> {
-  return axios.get(`${url}/user/${userId}`);
+export async function getAbsencesByUserId(
+  userId: number,
+  fromDate?: string,
+  toDate?: string
+): Promise<AxiosResponse<Absence[]>> {
+  const query = new URLSearchParams();
+
+  if (fromDate) {
+    query.append('fromDate', fromDate);
+  }
+
+  if (toDate) {
+    query.append('toDate', toDate);
+  }
+
+  const queryStr = query.toString();
+
+  return axios.get(`${url}/user/${userId}${queryStr.length ? '?' : ''}${queryStr}`);
 }
 
 export default {

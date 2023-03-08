@@ -5,10 +5,12 @@ import Select from 'react-select';
  *
  * @param placeholder is the "title" of the dropdown
  * @param listOfOptions is list of options retrieved from database
+ * @param handleChange is the function that is called when a new option is selected
+ * @param value is the value of the selected option
  * @returns dropdown component
  */
 
-export default function Dropdown({ handleChange, placeholder, listOfOptions }: IDropdown) {
+export default function Dropdown({ handleChange, placeholder, listOfOptions, value }: IDropdown) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
   const handleOnChange = (selectedOption: any) => {
@@ -21,6 +23,7 @@ export default function Dropdown({ handleChange, placeholder, listOfOptions }: I
         className="text-primary w-80"
         options={options}
         placeholder={placeholder}
+        value={value === -1 ? null : options.find((option) => option.value === value)}
         onChange={handleOnChange}
         theme={(theme) => ({
           ...theme,

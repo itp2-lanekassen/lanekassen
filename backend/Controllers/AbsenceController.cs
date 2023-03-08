@@ -105,27 +105,52 @@ public class AbsenceController : ControllerBase {
     return Ok();
   }
 
-  [HttpGet]
-  public async Task<IActionResult> GetAbsences() {
-    List<Absence> absences = await _context.Absences.ToListAsync();
-    return Ok(absences);
-  }
-
   [HttpGet("{id}")]
   public async Task<IActionResult> GetAbsence(int id) {
     Absence? absence = await _context.Absences.FindAsync(id);
     return absence == null ? BadRequest("Invalid absence id") : Ok(absence);
   }
 
-  [HttpGet("user/{id}")]
-  public async Task<IActionResult> GetAbsenceForUser(int id) {
-    List<Absence> absences = await _context.Absences.Where(a => a.UserId == id).ToListAsync();
+  [HttpGet]
+  public async Task<IActionResult> GetAbsences([FromQuery(Name = "fromDate")] DateTime FromDate, [FromQuery(Name = "toDate")] DateTime ToDate) {
+    IQueryable<Absence> absences = _context.Absences;
 
-    foreach (Absence absence in absences) {
-      _context.Entry(absence).Reference(a => a.Type).Load();
+    if (FromDate != null) {
+      absences = absences.Where(a => a.StartDate >= FromDate);
     }
 
-    return Ok(absences);
+    if (ToDate != null) {
+      absences = absences.Where(a => a.StartDate <= ToDate);
+    }
+
+    List<Absence> result = await absences.ToListAsync();
+
+    foreach (Absence absence in result) {
+      await _context.Entry(absence).Reference(a => a.Type).LoadAsync();
+    }
+
+    return Ok(result);
+  }
+
+  [HttpGet("user/{id}")]
+  public async Task<IActionResult> GetAbsenceForUser(int id, [FromQuery(Name = "fromDate")] DateTime? FromDate, [FromQuery(Name = "toDate")] DateTime? ToDate) {
+    IQueryable<Absence> absences = _context.Absences.Where(a => a.UserId == id);
+
+    if (FromDate != null) {
+      absences = absences.Where(a => a.StartDate >= FromDate);
+    }
+
+    if (ToDate != null) {
+      absences = absences.Where(a => a.StartDate <= ToDate);
+    }
+
+    List<Absence> result = await absences.ToListAsync();
+
+    foreach (Absence absence in result) {
+      await _context.Entry(absence).Reference(a => a.Type).LoadAsync();
+    }
+
+    return Ok(result);
   }
 
 
