@@ -32,11 +32,11 @@ export const useFilterContext = () => {
 };
 
 const FilterContextProvider = ({ children }: FilterContextProps) => {
-  // TODO: set somewhere
+  // TODO: set values from fitler options
   // isoWeek is needed to make week start on monday
   const [fromDate, setFromDate] = useState(m().startOf('isoWeek').toISOString());
 
-  const [departments, setDepartments] = useState<number[]>([1, 2, 3]);
+  const [departments, setDepartments] = useState<number[]>([]);
   const [sections, setSections] = useState<number[]>([]);
   const [teams, setTeams] = useState<number[]>([]);
   const [roles, setRoles] = useState<number[]>([]);

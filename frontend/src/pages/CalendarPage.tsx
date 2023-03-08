@@ -59,7 +59,6 @@ const CalendarPage = () => {
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
 
-  // TODO: better way of doing this?
   return (
     <main className="grid place-items-center p-10">
       <div className="calendar-view">
@@ -102,7 +101,6 @@ const CalendarPage = () => {
 
         <CalendarRow user={currentUser} isCurrentUser={true} columns={calendarColumns} />
 
-        {/* TODO: filter out logged in user */}
         {users.map((user, i) => (
           <CalendarRow key={user?.userId || i} user={user} columns={calendarColumns} />
         ))}
