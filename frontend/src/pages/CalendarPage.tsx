@@ -24,9 +24,13 @@ export const useFilterContext = () => useContext(FilterContext);
 const CalendarPage = () => {
   const { currentUser } = useUserContext();
 
-  const { data, isLoading } = useQuery<(User | undefined)[]>(['users'], async () => {
-    const users = (await getAllUsers()).data;
-    return [...users, ...Array(30 - users.length)];
+  const {
+    data: users,
+    isLoading,
+    isError
+  } = useQuery<(User | undefined)[]>(['users'], async () => {
+    const res = (await getAllUsers()).data;
+    return [...res, ...Array(30 - res.length)];
   });
 
   // TODO: set somewhere
@@ -52,7 +56,8 @@ const CalendarPage = () => {
     setCalendarColumns(columns);
   }, [fromDate]);
 
-  if (isLoading) return null;
+  if (isLoading) return <div>Laster...</div>;
+  if (isError) return <div>Noe gikk galt</div>;
 
   // TODO: better way of doing this?
   return (
@@ -104,7 +109,7 @@ const CalendarPage = () => {
           <CalendarRow user={currentUser} isCurrentUser={true} columns={calendarColumns} />
 
           {/* TODO: filter out logged in user */}
-          {data?.map((user, i) => (
+          {users.map((user, i) => (
             <CalendarRow key={user?.userId || i} user={user} columns={calendarColumns} />
           ))}
         </FilterContext.Provider>
