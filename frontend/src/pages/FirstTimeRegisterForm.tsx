@@ -4,114 +4,75 @@ import SubmitButton from '../components/SubmitButton';
 import ellipse from '../assets/Ellipse 1.png';
 import { useEffect, useState } from 'react';
 import {
-  getAllDepartments,
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
   getSubjectFieldsByDepartmentId,
   getTeamsByDepartmentId
 } from '../API/DepartmentAPI';
 import { postUser } from '../API/UserAPI';
-import { NewUser } from '../types/types';
+import { EmploymentType } from '../types/types';
+import { useGlobalContext } from '@/context/GlobalContext';
+import { useUserContext } from '@/context/UserContext';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 /**
  *
  * @returns component that is the page for first-time registering
  */
 export default function FirstTimeRegisterForm() {
-  const [data, setData] = useState<{
-    roles: { id: number; name: string }[];
-    subjectFields: { id: number; name: string }[];
-    teams: { id: number; name: string }[];
-    sections: { id: number; name: string }[];
-  }>({
-    roles: [],
-    subjectFields: [],
-    teams: [],
-    sections: []
-  });
-  const [department, setDepartment] = useState<{ id: number; name: string }[]>([]);
-  const [employmentType, setEmploymentType] = useState<{ id: number; name: string }[]>([]);
+  const queryClient = useQueryClient();
+
+  const { azureUser } = useUserContext();
+  const { departments } = useGlobalContext();
+
   const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
   const [selectedSection, setSelectedSection] = useState<number>(-1);
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(-1);
-  const [isReset, setIsReset] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
 
-  const fetchData = async () => {
-    try {
-      const [roles, teams, sections, subjectFields] = await Promise.all([
-        getRolesByDepartmentId(selectedDepartment),
-        getTeamsByDepartmentId(selectedDepartment),
-        getSectionsByDepartmentId(selectedDepartment),
-        getSubjectFieldsByDepartmentId(selectedDepartment)
-      ]);
+  const { data: roles } = useQuery(
+    ['roles', { departmentId: selectedDepartment }],
+    async () => (await getRolesByDepartmentId(selectedDepartment)).data
+  );
 
-      const newData = {
-        roles: roles?.data?.map((r) => ({ id: r.roleId, name: r.name })) ?? [],
-        subjectFields:
-          subjectFields?.data?.map((s) => ({ id: s.subjectFieldId, name: s.name })) ?? [],
-        teams: teams?.data?.map((t) => ({ id: t.teamId, name: t.name })) ?? [],
-        sections: sections?.data?.map((s) => ({ id: s.sectionId, name: s.name })) ?? []
-      };
-      setData(newData);
-    } catch (error) {
-      console.error(error);
+  const { data: teams } = useQuery(
+    ['teams', { departmentId: selectedDepartment }],
+    async () => (await getTeamsByDepartmentId(selectedDepartment)).data
+  );
+
+  const { data: sections } = useQuery(
+    ['section', { departmentId: selectedDepartment }],
+    async () => (await getSectionsByDepartmentId(selectedDepartment)).data
+  );
+
+  const { data: subjectFields } = useQuery(
+    ['subject-fields', { departmentId: selectedDepartment }],
+    async () => (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
+  );
+
+  const { mutate: registerUser } = useMutation({
+    mutationFn: () =>
+      postUser({
+        azureId: azureUser.id,
+        firstName: azureUser.givenName,
+        lastName: azureUser.surname,
+        email: azureUser.mail,
+        admin: false,
+        sectionId: selectedSection,
+        departmentId: selectedDepartment,
+        subjectFields: selectedSubjectFields,
+        teams: selectedTeams,
+        roles: selectedRoles,
+        employmentType: selectedEmploymentType
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['current-user']);
+      // redirect('/calendar)
     }
-  };
-
-  const mapEmploymentType = () => {
-    const employmentTypes = ['Ansatt', 'Konsulent'];
-    const mappedEmploymentType = employmentTypes.map((e, i) => ({ id: i, name: e }));
-    setEmploymentType(mappedEmploymentType);
-  };
-
-  const fetchDepartments = async () => {
-    try {
-      const fetchedDepartments = await getAllDepartments();
-      const mappedDepartments = fetchedDepartments?.data?.map((d) => ({
-        id: d.departmentId,
-        name: d.name
-      }));
-      setDepartment(mappedDepartments);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleReset = () => {
-    setIsReset(true);
-    resetStatesOnDepartmentChange();
-    setIsReset(false);
-  };
-
-  function resetStatesOnDepartmentChange() {
-    if (selectedDepartment !== -1) {
-      setSelectedSection(-1);
-      setSelectedSubjectFields([]);
-      setSelectedTeams([]);
-      setSelectedRoles([]);
-      setData({
-        roles: [],
-        subjectFields: [],
-        teams: [],
-        sections: []
-      });
-    }
-  }
-
-  useEffect(() => {
-    mapEmploymentType();
-    fetchDepartments();
-  }, []);
-
-  // Fetch data when department is selected
-  useEffect(() => {
-    handleReset();
-    if (selectedDepartment !== -1) fetchData();
-  }, [selectedDepartment]);
+  });
 
   // Validate that required fields are filled out
   useEffect(() => {
@@ -123,23 +84,15 @@ export default function FirstTimeRegisterForm() {
     );
   }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
 
-  const handleClick = () => {
-    const newUser: NewUser = {
-      // TODO: Remove hardcoded values and replace it with values from Azure
-      azureId: 'test-azure-id',
-      firstName: 'test',
-      lastName: 'test',
-      email: 'test@test.no',
-      admin: false,
-      sectionId: selectedSection,
-      subjectFields: selectedSubjectFields,
-      teams: selectedTeams,
-      roles: selectedRoles,
-      employmentType: selectedEmploymentType
-    };
-    postUser(newUser);
-    // TODO: Redirect to home page
-  };
+  // Fetch data when department is selected
+  useEffect(() => {
+    if (selectedDepartment !== -1) {
+      setSelectedSection(-1);
+      setSelectedSubjectFields([]);
+      setSelectedTeams([]);
+      setSelectedRoles([]);
+    }
+  }, [selectedDepartment]);
 
   return (
     <div className="max-w-full">
@@ -154,44 +107,46 @@ export default function FirstTimeRegisterForm() {
       <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
         <Dropdown
           placeholder="Ansattforhold"
-          listOfOptions={employmentType.map((e) => ({ name: e.name, id: e.id }))}
+          listOfOptions={Object.keys(EmploymentType)
+            .filter((type) => isNaN(Number(type)))
+            .map((type, i) => ({ name: type, id: i }))}
           handleChange={(e) => setSelectedEmploymentType(e)}
           value={selectedEmploymentType}
         />
         <Dropdown
           placeholder="Avdeling"
-          listOfOptions={department.map((d) => ({ name: d.name, id: d.id }))}
+          listOfOptions={departments.map((d) => ({ name: d.name, id: d.departmentId }))}
           handleChange={(e) => setSelectedDepartment(e)}
           value={selectedDepartment}
         />
         <Dropdown
           placeholder="Seksjon"
-          listOfOptions={data.sections.map((s) => ({ name: s.name, id: s.id }))}
+          listOfOptions={(sections || []).map((s) => ({ name: s.name, id: s.sectionId }))}
           handleChange={(e) => setSelectedSection(e)}
-          value={isReset ? -1 : selectedSection}
+          value={selectedSection}
         />
         <DropdownMultiSelect
           placeholder="Fagområde"
-          listOfOptions={data.subjectFields.map((s) => ({ name: s.name, id: s.id }))}
+          listOfOptions={(subjectFields || []).map((s) => ({ name: s.name, id: s.subjectFieldId }))}
           handleChange={(e) => setSelectedSubjectFields(e)}
-          value={isReset ? [] : selectedSubjectFields}
+          value={selectedSubjectFields}
         />
         <DropdownMultiSelect
           placeholder="Team"
-          listOfOptions={data.teams.map((t) => ({ name: t.name, id: t.id }))}
+          listOfOptions={(teams || []).map((t) => ({ name: t.name, id: t.teamId }))}
           handleChange={(e) => setSelectedTeams(e)}
-          value={isReset ? [] : selectedTeams}
+          value={selectedTeams}
         />
         <DropdownMultiSelect
           placeholder="Rolle"
-          listOfOptions={data.roles.map((r) => ({ name: r.name, id: r.id }))}
+          listOfOptions={(roles || []).map((r) => ({ name: r.name, id: r.roleId }))}
           handleChange={(e) => setSelectedRoles(e)}
-          value={isReset ? [] : selectedRoles}
+          value={selectedRoles}
         />
 
         <SubmitButton
           buttonText="Registrer deg"
-          handleClick={handleClick}
+          handleClick={registerUser}
           disabled={isDisabled}
           disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
         />

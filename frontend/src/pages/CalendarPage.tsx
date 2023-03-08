@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import moment from 'moment';
+import { createContext, useContext, useEffect, useState } from 'react';
+import m from 'moment';
 import { useQuery } from '@tanstack/react-query';
-import { User } from '@/types';
+import { User } from '@/types/types';
 import { getAllUsers } from '@/API/UserAPI';
 import { useUserContext } from '@/context/UserContext';
 import CalendarRow from '@/components/CalendarRow';
@@ -9,38 +9,55 @@ import { ArrowForward, ArrowBack } from '@mui/icons-material';
 
 export type Column = Record<number, string[]>;
 
-const CalendarPage = () => {
-  const { data, isLoading } = useQuery<(User | undefined)[]>(['users'], async () => {
-    const users = (await getAllUsers()).data;
-    return [...users, ...Array(30 - users.length)];
-  });
+interface FilterContextType {
+  fromDate: string;
+  toDate: string;
+}
 
+const FilterContext = createContext<FilterContextType>({
+  fromDate: '',
+  toDate: ''
+});
+
+export const useFilterContext = () => useContext(FilterContext);
+
+const CalendarPage = () => {
   const { currentUser } = useUserContext();
 
+  const {
+    data: users,
+    isLoading,
+    isError
+  } = useQuery<(User | undefined)[]>(['users'], async () => {
+    const res = (await getAllUsers()).data;
+    return [...res, ...Array(30 - res.length)];
+  });
+
   // TODO: set somewhere
-  const [currentWeek] = useState(moment().startOf('w'));
-  // ? Thought this would be 4, but ok
-  const [numberOfWeeks] = useState(3);
+  // isoWeek is needed to make week start on monday
+  const [fromDate, setFromDate] = useState(m().startOf('isoWeek'));
+
   const [calendarColumns, setCalendarColumns] = useState<Column>({});
 
   useEffect(() => {
-    const startWeek = moment(currentWeek);
-    const endWeek = moment(currentWeek).add(numberOfWeeks, 'w').endOf('w');
+    const currentDay = m(fromDate);
+    const toDate = m(fromDate).add(3, 'w').endOf('isoWeek');
 
     const columns: Column = {};
 
-    while (startWeek < endWeek) {
-      if (!columns[startWeek.week()]) columns[startWeek.week()] = [];
-      if (!startWeek.format('ddd').match(/Sat|Sun/)) {
-        columns[startWeek.week()].push(startWeek.format('DD.MM.YY'));
+    while (currentDay < toDate) {
+      if (!columns[currentDay.isoWeek()]) columns[currentDay.isoWeek()] = [];
+      if (!currentDay.format('ddd').match(/Sat|Sun/)) {
+        columns[currentDay.isoWeek()].push(currentDay.format('DD.MM.YY'));
       }
-      startWeek.add(1, 'd');
+      currentDay.add(1, 'd');
     }
 
     setCalendarColumns(columns);
-  }, [currentWeek, numberOfWeeks]);
+  }, [fromDate]);
 
-  if (isLoading) return null;
+  if (isLoading) return <div>Laster...</div>;
+  if (isError) return <div>Noe gikk galt</div>;
 
   // TODO: better way of doing this?
   return (
@@ -49,24 +66,30 @@ const CalendarPage = () => {
         <button className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white row-span-2 row-start-1 whitespace-nowrap mb-1 mr-4 text-center">
           Se din fraværsoversikt
         </button>
-        {Object.entries(calendarColumns).map(([week, days], i) => (
-          <div key={week} className="contents">
+        {Object.entries(calendarColumns).map(([isoWeek, days], i) => (
+          <div key={isoWeek} className="contents">
             <h6 className="col-span-5 row-start-1 w-full bg-primary-light text-white text-center relative flex items-center justify-center">
               {i === 0 && (
-                <button className="text-sm absolute left-0">
+                <button
+                  className="text-sm absolute left-0"
+                  onClick={() => setFromDate((d) => m(d).subtract(1, 'w'))}
+                >
                   <ArrowBack />
                 </button>
               )}
-              Uke&nbsp;{week}
+              Uke&nbsp;{isoWeek}
               {i === Object.keys(calendarColumns).length - 1 && (
-                <button className="text-sm absolute right-0">
+                <button
+                  className="text-sm absolute right-0"
+                  onClick={() => setFromDate((d) => m(d).add(1, 'w'))}
+                >
                   <ArrowForward />
                 </button>
               )}
             </h6>
             {days.map((d) => (
               <div
-                key={String(week) + d}
+                key={String(isoWeek) + d}
                 className={`font-header text-primary text-xs px-0.5 w-full text-center mb-1 ${
                   i % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark'
                 }`}
@@ -77,12 +100,19 @@ const CalendarPage = () => {
           </div>
         ))}
 
-        <CalendarRow user={currentUser} isCurrentUser={true} columns={calendarColumns} />
+        <FilterContext.Provider
+          value={{
+            fromDate: fromDate.toISOString(),
+            toDate: m(fromDate).add(3, 'w').endOf('isoWeek').toISOString()
+          }}
+        >
+          <CalendarRow user={currentUser} isCurrentUser={true} columns={calendarColumns} />
 
-        {/* TODO: filter out logged in user */}
-        {data?.map((user, i) => (
-          <CalendarRow key={user?.userId || i} user={user} columns={calendarColumns} />
-        ))}
+          {/* TODO: filter out logged in user */}
+          {users.map((user, i) => (
+            <CalendarRow key={user?.userId || i} user={user} columns={calendarColumns} />
+          ))}
+        </FilterContext.Provider>
       </div>
     </main>
   );
