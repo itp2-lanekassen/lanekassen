@@ -7,7 +7,7 @@ import { useUserContext } from '@/context/UserContext';
 import CalendarRow from '@/components/CalendarRow';
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
 
-export type Column = Record<number, string[]>;
+export type Column = Record<string, string[]>;
 
 interface FilterContextType {
   fromDate: string;
@@ -45,11 +45,15 @@ const CalendarPage = () => {
 
     const columns: Column = {};
 
-    while (currentDay < toDate) {
-      if (!columns[currentDay.isoWeek()]) columns[currentDay.isoWeek()] = [];
+    while (currentDay.isBefore(toDate)) {
+      const key = `Uke ${String(currentDay.isoWeek())}`;
+
+      if (!columns[key]) columns[key] = [];
+
       if (!currentDay.format('ddd').match(/Sat|Sun/)) {
-        columns[currentDay.isoWeek()].push(currentDay.format('DD.MM.YY'));
+        columns[key].push(currentDay.format('DD.MM.YY'));
       }
+
       currentDay.add(1, 'd');
     }
 
@@ -66,8 +70,8 @@ const CalendarPage = () => {
         <button className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white row-span-2 row-start-1 whitespace-nowrap mb-1 mr-4 text-center">
           Se din fraværsoversikt
         </button>
-        {Object.entries(calendarColumns).map(([isoWeek, days], i) => (
-          <div key={isoWeek} className="contents">
+        {Object.entries(calendarColumns).map(([week, days], i) => (
+          <div key={week} className="contents">
             <h6 className="col-span-5 row-start-1 w-full bg-primary-light text-white text-center relative flex items-center justify-center">
               {i === 0 && (
                 <button
@@ -77,7 +81,7 @@ const CalendarPage = () => {
                   <ArrowBack />
                 </button>
               )}
-              Uke&nbsp;{isoWeek}
+              {week}
               {i === Object.keys(calendarColumns).length - 1 && (
                 <button
                   className="text-sm absolute right-0"
@@ -89,7 +93,7 @@ const CalendarPage = () => {
             </h6>
             {days.map((d) => (
               <div
-                key={String(isoWeek) + d}
+                key={week + d}
                 className={`font-header text-primary text-xs px-0.5 w-full text-center mb-1 ${
                   i % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark'
                 }`}
