@@ -95,8 +95,13 @@ export default function FirstTimeRegisterForm() {
     }
   }, [selectedDepartment]);
 
-  // const handleEditClick = () => {
-  // };
+  const handleEditClick = () => {
+    if (isDropdownDisabled == true) {
+      setIsDropdownDisabled(false);
+    } else {
+      setIsDropdownDisabled(true);
+    }
+  };
 
   return (
     <div className="max-w-full">
