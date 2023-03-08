@@ -33,23 +33,13 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
     openAbsenceForm(moment(day, 'DD.MM.YY').format('yyyy-MM-DD'));
   };
 
-<<<<<<< HEAD
-  const { isLoading, data: absences } = useQuery(
-    ['absences', { userId: user?.userId, fromDate, toDate }],
-    async () => {
-      if (!user) return [];
-
-      return (await getAbsencesByUserId(user.userId, fromDate, toDate)).data;
-    }
-=======
   const {
     data: absences,
     isLoading,
     isError,
     error
-  } = useQuery(['absences', { userId: user?.userId }], async () =>
-    user ? (await getAbsencesByUserId(user.userId)).data : []
->>>>>>> 0e1055b (translate loading and error messages to norwegian)
+  } = useQuery(['absences', { userId: user?.userId, fromDate, toDate }], async () =>
+    user ? (await getAbsencesByUserId(user.userId, fromDate, toDate)).data : []
   );
 
   if (isLoading) return <div>Laster...</div>;
