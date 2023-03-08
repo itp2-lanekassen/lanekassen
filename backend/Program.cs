@@ -46,10 +46,11 @@ builder.Services.AddDbContext<ApiDbContext>(
 // Add CORS
 builder.Services.AddCors(options => {
   options.AddPolicy("AllowAnyOrigin",
-      builder => builder.SetIsOriginAllowed(_ => true)
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials());
+    builder => builder
+      .SetIsOriginAllowed(_ => true)
+      .AllowAnyHeader()
+      .AllowAnyMethod()
+      .AllowCredentials());
 });
 
 
