@@ -1,6 +1,6 @@
 import { getAllAbsenceTypes } from '@/API/AbsenceTypeAPI';
 import AbsenceForm from '@/components/AbsenceForm';
-import { AbsenceType } from '@/types';
+import { AbsenceType } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import { createContext, ReactNode, useContext, useState } from 'react';
 

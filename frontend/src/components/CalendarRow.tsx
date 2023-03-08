@@ -1,7 +1,7 @@
 import { getAbsencesByUserId } from '@/API/AbsenceAPI';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useUserContext } from '@/context/UserContext';
-import { Column } from '@/pages/CalendarPage';
+import { Column, useFilterContext } from '@/pages/CalendarPage';
 import { Absence, User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
@@ -25,6 +25,7 @@ function getBgColor(absences: Absence[] = [], day: string) {
 const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps) => {
   const { currentUser } = useUserContext();
   const { openAbsenceForm } = useGlobalContext();
+  const { fromDate, toDate } = useFilterContext();
 
   const handleRowClick = (day: string) => {
     if (!(isCurrentUser || currentUser.admin)) return;
@@ -32,8 +33,13 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
     openAbsenceForm(moment(day, 'DD.MM.YY').format('yyyy-MM-DD'));
   };
 
-  const { isLoading, data: absences } = useQuery(['absences', { userId: user?.userId }], async () =>
-    user ? (await getAbsencesByUserId(user.userId)).data : []
+  const { isLoading, data: absences } = useQuery(
+    ['absences', { userId: user?.userId, fromDate, toDate }],
+    async () => {
+      if (!user) return [];
+
+      return (await getAbsencesByUserId(user.userId, fromDate, toDate)).data;
+    }
   );
 
   if (isLoading) return <div>Loading...</div>;

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { createContext, FC, ReactNode, useContext } from 'react';
-import { User } from '@/types';
+import { User } from '@/types/types';
 import { loginRequest } from '@/authConfig';
 import { useMsal } from '@azure/msal-react';
 import { getAzureAdUser } from '@/API/AzureAdAPI';
