@@ -6,6 +6,7 @@ import { useMsal } from '@azure/msal-react';
 import { getAzureAdUser } from '@/API/AzureAdAPI';
 import { getUserByAzureId } from '@/API/UserAPI';
 import { AzureAdUser } from '@/types/azureAd';
+import { useNavigate } from 'react-router-dom';
 
 interface UserContextProps {
   children?: ReactNode;
@@ -29,8 +30,6 @@ export const useUserContext = (): UserContextType => {
 const UserContextProvider: FC<UserContextProps> = (props) => {
   const { instance, accounts } = useMsal();
 
-  const azureId = 'This-is-a-fake-azure-id';
-
   const azureUser = useQuery(
     ['azure-ad-user'],
     async () => {
@@ -48,8 +47,7 @@ const UserContextProvider: FC<UserContextProps> = (props) => {
 
   const currentUser = useQuery(
     ['current-user'],
-    // TODO: use actual id - azureUser.id
-    async () => (await getUserByAzureId(azureId)).data,
+    async () => (azureUser.data ? (await getUserByAzureId(azureUser.data.id)).data : ({} as User)),
     {
       retry: false
     }

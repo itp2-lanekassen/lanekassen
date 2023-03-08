@@ -10,11 +10,11 @@ export const SignInButton = () => {
   const navigate = useNavigate();
 
   const handleLogin = (loginType: string) => {
+    instance.loginRedirect(loginRequest).catch((e: unknown) => {
+      console.error(e);
+    });
     if (loginType === 'redirect') {
-      instance.loginRedirect(loginRequest).catch((e: unknown) => {
-        console.error(e);
-      });
-      navigate('/register');
+      navigate('/check');
     }
   };
   return (

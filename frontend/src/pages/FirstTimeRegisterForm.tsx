@@ -14,8 +14,10 @@ import { EmploymentType } from '../types/types';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useUserContext } from '@/context/UserContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { redirect, useNavigate } from 'react-router-dom';
 
 export default function FirstTimeRegisterForm() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { azureUser } = useUserContext();
@@ -66,7 +68,7 @@ export default function FirstTimeRegisterForm() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
-      // redirect('/calendar)
+      navigate('/');
     }
   });
 
