@@ -1,5 +1,7 @@
-import { backendUrl, Section } from '../types/types';
+import { Section } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const url = `${backendUrl}/Section`;
 

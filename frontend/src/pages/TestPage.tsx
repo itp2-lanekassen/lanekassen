@@ -155,6 +155,14 @@ function MyComponent() {
   };
 
   const getUser3 = async () => {
+    const test = import.meta.env.VITE_API_URL;
+    console.log('clientId: ' + import.meta.env.VITE_CLIENT_ID);
+    console.log(
+      'authority: ' + `https://login.microsoftonline.com/${import.meta.env.VITE_AUTHORITY}`
+    ); // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
+    console.log('redirectUri: ' + import.meta.env.VITE_REDIRECT_URI);
+    console.log(test);
+
     const userId = 'string';
     const user = await getUserById(666969);
 

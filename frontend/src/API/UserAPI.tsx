@@ -1,5 +1,7 @@
-import { User, backendUrl, NewUser } from '../types/types';
+import { User, NewUser } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const url = `${backendUrl}/User`;
 
