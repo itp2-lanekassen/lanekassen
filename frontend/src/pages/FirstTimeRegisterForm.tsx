@@ -1,7 +1,7 @@
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
-import ellipse from '../assets/Ellipse 1.png';
+import ellipse from '../assets/ellipse.png';
 import { useEffect, useState } from 'react';
 import {
   getRolesByDepartmentId,
