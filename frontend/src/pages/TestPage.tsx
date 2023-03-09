@@ -70,7 +70,7 @@ function MyComponent() {
     axios
       .delete(`${backendUrl}/User/${userId}`)
       .then((response) => {
-        console.log(response);
+        //console.log(response);
       })
       .catch((error) => {
         console.error(error);
@@ -98,7 +98,7 @@ function MyComponent() {
     axios
       .put(`${backendUrl}/User/${userId}`, userToBeUpdated)
       .then((response) => {
-        console.log(response);
+        //console.log(response);
       })
       .catch((error) => {
         console.error(error);
@@ -135,32 +135,40 @@ function MyComponent() {
         .then((response) => {
           const data = response.data;
           if (data != null || data != undefined) {
-            console.log('User exists');
-            console.log(data);
+            //console.log('User exists');
+            //console.log(data);
             // TODO: navigate to home page
           } else {
             console.error('Data is null or undefined');
           }
         })
         .catch((error) => {
-          console.log('User not found');
+          //console.log('User not found');
           console.error(error);
           // TODO: navigate to registration page
         });
     } catch (error) {
-      console.log('Error logging in');
+      //console.log('Error logging in');
       console.error(error);
       // TODO: handle error
     }
   };
 
   const getUser3 = async () => {
+    const test = import.meta.env.VITE_API_URL;
+    //console.log('clientId: ' + import.meta.env.VITE_CLIENT_ID);
+    /*console.log(
+      'authority: ' + `https://login.microsoftonline.com/${import.meta.env.VITE_AUTHORITY}`
+    );*/ // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
+    //console.log('redirectUri: ' + import.meta.env.VITE_REDIRECT_URI);
+    //console.log(test);
+
     const userId = 'string';
     const user = await getUserById(666969);
 
     if (user != null || user != undefined) {
-      console.log('User exists');
-      console.log(user.data);
+      //console.log('User exists');
+      //console.log(user.data);
     } else {
       console.error('Data is null or undefined');
     }

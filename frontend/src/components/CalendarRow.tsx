@@ -1,8 +1,9 @@
 import { getAbsencesByUserId } from '../API/AbsenceAPI';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
-import { Column, useFilterContext } from '../pages/CalendarPage';
+import { Column } from '../pages/CalendarPage';
 import { Absence, User } from '../types/types';
+import { useFilterContext } from '../context/FilterContext';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 

@@ -154,7 +154,7 @@
 
   .calendar-view {
     @apply grid place-content-center place-items-center gap-0.5;
-    grid-template-columns: 15% repeat(20, 1fr);
+    grid-template-columns: 18% repeat(20, 1fr);
   }
 
 

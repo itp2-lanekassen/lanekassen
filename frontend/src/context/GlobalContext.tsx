@@ -23,17 +23,15 @@ interface GlobalContextType {
   subjectFields: SubjectField[];
 }
 
-const GlobalContext = createContext<GlobalContextType>({
-  openAbsenceForm: () => null,
-  absenceTypes: [],
-  roles: [],
-  teams: [],
-  sections: [],
-  departments: [],
-  subjectFields: []
-});
+const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
-export const useGlobalContext = () => useContext(GlobalContext);
+export const useGlobalContext = () => {
+  const ctx = useContext(GlobalContext);
+
+  if (!ctx) throw new Error('GlobalContext must be used within its provider');
+
+  return ctx;
+};
 
 const GlobalContextProvider = ({ children }: GlobalContextProps) => {
   const absenceTypes = useQuery(['absence-types'], async () => (await getAllAbsenceTypes()).data);

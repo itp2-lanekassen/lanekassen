@@ -16,9 +16,15 @@ interface UserContextType {
   currentUser: User;
 }
 
-const UserContext = createContext<UserContextType>({} as UserContextType);
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const useUserContext = (): UserContextType => useContext(UserContext);
+export const useUserContext = (): UserContextType => {
+  const ctx = useContext(UserContext);
+
+  if (!ctx) throw new Error('UserContext must be used within its provider');
+
+  return ctx;
+};
 
 const UserContextProvider: FC<UserContextProps> = (props) => {
   const { instance, accounts } = useMsal();
@@ -53,7 +59,7 @@ const UserContextProvider: FC<UserContextProps> = (props) => {
   if (azureUser.isError) return <div>Noe gikk galt: {String(azureUser.error)}</div>;
 
   if (currentUser.isLoading) return <div>Laster bruker...</div>;
-  if (currentUser.isError) return <div>Noe gikk galt: {String(currentUser.data)}</div>;
+  if (currentUser.isError) return <div>Noe gikk galt: {String(currentUser.error)}</div>;
 
   // if (!currentUser.data) redirect('/login');
 
