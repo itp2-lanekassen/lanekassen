@@ -1,4 +1,4 @@
-import { backendUrl, Department } from '../types/types';
+import { backendUrl, Department, Role, Section, SubjectField, Team } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const url = `${backendUrl}/Department`;
@@ -9,6 +9,24 @@ export function getAllDepartments(): Promise<AxiosResponse<Department[]>> {
 
 export function getDepartmentById(departmentId: number): Promise<AxiosResponse<Department>> {
   return axios.get(`${url}/${departmentId}`);
+}
+
+export function getSectionsByDepartmentId(departmentId: number): Promise<AxiosResponse<Section[]>> {
+  return axios.get(`${url}/${departmentId}/sections`);
+}
+
+export function getSubjectFieldsByDepartmentId(
+  departmentId: number
+): Promise<AxiosResponse<SubjectField[]>> {
+  return axios.get(`${url}/${departmentId}/subjectFields`);
+}
+
+export function getTeamsByDepartmentId(departmentId: number): Promise<AxiosResponse<Team[]>> {
+  return axios.get(`${url}/${departmentId}/teams`);
+}
+
+export function getRolesByDepartmentId(departmentId: number): Promise<AxiosResponse<Role[]>> {
+  return axios.get(`${url}/${departmentId}/roles`);
 }
 
 export function postDepartment(department: Department): Promise<AxiosResponse<Department>> {
@@ -31,5 +49,9 @@ export default {
   getDepartmentById,
   postDepartment,
   updateDepartment,
-  deleteDepartment
+  deleteDepartment,
+  getSectionsByDepartmentId,
+  getSubjectFieldsByDepartmentId,
+  getTeamsByDepartmentId,
+  getRolesByDepartmentId
 };

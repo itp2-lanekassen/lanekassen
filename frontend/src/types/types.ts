@@ -15,7 +15,7 @@ export interface Team {
 export interface SubjectField {
   subjectFieldId: number;
   name: string;
-  departments?: Department[];
+  departmentId: number;
 }
 
 export interface Absence {
@@ -89,7 +89,29 @@ export interface NewUser {
   employmentType: EmploymentType;
   admin: boolean;
   sectionId: number;
+  departmentId: number;
   subjectFields: number[];
   roles?: number[];
   teams?: number[];
+}
+
+export interface ISubmitButton {
+  disabledTitle: string;
+  disabled: boolean;
+  buttonText: string;
+  handleClick: () => void;
+}
+
+export interface IDropdownMultiSelect {
+  handleChange: (value: number[]) => void;
+  value: number[];
+  placeholder: string;
+  listOfOptions: { name: string; id: number }[];
+}
+
+export interface IDropdown {
+  handleChange: (value: number) => void;
+  value: number;
+  placeholder: string;
+  listOfOptions: { name: string; id: number }[];
 }
