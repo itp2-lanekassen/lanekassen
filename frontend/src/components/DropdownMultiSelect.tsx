@@ -29,7 +29,7 @@ export default function DropdownMultiSelect({
   };
 
   return (
-    <div className="mb-4">
+    <div className="">
       <Select
         isDisabled={isDisabled}
         className="text-primary w-80"

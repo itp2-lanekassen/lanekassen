@@ -74,6 +74,8 @@ export interface User {
   subjectFields: SubjectField[];
   roles: Role[];
   teams: Team[];
+  departmentId: number;
+  department?: Department;
 }
 
 export enum EmploymentType {

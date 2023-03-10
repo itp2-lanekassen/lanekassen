@@ -24,7 +24,7 @@ export default function Dropdown({
   };
 
   return (
-    <div className="mb-4">
+    <div className="">
       <Select
         isDisabled={isDisabled}
         className="text-primary w-80"

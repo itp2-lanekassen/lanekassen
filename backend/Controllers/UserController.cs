@@ -148,7 +148,7 @@ public class UserController : ControllerBase {
   //get user by azure id
   [HttpGet("azure/{azureId}")]
   public async Task<IActionResult> GetUserByAzureId(string azureId) {
-    User? user = await _context.Users.FirstOrDefaultAsync(u => u.AzureId == azureId);
+    User? user = await _context.Users.Include(u => u.SubjectFields).Include(u => u.Roles).Include(u => u.Teams).FirstOrDefaultAsync(u => u.AzureId == azureId);
     return user == null ? NotFound() : Ok(user);
   }
 

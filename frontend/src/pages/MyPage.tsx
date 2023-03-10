@@ -24,12 +24,21 @@ export default function MyPage() {
   const { currentUser } = useUserContext();
   const { departments } = useGlobalContext();
 
-  const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
-  const [selectedSection, setSelectedSection] = useState<number>(-1);
-  const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
-  const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
-  const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
-  const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(-1);
+  const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
+    currentUser.employmentType
+  );
+  const [selectedDepartment, setSelectedDepartment] = useState<number>(currentUser.departmentId);
+  const [selectedSection, setSelectedSection] = useState<number>(currentUser.sectionId);
+  const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>(
+    currentUser.subjectFields.map((sf) => sf.subjectFieldId)
+  );
+  const [selectedTeams, setSelectedTeams] = useState<number[]>(
+    currentUser.teams.map((t) => t.teamId)
+  );
+  const [selectedRoles, setSelectedRoles] = useState<number[]>(
+    currentUser.roles.map((r) => r.roleId)
+  );
+
   const [isDisabled, setIsDisabled] = useState(true);
   const [isDropdownDisabled, setIsDropdownDisabled] = useState(true);
 
@@ -78,21 +87,21 @@ export default function MyPage() {
   useEffect(() => {
     setIsDisabled(
       selectedDepartment === -1 ||
-        selectedSection === -1 ||
-        selectedSubjectFields.length === 0 ||
-        selectedEmploymentType === -1
+      selectedSection === -1 ||
+      selectedSubjectFields.length === 0 ||
+      selectedEmploymentType === -1
     );
   }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
 
   // Fetch data when department is selected
-  useEffect(() => {
-    if (selectedDepartment !== -1) {
-      setSelectedSection(-1);
-      setSelectedSubjectFields([]);
-      setSelectedTeams([]);
-      setSelectedRoles([]);
-    }
-  }, [selectedDepartment]);
+  /*   useEffect(() => {
+      if (selectedDepartment !== -1) {
+        setSelectedSection(-1);
+        setSelectedSubjectFields([]);
+        setSelectedTeams([]);
+        setSelectedRoles([]);
+      }
+    }, [selectedDepartment]); */
 
   const handleEditClick = () => {
     if (isDropdownDisabled == true) {
@@ -102,7 +111,9 @@ export default function MyPage() {
     }
   };
 
-  // const handleDeleteProfileClick = () => {
+  const handleDeleteProfileClick = () => {
+    console.log('delete profile');
+  };
 
   return (
     <div className="max-w-full">
@@ -114,13 +125,17 @@ export default function MyPage() {
         />
         <h1 className="mt-[-100px]">Profil</h1>
       </div>
-      <button
-        className="bg-primary-light hover:scale-110 text-grey-lightest font-Rubik Medium py-2 px-4 rounded position: relative"
-        onClick={() => handleEditClick()}
-      >
-        Rediger info
-      </button>
-      <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
+
+      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mt-16">
+        <p className="font-bold"> Navn: </p>
+        <p className=" w-full">
+          {currentUser.firstName} {currentUser.lastName}{' '}
+        </p>
+
+        <p className="font-bold"> E-post: </p>
+        <p className=" w-full">{currentUser.email}</p>
+
+        <p className="font-bold"> Ansattforhold: </p>
         <Dropdown
           placeholder="Ansattforhold"
           listOfOptions={Object.keys(EmploymentType)
@@ -130,9 +145,11 @@ export default function MyPage() {
           value={selectedEmploymentType}
           isDisabled={isDropdownDisabled}
         />
+
+        <p className="font-bold"> Avdeling: </p>
         <Dropdown
           placeholder="Avdeling"
-          listOfOptions={departments.map((d: { name: any; departmentId: any }) => ({
+          listOfOptions={departments.map((d: { name: string; departmentId: number }) => ({
             name: d.name,
             id: d.departmentId
           }))}
@@ -140,9 +157,11 @@ export default function MyPage() {
           value={selectedDepartment}
           isDisabled={isDropdownDisabled}
         />
+
+        <p className="font-bold"> Seksjon: </p>
         <Dropdown
           placeholder="Seksjon"
-          listOfOptions={(sections || []).map((s: { name: any; sectionId: any }) => ({
+          listOfOptions={(sections || []).map((s: { name: string; sectionId: number }) => ({
             name: s.name,
             id: s.sectionId
           }))}
@@ -150,19 +169,25 @@ export default function MyPage() {
           value={selectedSection}
           isDisabled={isDropdownDisabled}
         />
+
+        <p className="font-bold"> Fagområde: </p>
         <DropdownMultiSelect
           placeholder="Fagområde"
-          listOfOptions={(subjectFields || []).map((s: { name: any; subjectFieldId: any }) => ({
-            name: s.name,
-            id: s.subjectFieldId
-          }))}
+          listOfOptions={(subjectFields || []).map(
+            (s: { name: string; subjectFieldId: number }) => ({
+              name: s.name,
+              id: s.subjectFieldId
+            })
+          )}
           handleChange={(e) => setSelectedSubjectFields(e)}
           value={selectedSubjectFields}
           isDisabled={isDropdownDisabled}
         />
+
+        <p className="font-bold"> Team: </p>
         <DropdownMultiSelect
           placeholder="Team"
-          listOfOptions={(teams || []).map((t: { name: any; teamId: any }) => ({
+          listOfOptions={(teams || []).map((t: { name: string; teamId: number }) => ({
             name: t.name,
             id: t.teamId
           }))}
@@ -170,9 +195,11 @@ export default function MyPage() {
           value={selectedTeams}
           isDisabled={isDropdownDisabled}
         />
+
+        <p className="font-bold"> Rolle: </p>
         <DropdownMultiSelect
           placeholder="Rolle"
-          listOfOptions={(roles || []).map((r: { name: any; roleId: any }) => ({
+          listOfOptions={(roles || []).map((r: { name: string; roleId: number }) => ({
             name: r.name,
             id: r.roleId
           }))}
@@ -180,19 +207,38 @@ export default function MyPage() {
           value={selectedRoles}
           isDisabled={isDropdownDisabled}
         />
-        <button
-          className="bg-primary-light hover:scale-110 text-grey-lightest font-Rubik Medium py-2 px-4 rounded position: relative"
-          // onClick={() => handleDeleteProfileClick()}
-        >
-          Slett bruker
-        </button>
 
-        <SubmitButton
-          buttonText="Registrer deg"
-          handleClick={userToBeUpdated}
-          disabled={isDisabled}
-          disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
-        />
+        <div className="flex items-center gap-2 col-span-2">
+          {isDropdownDisabled ? (
+            <SubmitButton
+              buttonText="Rediger bruker"
+              handleClick={handleEditClick}
+              disabled={!isDropdownDisabled}
+              disabledTitle={'Disabled'}
+            />
+          ) : (
+            <>
+              <SubmitButton
+                buttonText="Avbryt redigering"
+                handleClick={() => setIsDropdownDisabled(true)}
+                disabled={isDropdownDisabled}
+                disabledTitle={'Disabled'}
+              />
+              <SubmitButton
+                buttonText="Oppdater bruker"
+                handleClick={userToBeUpdated}
+                disabled={isDisabled}
+                disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
+              />
+              <SubmitButton
+                disabled={isDropdownDisabled}
+                disabledTitle={'Slett bruker'}
+                buttonText={'Slett bruker'}
+                handleClick={handleDeleteProfileClick}
+              />
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

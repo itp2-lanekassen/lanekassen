@@ -13,4 +13,5 @@ public class UserDTO {
   public ICollection<int>? Roles { get; set; }
   public ICollection<int>? Teams { get; set; }
   public ICollection<int>? Absences { get; set; }
+  public int DepartmentId { get; set; }
 }

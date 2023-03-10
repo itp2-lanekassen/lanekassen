@@ -108,6 +108,7 @@ public class ApiDbContext : DbContext {
           section1.SectionId,
           Admin = false,
           EmploymentType = EmploymentType.Ansatt,
+          department1.DepartmentId,
         }
       );
 
