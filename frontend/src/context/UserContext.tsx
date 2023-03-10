@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { createContext, FC, ReactNode, useContext } from 'react';
-import { User } from '@/types/types';
-import { loginRequest } from '@/authConfig';
+import { User } from '../types/types';
+import { loginRequest } from '../authConfig';
 import { useMsal } from '@azure/msal-react';
-import { getAzureAdUser } from '@/API/AzureAdAPI';
-import { getUserByAzureId } from '@/API/UserAPI';
-import { AzureAdUser } from '@/types/azureAd';
+import { getAzureAdUser } from '../API/AzureAdAPI';
+import { getUserByAzureId } from '../API/UserAPI';
+import { AzureAdUser } from '../types/azureAd';
 
 interface UserContextProps {
   children?: ReactNode;
