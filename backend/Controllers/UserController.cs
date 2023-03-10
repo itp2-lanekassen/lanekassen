@@ -28,6 +28,11 @@ public class UserController : ControllerBase {
       return BadRequest("Invalid section id");
     }
 
+    Department? department = await _context.Departments.FindAsync(user.DepartmentId);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
     User? newUser = new() {
       AzureId = user.AzureId,
       FirstName = user.FirstName,
@@ -39,6 +44,7 @@ public class UserController : ControllerBase {
       SubjectFields = await _context.SubjectFields.Where(sf => user.SubjectFields.Contains(sf.SubjectFieldId)).ToListAsync(),
       Roles = await _context.Roles.Where(r => user.Roles!.Contains(r.RoleId)).ToListAsync(),
       Teams = await _context.Teams.Where(t => user.Teams!.Contains(t.TeamId)).ToListAsync(),
+      Department = department,
     };
 
     try {
@@ -82,6 +88,11 @@ public class UserController : ControllerBase {
       return BadRequest("Invalid section id");
     }
 
+    Department? department = await _context.Departments.FindAsync(user.DepartmentId);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
     User? userToUpdate = await _context.Users.FindAsync(id);
     if (userToUpdate == null) {
       return NotFound();
@@ -93,10 +104,11 @@ public class UserController : ControllerBase {
     userToUpdate.EmploymentType = user.EmploymentType;
     userToUpdate.Admin = user.Admin;
     userToUpdate.Section = section;
+    userToUpdate.Department = department;
     userToUpdate.SubjectFields = await _context.SubjectFields.Where(sf => user.SubjectFields.Contains(sf.SubjectFieldId)).ToListAsync();
     userToUpdate.Roles = await _context.Roles.Where(r => user.Roles!.Contains(r.RoleId)).ToListAsync();
     userToUpdate.Teams = await _context.Teams.Where(t => user.Teams!.Contains(t.TeamId)).ToListAsync();
-    userToUpdate.Absences = await _context.Absences.Where(a => user.Absences!.Contains(a.AbsenceId)).ToListAsync();
+    //userToUpdate.Absences = await _context.Absences.Where(a => user.Absences!.Contains(a.AbsenceId)).ToListAsync();
 
     try {
       _ = await _context.SaveChangesAsync();

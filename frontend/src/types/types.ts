@@ -70,10 +70,10 @@ export interface User {
   admin: boolean;
   sectionId: number;
   section?: Section;
-  absences: Absence[];
-  subjectFields: SubjectField[];
-  roles: Role[];
-  teams: Team[];
+  absences?: Absence[];
+  subjectFields: number[];
+  roles?: number[];
+  teams?: number[];
   departmentId: number;
   department?: Department;
 }
