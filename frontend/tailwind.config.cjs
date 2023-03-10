@@ -8,6 +8,13 @@ module.exports = {
       scale: {
         115: '1.15'
       },
+      gridTemplateColumns: {
+        calendar: '15% repeat(20, 56px)'
+      },
+      screens: {
+        'mobile': '320px',
+        'tablet': '481px',
+      }
     },
     colors: {
       // Primary
@@ -85,11 +92,6 @@ module.exports = {
     fontFamily: {
       sans: ['Roboto', ...defaultTheme.fontFamily.sans],
       header: ['Rubik', ...defaultTheme.fontFamily.sans]
-    },
-    screens: {
-      'mobile': '320px',
-      'tablet': '481px',
-      'sm': '769px'
     }
   },
   plugins: []

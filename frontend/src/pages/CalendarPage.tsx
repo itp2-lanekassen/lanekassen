@@ -60,8 +60,8 @@ const CalendarPage = () => {
   if (isError) return <div>Noe gikk galt</div>;
 
   return (
-    <main className="grid place-items-center p-10">
-      <div className="calendar-view">
+    <div className="w-full py-8">
+      <div className="grid grid-cols-calendar place-content-center place-items-center gap-0.5">
         <button className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white row-span-2 row-start-1 whitespace-nowrap mb-1 mr-4 text-center">
           Se din fraværsoversikt
         </button>
@@ -105,7 +105,7 @@ const CalendarPage = () => {
           <CalendarRow key={user?.userId || i} user={user} columns={calendarColumns} />
         ))}
       </div>
-    </main>
+    </div>
   );
 };
 
