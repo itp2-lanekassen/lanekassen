@@ -9,7 +9,10 @@ module.exports = {
         115: '1.15'
       },
       gridTemplateColumns: {
-        calendar: '15% repeat(20, 56px)'
+        calendar: '15% repeat(20, 1fr)'
+      },
+      gridColumn: {
+        'span-20': 'span 20  / span 20'
       },
       screens: {
         'mobile': '320px',
