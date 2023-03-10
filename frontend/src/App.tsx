@@ -38,7 +38,14 @@ function App() {
                   </ContextWrapper>
                 }
               />
-              <Route path="/profile" element={<MyPage />} />
+              <Route
+                path="/mypage"
+                element={
+                  <ContextWrapper>
+                    <MyPage />
+                  </ContextWrapper>
+                }
+              />
             </Routes>
           </GlobalContextProvider>
         </AzureAdContextProvider>
