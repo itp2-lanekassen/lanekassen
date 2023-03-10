@@ -12,15 +12,15 @@ import {
 import { postUser } from '../API/UserAPI';
 import { EmploymentType } from '../types/types';
 import { useGlobalContext } from '@/context/GlobalContext';
-import { useUserContext } from '@/context/UserContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAzureAdContext } from '@/context/AzureAdContext';
 
 export default function FirstTimeRegisterForm() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { azureUser } = useUserContext();
+  const azureUser = useAzureAdContext();
   const { departments } = useGlobalContext();
 
   const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);

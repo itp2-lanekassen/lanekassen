@@ -5,9 +5,19 @@ import FilterContextProvider from './context/FilterContext';
 import CalendarPage from './pages/CalendarPage';
 import logo from './assets/lanekassen_logo.png';
 import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
-import { Routes, Route, HashRouter } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import { Route, Routes } from 'react-router-dom';
 import GlobalContextProvider from './context/GlobalContext';
+import { ReactNode } from 'react';
+import AzureAdContextProvider from './context/AzureAdContext';
+import ModalContextProvider from './context/ModalContext';
+
+const ContextWrapper = ({ children }: { children?: ReactNode }) => (
+  <UserContextProvider>
+    <ModalContextProvider>
+      <FilterContextProvider>{children}</FilterContextProvider>
+    </ModalContextProvider>
+  </UserContextProvider>
+);
 
 function App() {
   return (
@@ -20,22 +30,25 @@ function App() {
             className="object-contain h-14"
             style={{ bottom: '75px', position: 'relative' }}
           />
-          <HashRouter>
-            <Routes>
-              <Route path="/" element={<SignInButton />}></Route>
-            </Routes>
-          </HashRouter>
+          <SignInButton />
         </center>
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>
-        <UserContextProvider>
+        <AzureAdContextProvider>
           <GlobalContextProvider>
-            <FilterContextProvider>
-              {/* Router view here */}
-              <CalendarPage />
-            </FilterContextProvider>
+            <Routes>
+              <Route path="/register" element={<FirstTimeRegisterForm />} />
+              <Route
+                path="/"
+                element={
+                  <ContextWrapper>
+                    <CalendarPage />
+                  </ContextWrapper>
+                }
+              />
+            </Routes>
           </GlobalContextProvider>
-        </UserContextProvider>
+        </AzureAdContextProvider>
       </AuthenticatedTemplate>
     </>
   );
