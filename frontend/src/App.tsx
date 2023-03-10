@@ -1,11 +1,23 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
 import { SignInButton } from './components/SignInButton';
-import GlobalContextProvider from './context/GlobalContext';
 import UserContextProvider from './context/UserContext';
 import FilterContextProvider from './context/FilterContext';
 import CalendarPage from './pages/CalendarPage';
 import logo from './assets/lanekassen_logo.png';
 import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
+import { Route, Routes } from 'react-router-dom';
+import GlobalContextProvider from './context/GlobalContext';
+import { ReactNode } from 'react';
+import AzureAdContextProvider from './context/AzureAdContext';
+import ModalContextProvider from './context/ModalContext';
+
+const ContextWrapper = ({ children }: { children?: ReactNode }) => (
+  <UserContextProvider>
+    <ModalContextProvider>
+      <FilterContextProvider>{children}</FilterContextProvider>
+    </ModalContextProvider>
+  </UserContextProvider>
+);
 
 function App() {
   return (
@@ -22,14 +34,21 @@ function App() {
         </center>
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>
-        <UserContextProvider>
+        <AzureAdContextProvider>
           <GlobalContextProvider>
-            <FilterContextProvider>
-              {/* Router view here */}
-              <CalendarPage />
-            </FilterContextProvider>
+            <Routes>
+              <Route path="/register" element={<FirstTimeRegisterForm />} />
+              <Route
+                path="/"
+                element={
+                  <ContextWrapper>
+                    <CalendarPage />
+                  </ContextWrapper>
+                }
+              />
+            </Routes>
           </GlobalContextProvider>
-        </UserContextProvider>
+        </AzureAdContextProvider>
       </AuthenticatedTemplate>
     </>
   );

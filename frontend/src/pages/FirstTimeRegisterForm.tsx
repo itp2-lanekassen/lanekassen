@@ -12,17 +12,15 @@ import {
 import { postUser } from '../API/UserAPI';
 import { EmploymentType } from '../types/types';
 import { useGlobalContext } from '@/context/GlobalContext';
-import { useUserContext } from '@/context/UserContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { useAzureAdContext } from '@/context/AzureAdContext';
 
-/**
- *
- * @returns component that is the page for first-time registering
- */
 export default function FirstTimeRegisterForm() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { azureUser } = useUserContext();
+  const azureUser = useAzureAdContext();
   const { departments } = useGlobalContext();
 
   const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
@@ -70,7 +68,7 @@ export default function FirstTimeRegisterForm() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
-      // redirect('/calendar)
+      navigate('/');
     }
   });
 

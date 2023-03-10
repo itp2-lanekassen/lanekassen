@@ -11,7 +11,7 @@ import { useFilterContext } from '@/context/FilterContext';
 export type Column = Record<string, string[]>;
 
 const CalendarPage = () => {
-  const { currentUser } = useUserContext();
+  const currentUser = useUserContext();
   const { fromDate, setFromDate, departments, sections, teams, roles, subjectFields } =
     useFilterContext();
 
