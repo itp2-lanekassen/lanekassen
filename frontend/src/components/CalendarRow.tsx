@@ -1,6 +1,6 @@
 import { getAbsencesByUserId } from '@/API/AbsenceAPI';
 import { useFilterContext } from '@/context/FilterContext';
-import { useGlobalContext } from '@/context/GlobalContext';
+import { useModalContext } from '@/context/ModalContext';
 import { useUserContext } from '@/context/UserContext';
 import { Column } from '@/pages/CalendarPage';
 import { Absence, User } from '@/types/types';
@@ -24,8 +24,8 @@ function getBgColor(absences: Absence[] = [], day: string) {
 }
 
 const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps) => {
-  const { currentUser } = useUserContext();
-  const { openAbsenceForm } = useGlobalContext();
+  const currentUser = useUserContext();
+  const { openAbsenceForm } = useModalContext();
   const { fromDate, toDate } = useFilterContext();
 
   const handleRowClick = (day: string) => {
