@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lanekassen.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230227085347_InititalCreate")]
-    partial class InititalCreate
+    [Migration("20230309193635_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,68 @@ namespace Lanekassen.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("DepartmentRole", b =>
+                {
+                    b.Property<int>("DepartmentsDepartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RolesRoleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DepartmentsDepartmentId", "RolesRoleId");
+
+                    b.HasIndex("RolesRoleId");
+
+                    b.ToTable("DepartmentRole");
+
+                    b.HasData(
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            RolesRoleId = 736969
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            RolesRoleId = 736970
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            RolesRoleId = 736971
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            RolesRoleId = 736972
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            RolesRoleId = 736973
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            RolesRoleId = 736974
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            RolesRoleId = 736975
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            RolesRoleId = 736976
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            RolesRoleId = 736977
+                        });
+                });
 
             modelBuilder.Entity("DepartmentSection", b =>
                 {
@@ -54,6 +116,63 @@ namespace Lanekassen.Migrations
                         {
                             DepartmentsDepartmentId = 696969,
                             SectionsSectionId = 706971
+                        });
+                });
+
+            modelBuilder.Entity("DepartmentTeam", b =>
+                {
+                    b.Property<int>("DepartmentsDepartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TeamsTeamId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DepartmentsDepartmentId", "TeamsTeamId");
+
+                    b.HasIndex("TeamsTeamId");
+
+                    b.ToTable("DepartmentTeam");
+
+                    b.HasData(
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            TeamsTeamId = 726969
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            TeamsTeamId = 726970
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            TeamsTeamId = 726971
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            TeamsTeamId = 726972
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            TeamsTeamId = 726973
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            TeamsTeamId = 726974
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            TeamsTeamId = 726975
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 696969,
+                            TeamsTeamId = 726976
                         });
                 });
 
@@ -562,6 +681,21 @@ namespace Lanekassen.Migrations
                         });
                 });
 
+            modelBuilder.Entity("DepartmentRole", b =>
+                {
+                    b.HasOne("Lanekassen.Models.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentsDepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lanekassen.Models.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DepartmentSection", b =>
                 {
                     b.HasOne("Lanekassen.Models.Department", null)
@@ -573,6 +707,21 @@ namespace Lanekassen.Migrations
                     b.HasOne("Lanekassen.Models.Section", null)
                         .WithMany()
                         .HasForeignKey("SectionsSectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DepartmentTeam", b =>
+                {
+                    b.HasOne("Lanekassen.Models.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentsDepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lanekassen.Models.Team", null)
+                        .WithMany()
+                        .HasForeignKey("TeamsTeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -596,13 +745,11 @@ namespace Lanekassen.Migrations
 
             modelBuilder.Entity("Lanekassen.Models.SubjectField", b =>
                 {
-                    b.HasOne("Lanekassen.Models.Department", "Departments")
+                    b.HasOne("Lanekassen.Models.Department", null)
                         .WithMany("SubjectFields")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("Lanekassen.Models.User", b =>

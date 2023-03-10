@@ -1,5 +1,7 @@
-import { backendUrl, Team } from '../types/types';
+import { Team } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const url = `${backendUrl}/Team`;
 

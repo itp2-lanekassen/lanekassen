@@ -1,5 +1,5 @@
-import { SignInButton } from '@/components/SignInButton';
-import { SignOutButton } from '@/components/SignOutButton';
+import { SignInButton } from '../components/SignInButton';
+import { SignOutButton } from '../components/SignOutButton';
 import { useIsAuthenticated } from '@azure/msal-react';
 import logo from '../assets/lanekassen_logo.png';
 

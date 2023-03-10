@@ -1,7 +1,6 @@
-import Dropdown from '../components/Dropdown';
-import DropdownMultiSelect from '../components/DropdownMultiSelect';
-import SubmitButton from '../components/SubmitButton';
-import ellipse from '../assets/Ellipse 1.png';
+import { useGlobalContext } from '@/context/GlobalContext';
+import { useUserContext } from '@/context/UserContext';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
   getRolesByDepartmentId,
@@ -10,10 +9,11 @@ import {
   getTeamsByDepartmentId
 } from '../API/DepartmentAPI';
 import { postUser } from '../API/UserAPI';
+import ellipse from '../assets/ellipse.png';
+import Dropdown from '../components/Dropdown';
+import DropdownMultiSelect from '../components/DropdownMultiSelect';
+import SubmitButton from '../components/SubmitButton';
 import { EmploymentType } from '../types/types';
-import { useGlobalContext } from '@/context/GlobalContext';
-import { useUserContext } from '@/context/UserContext';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 /**
  *
@@ -33,24 +33,24 @@ export default function FirstTimeRegisterForm() {
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(-1);
   const [isDisabled, setIsDisabled] = useState(true);
 
-  const { data: roles } = useQuery(
-    ['roles', { departmentId: selectedDepartment }],
-    async () => (await getRolesByDepartmentId(selectedDepartment)).data
+  const { data: roles } = useQuery(['roles', { departmentId: selectedDepartment }], async () =>
+    selectedDepartment === -1 ? [] : (await getRolesByDepartmentId(selectedDepartment)).data
   );
 
-  const { data: teams } = useQuery(
-    ['teams', { departmentId: selectedDepartment }],
-    async () => (await getTeamsByDepartmentId(selectedDepartment)).data
+  const { data: teams } = useQuery(['teams', { departmentId: selectedDepartment }], async () =>
+    selectedDepartment === -1 ? [] : (await getTeamsByDepartmentId(selectedDepartment)).data
   );
 
-  const { data: sections } = useQuery(
-    ['section', { departmentId: selectedDepartment }],
-    async () => (await getSectionsByDepartmentId(selectedDepartment)).data
+  const { data: sections } = useQuery(['section', { departmentId: selectedDepartment }], async () =>
+    selectedDepartment === -1 ? [] : (await getSectionsByDepartmentId(selectedDepartment)).data
   );
 
   const { data: subjectFields } = useQuery(
     ['subject-fields', { departmentId: selectedDepartment }],
-    async () => (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
+    async () =>
+      selectedDepartment === -1
+        ? []
+        : (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
   );
 
   const { mutate: registerUser } = useMutation({
@@ -112,36 +112,54 @@ export default function FirstTimeRegisterForm() {
             .map((type, i) => ({ name: type, id: i }))}
           handleChange={(e) => setSelectedEmploymentType(e)}
           value={selectedEmploymentType}
+          isDisabled={false}
         />
         <Dropdown
           placeholder="Avdeling"
           listOfOptions={departments.map((d) => ({ name: d.name, id: d.departmentId }))}
           handleChange={(e) => setSelectedDepartment(e)}
           value={selectedDepartment}
+          isDisabled={false}
         />
         <Dropdown
           placeholder="Seksjon"
-          listOfOptions={(sections || []).map((s) => ({ name: s.name, id: s.sectionId }))}
+          listOfOptions={(sections || []).map((s: { name: any; sectionId: any }) => ({
+            name: s.name,
+            id: s.sectionId
+          }))}
           handleChange={(e) => setSelectedSection(e)}
           value={selectedSection}
+          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Fagområde"
-          listOfOptions={(subjectFields || []).map((s) => ({ name: s.name, id: s.subjectFieldId }))}
+          listOfOptions={(subjectFields || []).map((s: { name: any; subjectFieldId: any }) => ({
+            name: s.name,
+            id: s.subjectFieldId
+          }))}
           handleChange={(e) => setSelectedSubjectFields(e)}
           value={selectedSubjectFields}
+          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Team"
-          listOfOptions={(teams || []).map((t) => ({ name: t.name, id: t.teamId }))}
+          listOfOptions={(teams || []).map((t: { name: any; teamId: any }) => ({
+            name: t.name,
+            id: t.teamId
+          }))}
           handleChange={(e) => setSelectedTeams(e)}
           value={selectedTeams}
+          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Rolle"
-          listOfOptions={(roles || []).map((r) => ({ name: r.name, id: r.roleId }))}
+          listOfOptions={(roles || []).map((r: { name: any; roleId: any }) => ({
+            name: r.name,
+            id: r.roleId
+          }))}
           handleChange={(e) => setSelectedRoles(e)}
           value={selectedRoles}
+          isDisabled={false}
         />
 
         <SubmitButton

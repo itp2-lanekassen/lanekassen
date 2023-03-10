@@ -123,7 +123,4 @@ public class SubjectFieldsController : ControllerBase {
     List<User> users = await _context.Users.Where(u => u.SubjectFields.Contains(subjectField)).ToListAsync();
     return Ok(users);
   }
-
-
-
 }

@@ -742,13 +742,11 @@ namespace Lanekassen.Migrations
 
             modelBuilder.Entity("Lanekassen.Models.SubjectField", b =>
                 {
-                    b.HasOne("Lanekassen.Models.Department", "Departments")
+                    b.HasOne("Lanekassen.Models.Department", null)
                         .WithMany("SubjectFields")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("Lanekassen.Models.User", b =>

@@ -1,5 +1,3 @@
-import { useGlobalContext } from '@/context/GlobalContext';
-import { useUserContext } from '@/context/UserContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
@@ -8,21 +6,22 @@ import {
   getSubjectFieldsByDepartmentId,
   getTeamsByDepartmentId
 } from '../API/DepartmentAPI';
-import { postUser } from '../API/UserAPI';
-import ellipse from '../assets/Ellipse 1.png';
+import { updateUser } from '../API/UserAPI';
+import ellipse from '../assets/ellipse.png';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
+import { useGlobalContext } from '../context/GlobalContext';
+import { useUserContext } from '../context/UserContext';
 import { EmploymentType } from '../types/types';
-
 /**
  *
  * @returns component that is the page for first-time registering
  */
-export default function FirstTimeRegisterForm() {
+export default function MyPage() {
   const queryClient = useQueryClient();
 
-  const { azureUser } = useUserContext();
+  const { currentUser } = useUserContext();
   const { departments } = useGlobalContext();
 
   const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
@@ -54,13 +53,13 @@ export default function FirstTimeRegisterForm() {
     async () => (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
   );
 
-  const { mutate: registerUser } = useMutation({
+  const { mutate: userToBeUpdated } = useMutation({
     mutationFn: () =>
-      postUser({
-        azureId: azureUser.id,
-        firstName: azureUser.givenName,
-        lastName: azureUser.surname,
-        email: azureUser.mail,
+      updateUser(currentUser.userId, {
+        azureId: currentUser.azureId,
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        email: currentUser.email,
         admin: false,
         sectionId: selectedSection,
         departmentId: selectedDepartment,
@@ -103,6 +102,8 @@ export default function FirstTimeRegisterForm() {
     }
   };
 
+  // const handleDeleteProfileClick = () => {
+
   return (
     <div className="max-w-full">
       <div className="flex flex-1 flex-col items-center">
@@ -131,43 +132,64 @@ export default function FirstTimeRegisterForm() {
         />
         <Dropdown
           placeholder="Avdeling"
-          listOfOptions={departments.map((d) => ({ name: d.name, id: d.departmentId }))}
+          listOfOptions={departments.map((d: { name: any; departmentId: any }) => ({
+            name: d.name,
+            id: d.departmentId
+          }))}
           handleChange={(e) => setSelectedDepartment(e)}
           value={selectedDepartment}
           isDisabled={isDropdownDisabled}
         />
         <Dropdown
           placeholder="Seksjon"
-          listOfOptions={(sections || []).map((s) => ({ name: s.name, id: s.sectionId }))}
+          listOfOptions={(sections || []).map((s: { name: any; sectionId: any }) => ({
+            name: s.name,
+            id: s.sectionId
+          }))}
           handleChange={(e) => setSelectedSection(e)}
           value={selectedSection}
           isDisabled={isDropdownDisabled}
         />
         <DropdownMultiSelect
           placeholder="Fagområde"
-          listOfOptions={(subjectFields || []).map((s) => ({ name: s.name, id: s.subjectFieldId }))}
+          listOfOptions={(subjectFields || []).map((s: { name: any; subjectFieldId: any }) => ({
+            name: s.name,
+            id: s.subjectFieldId
+          }))}
           handleChange={(e) => setSelectedSubjectFields(e)}
           value={selectedSubjectFields}
           isDisabled={isDropdownDisabled}
         />
         <DropdownMultiSelect
           placeholder="Team"
-          listOfOptions={(teams || []).map((t) => ({ name: t.name, id: t.teamId }))}
+          listOfOptions={(teams || []).map((t: { name: any; teamId: any }) => ({
+            name: t.name,
+            id: t.teamId
+          }))}
           handleChange={(e) => setSelectedTeams(e)}
           value={selectedTeams}
           isDisabled={isDropdownDisabled}
         />
         <DropdownMultiSelect
           placeholder="Rolle"
-          listOfOptions={(roles || []).map((r) => ({ name: r.name, id: r.roleId }))}
+          listOfOptions={(roles || []).map((r: { name: any; roleId: any }) => ({
+            name: r.name,
+            id: r.roleId
+          }))}
           handleChange={(e) => setSelectedRoles(e)}
           value={selectedRoles}
           isDisabled={isDropdownDisabled}
         />
+        <button
+          className="bg-primary-light hover:scale-110 text-grey-lightest font-Rubik Medium py-2 px-4 rounded position: relative"
+          // onClick={() => handleDeleteProfileClick()}
+        >
+          Slett bruker
+        </button>
 
         <SubmitButton
           buttonText="Registrer deg"
-          handleClick={registerUser}
+          handleClick={userToBeUpdated}
           disabled={isDisabled}
           disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
         />

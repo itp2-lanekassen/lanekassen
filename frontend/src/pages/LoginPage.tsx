@@ -1,7 +1,7 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { useState } from 'react';
 import { loginRequest } from '../authConfig';
-import { PageLayout } from '../components/PageLayout';
+import { PageLayout } from './PageLayout';
 import { ProfileData } from '../components/ProfileData';
 import { callMsGraph } from '../graph';
 

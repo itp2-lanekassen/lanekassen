@@ -112,7 +112,10 @@ public class AbsenceController : ControllerBase {
   }
 
   [HttpGet]
-  public async Task<IActionResult> GetAbsences([FromQuery(Name = "fromDate")] DateTime FromDate, [FromQuery(Name = "toDate")] DateTime ToDate) {
+  public async Task<IActionResult> GetAbsences(
+    [FromQuery(Name = "fromDate")] DateTime? FromDate,
+    [FromQuery(Name = "toDate")] DateTime? ToDate
+  ) {
     IQueryable<Absence> absences = _context.Absences;
 
     if (FromDate != null) {
@@ -133,7 +136,11 @@ public class AbsenceController : ControllerBase {
   }
 
   [HttpGet("user/{id}")]
-  public async Task<IActionResult> GetAbsenceForUser(int id, [FromQuery(Name = "fromDate")] DateTime? FromDate, [FromQuery(Name = "toDate")] DateTime? ToDate) {
+  public async Task<IActionResult> GetAbsenceForUser(
+    int id,
+    [FromQuery(Name = "fromDate")] DateTime? FromDate,
+    [FromQuery(Name = "toDate")] DateTime? ToDate
+  ) {
     IQueryable<Absence> absences = _context.Absences.Where(a => a.UserId == id);
 
     if (FromDate != null) {
