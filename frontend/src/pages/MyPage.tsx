@@ -6,7 +6,7 @@ import {
   getSubjectFieldsByDepartmentId,
   getTeamsByDepartmentId
 } from '../API/DepartmentAPI';
-import { updateUser } from '../API/UserAPI';
+import { updateUser, deleteUser } from '../API/UserAPI';
 import ellipse from '../assets/ellipse.png';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
@@ -79,6 +79,7 @@ export default function MyPage() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
+      setIsDropdownDisabled(true);
       // redirect('/calendar)
     }
   });
@@ -87,9 +88,9 @@ export default function MyPage() {
   useEffect(() => {
     setIsDisabled(
       selectedDepartment === -1 ||
-      selectedSection === -1 ||
-      selectedSubjectFields.length === 0 ||
-      selectedEmploymentType === -1
+        selectedSection === -1 ||
+        selectedSubjectFields.length === 0 ||
+        selectedEmploymentType === -1
     );
   }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
 
@@ -103,16 +104,11 @@ export default function MyPage() {
       }
     }, [selectedDepartment]); */
 
-  const handleEditClick = () => {
-    if (isDropdownDisabled == true) {
-      setIsDropdownDisabled(false);
-    } else {
-      setIsDropdownDisabled(true);
-    }
-  };
-
   const handleDeleteProfileClick = () => {
-    console.log('delete profile');
+    const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
+    if (confirmDelete) {
+      deleteUser(currentUser.userId);
+    }
   };
 
   return (
@@ -212,7 +208,7 @@ export default function MyPage() {
           {isDropdownDisabled ? (
             <SubmitButton
               buttonText="Rediger bruker"
-              handleClick={handleEditClick}
+              handleClick={() => setIsDropdownDisabled(false)}
               disabled={!isDropdownDisabled}
               disabledTitle={'Disabled'}
             />
