@@ -8,10 +8,6 @@ import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
 import { Routes, Route, HashRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import GlobalContextProvider from './context/GlobalContext';
-<<<<<<< HEAD
-=======
-import CheckUserExist from './pages/CheckUserExist';
->>>>>>> ed806e8 (Add a page for redirecting)
 
 function App() {
   return (
