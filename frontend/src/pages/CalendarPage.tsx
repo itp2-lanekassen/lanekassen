@@ -7,6 +7,7 @@ import { useUserContext } from '@/context/UserContext';
 import CalendarRow from '@/components/CalendarRow';
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
 import { useFilterContext } from '@/context/FilterContext';
+import FilterComponents from '@/components/CalendarFilter';
 
 export type Column = Record<string, string[]>;
 
@@ -61,6 +62,7 @@ const CalendarPage = () => {
 
   return (
     <main className="grid place-items-center p-10">
+      <div><FilterComponents /> </div>
       <div className="calendar-view">
         <button className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white row-span-2 row-start-1 whitespace-nowrap mb-1 mr-4 text-center">
           Se din fraværsoversikt

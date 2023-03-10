@@ -107,6 +107,8 @@ export interface IDropdownMultiSelect {
   value: number[];
   placeholder: string;
   listOfOptions: { name: string; id: number }[];
+  className?:String;
+  cusTheme?:boolean;
 }
 
 export interface IDropdown {
@@ -114,4 +116,5 @@ export interface IDropdown {
   value: number;
   placeholder: string;
   listOfOptions: { name: string; id: number }[];
+  className?:String;
 }

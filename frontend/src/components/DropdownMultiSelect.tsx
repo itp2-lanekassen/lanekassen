@@ -18,7 +18,9 @@ export default function DropdownMultiSelect({
   handleChange,
   placeholder,
   listOfOptions,
-  value
+  value,
+  className,
+  cusTheme
 }: IDropdownMultiSelect) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
