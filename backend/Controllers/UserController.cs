@@ -93,7 +93,12 @@ public class UserController : ControllerBase {
       return BadRequest("Invalid department id");
     }
 
-    User? userToUpdate = await _context.Users.FindAsync(id);
+    User? userToUpdate = await _context.Users
+        .Include(u => u.Roles)
+        .Include(u => u.Teams)
+        .Include(u => u.SubjectFields)
+        .FirstOrDefaultAsync(u => u.UserId == id);
+
     if (userToUpdate == null) {
       return NotFound();
     }
@@ -105,13 +110,34 @@ public class UserController : ControllerBase {
     userToUpdate.Admin = user.Admin;
     userToUpdate.Section = section;
     userToUpdate.Department = department;
-    userToUpdate.SubjectFields = await _context.SubjectFields.Where(sf => user.SubjectFields.Contains(sf.SubjectFieldId)).ToListAsync();
-    userToUpdate.Roles = await _context.Roles.Where(r => user.Roles!.Contains(r.RoleId)).ToListAsync();
-    userToUpdate.Teams = await _context.Teams.Where(t => user.Teams!.Contains(t.TeamId)).ToListAsync();
-    //userToUpdate.Absences = await _context.Absences.Where(a => user.Absences!.Contains(a.AbsenceId)).ToListAsync();
+
+    // Clear existing roles, teams and subject fields
+    userToUpdate.Roles.Clear();
+    userToUpdate.Teams.Clear();
+    userToUpdate.SubjectFields.Clear();
+
+    // Add new roles, teams and subject fields
+    foreach (int roleId in user.Roles ?? Array.Empty<int>()) {
+      Role? role = await _context.Roles.FindAsync(roleId);
+      if (role != null) {
+        userToUpdate.Roles.Add(role);
+      }
+    }
+    foreach (int teamId in user.Teams ?? Array.Empty<int>()) {
+      Team? team = await _context.Teams.FindAsync(teamId);
+      if (team != null) {
+        userToUpdate.Teams.Add(team);
+      }
+    }
+    foreach (int subjectFieldId in user.SubjectFields ?? Array.Empty<int>()) {
+      SubjectField? subjectField = await _context.SubjectFields.FindAsync(subjectFieldId);
+      if (subjectField != null) {
+        userToUpdate.SubjectFields.Add(subjectField);
+      }
+    }
 
     try {
-      _ = await _context.SaveChangesAsync();
+      await _context.SaveChangesAsync();
     } catch (DbUpdateException ex) {
       _logger.LogError(ex, "Error updating user");
       return StatusCode(

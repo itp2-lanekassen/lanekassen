@@ -18,7 +18,7 @@ import { SignOutButton } from '../components/SignOutButton';
 import { useNavigate } from 'react-router-dom';
 /**
  *
- * @returns component that is the page for first-time registering
+ * @returns component that is the personal profile of the user, where the user can edit their information and delete their account
  */
 export default function MyPage() {
   const queryClient = useQueryClient();
@@ -65,23 +65,6 @@ export default function MyPage() {
     async () => (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
   );
 
-  /*   useEffect(() => {
-    //console.log('currentUser', currentUser);
-    console.log('user', {
-      azureId: currentUser.azureId,
-      firstName: currentUser.firstName,
-      lastName: currentUser.lastName,
-      email: currentUser.email,
-      employmentType: selectedEmploymentType,
-      admin: false,
-      sectionId: selectedSection,
-      subjectFields: selectedSubjectFields,
-      roles: selectedRoles,
-      teams: selectedTeams,
-      departmentId: selectedDepartment
-    });
-  }, []); */
-
   const { mutate: userToBeUpdated } = useMutation({
     mutationFn: () =>
       updateUser(currentUser.userId, {
@@ -90,7 +73,7 @@ export default function MyPage() {
         lastName: currentUser.lastName,
         email: currentUser.email,
         admin: currentUser.admin,
-        employmentType: selectedEmploymentType,
+        employmentType: currentUser.employmentType,
         sectionId: selectedSection,
         subjectFields: selectedSubjectFields,
         roles: selectedRoles,
@@ -127,7 +110,7 @@ export default function MyPage() {
     const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
     if (confirmDelete) {
       deleteUser(currentUser.userId).then(() => {
-        navigate('/');
+        navigate('/register');
       });
     }
   };
