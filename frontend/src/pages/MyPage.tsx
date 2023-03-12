@@ -24,7 +24,7 @@ export default function MyPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { currentUser } = useUserContext();
+  const currentUser = useUserContext();
   const { departments } = useGlobalContext();
 
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
@@ -65,6 +65,23 @@ export default function MyPage() {
     async () => (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
   );
 
+  /*   useEffect(() => {
+    //console.log('currentUser', currentUser);
+    console.log('user', {
+      azureId: currentUser.azureId,
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      email: currentUser.email,
+      employmentType: selectedEmploymentType,
+      admin: false,
+      sectionId: selectedSection,
+      subjectFields: selectedSubjectFields,
+      roles: selectedRoles,
+      teams: selectedTeams,
+      departmentId: selectedDepartment
+    });
+  }, []); */
+
   const { mutate: userToBeUpdated } = useMutation({
     mutationFn: () =>
       updateUser(currentUser.userId, {
@@ -72,13 +89,13 @@ export default function MyPage() {
         firstName: currentUser.firstName,
         lastName: currentUser.lastName,
         email: currentUser.email,
+        employmentType: selectedEmploymentType,
         admin: false,
         sectionId: selectedSection,
-        departmentId: selectedDepartment,
         subjectFields: selectedSubjectFields,
-        teams: selectedTeams,
         roles: selectedRoles,
-        employmentType: selectedEmploymentType
+        teams: selectedTeams,
+        departmentId: selectedDepartment
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
@@ -110,7 +127,9 @@ export default function MyPage() {
   const handleDeleteProfileClick = () => {
     const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
     if (confirmDelete) {
-      deleteUser(currentUser.userId);
+      deleteUser(currentUser.userId).then(() => {
+        navigate('/');
+      });
     }
   };
 
