@@ -1,6 +1,6 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
-import FilterContextProvider from './context/FilterContext';
 import UserContextProvider from './context/UserContext';
+import FilterContextProvider from './context/FilterContext';
 import CalendarPage from './pages/CalendarPage';
 import MyPage from './pages/MyPage';
 import LoginPage from './pages/LoginPage';
@@ -22,15 +22,16 @@ const ContextWrapper = ({ children }: { children?: ReactNode }) => (
 
 function App() {
   return (
-    <>
+    <main className="min-h-screen w-full max-w-screen-xl mx-auto">
       <UnauthenticatedTemplate>
+        <LoginPage />
         <LoginPage />
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>
         <AzureAdContextProvider>
           <GlobalContextProvider>
             <Routes>
-              <Route path="/register" element={<FirstTimeRegisterForm />} />{' '}
+              <Route path="/register" element={<FirstTimeRegisterForm />} />
               {/* Denne burde beskyttes slik at man ikke kan navigere hit hvis man har bruker */}
               <Route
                 path="/"
@@ -53,7 +54,7 @@ function App() {
           </GlobalContextProvider>
         </AzureAdContextProvider>
       </AuthenticatedTemplate>
-    </>
+    </main>
   );
 }
 

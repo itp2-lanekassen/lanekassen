@@ -89,8 +89,8 @@ export default function MyPage() {
         firstName: currentUser.firstName,
         lastName: currentUser.lastName,
         email: currentUser.email,
-        employmentType: selectedEmploymentType,
         admin: currentUser.admin,
+        employmentType: selectedEmploymentType,
         sectionId: selectedSection,
         subjectFields: selectedSubjectFields,
         roles: selectedRoles,
@@ -100,7 +100,6 @@ export default function MyPage() {
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
       setIsDropdownDisabled(true);
-      // redirect('/calendar)
     }
   });
 

@@ -15,7 +15,7 @@ interface CalendarRowProps {
 
 function getBgColor(absences: Absence[] = [], day: string) {
   const matchedAbsence = absences.find((a) =>
-    moment(day, 'DD.MM.YY').isBetween(moment(a.startDate), moment(a.endDate), 'd', '[]')
+    moment(day).isBetween(moment(a.startDate), moment(a.endDate), 'd', '[]')
   );
 
   if (matchedAbsence) {
@@ -31,7 +31,7 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
   const handleRowClick = (day: string) => {
     if (!(isCurrentUser || currentUser.admin)) return;
 
-    openAbsenceForm(moment(day, 'DD.MM.YY').format('yyyy-MM-DD'));
+    openAbsenceForm(moment(day).format('yyyy-MM-DD'));
   };
 
   const {
@@ -61,16 +61,16 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
       )}
 
       {Object.values(columns).map((days, j) => (
-        <div key={(user?.userId || '') + days.join(',')} className="contents">
+        <div key={(user?.userId || '') + days.map((d) => d.value).join(',')} className="contents">
           {days.map((day) => (
             <div
-              key={String(user?.userId || '') + j + day}
+              key={day.value + j}
               className={`w-full min-h-[21px] h-full ${
-                getBgColor(absences, day) ? '' : j % 2 ? 'bg-card-two' : 'bg-card-one'
+                getBgColor(absences, day.value) ? '' : j % 2 ? 'bg-card-two' : 'bg-card-one'
               }`}
-              style={getBgColor(absences, day)}
+              style={getBgColor(absences, day.value)}
               role="button"
-              onClick={() => handleRowClick(day)}
+              onClick={() => handleRowClick(day.value)}
             />
           ))}
         </div>
