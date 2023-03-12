@@ -71,9 +71,9 @@ export interface User {
   sectionId: number;
   section?: Section;
   absences?: Absence[];
-  subjectFields: number[];
-  roles?: number[];
-  teams?: number[];
+  subjectFields: SubjectField[];
+  roles: Role[];
+  teams: Team[];
   departmentId: number;
   department?: Department;
 }
