@@ -30,7 +30,8 @@ function App() {
         <AzureAdContextProvider>
           <GlobalContextProvider>
             <Routes>
-              <Route path="/register" element={<FirstTimeRegisterForm />} />
+              <Route path="/register" element={<FirstTimeRegisterForm />} />{' '}
+              {/* Denne burde beskyttes slik at man ikke kan navigere hit hvis man har bruker */}
               <Route
                 path="/"
                 element={

@@ -90,7 +90,7 @@ export default function MyPage() {
         lastName: currentUser.lastName,
         email: currentUser.email,
         employmentType: selectedEmploymentType,
-        admin: false,
+        admin: currentUser.admin,
         sectionId: selectedSection,
         subjectFields: selectedSubjectFields,
         roles: selectedRoles,
