@@ -6,11 +6,13 @@ import { Column } from '@/pages/CalendarPage';
 import { Absence, User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
 
 interface CalendarRowProps {
   user?: User;
   isCurrentUser?: boolean;
   columns: Column;
+  //children: JSX.Element|JSX.Element[];
 }
 
 function getBgColor(absences: Absence[] = [], day: string) {
@@ -27,6 +29,7 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
   const currentUser = useUserContext();
   const { openAbsenceForm } = useModalContext();
   const { fromDate, toDate } = useFilterContext();
+  const [open, setOpen] = useState(false);
 
   const handleRowClick = (day: string) => {
     if (!(isCurrentUser || currentUser.admin)) return;
@@ -46,15 +49,26 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt: {String(error)}</div>;
 
+  const handleClick = () => {
+    setOpen(!open);
+    //console.log(open);
+  };
+
   return (
     <div className="contents text-sm">
       {user ? (
-        <div
-          className={`${
-            isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
-          } text-white rounded-full w-full px-4 py`}
-        >
-          {user.firstName}&nbsp;{user.lastName}
+        <div>
+          <button
+            onClick={handleClick}
+            className={`${
+              isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
+            } text-white rounded-full w-full px-4 py`}
+          >
+            {user.firstName}&nbsp;{user.lastName}
+          </button>
+          <div className={`${isCurrentUser ? 'bg-card-two' : 'bg-card-one-dark'} text-primary`}>
+            <>{user.azureId}</>
+          </div>
         </div>
       ) : (
         <div></div>
