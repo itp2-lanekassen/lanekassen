@@ -10,6 +10,7 @@ import { ReactNode } from 'react';
 import AzureAdContextProvider from './context/AzureAdContext';
 import ModalContextProvider from './context/ModalContext';
 import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
+import PageNotFound from './pages/PageNotFound';
 
 const ContextWrapper = ({ children }: { children?: ReactNode }) => (
   <UserContextProvider>
@@ -46,6 +47,7 @@ function App() {
                   </ContextWrapper>
                 }
               />
+              <Route path="*" element={<PageNotFound />} />
             </Routes>
           </GlobalContextProvider>
         </AzureAdContextProvider>
