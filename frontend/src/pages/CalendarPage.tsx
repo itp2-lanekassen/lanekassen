@@ -122,7 +122,7 @@ const CalendarPage = () => {
         <CalendarRow user={currentUser} isCurrentUser={true} columns={calendarColumns} />
 
         {users.map((user, i) => (
-          <CalendarRow key={user?.userId || i} user={user} columns={calendarColumns} />
+          <CalendarRow key={user?.azureId || i} user={user} columns={calendarColumns} />
         ))}
       </div>
     </div>
