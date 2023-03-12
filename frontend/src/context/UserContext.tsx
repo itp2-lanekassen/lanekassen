@@ -3,11 +3,7 @@ import { createContext, FC, ReactNode, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAzureAdContext } from './AzureAdContext';
 import { User } from '../types/types';
-import { loginRequest } from '../authConfig';
-import { useMsal } from '@azure/msal-react';
-import { getAzureAdUser } from '../API/AzureAdAPI';
 import { getUserByAzureId } from '../API/UserAPI';
-import { AzureAdUser } from '../types/azureAd';
 
 interface UserContextProps {
   children?: ReactNode;
