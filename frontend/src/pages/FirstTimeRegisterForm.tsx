@@ -1,5 +1,5 @@
-import { useGlobalContext } from '@/context/GlobalContext';
-import { useUserContext } from '@/context/UserContext';
+import { useGlobalContext } from '../context/GlobalContext';
+import { useUserContext } from '../context/UserContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
@@ -14,10 +14,8 @@ import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
 import { EmploymentType } from '../types/types';
-import { useGlobalContext } from '@/context/GlobalContext';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useAzureAdContext } from '@/context/AzureAdContext';
+import { useAzureAdContext } from '../context/AzureAdContext';
 
 export default function FirstTimeRegisterForm() {
   const navigate = useNavigate();
@@ -105,7 +103,10 @@ export default function FirstTimeRegisterForm() {
         />
         <h1 className="mt-[-100px]">Registrering</h1>
       </div>
-      <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
+
+      {/*       <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
+       */}
+      <div className="grid mx-auto w-max gap-4 place-items-center mt-16">
         <Dropdown
           placeholder="Ansattforhold"
           listOfOptions={Object.keys(EmploymentType)
