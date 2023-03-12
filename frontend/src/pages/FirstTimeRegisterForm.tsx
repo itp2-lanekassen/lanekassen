@@ -93,10 +93,10 @@ export default function FirstTimeRegisterForm() {
   }, [selectedDepartment]);
 
   return (
-    <div className="max-w-full">
+    <div className="w-full">
       <div className="flex flex-1 flex-col items-center">
         <img
-          className="sm:w-[70vw] mobile:w-[90vw] sm:h-[20vh] mobile:h-[15vh]"
+          className="md:w-[70vw] mobile:w-[90vw] md:h-[20vh] mobile:h-[15vh]"
           src={ellipse}
           alt=""
         />
