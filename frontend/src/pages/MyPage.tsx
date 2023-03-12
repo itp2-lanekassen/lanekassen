@@ -13,13 +13,16 @@ import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
-import { EmploymentType } from '../types/types';
+import { EmploymentType, Role, SubjectField, Team } from '../types/types';
+import { SignOutButton } from '../components/SignOutButton';
+import { useNavigate } from 'react-router-dom';
 /**
  *
  * @returns component that is the page for first-time registering
  */
 export default function MyPage() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { currentUser } = useUserContext();
   const { departments } = useGlobalContext();
@@ -30,13 +33,13 @@ export default function MyPage() {
   const [selectedDepartment, setSelectedDepartment] = useState<number>(currentUser.departmentId);
   const [selectedSection, setSelectedSection] = useState<number>(currentUser.sectionId);
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>(
-    currentUser.subjectFields.map((sf) => sf.subjectFieldId)
+    currentUser.subjectFields.map((sf: SubjectField) => sf.subjectFieldId)
   );
   const [selectedTeams, setSelectedTeams] = useState<number[]>(
-    currentUser.teams.map((t) => t.teamId)
+    currentUser.teams.map((t: Team) => t.teamId)
   );
   const [selectedRoles, setSelectedRoles] = useState<number[]>(
-    currentUser.roles.map((r) => r.roleId)
+    currentUser.roles.map((r: Role) => r.roleId)
   );
 
   const [isDisabled, setIsDisabled] = useState(true);
@@ -120,6 +123,21 @@ export default function MyPage() {
           alt=""
         />
         <h1 className="mt-[-100px]">Profil</h1>
+      </div>
+
+      <div className="absolute top-10 right-10 flex justify-end">
+        <SignOutButton />
+      </div>
+
+      <div className="absolute top-10 left-10 flex justify-end">
+        <SubmitButton
+          disabled={false}
+          disabledTitle={'Tilbake'}
+          buttonText={'Tilbake til kalender'}
+          handleClick={() => {
+            navigate('/');
+          }}
+        />
       </div>
 
       <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mt-16">

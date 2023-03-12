@@ -15,6 +15,7 @@ import SubmitButton from '../components/SubmitButton';
 import { EmploymentType } from '../types/types';
 import { useNavigate } from 'react-router-dom';
 import { useAzureAdContext } from '../context/AzureAdContext';
+import { SignOutButton } from '../components/SignOutButton';
 
 export default function FirstTimeRegisterForm() {
   const navigate = useNavigate();
@@ -105,6 +106,9 @@ export default function FirstTimeRegisterForm() {
 
       {/*       <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
        */}
+      <div className="absolute top-10 left-10 flex justify-end">
+        <SignOutButton />
+      </div>
       <div className="grid mx-auto w-max gap-4 place-items-center mt-16">
         <Dropdown
           placeholder="Ansattforhold"
