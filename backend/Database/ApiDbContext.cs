@@ -101,10 +101,10 @@ public class ApiDbContext : DbContext {
       _ = e.HasData(
         new {
           UserId = 1,
-          AzureId = "This-is-a-fake-azure-id",
-          FirstName = "John",
-          LastName = "Doe",
-          Email = "john@doe.com",
+          AzureId = "Falsk-azure-id",
+          FirstName = "Ola",
+          LastName = "Nordmann",
+          Email = "ola@nordmann.no",
           section1.SectionId,
           Admin = false,
           EmploymentType = EmploymentType.Ansatt,

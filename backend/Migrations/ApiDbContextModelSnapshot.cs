@@ -608,12 +608,12 @@ namespace Lanekassen.Migrations
                         {
                             UserId = 1,
                             Admin = false,
-                            AzureId = "This-is-a-fake-azure-id",
+                            AzureId = "Falsk-azure-id",
                             DepartmentId = 1,
-                            Email = "john@doe.com",
+                            Email = "ola@nordmann.no",
                             EmploymentType = 0,
-                            FirstName = "John",
-                            LastName = "Doe",
+                            FirstName = "Ola",
+                            LastName = "Nordmann",
                             SectionId = 1
                         });
                 });

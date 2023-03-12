@@ -162,11 +162,17 @@ namespace Lanekassen.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     EmploymentType = table.Column<int>(type: "integer", nullable: false),
                     Admin = table.Column<bool>(type: "boolean", nullable: false),
-                    SectionId = table.Column<int>(type: "integer", nullable: true)
+                    SectionId = table.Column<int>(type: "integer", nullable: true),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Users_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId");
                     table.ForeignKey(
                         name: "FK_Users_Sections_SectionId",
                         column: x => x.SectionId,
@@ -303,9 +309,9 @@ namespace Lanekassen.Migrations
                 columns: new[] { "AbsenceTypeId", "Code", "ColorCode", "Name" },
                 values: new object[,]
                 {
-                    { 746969, "T", "#bada55", "Tilgjengelig fravær" },
-                    { 746970, "F", "#bada55", "Utilgjengelig fravær" },
-                    { 746971, "P/S", "#bada55", "Permisjon/Sykmelding" }
+                    { 1, "T", "#bada55", "Tilgjengelig fravær" },
+                    { 2, "F", "#bada55", "Utilgjengelig fravær" },
+                    { 3, "P/S", "#bada55", "Permisjon/Sykmelding" }
                 });
 
             migrationBuilder.InsertData(
@@ -313,12 +319,12 @@ namespace Lanekassen.Migrations
                 columns: new[] { "DepartmentId", "Abbreviation", "Name" },
                 values: new object[,]
                 {
-                    { 696969, "IT", "IT-avdelingen" },
-                    { 696970, "UA", "Utdanningsstøtte" },
-                    { 696971, "SAK", "Saksavdelingen" },
-                    { 696972, "SØ", "Styring og Økonomi" },
-                    { 696973, "KOM", "Kommunikasjonsstaben" },
-                    { 696974, "HR", "HR og administrasjon" }
+                    { 1, "IT", "IT-avdelingen" },
+                    { 2, "UA", "Utdanningsstøtte" },
+                    { 3, "SAK", "Saksavdelingen" },
+                    { 4, "SØ", "Styring og Økonomi" },
+                    { 5, "KOM", "Kommunikasjonsstaben" },
+                    { 6, "HR", "HR og administrasjon" }
                 });
 
             migrationBuilder.InsertData(
@@ -326,15 +332,15 @@ namespace Lanekassen.Migrations
                 columns: new[] { "RoleId", "Name" },
                 values: new object[,]
                 {
-                    { 736969, "Arkitekt" },
-                    { 736970, "Prosjektleder" },
-                    { 736971, "App.Drift" },
-                    { 736972, "Teamlead" },
-                    { 736973, "Tester" },
-                    { 736974, "Utvikler" },
-                    { 736975, "Designer" },
-                    { 736976, "Controller" },
-                    { 736977, "Leder" }
+                    { 1, "Arkitekt" },
+                    { 2, "Prosjektleder" },
+                    { 3, "App.Drift" },
+                    { 4, "Teamlead" },
+                    { 5, "Tester" },
+                    { 6, "Utvikler" },
+                    { 7, "Designer" },
+                    { 8, "Controller" },
+                    { 9, "Leder" }
                 });
 
             migrationBuilder.InsertData(
@@ -342,9 +348,9 @@ namespace Lanekassen.Migrations
                 columns: new[] { "SectionId", "Name" },
                 values: new object[,]
                 {
-                    { 706969, "Trondheim" },
-                    { 706970, "Oslo" },
-                    { 706971, "Hjemmekollega" }
+                    { 1, "Trondheim" },
+                    { 2, "Oslo" },
+                    { 3, "Hjemmekollega" }
                 });
 
             migrationBuilder.InsertData(
@@ -352,14 +358,14 @@ namespace Lanekassen.Migrations
                 columns: new[] { "TeamId", "Name" },
                 values: new object[,]
                 {
-                    { 726969, "Rubik" },
-                    { 726970, "Settlers" },
-                    { 726971, "Dominion" },
-                    { 726972, "Portal" },
-                    { 726973, "Pong" },
-                    { 726974, "Test" },
-                    { 726975, "Ledergruppe IT" },
-                    { 726976, "Utvidet Ledergruppe IT" }
+                    { 1, "Rubik" },
+                    { 2, "Settlers" },
+                    { 3, "Dominion" },
+                    { 4, "Portal" },
+                    { 5, "Pong" },
+                    { 6, "Test" },
+                    { 7, "Ledergruppe IT" },
+                    { 8, "Utvidet Ledergruppe IT" }
                 });
 
             migrationBuilder.InsertData(
@@ -367,15 +373,15 @@ namespace Lanekassen.Migrations
                 columns: new[] { "DepartmentsDepartmentId", "RolesRoleId" },
                 values: new object[,]
                 {
-                    { 696969, 736969 },
-                    { 696969, 736970 },
-                    { 696969, 736971 },
-                    { 696969, 736972 },
-                    { 696969, 736973 },
-                    { 696969, 736974 },
-                    { 696969, 736975 },
-                    { 696969, 736976 },
-                    { 696969, 736977 }
+                    { 1, 1 },
+                    { 1, 2 },
+                    { 1, 3 },
+                    { 1, 4 },
+                    { 1, 5 },
+                    { 1, 6 },
+                    { 1, 7 },
+                    { 1, 8 },
+                    { 1, 9 }
                 });
 
             migrationBuilder.InsertData(
@@ -383,9 +389,9 @@ namespace Lanekassen.Migrations
                 columns: new[] { "DepartmentsDepartmentId", "SectionsSectionId" },
                 values: new object[,]
                 {
-                    { 696969, 706969 },
-                    { 696969, 706970 },
-                    { 696969, 706971 }
+                    { 1, 1 },
+                    { 1, 2 },
+                    { 1, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -393,14 +399,14 @@ namespace Lanekassen.Migrations
                 columns: new[] { "DepartmentsDepartmentId", "TeamsTeamId" },
                 values: new object[,]
                 {
-                    { 696969, 726969 },
-                    { 696969, 726970 },
-                    { 696969, 726971 },
-                    { 696969, 726972 },
-                    { 696969, 726973 },
-                    { 696969, 726974 },
-                    { 696969, 726975 },
-                    { 696969, 726976 }
+                    { 1, 1 },
+                    { 1, 2 },
+                    { 1, 3 },
+                    { 1, 4 },
+                    { 1, 5 },
+                    { 1, 6 },
+                    { 1, 7 },
+                    { 1, 8 }
                 });
 
             migrationBuilder.InsertData(
@@ -408,41 +414,41 @@ namespace Lanekassen.Migrations
                 columns: new[] { "SubjectFieldId", "DepartmentId", "Name" },
                 values: new object[,]
                 {
-                    { 716969, 696969, "Virksomhetsarkitektur og Prosjektledelse" },
-                    { 716970, 696969, "Applikasjonsdrift" },
-                    { 716971, 696969, "Systemutvikling og test" },
-                    { 716972, 696969, "Informasjonssikkerhet" },
-                    { 716973, 696969, "Data og informasjonsforvaltning" },
-                    { 716974, 696969, "Leverandørstyring og økonomi" },
-                    { 716975, 696969, "Drift og avtaleeierskap" },
-                    { 716976, 696969, "IT Brukerstøtte" },
-                    { 716977, 696969, "Rekruttering og kompetanse" }
+                    { 1, 1, "Virksomhetsarkitektur og Prosjektledelse" },
+                    { 2, 1, "Applikasjonsdrift" },
+                    { 3, 1, "Systemutvikling og test" },
+                    { 4, 1, "Informasjonssikkerhet" },
+                    { 5, 1, "Data og informasjonsforvaltning" },
+                    { 6, 1, "Leverandørstyring og økonomi" },
+                    { 7, 1, "Drift og avtaleeierskap" },
+                    { 8, 1, "IT Brukerstøtte" },
+                    { 9, 1, "Rekruttering og kompetanse" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "UserId", "Admin", "AzureId", "Email", "EmploymentType", "FirstName", "LastName", "SectionId" },
-                values: new object[] { 666969, false, "This-is-a-fake-azure-id", "john@doe.com", 0, "John", "Doe", 706969 });
+                columns: new[] { "UserId", "Admin", "AzureId", "DepartmentId", "Email", "EmploymentType", "FirstName", "LastName", "SectionId" },
+                values: new object[] { 1, false, "Falsk-azure-id", 1, "ola@nordmann.no", 0, "Ola", "Nordmann", 1 });
 
             migrationBuilder.InsertData(
                 table: "Absences",
                 columns: new[] { "AbsenceId", "AbsenceTypeId", "Comment", "EndDate", "StartDate", "UserId" },
-                values: new object[] { 756969, 746969, null, new DateTime(1, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 666969 });
+                values: new object[] { 1, 1, null, new DateTime(1, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1 });
 
             migrationBuilder.InsertData(
                 table: "RoleUser",
                 columns: new[] { "RolesRoleId", "UsersUserId" },
-                values: new object[] { 736969, 666969 });
+                values: new object[] { 1, 1 });
 
             migrationBuilder.InsertData(
                 table: "SubjectFieldUser",
                 columns: new[] { "SubjectFieldsSubjectFieldId", "UsersUserId" },
-                values: new object[] { 716969, 666969 });
+                values: new object[] { 1, 1 });
 
             migrationBuilder.InsertData(
                 table: "TeamUser",
                 columns: new[] { "TeamsTeamId", "UsersUserId" },
-                values: new object[] { 726969, 666969 });
+                values: new object[] { 1, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Absences_AbsenceTypeId",
@@ -488,6 +494,11 @@ namespace Lanekassen.Migrations
                 name: "IX_TeamUser_UsersUserId",
                 table: "TeamUser",
                 column: "UsersUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_DepartmentId",
+                table: "Users",
+                column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_SectionId",
