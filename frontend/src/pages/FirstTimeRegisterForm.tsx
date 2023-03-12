@@ -1,5 +1,4 @@
 import { useGlobalContext } from '../context/GlobalContext';
-import { useUserContext } from '../context/UserContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
@@ -125,7 +124,7 @@ export default function FirstTimeRegisterForm() {
         />
         <Dropdown
           placeholder="Seksjon"
-          listOfOptions={(sections || []).map((s: { name: any; sectionId: any }) => ({
+          listOfOptions={(sections || []).map((s: { name: string; sectionId: number }) => ({
             name: s.name,
             id: s.sectionId
           }))}
@@ -135,17 +134,19 @@ export default function FirstTimeRegisterForm() {
         />
         <DropdownMultiSelect
           placeholder="Fagområde"
-          listOfOptions={(subjectFields || []).map((s: { name: any; subjectFieldId: any }) => ({
-            name: s.name,
-            id: s.subjectFieldId
-          }))}
+          listOfOptions={(subjectFields || []).map(
+            (s: { name: string; subjectFieldId: number }) => ({
+              name: s.name,
+              id: s.subjectFieldId
+            })
+          )}
           handleChange={(e) => setSelectedSubjectFields(e)}
           value={selectedSubjectFields}
           isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Team"
-          listOfOptions={(teams || []).map((t: { name: any; teamId: any }) => ({
+          listOfOptions={(teams || []).map((t: { name: string; teamId: number }) => ({
             name: t.name,
             id: t.teamId
           }))}
@@ -155,7 +156,7 @@ export default function FirstTimeRegisterForm() {
         />
         <DropdownMultiSelect
           placeholder="Rolle"
-          listOfOptions={(roles || []).map((r: { name: any; roleId: any }) => ({
+          listOfOptions={(roles || []).map((r: { name: string; roleId: number }) => ({
             name: r.name,
             id: r.roleId
           }))}
