@@ -1,21 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import {
-  getRolesByDepartmentId,
-  getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId,
-  getTeamsByDepartmentId
-} from '../API/DepartmentAPI';
-import { updateUser, deleteUser } from '../API/UserAPI';
-import ellipse from '../assets/ellipse.png';
-import Dropdown from '../components/Dropdown';
-import DropdownMultiSelect from '../components/DropdownMultiSelect';
+import { useNavigate } from 'react-router-dom';
 import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
 import { EmploymentType, Role, SubjectField, Team } from '../types/types';
 import { SignOutButton } from '../components/SignOutButton';
-import { useNavigate } from 'react-router-dom';
 import {
   getAllAbsenceTypes,
   postAbsenceType,
@@ -23,6 +13,7 @@ import {
   deleteAbsenceType
 } from '../API/AbsenceTypeAPI';
 import TextField from '@mui/material/TextField';
+import Dropdown from '../components/Dropdown';
 
 /**
  *
@@ -115,7 +106,7 @@ export default function AdminPage() {
           disabledTitle={'minside'}
           buttonText={'Til min side'}
           handleClick={() => {
-            navigate('/mypage');
+            navigate('/profil');
           }}
         />
       </div>

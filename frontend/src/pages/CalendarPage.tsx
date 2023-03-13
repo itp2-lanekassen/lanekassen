@@ -46,7 +46,6 @@ const CalendarPage = () => {
 
       return 0;
     });
-
     return [...res, ...Array(30 - res.length)];
   });
 
@@ -79,12 +78,31 @@ const CalendarPage = () => {
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
 
+  function handleMyPageClick() {
+    window.location.href = '/mypage';
+  }
+
   return (
     <div className="w-full py-8">
       <div className="grid grid-cols-calendar place-content-center place-items-center gap-0.5">
-        <button className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white row-start-1 row-span-3 whitespace-nowrap mb-1 mr-4 text-center">
-          Se din fraværsoversikt
-        </button>
+        <div className="row-start-1 row-span-3 flex-column ">
+          <div>
+            <button
+              onClick={handleMyPageClick}
+              className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white row-start-1 row-span-3 whitespace-nowrap mb-1 mr-4 text-center hover:text-secondary-light hover:bg-white border-solid border-2 hover:scale-110"
+            >
+              Profil
+            </button>
+          </div>
+          <button className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white whitespace-nowrap mb-1 mr-4 text-center">
+            Se din fraværsoversikt
+          </button>
+        </div>
+
+        {/* <button className="rounded-full bg-primary-light px-3 py-1 text-sm text-white row-start-2 row-span-3 whitespace-nowrap mb-1 mr-4 text-center">
+          Profil
+        </button> */}
+
         <h6 className="row-start-1 col-span-20 w-full bg-primary-light text-white text-center flex justify-between items-center">
           <button
             className="text-sm"
@@ -137,7 +155,6 @@ const CalendarPage = () => {
         ))}
 
         <CalendarRow user={currentUser} isCurrentUser={true} columns={calendarColumns} />
-
         {users.map((user, i) => (
           <CalendarRow key={user?.azureId || i} user={user} columns={calendarColumns} />
         ))}
@@ -145,5 +162,4 @@ const CalendarPage = () => {
     </div>
   );
 };
-
 export default CalendarPage;
