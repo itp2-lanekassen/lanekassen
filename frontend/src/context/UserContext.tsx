@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { createContext, FC, ReactNode, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAzureAdContext } from './AzureAdContext';
-import { User } from '../types/types';
 import { getUserByAzureId } from '../API/UserAPI';
+import { User } from '../types/types';
+import { useAzureAdContext } from './AzureAdContext';
 
 interface UserContextProps {
   children?: ReactNode;
@@ -31,7 +31,7 @@ const UserContextProvider: FC<UserContextProps> = ({ children }) => {
 
   if (isLoading) return <div>Laster bruker...</div>;
   if (isError) {
-    return <Navigate to="/register" />;
+    return <Navigate to="/registrer-bruker" />;
   }
 
   return <UserContext.Provider value={currentUser}>{children}</UserContext.Provider>;
