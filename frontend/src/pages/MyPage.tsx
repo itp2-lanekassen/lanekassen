@@ -141,6 +141,21 @@ export default function MyPage() {
         />
       </div>
 
+      {currentUser.admin ? (
+        <div className="absolute top-18 left-10 flex justify-end">
+          <SubmitButton
+            disabled={false}
+            disabledTitle={'admin'}
+            buttonText={'Til adminsiden'}
+            handleClick={() => {
+              navigate('/adminpage');
+            }}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
+
       <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mt-16">
         <p className="font-bold"> Navn: </p>
         <p className=" w-full">
