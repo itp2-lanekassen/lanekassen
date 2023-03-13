@@ -1,99 +1,43 @@
 import { AbsencePeriod } from './AbsencePeriod';
-/**
- * Renders a component that shows all absence periods for a user
- */
+import { Absence } from '../types/types';
+import { useEffect, useState } from 'react';
+import { getAbsencesByUserId } from '../API/AbsenceAPI';
+import { useUserContext } from '../context/UserContext';
+import moment from 'moment';
 
-export const AbsencePeriods = () => {
-  //const [loggedIn, setLoggedIn] = useRecoilState(tempFahrenheit);
+//Get all absences for a user from database
+async function getAbsences(currentUser: { userId: number }, setAbsences: any) {
+  setAbsences(await getAbsencesByUserId(currentUser.userId).then((response) => response.data));
+}
+
+/**
+ * Renders a scroll window that shows all absence periods for a user
+ */
+export const AbsencePeriods = (props: { setAbsence: any; selectedAbsence?: Absence }) => {
+  const { currentUser } = useUserContext();
+  const [absences, setAbsences] = useState<Absence[]>([]);
+  useEffect(() => {
+    getAbsences(currentUser, setAbsences);
+  }, [currentUser, props.selectedAbsence]);
+
+  //Sort and return all absences in AbsencePeriod components
+  const absencePeriods = absences
+    .sort((a, b) => moment(a.startDate).unix() - moment(b.startDate).unix())
+    .map((absence) => {
+      return (
+        <AbsencePeriod
+          key={absence.absenceId}
+          setAbsence={props.setAbsence}
+          absence={absence}
+        ></AbsencePeriod>
+      );
+    });
 
   return (
-    <div className="h-[450px] w-[350px]">
+    <div className="h-[500px] w-[350px]">
       <h3 className="ml-[25px]">Dine fravær</h3>
-      <div className="overflow-scroll overflow-x-hidden h-[410px] w-[350px] flex flex-col items-center gap-[10px] scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas Skal på ferie til HellasSkal på ferie til HellasSkal på ferie til HellasSkal på ferie til HellasSkal på ferie til HellasSkal på ferie til HellasSkal på ferie til HellasSkal på ferie til HellasSkal på ferie til HellasSkal på ferie til HellasSkal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>{' '}
-        <AbsencePeriod
-          dateStart="123"
-          dateEnd="124"
-          absenceType="Fravær, ikke tilgjengelig"
-          personalNote="Skal på ferie til Hellas"
-        ></AbsencePeriod>
+      <div className="overflow-scroll overflow-x-hidden h-[460px] w-[350px] flex flex-col items-center gap-[10px] scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
+        {absencePeriods}
       </div>
     </div>
   );

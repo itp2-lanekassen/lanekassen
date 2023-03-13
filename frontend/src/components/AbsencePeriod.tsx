@@ -1,15 +1,13 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from 'react';
-
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { deleteAbsence } from '../API/AbsenceAPI';
+import { Absence } from '../types/types';
 /**
  * Renders a component that shows a users absence instance
  */
-export const AbsencePeriod = (props: {
-  dateStart: string;
-  dateEnd: string;
-  absenceType: string;
-  personalNote: string;
-}) => {
+export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
 
@@ -25,13 +23,22 @@ export const AbsencePeriod = (props: {
   };
 
   //Check if absence period lasts for more that one day
-  let absencePeriod = props.dateStart;
-  if (props.dateStart != props.dateEnd) {
-    absencePeriod = absencePeriod.concat(' - ' + props.dateEnd);
+  let absencePeriod = new Date(props.absence.startDate).toLocaleDateString();
+  if (props.absence.startDate != props.absence.endDate) {
+    absencePeriod = absencePeriod.concat(
+      ' - ' + new Date(props.absence.endDate).toLocaleDateString()
+    );
   }
 
-  //get user with azure id
-  //let absences = await getUser();
+  //Check if absence has a comment to display
+  let notice;
+  if (props.absence.comment && props.absence.comment.length > 0) {
+    notice = (
+      <p className="mx-[20px] pt-[10px] text-[18px]">
+        Personlig notis <strong className="body-tight text-[12px]">{props.absence.comment}</strong>
+      </p>
+    );
+  }
 
   return (
     <div className="w-[300px]  min-h-[fit-content] text-grey-lightest font-Rubik ">
@@ -52,14 +59,43 @@ export const AbsencePeriod = (props: {
       </div>
       <section
         style={{ display: expandStatus[0] }}
-        className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter rounded-b-[20px]"
+        className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter rounded-b-[20px] overflow-hidden"
       >
         <p className="mx-[20px] text-[18px]">
-          Fraværstype <strong className="body-bold text-[12px]">{props.absenceType}</strong>
+          Fraværstype <strong className="body-bold text-[12px]">{props.absence.type.name}</strong>
         </p>
-        <p className="mx-[20px] pt-[10px] text-[18px]">
-          Personlig notis <strong className="body-tight text-[12px]">{props.personalNote}</strong>
-        </p>
+        {notice}
+        <div className="flex flex-row float-right">
+          <EditOutlinedIcon
+            onClick={() => {
+              props.setAbsence(props.absence);
+            }}
+            sx={{
+              color: '#410464',
+              height: '30px',
+              mr: '10px',
+              '&:hover': {
+                color: '#26023B'
+              }
+            }}
+          ></EditOutlinedIcon>
+          <DeleteOutlineIcon
+            onClick={() => {
+              const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
+              if (confirmDelete) {
+                deleteAbsence(props.absence.absenceId);
+              }
+            }}
+            sx={{
+              color: '#410464',
+              height: '30px',
+              mr: '10px',
+              '&:hover': {
+                color: '#26023B'
+              }
+            }}
+          ></DeleteOutlineIcon>
+        </div>
       </section>
     </div>
   );
