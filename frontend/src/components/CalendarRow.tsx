@@ -7,6 +7,7 @@ import { Absence, User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import UserDropdown from './UserDropdown';
 
 interface CalendarRowProps {
   user?: User;
@@ -51,9 +52,10 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
 
   const handleClick = () => {
     setOpen(!open);
-    //console.log(open);
+    console.log(open);
   };
 
+  /*
   return (
     <div className="contents text-sm">
       {user ? (
@@ -66,10 +68,50 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
           >
             {user.firstName}&nbsp;{user.lastName}
           </button>
-          <div className={`${isCurrentUser ? 'bg-card-two' : 'bg-card-one-dark'} text-primary`}>
-            <>{user.azureId}</>
+          {open == true && (
+            <div className={`${isCurrentUser ? 'bg-card-two' : 'bg-card-one-dark'} text-primary`}>
+              <>{user.email}</>
+              <br />
+              <>{user.sectionId}</>
           </div>
+          )
+          }
         </div>
+      ) : (
+        <div></div>
+      )}
+
+      {Object.values(columns).map((days, j) => (
+        <div key={(user?.userId || '') + days.map((d) => d.value).join(',')} className="contents">
+          {days.map((day) => (
+            <div
+              key={day.value + j}
+              className={`w-full min-h-[21px] h-full ${
+                getBgColor(absences, day.value) ? '' : j % 2 ? 'bg-card-two' : 'bg-card-one'
+              }`}
+              style={getBgColor(absences, day.value)}
+              role="button"
+              onClick={() => handleRowClick(day.value)}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );*/
+
+  return (
+    <div className="contents text-sm">
+      {user ? (
+        <UserDropdown
+          department={user.department}
+          section={user.section}
+          name={user.firstName + ' ' + user.lastName}
+          subjectField={user.subjectFields}
+          team={user.teams}
+          role={user.roles}
+          employmentType={user.employmentType}
+          isCurrentUser={isCurrentUser}
+        />
       ) : (
         <div></div>
       )}
