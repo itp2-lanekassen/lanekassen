@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import m from 'moment';
 import { useQuery } from '@tanstack/react-query';
-import { User } from '@/types/types';
-import { filterUsers } from '@/API/UserAPI';
-import { useUserContext } from '@/context/UserContext';
-import CalendarRow from '@/components/CalendarRow';
+import { User } from '../types/types';
+import { filterUsers } from '../API/UserAPI';
+import { useUserContext } from '../context/UserContext';
+import CalendarRow from '../components/CalendarRow';
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
-import { useFilterContext } from '@/context/FilterContext';
+import { useFilterContext } from '../context/FilterContext';
 
 export type Column = Record<string, { display: string; value: string }[]>;
 
