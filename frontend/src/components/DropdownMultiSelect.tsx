@@ -1,5 +1,6 @@
 import { IDropdownMultiSelect } from '../types/types';
 import Select, { MultiValue } from 'react-select';
+import { TroubleshootSharp } from '@mui/icons-material';
 
 /**
  *
@@ -20,25 +21,30 @@ export default function DropdownMultiSelect({
   listOfOptions,
   value,
   className,
-  cusTheme
+  isExpands = true
 }: IDropdownMultiSelect) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
   const handleOnChange = (selectedOptions: MultiValue<IOption>) => {
-    const selectedValues = selectedOptions ? selectedOptions.map((option) => option.value) : [];
+    const selectedValues = selectedOptions
+      ? selectedOptions.map((option: { value: any }) => option.value)
+      : [];
     handleChange(selectedValues);
   };
+
+  const menuPlacement = isExpands ? 'auto' : 'bottom';
 
   return (
     <div className="mb-4">
       <Select
-        className="text-primary w-80"
+        className={`text-primary w-80 ${className}`}
         options={options}
         placeholder={placeholder}
         isMulti
         value={value ? options.filter((option) => value.includes(option.value)) : []}
         onChange={handleOnChange}
-        theme={(theme) => ({
+        menuPlacement={menuPlacement}
+        theme={(theme: { colors: any }) => ({
           ...theme,
           borderRadius: 20,
           colors: {

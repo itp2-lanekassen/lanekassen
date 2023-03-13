@@ -10,7 +10,13 @@ import Select from 'react-select';
  * @returns dropdown component
  */
 
-export default function Dropdown({ handleChange, placeholder, listOfOptions, value }: IDropdown) {
+export default function Dropdown({
+  handleChange,
+  placeholder,
+  listOfOptions,
+  value,
+  className
+}: IDropdown) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
   const handleOnChange = (selectedOption: any) => {
@@ -20,12 +26,12 @@ export default function Dropdown({ handleChange, placeholder, listOfOptions, val
   return (
     <div className="mb-4">
       <Select
-        className="text-primary w-80"
+        className={`text-primary w-80 ${className}`}
         options={options}
         placeholder={placeholder}
         value={value === -1 ? null : options.find((option) => option.value === value)}
         onChange={handleOnChange}
-        theme={(theme) => ({
+        theme={(theme: { colors: any }) => ({
           ...theme,
           borderRadius: 20,
           colors: {
