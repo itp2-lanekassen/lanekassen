@@ -11,9 +11,6 @@ import { EmploymentType } from '../types/types';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useUserContext } from '@/context/UserContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { func } from 'prop-types';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 
 /**
  *
@@ -28,7 +25,6 @@ export default function FilterComponents() {
 
   const queryClient = useQueryClient();
 
-  const { azureUser } = useUserContext();
   const { departments } = useGlobalContext();
 
   const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
@@ -126,6 +122,7 @@ export default function FilterComponents() {
             }}
             value={selectedDepartment}
             className="!w-auto"
+            isDisabled={false}
           />
           <Dropdown
             placeholder="Seksjon"
@@ -135,6 +132,7 @@ export default function FilterComponents() {
             }}
             value={selectedSection}
             className="!w-auto"
+            isDisabled={false}
           />
           <DropdownMultiSelect
             placeholder="Fagområde"
@@ -148,6 +146,7 @@ export default function FilterComponents() {
             value={selectedSubjectFields}
             className="!w-auto"
             isExpands={false}
+            isDisabled={false}
           />
           <DropdownMultiSelect
             placeholder="Team"
@@ -158,6 +157,7 @@ export default function FilterComponents() {
             value={selectedTeams}
             className="!w-auto"
             isExpands={false}
+            isDisabled={false}
           />
           <DropdownMultiSelect
             placeholder="Rolle"
@@ -168,6 +168,7 @@ export default function FilterComponents() {
             value={selectedRoles}
             className="!w-auto"
             isExpands={false}
+            isDisabled={false}
           />
           <button
             className=" border-1 rounded-[20px] border-primary text-center max-h-9 focus:outline-none px-2"

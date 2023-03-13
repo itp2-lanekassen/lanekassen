@@ -1,5 +1,5 @@
-import { IDropdown } from '../types/types';
 import Select from 'react-select';
+import { IDropdown } from '../types/types';
 
 /**
  *
@@ -15,7 +15,8 @@ export default function Dropdown({
   placeholder,
   listOfOptions,
   value,
-  className
+  className,
+  isDisabled
 }: IDropdown) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
@@ -24,14 +25,17 @@ export default function Dropdown({
   };
 
   return (
-    <div className="mb-4">
+    <div className="">
       <Select
         className={`text-primary w-80 ${className}`}
+        isDisabled={isDisabled}
         options={options}
         placeholder={placeholder}
-        value={value === -1 ? null : options.find((option) => option.value === value)}
+        value={
+          value === -1 ? null : options.find((option: { value: number }) => option.value === value)
+        }
         onChange={handleOnChange}
-        theme={(theme: { colors: any }) => ({
+        theme={(theme) => ({
           ...theme,
           borderRadius: 20,
           colors: {

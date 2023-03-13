@@ -4,17 +4,15 @@ import { getAllRoles } from '@/API/RoleAPI';
 import { getAllSections } from '@/API/SectionAPI';
 import { getAllSubjectFields } from '@/API/SubjectFieldAPI';
 import { getAllTeams } from '@/API/TeamAPI';
-import AbsenceForm from '@/components/AbsenceForm';
 import { AbsenceType, Department, Role, Section, SubjectField, Team } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext } from 'react';
 
 interface GlobalContextProps {
   children?: ReactNode;
 }
 
 interface GlobalContextType {
-  openAbsenceForm: (date?: string) => void;
   absenceTypes: AbsenceType[];
   roles: Role[];
   teams: Team[];
@@ -44,14 +42,6 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
     async () => (await getAllSubjectFields()).data
   );
 
-  const [showAbsenceForm, setShowAbsenceForm] = useState(false);
-  const [date, setDate] = useState<string>();
-
-  const openAbsenceForm = (clickedDate?: string) => {
-    setDate(clickedDate);
-    setShowAbsenceForm(true);
-  };
-
   // TODO: Single return or individual?
   if (absenceTypes.isLoading) return <div>Laster fraværstyper...</div>;
   if (roles.isLoading) return <div>Laster roller...</div>;
@@ -73,7 +63,6 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
   return (
     <GlobalContext.Provider
       value={{
-        openAbsenceForm,
         absenceTypes: absenceTypes.data,
         roles: roles.data,
         teams: teams.data,
@@ -83,9 +72,6 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
       }}
     >
       {children}
-      {showAbsenceForm && (
-        <AbsenceForm startDate={date} onClose={() => setShowAbsenceForm(false)} />
-      )}
     </GlobalContext.Provider>
   );
 };
