@@ -28,6 +28,13 @@ export default function AdminPage() {
   const currentUser = useUserContext();
   const { departments } = useGlobalContext();
 
+  useEffect(() => {
+    if (!currentUser.admin) {
+      // midlertidig løsning for å beskytte siden
+      navigate('/');
+    }
+  }, [currentUser.admin, navigate]);
+
   return (
     <div>
       <h1>Admin Page</h1>
