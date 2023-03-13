@@ -34,7 +34,9 @@ export default function UserDropdown(props: {
       <div
         style={{ borderRadius: expandStatus[1] }}
         onClick={() => expandCollapse()}
-        className="flex flex-row justify-between bg-primary hover:bg-primary-dark leading-[30px] body-tight"
+        className={`${
+          props.isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
+        } flex flex-row justify-between leading-[30px] body-tight`}
       >
         <p className="ml-[20px]">{props.name}</p>
         <ExpandMoreIcon
@@ -48,7 +50,9 @@ export default function UserDropdown(props: {
       </div>
       <section
         style={{ display: expandStatus[0] }}
-        className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter rounded-b-[20px] overflow-hidden"
+        className={`${
+          props.isCurrentUser ? 'bg-card-two-light' : 'bg-primary-lighter'
+        } text-primary subheading-small py-[10px] rounded-b-[20px] overflow-hidden`}
       >
         <p className="mx-[20px] text-[18px]">
           <strong className="body-bold text-[12px]">{props.employmentType}</strong>
