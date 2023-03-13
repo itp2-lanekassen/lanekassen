@@ -193,7 +193,7 @@ public class UserController : ControllerBase {
   [HttpGet("filter")]
   public async Task<IActionResult> FilterUsers(
     [FromQuery(Name = "excludeIds")] List<int> ExcludeIds,
-    // [FromQuery(Name = "departments")] List<int> Departments,
+    [FromQuery(Name = "departments")] List<int> Departments,
     [FromQuery(Name = "sections")] List<int> Sections,
     [FromQuery(Name = "teams")] List<int> Teams,
     [FromQuery(Name = "roles")] List<int> Roles,
@@ -205,10 +205,9 @@ public class UserController : ControllerBase {
       users = users.Where(u => !ExcludeIds.Contains(u.UserId));
     }
 
-    // TODO: add departments on user type
-    // if (Departments.Count > 0) {
-    //   users = users.Where(u => Departments.Contains(u.DepartmentId));
-    // }
+    if (Departments.Count > 0) {
+      users = users.Where(u => Departments.Contains(u.Department.DepartmentId));
+    }
 
     if (Sections.Count > 0) {
       users = users.Where(u => Sections.Contains(u.Section.SectionId));
