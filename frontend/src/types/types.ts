@@ -70,10 +70,12 @@ export interface User {
   admin: boolean;
   sectionId: number;
   section?: Section;
-  absences: Absence[];
+  absences?: Absence[];
   subjectFields: SubjectField[];
   roles: Role[];
   teams: Team[];
+  departmentId: number;
+  department?: Department;
 }
 
 export enum EmploymentType {
@@ -107,6 +109,7 @@ export interface IDropdownMultiSelect {
   value: number[];
   placeholder: string;
   listOfOptions: { name: string; id: number }[];
+  isDisabled: boolean;
 }
 
 export interface IDropdown {
@@ -114,4 +117,5 @@ export interface IDropdown {
   value: number;
   placeholder: string;
   listOfOptions: { name: string; id: number }[];
+  isDisabled: boolean;
 }

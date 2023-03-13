@@ -8,6 +8,17 @@ module.exports = {
       scale: {
         115: '1.15'
       },
+      gridTemplateColumns: {
+        calendar: '15% repeat(20, 1fr)',
+        'my-page': 'max-content auto'
+      },
+      gridColumn: {
+        'span-20': 'span 20  / span 20'
+      },
+      screens: {
+        mobile: '320px',
+        tablet: '481px'
+      }
     },
     colors: {
       // Primary
@@ -71,25 +82,24 @@ module.exports = {
     },
     fontSize: {
       '2xs': '0.6875rem', // 11px
-      xs: '0.75rem',      // 12px
-      sm: '0.875rem',     // 14px
-      base: ['1rem', {    // 16px
-        lineHeight: 1.625,
-        letterSpacing: '0.00938em'
-      }],
-      md: '1.125rem',     // 18px
-      lg: '1.25rem',      // 20px
-      xl: '1.5rem',       // 24px
-      '2xl': '2rem'       // 32px 
+      xs: '0.75rem', // 12px
+      sm: '0.875rem', // 14px
+      base: [
+        '1rem',
+        {
+          // 16px
+          lineHeight: 1.625,
+          letterSpacing: '0.00938em'
+        }
+      ],
+      md: '1.125rem', // 18px
+      lg: '1.25rem', // 20px
+      xl: '1.5rem', // 24px
+      '2xl': '2rem' // 32px
     },
     fontFamily: {
       sans: ['Roboto', ...defaultTheme.fontFamily.sans],
       header: ['Rubik', ...defaultTheme.fontFamily.sans]
-    },
-    screens: {
-      'mobile': '320px',
-      'tablet': '481px',
-      'sm': '769px'
     }
   },
   plugins: []
