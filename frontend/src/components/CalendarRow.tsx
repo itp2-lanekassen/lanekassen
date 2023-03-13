@@ -99,6 +99,8 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
     </div>
   );*/
 
+  //console.log("balbal " + user?.department);
+
   return (
     <div className="contents text-sm">
       {user ? (

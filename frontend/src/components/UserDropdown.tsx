@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Department, Role, Section, SubjectField, Team } from '@/types/types';
 
 export default function UserDropdown(props: {
-  department: string;
-  section: string;
+  department: Department | undefined;
+  section: Section | undefined;
   name: string;
-  subjectField: string;
-  team: string;
-  role: string;
+  subjectField: SubjectField[];
+  team: Team[];
+  role: Role[];
   employmentType: number;
   isCurrentUser: boolean;
 }) {
@@ -26,8 +27,10 @@ export default function UserDropdown(props: {
     }
   };
 
+  //console.log("her er det " + props.name);
+
   return (
-    <div className="w-[300px]  min-h-[fit-content] text-grey-lightest font-Rubik ">
+    <div className="w-[180px]  min-h-[fit-content] text-grey-lightest font-Rubik ">
       <div
         style={{ borderRadius: expandStatus[1] }}
         onClick={() => expandCollapse()}
@@ -49,6 +52,12 @@ export default function UserDropdown(props: {
       >
         <p className="mx-[20px] text-[18px]">
           <strong className="body-bold text-[12px]">{props.employmentType}</strong>
+        </p>
+        <p>
+          <strong className="body-bold text-[12px]">{props.section?.name}</strong>
+        </p>
+        <p>
+          <strong className="body-bold text-[12px]">{props.department?.name}</strong>
         </p>
         <div className="flex flex-row float-right">
           <EditOutlinedIcon
