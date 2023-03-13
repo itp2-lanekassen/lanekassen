@@ -13,7 +13,6 @@ interface CalendarRowProps {
   user?: User;
   isCurrentUser?: boolean;
   columns: Column;
-  //children: JSX.Element|JSX.Element[];
 }
 
 function getBgColor(absences: Absence[] = [], day: string) {
@@ -100,6 +99,7 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
   );*/
 
   //console.log("balbal " + user?.department);
+  console.log(user);
 
   return (
     <div className="contents text-sm">
