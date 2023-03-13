@@ -38,6 +38,16 @@ export default function AdminPage() {
   return (
     <div>
       <h1>Admin Page</h1>
+      <div className="absolute top-18 left-10 flex justify-end">
+        <SubmitButton
+          disabled={false}
+          disabledTitle={'minside'}
+          buttonText={'Til min side'}
+          handleClick={() => {
+            navigate('/mypage');
+          }}
+        />
+      </div>
     </div>
   );
 }
