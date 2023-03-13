@@ -22,6 +22,7 @@ import {
   updateAbsenceType,
   deleteAbsenceType
 } from '../API/AbsenceTypeAPI';
+import TextField from '@mui/material/TextField';
 
 /**
  *
@@ -106,7 +107,7 @@ export default function AdminPage() {
   return (
     <div>
       <div className="grid mx-auto w-max gap-4 place-items-center mt-16">
-        <h1>Admin side</h1>
+        <h1>Adminfunksjonalitet</h1>
       </div>
       <div className="absolute top-18 left-10 flex justify-end">
         <SubmitButton
@@ -138,6 +139,14 @@ export default function AdminPage() {
           handleChange={(e) => setSelectedAlternative(e)}
           value={selectedAlternative}
           isDisabled={false}
+        />
+      </div>
+
+      <div className="grid mx-auto w-max gap-4 place-items-center mt-16">
+        <p>{alternativeOptions[selectedAlternative]}</p>
+        <TextField
+          placeholder={`Velg ${alternativeOptions[selectedAlternative]} `}
+          onChange={(e) => setSelectedAbsenceTypeName(e.target.value)}
         />
       </div>
 
