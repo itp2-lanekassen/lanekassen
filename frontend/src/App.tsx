@@ -11,6 +11,7 @@ import AzureAdContextProvider from './context/AzureAdContext';
 import ModalContextProvider from './context/ModalContext';
 import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
 import PageNotFound from './pages/PageNotFound';
+import AdminPage from './pages/AdminPage';
 
 const ContextWrapper = ({ children }: { children?: ReactNode }) => (
   <UserContextProvider>
@@ -47,6 +48,15 @@ function App() {
                   <ContextWrapper>
                     <MyPage />
                   </ContextWrapper>
+                }
+              />
+              <Route
+                path="/adminpage"
+                element={
+                  <ContextWrapper>
+                    <AdminPage />
+                  </ContextWrapper>
+                  /* Må være protected fra ikke-admins */
                 }
               />
               <Route path="*" element={<PageNotFound />} />
