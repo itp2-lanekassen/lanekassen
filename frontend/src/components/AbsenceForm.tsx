@@ -5,16 +5,19 @@ import { postAbsence } from '../API/AbsenceAPI';
 import { useUserContext } from '../context/UserContext';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { DateField } from './DateField';
+import { AbsenceRadioField } from './AbsenceRadioField';
+import { CommentField } from './CommentField';
 
 type ModalProps = {
   startDate?: string;
   onClose: () => void;
 };
 
-type FormValues = {
+export type FormValues = {
   startDate: string;
   endDate: string;
-  comment: string;
+  comment: string | undefined;
   absenceType: number;
 };
 
@@ -66,7 +69,7 @@ const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await addAbsence({
+    addAbsence({
       startDate: moment(formValues.startDate).toISOString(),
       endDate: moment(formValues.endDate).toISOString(),
       comment: formValues.comment,
@@ -82,69 +85,30 @@ const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
       <div className="relative w-auto my-6 mx-auto max-w-3xl bg-white px-10 pt-10 pb-5 rounded-[40px] ">
         <h2 className="modal-title text-center ">Fraværsskjema</h2>
         <form className="modal-form" onSubmit={handleSubmit}>
-          <div className="modal-field">
-            <label htmlFor="startDate" className="block heading-xs">
-              Fra
-            </label>
-            <input
-              type="date"
-              name="startDate"
-              max={formValues.endDate}
-              value={formValues.startDate}
-              onChange={handleInputChange}
-              className="modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center"
-              required
-            />
-          </div>
-          <div className="modal-field">
-            <label htmlFor="endDate" className="block heading-xs">
-              Til
-            </label>
-            <input
-              type="date"
-              name="endDate"
-              min={formValues.startDate}
-              value={formValues.endDate}
-              onChange={handleInputChange}
-              className="modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center"
-              required
-            />
-          </div>
-          <div className="modal-field">
-            <div className="heading-xs block pb-2">Type fravær</div>
-            <div className="bg-card-one-dark rounded-[20px] p-4 flex flex-col">
-              {absenceTypes.map((type) => (
-                <label
-                  key={type.absenceTypeId}
-                  className="inline-flex justify-start items-center heading-2xs"
-                >
-                  <input
-                    type="radio"
-                    className="form-radio h-4 w-4 accent-primary"
-                    name="absenceType"
-                    value={type.absenceTypeId}
-                    checked={formValues.absenceType === type.absenceTypeId}
-                    onChange={handleRadioChange}
-                    required
-                  />
-                  &nbsp;<span>{type.name}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div className="modal-field">
-            <label htmlFor="comment" className="block heading-xs pb-2 pt-3">
-              Personlig notis
-            </label>
-            <textarea
-              name="comment"
-              value={formValues.comment}
-              onChange={handleInputChange}
-              className="modal-input w-full border-2 rounded-[20px] p-3 border-primary"
-              rows={3}
-            />
-          </div>
+          <DateField
+            formValues={formValues}
+            handleInputChange={handleInputChange}
+            max={formValues.endDate}
+            value={formValues.startDate}
+            name={'startDate'}
+            label="Fra"
+          ></DateField>
+          <DateField
+            formValues={formValues}
+            handleInputChange={handleInputChange}
+            min={formValues.startDate}
+            value={formValues.endDate}
+            name={'endDate'}
+            label="Til"
+          ></DateField>
+          <AbsenceRadioField
+            formValues={formValues}
+            handleRadioChange={handleRadioChange}
+          ></AbsenceRadioField>
+          <CommentField
+            formValues={formValues}
+            handleInputChange={handleInputChange}
+          ></CommentField>
           <div className="modal-buttons relative flex flex-col items-center justify-center pt-5">
             <Button
               type="submit"

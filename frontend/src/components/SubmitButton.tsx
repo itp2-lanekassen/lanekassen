@@ -13,7 +13,8 @@ export default function SubmitButton({
   buttonText,
   handleClick,
   disabled,
-  disabledTitle
+  disabledTitle,
+  type
 }: ISubmitButton & { disabled?: boolean; disabledTitle?: string }) {
   const enabledTitle = '';
 
@@ -27,6 +28,7 @@ export default function SubmitButton({
         onClick={handleClick}
         disabled={disabled}
         title={disabled ? disabledTitle : enabledTitle}
+        type={type ? type : 'button'}
       >
         {buttonText}
       </button>
