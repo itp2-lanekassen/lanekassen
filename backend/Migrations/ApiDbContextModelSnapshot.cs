@@ -39,48 +39,48 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            RolesRoleId = 736969
+                            DepartmentsDepartmentId = 1,
+                            RolesRoleId = 1
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            RolesRoleId = 736970
+                            DepartmentsDepartmentId = 1,
+                            RolesRoleId = 2
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            RolesRoleId = 736971
+                            DepartmentsDepartmentId = 1,
+                            RolesRoleId = 3
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            RolesRoleId = 736972
+                            DepartmentsDepartmentId = 1,
+                            RolesRoleId = 4
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            RolesRoleId = 736973
+                            DepartmentsDepartmentId = 1,
+                            RolesRoleId = 5
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            RolesRoleId = 736974
+                            DepartmentsDepartmentId = 1,
+                            RolesRoleId = 6
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            RolesRoleId = 736975
+                            DepartmentsDepartmentId = 1,
+                            RolesRoleId = 7
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            RolesRoleId = 736976
+                            DepartmentsDepartmentId = 1,
+                            RolesRoleId = 8
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            RolesRoleId = 736977
+                            DepartmentsDepartmentId = 1,
+                            RolesRoleId = 9
                         });
                 });
 
@@ -101,18 +101,18 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            SectionsSectionId = 706969
+                            DepartmentsDepartmentId = 1,
+                            SectionsSectionId = 1
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            SectionsSectionId = 706970
+                            DepartmentsDepartmentId = 1,
+                            SectionsSectionId = 2
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            SectionsSectionId = 706971
+                            DepartmentsDepartmentId = 1,
+                            SectionsSectionId = 3
                         });
                 });
 
@@ -133,43 +133,43 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            TeamsTeamId = 726969
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 1
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            TeamsTeamId = 726970
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 2
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            TeamsTeamId = 726971
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 3
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            TeamsTeamId = 726972
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 4
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            TeamsTeamId = 726973
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 5
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            TeamsTeamId = 726974
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 6
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            TeamsTeamId = 726975
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 7
                         },
                         new
                         {
-                            DepartmentsDepartmentId = 696969,
-                            TeamsTeamId = 726976
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 8
                         });
                 });
 
@@ -207,11 +207,11 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            AbsenceId = 756969,
-                            AbsenceTypeId = 746969,
+                            AbsenceId = 1,
+                            AbsenceTypeId = 1,
                             EndDate = new DateTime(1, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),
                             StartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            UserId = 666969
+                            UserId = 1
                         });
                 });
 
@@ -242,23 +242,23 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            AbsenceTypeId = 746969,
+                            AbsenceTypeId = 1,
                             Code = "T",
-                            ColorCode = "#bada55",
+                            ColorCode = "#00b500",
                             Name = "Tilgjengelig fravær"
                         },
                         new
                         {
-                            AbsenceTypeId = 746970,
+                            AbsenceTypeId = 2,
                             Code = "F",
-                            ColorCode = "#bada55",
+                            ColorCode = "#d90404",
                             Name = "Utilgjengelig fravær"
                         },
                         new
                         {
-                            AbsenceTypeId = 746971,
+                            AbsenceTypeId = 3,
                             Code = "P/S",
-                            ColorCode = "#bada55",
+                            ColorCode = "#0700cf",
                             Name = "Permisjon/Sykmelding"
                         });
                 });
@@ -286,37 +286,37 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            DepartmentId = 696969,
+                            DepartmentId = 1,
                             Abbreviation = "IT",
                             Name = "IT-avdelingen"
                         },
                         new
                         {
-                            DepartmentId = 696970,
+                            DepartmentId = 2,
                             Abbreviation = "UA",
                             Name = "Utdanningsstøtte"
                         },
                         new
                         {
-                            DepartmentId = 696971,
+                            DepartmentId = 3,
                             Abbreviation = "SAK",
                             Name = "Saksavdelingen"
                         },
                         new
                         {
-                            DepartmentId = 696972,
+                            DepartmentId = 4,
                             Abbreviation = "SØ",
                             Name = "Styring og Økonomi"
                         },
                         new
                         {
-                            DepartmentId = 696973,
+                            DepartmentId = 5,
                             Abbreviation = "KOM",
                             Name = "Kommunikasjonsstaben"
                         },
                         new
                         {
-                            DepartmentId = 696974,
+                            DepartmentId = 6,
                             Abbreviation = "HR",
                             Name = "HR og administrasjon"
                         });
@@ -341,47 +341,47 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = 736969,
+                            RoleId = 1,
                             Name = "Arkitekt"
                         },
                         new
                         {
-                            RoleId = 736970,
+                            RoleId = 2,
                             Name = "Prosjektleder"
                         },
                         new
                         {
-                            RoleId = 736971,
+                            RoleId = 3,
                             Name = "App.Drift"
                         },
                         new
                         {
-                            RoleId = 736972,
+                            RoleId = 4,
                             Name = "Teamlead"
                         },
                         new
                         {
-                            RoleId = 736973,
+                            RoleId = 5,
                             Name = "Tester"
                         },
                         new
                         {
-                            RoleId = 736974,
+                            RoleId = 6,
                             Name = "Utvikler"
                         },
                         new
                         {
-                            RoleId = 736975,
+                            RoleId = 7,
                             Name = "Designer"
                         },
                         new
                         {
-                            RoleId = 736976,
+                            RoleId = 8,
                             Name = "Controller"
                         },
                         new
                         {
-                            RoleId = 736977,
+                            RoleId = 9,
                             Name = "Leder"
                         });
                 });
@@ -405,17 +405,17 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            SectionId = 706969,
+                            SectionId = 1,
                             Name = "Trondheim"
                         },
                         new
                         {
-                            SectionId = 706970,
+                            SectionId = 2,
                             Name = "Oslo"
                         },
                         new
                         {
-                            SectionId = 706971,
+                            SectionId = 3,
                             Name = "Hjemmekollega"
                         });
                 });
@@ -444,56 +444,56 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            SubjectFieldId = 716969,
-                            DepartmentId = 696969,
+                            SubjectFieldId = 1,
+                            DepartmentId = 1,
                             Name = "Virksomhetsarkitektur og Prosjektledelse"
                         },
                         new
                         {
-                            SubjectFieldId = 716970,
-                            DepartmentId = 696969,
+                            SubjectFieldId = 2,
+                            DepartmentId = 1,
                             Name = "Applikasjonsdrift"
                         },
                         new
                         {
-                            SubjectFieldId = 716971,
-                            DepartmentId = 696969,
+                            SubjectFieldId = 3,
+                            DepartmentId = 1,
                             Name = "Systemutvikling og test"
                         },
                         new
                         {
-                            SubjectFieldId = 716972,
-                            DepartmentId = 696969,
+                            SubjectFieldId = 4,
+                            DepartmentId = 1,
                             Name = "Informasjonssikkerhet"
                         },
                         new
                         {
-                            SubjectFieldId = 716973,
-                            DepartmentId = 696969,
+                            SubjectFieldId = 5,
+                            DepartmentId = 1,
                             Name = "Data og informasjonsforvaltning"
                         },
                         new
                         {
-                            SubjectFieldId = 716974,
-                            DepartmentId = 696969,
+                            SubjectFieldId = 6,
+                            DepartmentId = 1,
                             Name = "Leverandørstyring og økonomi"
                         },
                         new
                         {
-                            SubjectFieldId = 716975,
-                            DepartmentId = 696969,
+                            SubjectFieldId = 7,
+                            DepartmentId = 1,
                             Name = "Drift og avtaleeierskap"
                         },
                         new
                         {
-                            SubjectFieldId = 716976,
-                            DepartmentId = 696969,
+                            SubjectFieldId = 8,
+                            DepartmentId = 1,
                             Name = "IT Brukerstøtte"
                         },
                         new
                         {
-                            SubjectFieldId = 716977,
-                            DepartmentId = 696969,
+                            SubjectFieldId = 9,
+                            DepartmentId = 1,
                             Name = "Rekruttering og kompetanse"
                         });
                 });
@@ -517,42 +517,42 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            TeamId = 726969,
+                            TeamId = 1,
                             Name = "Rubik"
                         },
                         new
                         {
-                            TeamId = 726970,
+                            TeamId = 2,
                             Name = "Settlers"
                         },
                         new
                         {
-                            TeamId = 726971,
+                            TeamId = 3,
                             Name = "Dominion"
                         },
                         new
                         {
-                            TeamId = 726972,
+                            TeamId = 4,
                             Name = "Portal"
                         },
                         new
                         {
-                            TeamId = 726973,
+                            TeamId = 5,
                             Name = "Pong"
                         },
                         new
                         {
-                            TeamId = 726974,
+                            TeamId = 6,
                             Name = "Test"
                         },
                         new
                         {
-                            TeamId = 726975,
+                            TeamId = 7,
                             Name = "Ledergruppe IT"
                         },
                         new
                         {
-                            TeamId = 726976,
+                            TeamId = 8,
                             Name = "Utvidet Ledergruppe IT"
                         });
                 });
@@ -572,6 +572,9 @@ namespace Lanekassen.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnOrder(0);
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -594,6 +597,8 @@ namespace Lanekassen.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("DepartmentId");
+
                     b.HasIndex("SectionId");
 
                     b.ToTable("Users");
@@ -601,14 +606,15 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = 666969,
+                            UserId = 1,
                             Admin = false,
-                            AzureId = "This-is-a-fake-azure-id",
-                            Email = "john@doe.com",
+                            AzureId = "Falsk-azure-id",
+                            DepartmentId = 1,
+                            Email = "ola@nordmann.no",
                             EmploymentType = 0,
-                            FirstName = "John",
-                            LastName = "Doe",
-                            SectionId = 706969
+                            FirstName = "Ola",
+                            LastName = "Nordmann",
+                            SectionId = 1
                         });
                 });
 
@@ -629,8 +635,8 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            RolesRoleId = 736969,
-                            UsersUserId = 666969
+                            RolesRoleId = 1,
+                            UsersUserId = 1
                         });
                 });
 
@@ -651,8 +657,8 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            SubjectFieldsSubjectFieldId = 716969,
-                            UsersUserId = 666969
+                            SubjectFieldsSubjectFieldId = 1,
+                            UsersUserId = 1
                         });
                 });
 
@@ -673,8 +679,8 @@ namespace Lanekassen.Migrations
                     b.HasData(
                         new
                         {
-                            TeamsTeamId = 726969,
-                            UsersUserId = 666969
+                            TeamsTeamId = 1,
+                            UsersUserId = 1
                         });
                 });
 
@@ -742,20 +748,24 @@ namespace Lanekassen.Migrations
 
             modelBuilder.Entity("Lanekassen.Models.SubjectField", b =>
                 {
-                    b.HasOne("Lanekassen.Models.Department", "Departments")
+                    b.HasOne("Lanekassen.Models.Department", null)
                         .WithMany("SubjectFields")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("Lanekassen.Models.User", b =>
                 {
+                    b.HasOne("Lanekassen.Models.Department", "Department")
+                        .WithMany("Users")
+                        .HasForeignKey("DepartmentId");
+
                     b.HasOne("Lanekassen.Models.Section", "Section")
                         .WithMany("Users")
                         .HasForeignKey("SectionId");
+
+                    b.Navigation("Department");
 
                     b.Navigation("Section");
                 });
@@ -813,6 +823,8 @@ namespace Lanekassen.Migrations
             modelBuilder.Entity("Lanekassen.Models.Department", b =>
                 {
                     b.Navigation("SubjectFields");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Lanekassen.Models.Section", b =>

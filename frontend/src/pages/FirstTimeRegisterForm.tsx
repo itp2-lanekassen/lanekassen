@@ -1,7 +1,5 @@
-import Dropdown from '../components/Dropdown';
-import DropdownMultiSelect from '../components/DropdownMultiSelect';
-import SubmitButton from '../components/SubmitButton';
-import ellipse from '../assets/ellipse.png';
+import { useGlobalContext } from '../context/GlobalContext';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
   getRolesByDepartmentId,
@@ -10,11 +8,14 @@ import {
   getTeamsByDepartmentId
 } from '../API/DepartmentAPI';
 import { postUser } from '../API/UserAPI';
+import ellipse from '../assets/ellipse.png';
+import Dropdown from '../components/Dropdown';
+import DropdownMultiSelect from '../components/DropdownMultiSelect';
+import SubmitButton from '../components/SubmitButton';
 import { EmploymentType } from '../types/types';
-import { useGlobalContext } from '@/context/GlobalContext';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useAzureAdContext } from '@/context/AzureAdContext';
+import { useAzureAdContext } from '../context/AzureAdContext';
+import { SignOutButton } from '../components/SignOutButton';
 
 export default function FirstTimeRegisterForm() {
   const navigate = useNavigate();
@@ -93,16 +94,22 @@ export default function FirstTimeRegisterForm() {
   }, [selectedDepartment]);
 
   return (
-    <div className="max-w-full">
+    <div className="w-full">
       <div className="flex flex-1 flex-col items-center">
         <img
-          className="sm:w-[70vw] mobile:w-[90vw] sm:h-[20vh] mobile:h-[15vh]"
+          className="md:w-[70vw] mobile:w-[90vw] md:h-[20vh] mobile:h-[15vh]"
           src={ellipse}
           alt=""
         />
         <h1 className="mt-[-100px]">Registrering</h1>
       </div>
-      <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
+
+      {/*       <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
+       */}
+      <div className="absolute top-10 left-10 flex justify-end">
+        <SignOutButton />
+      </div>
+      <div className="grid mx-auto w-max gap-4 place-items-center mt-16">
         <Dropdown
           placeholder="Ansattforhold"
           listOfOptions={Object.keys(EmploymentType)
@@ -110,36 +117,56 @@ export default function FirstTimeRegisterForm() {
             .map((type, i) => ({ name: type, id: i }))}
           handleChange={(e) => setSelectedEmploymentType(e)}
           value={selectedEmploymentType}
+          isDisabled={false}
         />
         <Dropdown
           placeholder="Avdeling"
           listOfOptions={departments.map((d) => ({ name: d.name, id: d.departmentId }))}
           handleChange={(e) => setSelectedDepartment(e)}
           value={selectedDepartment}
+          isDisabled={false}
         />
         <Dropdown
           placeholder="Seksjon"
-          listOfOptions={(sections || []).map((s) => ({ name: s.name, id: s.sectionId }))}
+          listOfOptions={(sections || []).map((s: { name: string; sectionId: number }) => ({
+            name: s.name,
+            id: s.sectionId
+          }))}
           handleChange={(e) => setSelectedSection(e)}
           value={selectedSection}
+          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Fagområde"
-          listOfOptions={(subjectFields || []).map((s) => ({ name: s.name, id: s.subjectFieldId }))}
+          listOfOptions={(subjectFields || []).map(
+            (s: { name: string; subjectFieldId: number }) => ({
+              name: s.name,
+              id: s.subjectFieldId
+            })
+          )}
           handleChange={(e) => setSelectedSubjectFields(e)}
           value={selectedSubjectFields}
+          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Team"
-          listOfOptions={(teams || []).map((t) => ({ name: t.name, id: t.teamId }))}
+          listOfOptions={(teams || []).map((t: { name: string; teamId: number }) => ({
+            name: t.name,
+            id: t.teamId
+          }))}
           handleChange={(e) => setSelectedTeams(e)}
           value={selectedTeams}
+          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Rolle"
-          listOfOptions={(roles || []).map((r) => ({ name: r.name, id: r.roleId }))}
+          listOfOptions={(roles || []).map((r: { name: string; roleId: number }) => ({
+            name: r.name,
+            id: r.roleId
+          }))}
           handleChange={(e) => setSelectedRoles(e)}
           value={selectedRoles}
+          isDisabled={false}
         />
 
         <SubmitButton

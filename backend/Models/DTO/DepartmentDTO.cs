@@ -7,4 +7,5 @@ public class DepartmentDTO {
   public ICollection<int> SubjectFields { get; set; } = null!;
   public ICollection<int> Teams { get; set; } = null!;
   public ICollection<int> Roles { get; set; } = null!;
+  public ICollection<int> Users { get; set; } = null!;
 }
