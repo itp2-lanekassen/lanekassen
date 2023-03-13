@@ -30,6 +30,14 @@ const CalendarPage = () => {
         subjectFields
       })
     ).data;
+
+    res.sort((a, b) => {
+      if (a?.firstName && b?.firstName) {
+        return a.firstName.localeCompare(b.firstName);
+      }
+      return 0;
+    });
+
     return [...res, ...Array(30 - res.length)];
   });
 
