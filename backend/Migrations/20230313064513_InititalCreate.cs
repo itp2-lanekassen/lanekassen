@@ -309,9 +309,9 @@ namespace Lanekassen.Migrations
                 columns: new[] { "AbsenceTypeId", "Code", "ColorCode", "Name" },
                 values: new object[,]
                 {
-                    { 1, "T", "#bada55", "Tilgjengelig fravær" },
-                    { 2, "F", "#bada55", "Utilgjengelig fravær" },
-                    { 3, "P/S", "#bada55", "Permisjon/Sykmelding" }
+                    { 1, "T", "#00b500", "Tilgjengelig fravær" },
+                    { 2, "F", "#d90404", "Utilgjengelig fravær" },
+                    { 3, "P/S", "#0700cf", "Permisjon/Sykmelding" }
                 });
 
             migrationBuilder.InsertData(

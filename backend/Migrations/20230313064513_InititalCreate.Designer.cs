@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lanekassen.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230312184917_InititalCreate")]
+    [Migration("20230313064513_InititalCreate")]
     partial class InititalCreate
     {
         /// <inheritdoc />
@@ -247,21 +247,21 @@ namespace Lanekassen.Migrations
                         {
                             AbsenceTypeId = 1,
                             Code = "T",
-                            ColorCode = "#bada55",
+                            ColorCode = "#00b500",
                             Name = "Tilgjengelig fravær"
                         },
                         new
                         {
                             AbsenceTypeId = 2,
                             Code = "F",
-                            ColorCode = "#bada55",
+                            ColorCode = "#d90404",
                             Name = "Utilgjengelig fravær"
                         },
                         new
                         {
                             AbsenceTypeId = 3,
                             Code = "P/S",
-                            ColorCode = "#bada55",
+                            ColorCode = "#0700cf",
                             Name = "Permisjon/Sykmelding"
                         });
                 });

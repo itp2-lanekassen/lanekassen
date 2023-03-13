@@ -244,21 +244,21 @@ namespace Lanekassen.Migrations
                         {
                             AbsenceTypeId = 1,
                             Code = "T",
-                            ColorCode = "#bada55",
+                            ColorCode = "#00b500",
                             Name = "Tilgjengelig fravær"
                         },
                         new
                         {
                             AbsenceTypeId = 2,
                             Code = "F",
-                            ColorCode = "#bada55",
+                            ColorCode = "#d90404",
                             Name = "Utilgjengelig fravær"
                         },
                         new
                         {
                             AbsenceTypeId = 3,
                             Code = "P/S",
-                            ColorCode = "#bada55",
+                            ColorCode = "#0700cf",
                             Name = "Permisjon/Sykmelding"
                         });
                 });
