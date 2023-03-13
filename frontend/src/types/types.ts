@@ -60,6 +60,13 @@ export interface AbsenceType {
   absences?: Absence[];
 }
 
+export interface NewAbsenceType {
+  name: string;
+  code: string;
+  colorCode: string;
+  absences?: Absence[];
+}
+
 export interface User {
   userId: number;
   azureId: string;
