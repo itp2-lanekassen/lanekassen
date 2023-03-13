@@ -67,7 +67,7 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
               key={day.value + j}
               className={`w-full min-h-[21px] h-full ${
                 getBgColor(absences, day.value) ? '' : j % 2 ? 'bg-card-two' : 'bg-card-one'
-              }`}
+              } ${isCurrentUser ? 'cursor-pointer' : 'wait cursor-default'}`}
               style={getBgColor(absences, day.value)}
               role="button"
               onClick={() => handleRowClick(day.value)}
