@@ -7,7 +7,7 @@ import {
   getSubjectFieldsByDepartmentId,
   getTeamsByDepartmentId
 } from '../API/DepartmentAPI';
-import { postUser } from '../API/UserAPI';
+import { getUserByAzureId, postUser } from '../API/UserAPI';
 import ellipse from '../assets/ellipse.png';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
@@ -82,6 +82,18 @@ export default function FirstTimeRegisterForm() {
         selectedEmploymentType === -1
     );
   }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
+
+  async function checkIfUserIsRegistered() {
+    const user = await getUserByAzureId(azureUser.id);
+    if (user) {
+      navigate('/');
+    }
+  }
+
+  // Redirect to home if user is already registered
+  useEffect(() => {
+    checkIfUserIsRegistered();
+  }, []);
 
   // Fetch data when department is selected
   useEffect(() => {
