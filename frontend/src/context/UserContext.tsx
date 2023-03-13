@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { createContext, FC, ReactNode, useContext } from 'react';
-import { User } from '@/types/types';
-import { getUserByAzureId } from '@/API/UserAPI';
 import { Navigate } from 'react-router-dom';
 import { useAzureAdContext } from './AzureAdContext';
+import { User } from '../types/types';
+import { getUserByAzureId } from '../API/UserAPI';
 
 interface UserContextProps {
   children?: ReactNode;

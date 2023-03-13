@@ -19,4 +19,6 @@ public class User {
   public ICollection<SubjectField> SubjectFields { get; set; } = null!;
   public ICollection<Role> Roles { get; set; } = null!;
   public ICollection<Team> Teams { get; set; } = null!;
+  public Department Department { get; set; } = null!;
+  public int? DepartmentId { get; set; }
 }
