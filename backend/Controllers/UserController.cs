@@ -23,6 +23,12 @@ public class UserController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+    // Check if user already exists
+    User? existingUser = await _context.Users.FirstOrDefaultAsync(u => u.AzureId == user.AzureId);
+    if (existingUser != null) {
+      return BadRequest("User already exists");
+    }
+
     Section? section = await _context.Sections.FindAsync(user.SectionId);
     if (section == null) {
       return BadRequest("Invalid section id");
