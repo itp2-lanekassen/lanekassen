@@ -38,7 +38,7 @@ function App() {
                 path="/"
                 element={
                   <ContextWrapper>
-                    <AbsenceView></AbsenceView>
+                    <CalendarPage />
                   </ContextWrapper>
                 }
               />
