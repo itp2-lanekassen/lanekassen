@@ -14,11 +14,11 @@ async function getAbsences(currentUser: { userId: number }, setAbsences: any) {
  * Renders a scroll window that shows all absence periods for a user
  */
 export const AbsencePeriods = (props: { setAbsence: any; selectedAbsence?: Absence }) => {
-  const { currentUser } = useUserContext();
+  const currentUser = useUserContext();
   const [absences, setAbsences] = useState<Absence[]>([]);
   useEffect(() => {
     getAbsences(currentUser, setAbsences);
-  }, [currentUser, props.selectedAbsence]);
+  }, [absences, currentUser]);
 
   //Sort and return all absences in AbsencePeriod components
   const absencePeriods = absences

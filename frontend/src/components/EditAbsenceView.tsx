@@ -17,7 +17,7 @@ import { useEffect } from 'react';
 export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) => {
   const queryClient = useQueryClient();
 
-  const { currentUser } = useUserContext();
+  const currentUser = useUserContext();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const urlAbsence = `${backendUrl}/Absence`;

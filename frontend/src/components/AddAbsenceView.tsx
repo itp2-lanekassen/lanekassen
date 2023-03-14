@@ -16,7 +16,7 @@ import * as React from 'react';
 export const AddAbsenceView = () => {
   const queryClient = useQueryClient();
 
-  const { currentUser } = useUserContext();
+  const currentUser = useUserContext();
   const { absenceTypes } = useGlobalContext();
 
   //initialize postAbsence mutation
@@ -61,6 +61,15 @@ export const AddAbsenceView = () => {
       absenceTypeId: formValues.absenceType,
       userId: currentUser.userId
     });
+
+    setFormValues({
+      startDate: '',
+      endDate: '',
+      comment: '',
+      absenceType: absenceTypes[0].absenceTypeId
+    });
+
+    alert('Fraværet ble lagt til!');
   };
 
   return (
