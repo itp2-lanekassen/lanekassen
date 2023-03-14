@@ -90,11 +90,18 @@
     @apply subheading font-medium;
   }
 
+  .subheading-small {
+    font-size: 1.4rem;
+    line-height: 1.333;
+    letter-spacing: 0em;
+  }
+
   .preamble {
     font-size: 1.125rem;
     line-height: 1.45;
     letter-spacing: 0.0938em;
   }
+
 
   .body-bold {
     @apply font-bold;

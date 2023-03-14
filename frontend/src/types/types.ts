@@ -105,10 +105,11 @@ export interface NewUser {
 }
 
 export interface ISubmitButton {
-  disabledTitle: string;
+  disabledTitle?: string;
   disabled: boolean;
   buttonText: string;
-  handleClick: () => void;
+  handleClick?: () => void;
+  type?: 'button' | 'submit' | 'reset' | undefined;
 }
 
 export interface IDropdownMultiSelect {
