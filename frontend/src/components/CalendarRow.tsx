@@ -1,9 +1,9 @@
-import { getAbsencesByUserId } from '../API/AbsenceAPI';
-import { useGlobalContext } from '../context/GlobalContext';
-import { useUserContext } from '../context/UserContext';
-import { Column } from '../pages/CalendarPage';
-import { Absence, User } from '../types/types';
-import { useFilterContext } from '../context/FilterContext';
+import { getAbsencesByUserId } from '@/API/AbsenceAPI';
+import { useFilterContext } from '@/context/FilterContext';
+import { useModalContext } from '@/context/ModalContext';
+import { useUserContext } from '@/context/UserContext';
+import { Column } from '@/pages/CalendarPage';
+import { Absence, User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 
@@ -15,7 +15,7 @@ interface CalendarRowProps {
 
 function getBgColor(absences: Absence[] = [], day: string) {
   const matchedAbsence = absences.find((a) =>
-    moment(day, 'DD.MM.YY').isBetween(moment(a.startDate), moment(a.endDate), 'd', '[]')
+    moment(day).isBetween(moment(a.startDate), moment(a.endDate), 'd', '[]')
   );
 
   if (matchedAbsence) {
@@ -24,14 +24,14 @@ function getBgColor(absences: Absence[] = [], day: string) {
 }
 
 const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps) => {
-  const { currentUser } = useUserContext();
-  const { openAbsenceForm } = useGlobalContext();
+  const currentUser = useUserContext();
+  const { openAbsenceForm } = useModalContext();
   const { fromDate, toDate } = useFilterContext();
 
   const handleRowClick = (day: string) => {
     if (!(isCurrentUser || currentUser.admin)) return;
 
-    openAbsenceForm(moment(day, 'DD.MM.YY').format('yyyy-MM-DD'));
+    openAbsenceForm(moment(day).format('yyyy-MM-DD'));
   };
 
   const {
@@ -61,16 +61,16 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
       )}
 
       {Object.values(columns).map((days, j) => (
-        <div key={(user?.userId || '') + days.join(',')} className="contents">
+        <div key={(user?.userId || '') + days.map((d) => d.value).join(',')} className="contents">
           {days.map((day) => (
             <div
-              key={String(user?.userId || '') + j + day}
+              key={day.value + j}
               className={`w-full min-h-[21px] h-full ${
-                getBgColor(absences, day) ? '' : j % 2 ? 'bg-card-two' : 'bg-card-one'
-              }`}
-              style={getBgColor(absences, day)}
+                getBgColor(absences, day.value) ? '' : j % 2 ? 'bg-card-two' : 'bg-card-one'
+              } ${isCurrentUser ? 'cursor-pointer' : 'wait cursor-default'}`}
+              style={getBgColor(absences, day.value)}
               role="button"
-              onClick={() => handleRowClick(day)}
+              onClick={() => handleRowClick(day.value)}
             />
           ))}
         </div>

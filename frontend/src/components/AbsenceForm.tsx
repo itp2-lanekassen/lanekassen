@@ -24,7 +24,7 @@ export type FormValues = {
 const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
   const queryClient = useQueryClient();
 
-  const { currentUser } = useUserContext();
+  const currentUser = useUserContext();
   const { absenceTypes } = useGlobalContext();
 
   const { mutate: addAbsence } = useMutation({

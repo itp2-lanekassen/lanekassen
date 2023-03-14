@@ -8,4 +8,5 @@ public class Department {
   public ICollection<Section> Sections { get; set; } = null!;
   public ICollection<Team> Teams { get; set; } = null!;
   public ICollection<Role> Roles { get; set; } = null!;
+  public ICollection<User> Users { get; set; } = null!;
 }

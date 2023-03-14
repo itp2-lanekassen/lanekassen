@@ -23,9 +23,20 @@ public class UserController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+    // Check if user already exists
+    User? existingUser = await _context.Users.FirstOrDefaultAsync(u => u.AzureId == user.AzureId);
+    if (existingUser != null) {
+      return BadRequest("User already exists");
+    }
+
     Section? section = await _context.Sections.FindAsync(user.SectionId);
     if (section == null) {
       return BadRequest("Invalid section id");
+    }
+
+    Department? department = await _context.Departments.FindAsync(user.DepartmentId);
+    if (department == null) {
+      return BadRequest("Invalid department id");
     }
 
     User? newUser = new() {
@@ -39,6 +50,7 @@ public class UserController : ControllerBase {
       SubjectFields = await _context.SubjectFields.Where(sf => user.SubjectFields.Contains(sf.SubjectFieldId)).ToListAsync(),
       Roles = await _context.Roles.Where(r => user.Roles!.Contains(r.RoleId)).ToListAsync(),
       Teams = await _context.Teams.Where(t => user.Teams!.Contains(t.TeamId)).ToListAsync(),
+      Department = department,
     };
 
     try {
@@ -82,7 +94,17 @@ public class UserController : ControllerBase {
       return BadRequest("Invalid section id");
     }
 
-    User? userToUpdate = await _context.Users.FindAsync(id);
+    Department? department = await _context.Departments.FindAsync(user.DepartmentId);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
+    User? userToUpdate = await _context.Users
+        .Include(u => u.Roles)
+        .Include(u => u.Teams)
+        .Include(u => u.SubjectFields)
+        .FirstOrDefaultAsync(u => u.UserId == id);
+
     if (userToUpdate == null) {
       return NotFound();
     }
@@ -93,13 +115,35 @@ public class UserController : ControllerBase {
     userToUpdate.EmploymentType = user.EmploymentType;
     userToUpdate.Admin = user.Admin;
     userToUpdate.Section = section;
-    userToUpdate.SubjectFields = await _context.SubjectFields.Where(sf => user.SubjectFields.Contains(sf.SubjectFieldId)).ToListAsync();
-    userToUpdate.Roles = await _context.Roles.Where(r => user.Roles!.Contains(r.RoleId)).ToListAsync();
-    userToUpdate.Teams = await _context.Teams.Where(t => user.Teams!.Contains(t.TeamId)).ToListAsync();
-    userToUpdate.Absences = await _context.Absences.Where(a => user.Absences!.Contains(a.AbsenceId)).ToListAsync();
+    userToUpdate.Department = department;
+
+    // Clear existing roles, teams and subject fields
+    userToUpdate.Roles.Clear();
+    userToUpdate.Teams.Clear();
+    userToUpdate.SubjectFields.Clear();
+
+    // Add new roles, teams and subject fields
+    foreach (int roleId in user.Roles ?? Array.Empty<int>()) {
+      Role? role = await _context.Roles.FindAsync(roleId);
+      if (role != null) {
+        userToUpdate.Roles.Add(role);
+      }
+    }
+    foreach (int teamId in user.Teams ?? Array.Empty<int>()) {
+      Team? team = await _context.Teams.FindAsync(teamId);
+      if (team != null) {
+        userToUpdate.Teams.Add(team);
+      }
+    }
+    foreach (int subjectFieldId in user.SubjectFields ?? Array.Empty<int>()) {
+      SubjectField? subjectField = await _context.SubjectFields.FindAsync(subjectFieldId);
+      if (subjectField != null) {
+        userToUpdate.SubjectFields.Add(subjectField);
+      }
+    }
 
     try {
-      _ = await _context.SaveChangesAsync();
+      await _context.SaveChangesAsync();
     } catch (DbUpdateException ex) {
       _logger.LogError(ex, "Error updating user");
       return StatusCode(
@@ -148,14 +192,14 @@ public class UserController : ControllerBase {
   //get user by azure id
   [HttpGet("azure/{azureId}")]
   public async Task<IActionResult> GetUserByAzureId(string azureId) {
-    User? user = await _context.Users.FirstOrDefaultAsync(u => u.AzureId == azureId);
+    User? user = await _context.Users.Include(u => u.SubjectFields).Include(u => u.Roles).Include(u => u.Teams).FirstOrDefaultAsync(u => u.AzureId == azureId);
     return user == null ? NotFound() : Ok(user);
   }
 
   [HttpGet("filter")]
   public async Task<IActionResult> FilterUsers(
     [FromQuery(Name = "excludeIds")] List<int> ExcludeIds,
-    // [FromQuery(Name = "departments")] List<int> Departments,
+    [FromQuery(Name = "departments")] List<int> Departments,
     [FromQuery(Name = "sections")] List<int> Sections,
     [FromQuery(Name = "teams")] List<int> Teams,
     [FromQuery(Name = "roles")] List<int> Roles,
@@ -167,10 +211,9 @@ public class UserController : ControllerBase {
       users = users.Where(u => !ExcludeIds.Contains(u.UserId));
     }
 
-    // TODO: add departments on user type
-    // if (Departments.Count > 0) {
-    //   users = users.Where(u => Departments.Contains(u.DepartmentId));
-    // }
+    if (Departments.Count > 0) {
+      users = users.Where(u => Departments.Contains(u.Department.DepartmentId));
+    }
 
     if (Sections.Count > 0) {
       users = users.Where(u => Sections.Contains(u.Section.SectionId));
