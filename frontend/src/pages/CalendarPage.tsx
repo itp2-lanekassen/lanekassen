@@ -79,6 +79,8 @@ const CalendarPage = () => {
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
 
+  console.log(users);
+
   return (
     <div className="w-full py-8">
       <div className="grid grid-cols-calendar place-content-center place-items-center gap-0.5">

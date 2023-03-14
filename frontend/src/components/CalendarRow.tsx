@@ -49,11 +49,6 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt: {String(error)}</div>;
 
-  const handleClick = () => {
-    setOpen(!open);
-    console.log(open);
-  };
-
   /*
   return (
     <div className="contents text-sm">
@@ -99,13 +94,13 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
   );*/
 
   //console.log("balbal " + user?.department);
-  console.log(user);
+  //console.log(user);
 
   return (
     <div className="contents text-sm">
       {user ? (
         <UserDropdown
-          department={user.department}
+          departmentId={user.departmentId}
           section={user.section}
           name={user.firstName + ' ' + user.lastName}
           subjectField={user.subjectFields}

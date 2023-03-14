@@ -3,8 +3,15 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Department, Role, Section, SubjectField, Team } from '@/types/types';
 
+// hent seksjon, department osv
+// bruk get-funksjoner kanskje?
+// paste inn seksjon, department osv
+// skjul editknappen hos andre brukere hvis ikke admin
+// style bra
+// add funksjonalitet til egen editknapp
+
 export default function UserDropdown(props: {
-  department: Department | undefined;
+  departmentId: number;
   section: Section | undefined;
   name: string;
   subjectField: SubjectField[];
@@ -16,6 +23,8 @@ export default function UserDropdown(props: {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
 
+  const [selectedDepartment, setSelectedDepartment] = useState<number>(props.departmentId);
+
   //Expand/collapse component to show more/less information on click
   const expandCollapse = () => {
     if (expandStatus[0] == 'none') {
@@ -26,8 +35,6 @@ export default function UserDropdown(props: {
       setArrowRotation('rotate(0deg)');
     }
   };
-
-  //console.log("her er det " + props.name);
 
   return (
     <div className="w-[180px]  min-h-[fit-content] text-grey-lightest font-Rubik ">
@@ -54,16 +61,16 @@ export default function UserDropdown(props: {
           props.isCurrentUser ? 'bg-card-two-light' : 'bg-primary-lighter'
         } text-primary subheading-small py-[10px] rounded-b-[20px] overflow-hidden`}
       >
-        <p className="mx-[20px] text-[18px]">
-          <strong className="body-bold text-[12px]">{props.employmentType}</strong>
+        <p className="mx-[px] text-[18px]">
+          Ansatt <strong className="body-bold text-[12px]">{props.employmentType}</strong>
         </p>
         <p>
-          <strong className="body-bold text-[12px]">{props.section?.name}</strong>
+          Seksjon <strong className="body-bold text-[12px]">{props.section?.name}</strong>
         </p>
         <p>
-          <strong className="body-bold text-[12px]">{props.department?.name}</strong>
+          Avdeling <strong className="body-bold text-[12px]">{selectedDepartment}</strong>
         </p>
-        <div className="flex flex-row float-right">
+        <div className={`${props.isCurrentUser ? 'block' : 'hidden'} flex flex-row float-right`}>
           <EditOutlinedIcon
             onClick={() => {
               console.log('wiwo');
