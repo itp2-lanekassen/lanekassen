@@ -19,6 +19,7 @@ export default function UserDropdown(props: {
   role: Role[];
   employmentType: number;
   isCurrentUser: boolean;
+  isAdmin: boolean;
 }) {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
@@ -70,7 +71,11 @@ export default function UserDropdown(props: {
         <p>
           Avdeling <strong className="body-bold text-[12px]">{selectedDepartment}</strong>
         </p>
-        <div className={`${props.isCurrentUser ? 'block' : 'hidden'} flex flex-row float-right`}>
+        <div
+          className={`${
+            props.isCurrentUser || props.isAdmin ? 'block' : 'hidden'
+          } flex flex-row float-right`}
+        >
           <EditOutlinedIcon
             onClick={() => {
               console.log('wiwo');

@@ -108,6 +108,7 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
           role={user.roles}
           employmentType={user.employmentType}
           isCurrentUser={isCurrentUser}
+          isAdmin={currentUser.admin}
         />
       ) : (
         <div></div>
