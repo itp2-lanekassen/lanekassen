@@ -1,10 +1,10 @@
-import { getAllAbsenceTypes } from '@/API/AbsenceTypeAPI';
-import { getAllDepartments } from '@/API/DepartmentAPI';
-import { getAllRoles } from '@/API/RoleAPI';
-import { getAllSections } from '@/API/SectionAPI';
-import { getAllSubjectFields } from '@/API/SubjectFieldAPI';
-import { getAllTeams } from '@/API/TeamAPI';
-import { AbsenceType, Department, Role, Section, SubjectField, Team } from '@/types/types';
+import { getAllAbsenceTypes } from '../API/AbsenceTypeAPI';
+import { getAllDepartments } from '../API/DepartmentAPI';
+import { getAllRoles } from '../API/RoleAPI';
+import { getAllSections } from '../API/SectionAPI';
+import { getAllSubjectFields } from '../API/SubjectFieldAPI';
+import { getAllTeams } from '../API/TeamAPI';
+import { AbsenceType, Department, Role, Section, SubjectField, Team } from '../types/types';
 import { useQuery } from '@tanstack/react-query';
 import { createContext, ReactNode, useContext } from 'react';
 

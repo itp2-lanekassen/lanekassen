@@ -32,11 +32,8 @@ export function postAbsence(absence: NewAbsence): Promise<AxiosResponse<Absence>
   return axios.post(url, absence);
 }
 
-export function updateAbsence(
-  absenceId: number,
-  absence: Absence
-): Promise<AxiosResponse<Absence>> {
-  return axios.put(`${url}/${absenceId}`, absence);
+export function updateAbsence(absence: Absence): Promise<AxiosResponse<Absence>> {
+  return axios.put(`${url}/${absence.absenceId}`, absence);
 }
 
 export function deleteAbsence(absenceId: number): Promise<AxiosResponse<Absence>> {

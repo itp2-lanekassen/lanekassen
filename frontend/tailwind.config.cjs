@@ -106,5 +106,8 @@ module.exports = {
       header: ['Rubik', ...defaultTheme.fontFamily.sans]
     }
   },
-  plugins: []
+  plugins: [
+    // ...
+    require('tailwind-scrollbar')({ nocompatible: true })
+  ]
 };

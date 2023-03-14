@@ -1,17 +1,18 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
-import UserContextProvider from './context/UserContext';
-import FilterContextProvider from './context/FilterContext';
-import CalendarPage from './pages/CalendarPage';
-import MyPage from './pages/MyPage';
-import LoginPage from './pages/LoginPage';
-import { Route, Routes } from 'react-router-dom';
-import GlobalContextProvider from './context/GlobalContext';
 import { ReactNode } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { AbsenceView } from './components/AbsenceView';
 import AzureAdContextProvider from './context/AzureAdContext';
+import FilterContextProvider from './context/FilterContext';
+import GlobalContextProvider from './context/GlobalContext';
 import ModalContextProvider from './context/ModalContext';
-import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
-import PageNotFound from './pages/PageNotFound';
+import UserContextProvider from './context/UserContext';
 import AdminPage from './pages/AdminPage';
+import CalendarPage from './pages/CalendarPage';
+import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
+import LoginPage from './pages/LoginPage';
+import MyPage from './pages/MyPage';
+import PageNotFound from './pages/PageNotFound';
 
 const ContextWrapper = ({ children }: { children?: ReactNode }) => (
   <UserContextProvider>
@@ -26,13 +27,12 @@ function App() {
     <main className="min-h-screen w-full max-w-screen-xl mx-auto">
       <UnauthenticatedTemplate>
         <LoginPage />
-        <LoginPage />
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>
         <AzureAdContextProvider>
           <GlobalContextProvider>
             <Routes>
-              <Route path="/register" element={<FirstTimeRegisterForm />} />
+              <Route path="/registrer-bruker" element={<FirstTimeRegisterForm />} />
               {/* Denne burde beskyttes slik at man ikke kan navigere hit hvis man har bruker */}
               <Route
                 path="/"
@@ -43,7 +43,7 @@ function App() {
                 }
               />
               <Route
-                path="/mypage"
+                path="/profil"
                 element={
                   <ContextWrapper>
                     <MyPage />
@@ -51,7 +51,7 @@ function App() {
                 }
               />
               <Route
-                path="/adminpage"
+                path="/admin"
                 element={
                   <ContextWrapper>
                     <AdminPage />

@@ -1,21 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
   getSubjectFieldsByDepartmentId,
   getTeamsByDepartmentId
 } from '../API/DepartmentAPI';
-import { updateUser, deleteUser } from '../API/UserAPI';
+import { deleteUser, updateUser } from '../API/UserAPI';
 import ellipse from '../assets/ellipse.png';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
+import { SignOutButton } from '../components/SignOutButton';
 import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
 import { EmploymentType, Role, SubjectField, Team } from '../types/types';
-import { SignOutButton } from '../components/SignOutButton';
-import { useNavigate } from 'react-router-dom';
 /**
  *
  * @returns component that is the personal profile of the user, where the user can edit their information and delete their account
@@ -110,7 +110,7 @@ export default function MyPage() {
     const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
     if (confirmDelete) {
       deleteUser(currentUser.userId).then(() => {
-        navigate('/register');
+        navigate('/registrer-bruker');
       });
     }
   };
@@ -148,7 +148,7 @@ export default function MyPage() {
             disabledTitle={'admin'}
             buttonText={'Til adminsiden'}
             handleClick={() => {
-              navigate('/adminpage');
+              navigate('/admin');
             }}
           />
         </div>
