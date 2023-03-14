@@ -1,6 +1,7 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
 import { ReactNode } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { AbsenceView } from './components/AbsenceView';
 import AzureAdContextProvider from './context/AzureAdContext';
 import FilterContextProvider from './context/FilterContext';
 import GlobalContextProvider from './context/GlobalContext';
@@ -25,7 +26,6 @@ function App() {
   return (
     <main className="min-h-screen w-full max-w-screen-xl mx-auto">
       <UnauthenticatedTemplate>
-        <LoginPage />
         <LoginPage />
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>

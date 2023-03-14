@@ -79,7 +79,7 @@ const CalendarPage = () => {
   if (isError) return <div>Noe gikk galt</div>;
 
   function handleMyPageClick() {
-    window.location.href = '/mypage';
+    window.location.href = '/profil';
   }
 
   return (
