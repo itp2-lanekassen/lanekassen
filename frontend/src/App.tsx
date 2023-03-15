@@ -51,6 +51,14 @@ function App() {
                 }
               />
               <Route
+                path="/fravaersside"
+                element={
+                  <ContextWrapper>
+                    <AbsenceView />
+                  </ContextWrapper>
+                }
+              />
+              <Route
                 path="/admin"
                 element={
                   <ContextWrapper>
