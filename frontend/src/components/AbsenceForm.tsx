@@ -73,6 +73,7 @@ const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
       startDate: moment(formValues.startDate).toISOString(),
       endDate: moment(formValues.endDate).toISOString(),
       comment: formValues.comment,
+      isApproved: false,
       absenceTypeId: formValues.absenceType,
       userId: currentUser.userId
     });

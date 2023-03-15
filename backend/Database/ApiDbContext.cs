@@ -166,7 +166,7 @@ public class ApiDbContext : DbContext {
     );
 
     _ = modelBuilder.Entity<Absence>().HasData(
-      new Absence { AbsenceId = 1, StartDate = new DateTime().ToUniversalTime(), EndDate = new DateTime().ToUniversalTime().AddDays(2), UserId = 1, AbsenceTypeId = 1 }
+      new Absence { AbsenceId = 1, StartDate = new DateTime().ToUniversalTime(), EndDate = new DateTime().ToUniversalTime().AddDays(2), IsApproved = true, UserId = 1, AbsenceTypeId = 1 }
     );
   }
 }
