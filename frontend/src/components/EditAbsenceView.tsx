@@ -86,6 +86,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       type: updatedAbsenceType,
       userId: currentUser.userId,
       user: currentUser,
+      isApproved: false,
       comment: updatedComment
     });
     //Alert user of edit success
