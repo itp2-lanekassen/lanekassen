@@ -27,6 +27,7 @@ export interface Absence {
   userId: number;
   user?: User;
   comment?: string;
+  isApproved: boolean;
 }
 
 export interface NewAbsence {
@@ -35,6 +36,7 @@ export interface NewAbsence {
   absenceTypeId: number;
   userId: number;
   comment?: string;
+  isApproved: boolean;
 }
 
 export interface Department {

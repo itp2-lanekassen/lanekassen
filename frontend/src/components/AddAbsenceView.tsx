@@ -58,6 +58,7 @@ export const AddAbsenceView = () => {
       startDate: moment(formValues.startDate).toISOString(),
       endDate: moment(formValues.endDate).toISOString(),
       comment: formValues.comment,
+      isApproved: false,
       absenceTypeId: formValues.absenceType,
       userId: currentUser.userId
     });
