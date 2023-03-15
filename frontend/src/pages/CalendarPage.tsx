@@ -7,6 +7,7 @@ import { useUserContext } from '../context/UserContext';
 import CalendarRow from '../components/CalendarRow';
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
 import { useFilterContext } from '../context/FilterContext';
+import FilterComponents from '@/components/CalendarFilter';
 
 export type Column = Record<string, { display: string; value: string }[]>;
 
@@ -19,35 +20,48 @@ const CalendarPage = () => {
     data: users,
     isLoading,
     isError
-  } = useQuery<(User | undefined)[]>(['users'], async () => {
-    const res = (
-      await filterUsers({
+  } = useQuery<(User | undefined)[]>(
+    [
+      'users',
+      {
         excludeIds: [currentUser.userId],
         departments,
         sections,
         teams,
         roles,
         subjectFields
-      })
-    ).data;
-
-    res.sort((a, b) => {
-      if (a?.firstName && b?.firstName) {
-        const firstnameComparison = a.firstName.localeCompare(b.firstName);
-
-        if (firstnameComparison !== 0) {
-          return firstnameComparison;
-        }
-
-        if (a?.lastName && b?.lastName) {
-          return a.lastName.localeCompare(b.lastName);
-        }
       }
+    ],
+    async () => {
+      const res = (
+        await filterUsers({
+          excludeIds: [currentUser.userId],
+          departments,
+          sections,
+          teams,
+          roles,
+          subjectFields
+        })
+      ).data;
 
-      return 0;
-    });
-    return [...res, ...Array(30 - res.length)];
-  });
+      res.sort((a, b) => {
+        if (a?.firstName && b?.firstName) {
+          const firstnameComparison = a.firstName.localeCompare(b.firstName);
+
+          if (firstnameComparison !== 0) {
+            return firstnameComparison;
+          }
+
+          if (a?.lastName && b?.lastName) {
+            return a.lastName.localeCompare(b.lastName);
+          }
+        }
+
+        return 0;
+      });
+      return [...res, ...Array(30 - res.length)];
+    }
+  );
 
   const [calendarColumns, setCalendarColumns] = useState<Column>({});
 
@@ -84,6 +98,10 @@ const CalendarPage = () => {
 
   return (
     <div className="w-full py-8">
+      <div>
+        {' '}
+        <FilterComponents />
+      </div>
       <div className="grid grid-cols-calendar place-content-center place-items-center gap-0.5">
         <div className="row-start-1 row-span-3 flex-column ">
           <div>
@@ -162,4 +180,5 @@ const CalendarPage = () => {
     </div>
   );
 };
+
 export default CalendarPage;
