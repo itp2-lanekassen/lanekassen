@@ -19,13 +19,14 @@ export const AbsencePeriods = (props: { setAbsence: any; selectedAbsence?: Absen
   const [absences, setAbsences] = useState<Absence[]>([]);
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
   const [displayArchive, setDisplayArchive] = useState<boolean>(false);
+  const [displayFutureAbsences, setDisplayFutureAbsences] = useState<boolean>(true);
   useEffect(() => {
     getAbsences(currentUser, setAbsences);
   }, [absences, currentUser]);
 
   // Check if absence is before todays date
   const archiveAbsence = absences
-    .sort((a, b) => moment(a.startDate).unix() - moment(b.startDate).unix())
+    .sort((a, b) => moment(b.startDate).unix() - moment(a.startDate).unix())
     .map((absence) => {
       if (moment(absence.endDate).isBefore(moment(), 'day')) {
         return (
@@ -38,6 +39,7 @@ export const AbsencePeriods = (props: { setAbsence: any; selectedAbsence?: Absen
       }
     });
 
+  // Check if absence is after todays date
   const futureAbsence = absences
     .sort((a, b) => moment(a.startDate).unix() - moment(b.startDate).unix())
     .map((absence) => {
@@ -54,9 +56,42 @@ export const AbsencePeriods = (props: { setAbsence: any; selectedAbsence?: Absen
 
   return (
     <div className="h-[500px] w-[350px]">
-      <h3 className="ml-[25px]">Dine fravær</h3>
-      <div className="overflow-scroll overflow-x-hidden h-[460px] w-[350px] flex flex-col items-center gap-[10px] scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
-        {futureAbsence}
+      <div
+        style={{
+          borderRadius: '20px 20px 20px 20px',
+          border: '2px solid'
+        }}
+        className="mt-2 border-primary-light"
+      >
+        <div
+          style={{
+            borderRadius: '20px 20px 0px 0px'
+          }}
+          onClick={() => {
+            setDisplayFutureAbsences(displayFutureAbsences ? false : true);
+            setArrowRotation(displayFutureAbsences ? 'rotate(180deg)' : 'rotate(0deg)');
+          }}
+          className="hover:bg-primary-light flex flex-row justify-between white mb-3 border-primary-light leading-[30px] body-tight hover:bg-black hover:text-white"
+        >
+          <p className="ml-[20px] text-xl">Kommende fravær</p>
+          <ExpandMoreIcon
+            sx={{
+              color: 'primary-light',
+              height: '30px',
+              mr: '10px',
+              transform: arrowRotation
+            }}
+          ></ExpandMoreIcon>
+        </div>
+        <div>
+          {displayFutureAbsences ? (
+            <div className="overflow-scroll overflow-x-hidden mb-3 flex flex-col items-center gap-[10px] scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
+              {futureAbsence}
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
 
       <div
@@ -64,19 +99,19 @@ export const AbsencePeriods = (props: { setAbsence: any; selectedAbsence?: Absen
           borderRadius: '20px 20px 20px 20px',
           border: '2px solid'
         }}
+        className="mt-10 border-primary-light"
       >
         <div
           style={{
             borderRadius: '20px 20px 0px 0px'
-            //border: '2px solid'
           }}
           onClick={() => {
             setDisplayArchive(displayArchive ? false : true);
             setArrowRotation(displayArchive ? 'rotate(0deg)' : 'rotate(180deg)');
           }}
-          className="flex flex-row justify-between white mb-3 border-primary-light leading-[30px] body-tight "
+          className="hover:bg-primary-light flex flex-row justify-between white mb-3 border-primary-light leading-[30px] body-tight hover:bg-black hover:text-white"
         >
-          <h3 className="ml-[20px]">Arkiv</h3>
+          <p className="ml-[20px] text-xl">Arkiv</p>
           <ExpandMoreIcon
             sx={{
               color: 'primary-light',
@@ -88,7 +123,7 @@ export const AbsencePeriods = (props: { setAbsence: any; selectedAbsence?: Absen
         </div>
         <div>
           {displayArchive ? (
-            <div className="overflow-scroll overflow-x-hidden h-[460px] w-[350px] flex flex-col items-center gap-[10px] scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
+            <div className="overflow-scroll overflow-x-hidden mb-3 flex flex-col items-center gap-[10px] scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
               {archiveAbsence}
             </div>
           ) : (
