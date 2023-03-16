@@ -99,17 +99,7 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
   return (
     <div className="contents text-sm">
       {user ? (
-        <UserDropdown
-          departmentId={user.departmentId}
-          section={user.section}
-          name={user.firstName + ' ' + user.lastName}
-          subjectField={user.subjectFields}
-          team={user.teams}
-          role={user.roles}
-          employmentType={user.employmentType}
-          isCurrentUser={isCurrentUser}
-          isAdmin={currentUser.admin}
-        />
+        <UserDropdown user={user} isCurrentUser={isCurrentUser} isAdmin={currentUser.admin} />
       ) : (
         <div></div>
       )}

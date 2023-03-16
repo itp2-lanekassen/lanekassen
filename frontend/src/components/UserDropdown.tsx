@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Department, Role, Section, SubjectField, Team } from '@/types/types';
+import { Department, User } from '@/types/types';
+import { userInfo } from 'os';
+import { getDepartmentById } from '@/API/DepartmentAPI';
 
 // hent seksjon, department osv
 // bruk get-funksjoner kanskje?
@@ -11,23 +13,20 @@ import { Department, Role, Section, SubjectField, Team } from '@/types/types';
 // add funksjonalitet til egen editknapp
 
 export default function UserDropdown(props: {
-  departmentId: number;
-  section: Section | undefined;
-  name: string;
-  subjectField: SubjectField[];
-  team: Team[];
-  role: Role[];
-  employmentType: number;
+  user: User;
   isCurrentUser: boolean;
   isAdmin: boolean;
 }) {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
+  const [isSet, setIsSet] = useState<boolean>(false);
+  const [department, setDepartment] = useState<Department>();
 
-  const [selectedDepartment, setSelectedDepartment] = useState<number>(props.departmentId);
+  //const [selectedDepartment, setSelectedDepartment] = useState<number>(props.departmentId);
 
   //Expand/collapse component to show more/less information on click
-  const expandCollapse = () => {
+  const expandCollapse = async () => {
+    //lag en state for true/false for om du har lasta inn data før
     if (expandStatus[0] == 'none') {
       setExpandStatus(['block', '20px 20px 0px 0px']);
       setArrowRotation('rotate(180deg)');
@@ -35,6 +34,14 @@ export default function UserDropdown(props: {
       setExpandStatus(['none', '20px']);
       setArrowRotation('rotate(0deg)');
     }
+
+    if (!isSet) {
+      // så henter man dataen og setter det i states maybe
+      setDepartment(await (await getDepartmentById(props.user.departmentId)).data);
+      setIsSet(true);
+    }
+
+    //console.log("hdhh");
   };
 
   return (
@@ -46,7 +53,7 @@ export default function UserDropdown(props: {
           props.isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
         } flex flex-row justify-between leading-[30px] body-tight`}
       >
-        <p className="ml-[20px]">{props.name}</p>
+        <p className="ml-[20px]">{props.user.firstName + ' ' + props.user.lastName}</p>
         <ExpandMoreIcon
           sx={{
             color: 'white',
@@ -63,13 +70,13 @@ export default function UserDropdown(props: {
         } text-primary subheading-small py-[10px] rounded-b-[20px] overflow-hidden`}
       >
         <p className="mx-[px] text-[18px]">
-          Ansatt <strong className="body-bold text-[12px]">{props.employmentType}</strong>
+          Ansatt <strong className="body-bold text-[12px]">{'employ'}</strong>
         </p>
         <p>
-          Seksjon <strong className="body-bold text-[12px]">{props.section?.name}</strong>
+          Seksjon <strong className="body-bold text-[12px]">{'section'}</strong>
         </p>
         <p>
-          Avdeling <strong className="body-bold text-[12px]">{selectedDepartment}</strong>
+          Avdeling <strong className="body-bold text-[12px]">{department?.name}</strong>
         </p>
         <div
           className={`${
@@ -78,7 +85,7 @@ export default function UserDropdown(props: {
         >
           <EditOutlinedIcon
             onClick={() => {
-              console.log('wiwo');
+              console.log('Implement edit user here');
             }}
             sx={{
               color: '#410464',
