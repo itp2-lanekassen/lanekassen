@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Department, User } from '@/types/types';
+import { Department, Role, Section, SubjectField, Team, User } from '@/types/types';
 import { userInfo } from 'os';
-import { getDepartmentById } from '@/API/DepartmentAPI';
+import {
+  getDepartmentById,
+  getRolesByDepartmentId,
+  getSectionsByDepartmentId,
+  getSubjectFieldsByDepartmentId,
+  getTeamsByDepartmentId
+} from '@/API/DepartmentAPI';
+import { getSectionById } from '@/API/SectionAPI';
 
 // hent seksjon, department osv
 // bruk get-funksjoner kanskje?
@@ -21,6 +28,11 @@ export default function UserDropdown(props: {
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
   const [isSet, setIsSet] = useState<boolean>(false);
   const [department, setDepartment] = useState<Department>();
+  const [section, setSection] = useState<Section>();
+  const [teams, setTeams] = useState<string[]>();
+  const [subjectFields, setSubjectFields] = useState<string[]>();
+  const [employmentType, setEmploymentType] = useState<string>('');
+  const [roles, setRoles] = useState<string[]>();
 
   //const [selectedDepartment, setSelectedDepartment] = useState<number>(props.departmentId);
 
@@ -36,12 +48,32 @@ export default function UserDropdown(props: {
     }
 
     if (!isSet) {
-      // så henter man dataen og setter det i states maybe
-      setDepartment(await (await getDepartmentById(props.user.departmentId)).data);
+      const listTeam: string[] = [];
+      const listSubjectField: string[] = [];
+      const listRole: string[] = [];
+
+      setDepartment((await getDepartmentById(props.user.departmentId)).data);
+      setSection((await getSectionById(props.user.sectionId)).data);
+
+      props.user.teams.forEach((team) => listTeam.push(team.name));
+      setTeams(listTeam);
+
+      props.user.subjectFields.forEach((subjectField) => listSubjectField.push(subjectField.name));
+      setSubjectFields(listSubjectField);
+
+      props.user.roles.forEach((role) => listRole.push(role.name));
+      setRoles(listRole);
+
+      if (props.user.employmentType == 1) {
+        setEmploymentType('Konsulent');
+      } else if (props.user.employmentType == 0) {
+        setEmploymentType('Ansatt');
+      } else {
+        setEmploymentType('Noe gikk galt');
+      }
+
       setIsSet(true);
     }
-
-    //console.log("hdhh");
   };
 
   return (
@@ -70,13 +102,22 @@ export default function UserDropdown(props: {
         } text-primary subheading-small py-[10px] rounded-b-[20px] overflow-hidden`}
       >
         <p className="mx-[px] text-[18px]">
-          Ansatt <strong className="body-bold text-[12px]">{'employ'}</strong>
-        </p>
-        <p>
-          Seksjon <strong className="body-bold text-[12px]">{'section'}</strong>
+          Ansattforhold <strong className="body-bold text-[12px]">{employmentType}</strong>
         </p>
         <p>
           Avdeling <strong className="body-bold text-[12px]">{department?.name}</strong>
+        </p>
+        <p>
+          Seksjon <strong className="body-bold text-[12px]">{section?.name}</strong>
+        </p>
+        <p>
+          Fagområde <strong className="body-bold text-[12px]">{subjectFields}</strong>
+        </p>
+        <p>
+          Team <strong className="body-bold text-[12px]">{teams}</strong>
+        </p>
+        <p>
+          Rolle <strong className="body-bold text-[12px]">{roles}</strong>
         </p>
         <div
           className={`${
