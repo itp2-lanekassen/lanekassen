@@ -95,6 +95,9 @@ const CalendarPage = () => {
   function handleMyPageClick() {
     window.location.href = '/profil';
   }
+  function handleAbsenceViewClick() {
+    window.location.href = '/fravaersside';
+  }
 
   return (
     <div className="w-full py-8">
@@ -112,7 +115,10 @@ const CalendarPage = () => {
               Profil
             </button>
           </div>
-          <button className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white whitespace-nowrap mb-1 mr-4 text-center">
+          <button
+            onClick={handleAbsenceViewClick}
+            className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white whitespace-nowrap mb-1 mr-4 text-center"
+          >
             Se din fraværsoversikt
           </button>
         </div>
