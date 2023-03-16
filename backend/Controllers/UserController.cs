@@ -143,7 +143,7 @@ public class UserController : ControllerBase {
     }
 
     try {
-      await _context.SaveChangesAsync();
+      _ = await _context.SaveChangesAsync();
     } catch (DbUpdateException ex) {
       _logger.LogError(ex, "Error updating user");
       return StatusCode(
@@ -198,12 +198,14 @@ public class UserController : ControllerBase {
 
   [HttpGet("filter")]
   public async Task<IActionResult> FilterUsers(
+    [FromQuery(Name = "page")] int Page,
     [FromQuery(Name = "excludeIds")] List<int> ExcludeIds,
     [FromQuery(Name = "departments")] List<int> Departments,
     [FromQuery(Name = "sections")] List<int> Sections,
     [FromQuery(Name = "teams")] List<int> Teams,
     [FromQuery(Name = "roles")] List<int> Roles,
-    [FromQuery(Name = "subjectFields")] List<int> SubjectFields
+    [FromQuery(Name = "subjectFields")] List<int> SubjectFields,
+    [FromQuery(Name = "size")] int Size = 20
   ) {
     IQueryable<User> users = _context.Users;
 
@@ -231,9 +233,16 @@ public class UserController : ControllerBase {
       users = users.Where(u => u.SubjectFields.Any(sf => SubjectFields.Contains(sf.SubjectFieldId)));
     }
 
-    List<User> result = await users.ToListAsync();
+    int totalPages = (int)Math.Ceiling(users.Count() / (float)Size);
 
-    return Ok(result);
+    PageResponseDTO<User> response = new() {
+      Page = Page,
+      Size = Size,
+      TotalPages = totalPages,
+      Data = await users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName).Skip((Page - 1) * Size).Take(Size).ToListAsync()
+    };
+
+    return Ok(response);
   }
 
 
