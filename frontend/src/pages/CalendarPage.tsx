@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import m from 'moment';
-import { useQuery } from '@tanstack/react-query';
-import { User } from '../types/types';
-import { filterUsers } from '../API/UserAPI';
-import { useUserContext } from '../context/UserContext';
-import CalendarRow from '../components/CalendarRow';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { filterUsers } from '@/API/UserAPI';
+import { useUserContext } from '@/context/UserContext';
+import CalendarRow from '@/components/CalendarRow';
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
 import { useFilterContext } from '../context/FilterContext';
 
@@ -15,39 +14,28 @@ const CalendarPage = () => {
   const { fromDate, setFromDate, departments, sections, teams, roles, subjectFields } =
     useFilterContext();
 
-  const {
-    data: users,
-    isLoading,
-    isError
-  } = useQuery<(User | undefined)[]>(['users'], async () => {
-    const res = (
-      await filterUsers({
-        excludeIds: [currentUser.userId],
-        departments,
-        sections,
-        teams,
-        roles,
-        subjectFields
-      })
-    ).data;
+  const { hasNextPage, data, isLoading, isError, fetchNextPage } = useInfiniteQuery(
+    ['users', { departments, sections, teams, roles, subjectFields }],
+    async ({ pageParam = 1 }) =>
+      (
+        await filterUsers({
+          page: pageParam,
+          excludeIds: [currentUser.userId],
+          departments,
+          sections,
+          teams,
+          roles,
+          subjectFields
+        })
+      ).data,
+    {
+      getNextPageParam: (lastPage) => {
+        if (lastPage.page >= lastPage.totalPages) return undefined;
 
-    res.sort((a, b) => {
-      if (a?.firstName && b?.firstName) {
-        const firstnameComparison = a.firstName.localeCompare(b.firstName);
-
-        if (firstnameComparison !== 0) {
-          return firstnameComparison;
-        }
-
-        if (a?.lastName && b?.lastName) {
-          return a.lastName.localeCompare(b.lastName);
-        }
+        return lastPage.page + 1;
       }
-
-      return 0;
-    });
-    return [...res, ...Array(30 - res.length)];
-  });
+    }
+  );
 
   const [calendarColumns, setCalendarColumns] = useState<Column>({});
 
@@ -127,7 +115,7 @@ const CalendarPage = () => {
           </button>
         </h6>
         {Object.entries(calendarColumns).map(([week, days], i) => (
-          <div key={week} className="contents">
+          <Fragment key={week}>
             <h6 className="col-span-5 row-start-2 w-full bg-primary-light text-white text-center relative flex items-center justify-center">
               {i === 0 && (
                 <button
@@ -147,23 +135,34 @@ const CalendarPage = () => {
                 </button>
               )}
             </h6>
-            {days.map((d) => (
+            {days.map((date) => (
               <div
-                key={week + d.value}
+                key={week + date.value}
                 className={`font-header text-primary text-sm px-0.5 w-full text-center mb-1 ${
                   i % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark'
                 }`}
               >
-                {d.display}
+                {date.display}
               </div>
             ))}
-          </div>
+          </Fragment>
         ))}
 
         <CalendarRow user={currentUser} isCurrentUser={true} columns={calendarColumns} />
-        {users.map((user, i) => (
-          <CalendarRow key={user?.azureId || i} user={user} columns={calendarColumns} />
+
+        {data.pages.map((currentPage, i) => (
+          <Fragment key={i}>
+            {currentPage.data.map((user) => (
+              <CalendarRow key={user.userId} user={user} columns={calendarColumns} />
+            ))}
+          </Fragment>
         ))}
+
+        {hasNextPage && (
+          <div className="col-span-full flex justify-center text-primary mt-3">
+            <button onClick={() => fetchNextPage()}>Hent mer data</button>
+          </div>
+        )}
       </div>
     </div>
   );
