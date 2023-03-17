@@ -37,7 +37,7 @@
     "tailwind-scrollbar": "^2.1.0"
   },
   "devDependencies": {
-    "@types/node": "^18.14.2",
+    "@types/node": "^18.15.1",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@types/react-select": "^5.0.1",
