@@ -1,23 +1,9 @@
 import { useState } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Department, Role, Section, SubjectField, Team, User } from '@/types/types';
-import { userInfo } from 'os';
-import {
-  getDepartmentById,
-  getRolesByDepartmentId,
-  getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId,
-  getTeamsByDepartmentId
-} from '@/API/DepartmentAPI';
+import { Department, Section, User } from '@/types/types';
+import { getDepartmentById } from '@/API/DepartmentAPI';
 import { getSectionById } from '@/API/SectionAPI';
-
-// hent seksjon, department osv
-// bruk get-funksjoner kanskje?
-// paste inn seksjon, department osv
-// skjul editknappen hos andre brukere hvis ikke admin
-// style bra
-// add funksjonalitet til egen editknapp
 
 export default function UserDropdown(props: {
   user: User;
@@ -34,9 +20,8 @@ export default function UserDropdown(props: {
   const [employmentType, setEmploymentType] = useState<string>('');
   const [roles, setRoles] = useState<string[]>();
 
-  //const [selectedDepartment, setSelectedDepartment] = useState<number>(props.departmentId);
-
-  //Expand/collapse component to show more/less information on click
+  // Expand/collapse component to show more/less information on click
+  // Add data to fields in dropdown if clicked for the first time
   const expandCollapse = async () => {
     //lag en state for true/false for om du har lasta inn data før
     if (expandStatus[0] == 'none') {
@@ -101,7 +86,7 @@ export default function UserDropdown(props: {
           props.isCurrentUser ? 'bg-card-two-light' : 'bg-primary-lighter'
         } text-primary subheading-small py-[10px] rounded-b-[20px] overflow-hidden`}
       >
-        <p className="mx-[px] text-[18px]">
+        <p>
           Ansattforhold <strong className="body-bold text-[12px]">{employmentType}</strong>
         </p>
         <p>
