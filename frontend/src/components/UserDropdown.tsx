@@ -4,12 +4,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Department, Section, User } from '@/types/types';
 import { getDepartmentById } from '@/API/DepartmentAPI';
 import { getSectionById } from '@/API/SectionAPI';
+import { useUserContext } from '@/context/UserContext';
 
-export default function UserDropdown(props: {
-  user: User;
-  isCurrentUser: boolean;
-  isAdmin: boolean;
-}) {
+export default function UserDropdown(props: { user: User; isCurrentUser: boolean }) {
+  const currentUser = useUserContext();
+
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
   const [isSet, setIsSet] = useState<boolean>(false);
@@ -105,7 +104,7 @@ export default function UserDropdown(props: {
         </p>
         <div
           className={`${
-            props.isCurrentUser || props.isAdmin ? 'block' : 'hidden'
+            props.isCurrentUser || currentUser.admin ? 'block' : 'hidden'
           } flex flex-row float-right`}
         >
           <EditOutlinedIcon
