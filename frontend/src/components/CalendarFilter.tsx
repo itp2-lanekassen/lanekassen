@@ -19,8 +19,7 @@ import moment from 'moment';
  */
 
 export default function FilterComponents() {
-  const { departments } = useGlobalContext();
-  const { sections } = useGlobalContext();
+  const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
   const {
     fromDate,
     setFromDate,
@@ -35,28 +34,6 @@ export default function FilterComponents() {
     subjectFields: selectedSubjectFields,
     setSubjectFields
   } = useFilterContext();
-
-  const { data: roles } = useQuery(['roles', selectedDepartments[0]], async () =>
-    selectedDepartments.length > 0
-      ? (await getRolesByDepartmentId(selectedDepartments[0])).data
-      : []
-  );
-
-  const { data: teams } = useQuery(
-    ['teams', selectedDepartments[0], { departmentId: selectedDepartments[0] }],
-    async () =>
-      selectedDepartments.length > 0
-        ? (await getTeamsByDepartmentId(selectedDepartments[0])).data
-        : []
-  );
-
-  const { data: subjectFields } = useQuery(
-    ['subject-fields', selectedDepartments[0], { departmentId: selectedDepartments[0] }],
-    async () =>
-      selectedDepartments.length > 0
-        ? (await getSubjectFieldsByDepartmentId(selectedDepartments[0])).data
-        : []
-  );
 
   return (
     <>
