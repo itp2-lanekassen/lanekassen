@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
+import { TabPanel } from '@material-tailwind/react';
 
 const AdminTabs = () => {
   const [value, setValue] = useState<number>(0);
@@ -13,17 +14,25 @@ const AdminTabs = () => {
 
   return (
     <div className="flex flex-col h-full mt-10">
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={(e, newValue) => setValue(newValue)}
-        className="h-full "
-      >
-        {tabLabels.map((label, index) => (
-          <Tab label={label} key={index} className={getTabClassName(index)} />
-        ))}
-      </Tabs>
+      <div>
+        <Tabs
+          orientation="vertical"
+          variant="scrollable"
+          value={value}
+          onChange={(e, newValue) => setValue(newValue)}
+          className="h-full "
+        >
+          {tabLabels.map((label, index) => (
+            <Tab label={label} key={index} className={getTabClassName(index)} />
+          ))}
+        </Tabs>
+      </div>
+      {tabLabels.map((label, index) => (
+        <TabPanel key={index} value={value}>
+          {/* Replace this with your component for this tab */}
+          <div>{label} Content</div>
+        </TabPanel>
+      ))}
     </div>
   );
 };
