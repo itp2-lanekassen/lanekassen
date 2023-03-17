@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 import { Fragment } from 'react';
 import CalendarCell from './CalendarCell';
+import UserDropdown from './UserDropdown';
 
 interface CalendarRowProps {
   user: User;
@@ -28,14 +29,8 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
   };
 
   return (
-    <>
-      <div
-        className={`${
-          isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
-        } text-sm text-white rounded-full w-full px-4 py`}
-      >
-        {user.firstName}&nbsp;{user.lastName}
-      </div>
+    <div className="contents text-sm">
+      {user ? <UserDropdown user={user} isCurrentUser={isCurrentUser} /> : <div />}
 
       {Object.entries(columns).map(([week, days], j) => (
         <Fragment key={`${user.userId}-${week}`}>
@@ -50,7 +45,7 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
           ))}
         </Fragment>
       ))}
-    </>
+    </div>
   );
 };
 
