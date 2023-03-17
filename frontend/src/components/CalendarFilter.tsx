@@ -1,16 +1,9 @@
 import Dropdown from './Dropdown';
 import DropdownMultiSelect from './DropdownMultiSelect';
-import { useEffect } from 'react';
-import {
-  getRolesByDepartmentId,
-  getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId,
-  getTeamsByDepartmentId
-} from '../API/DepartmentAPI';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useFilterContext } from '@/context/FilterContext';
-import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 
 /**
@@ -19,8 +12,7 @@ import moment from 'moment';
  */
 
 export default function FilterComponents() {
-  const { departments } = useGlobalContext();
-  const { sections } = useGlobalContext();
+  const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
   const {
     fromDate,
     setFromDate,
@@ -35,28 +27,6 @@ export default function FilterComponents() {
     subjectFields: selectedSubjectFields,
     setSubjectFields
   } = useFilterContext();
-
-  const { data: roles } = useQuery(['roles', selectedDepartments[0]], async () =>
-    selectedDepartments.length > 0
-      ? (await getRolesByDepartmentId(selectedDepartments[0])).data
-      : []
-  );
-
-  const { data: teams } = useQuery(
-    ['teams', selectedDepartments[0], { departmentId: selectedDepartments[0] }],
-    async () =>
-      selectedDepartments.length > 0
-        ? (await getTeamsByDepartmentId(selectedDepartments[0])).data
-        : []
-  );
-
-  const { data: subjectFields } = useQuery(
-    ['subject-fields', selectedDepartments[0], { departmentId: selectedDepartments[0] }],
-    async () =>
-      selectedDepartments.length > 0
-        ? (await getSubjectFieldsByDepartmentId(selectedDepartments[0])).data
-        : []
-  );
 
   return (
     <>
@@ -154,7 +124,7 @@ export default function FilterComponents() {
                 setRoles([]);
               }}
             >
-              X
+              <CloseIcon />
             </button>
           </div>
         )}
@@ -170,7 +140,7 @@ export default function FilterComponents() {
                 className="text-white text-sm hover:underline focus:outline-none"
                 onClick={() => setSections(selectedSections.filter((s) => s !== sectionId))}
               >
-                X
+                <CloseIcon />
               </button>
             </div>
           ))}
@@ -187,7 +157,7 @@ export default function FilterComponents() {
                 className="text-white text-sm hover:underline focus:outline-none"
                 onClick={() => setSubjectFields(selectedSubjectFields.filter((f) => f !== sf))}
               >
-                X
+                <CloseIcon />
               </button>
             </div>
           ))}
@@ -204,7 +174,7 @@ export default function FilterComponents() {
                 className="text-white text-sm hover:underline focus:outline-none"
                 onClick={() => setTeams(selectedTeams.filter((f) => f !== t))}
               >
-                X
+                <CloseIcon />
               </button>
             </div>
           ))}
@@ -221,7 +191,7 @@ export default function FilterComponents() {
                 className="text-white hover:underline focus:outline-none"
                 onClick={() => setRoles(selectedRoles.filter((f) => f !== r))}
               >
-                X
+                <CloseIcon />
               </button>
             </div>
           ))}
