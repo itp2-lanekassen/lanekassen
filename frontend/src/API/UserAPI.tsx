@@ -1,4 +1,4 @@
-import { User, NewUser } from '../types/types';
+import { User, NewUser, PageResponse } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -31,6 +31,7 @@ export function deleteUser(userId: number): Promise<AxiosResponse<User>> {
 
 export function filterUsers(
   filters: Partial<{
+    page: number;
     excludeIds: number[];
     departments: number[];
     sections: number[];
@@ -38,12 +39,16 @@ export function filterUsers(
     roles: number[];
     subjectFields: number[];
   }>
-): Promise<AxiosResponse<User[]>> {
+): Promise<AxiosResponse<PageResponse<User>>> {
   const query = new URLSearchParams();
 
   Object.entries(filters).forEach(([key, val]) => {
-    if (val) {
-      val.forEach((id) => query.append(key, String(id)));
+    if (val !== undefined) {
+      if (Array.isArray(val)) {
+        val.forEach((id) => query.append(key, String(id)));
+      } else {
+        query.append(key, String(val));
+      }
     }
   });
 

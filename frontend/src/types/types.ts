@@ -85,6 +85,13 @@ export enum EmploymentType {
   Konsulent
 }
 
+export interface PageResponse<T> {
+  page: number;
+  size: number;
+  totalPages: number;
+  data: T[];
+}
+
 export interface NewUser {
   azureId: string;
   firstName: string;
