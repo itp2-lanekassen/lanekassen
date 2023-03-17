@@ -27,6 +27,7 @@ export interface Absence {
   userId: number;
   user?: User;
   comment?: string;
+  isApproved: boolean;
 }
 
 export interface NewAbsence {
@@ -35,6 +36,7 @@ export interface NewAbsence {
   absenceTypeId: number;
   userId: number;
   comment?: string;
+  isApproved: boolean;
 }
 
 export interface Department {
@@ -83,6 +85,13 @@ export enum EmploymentType {
   Konsulent
 }
 
+export interface PageResponse<T> {
+  page: number;
+  size: number;
+  totalPages: number;
+  data: T[];
+}
+
 export interface NewUser {
   azureId: string;
   firstName: string;
@@ -98,10 +107,11 @@ export interface NewUser {
 }
 
 export interface ISubmitButton {
-  disabledTitle: string;
+  disabledTitle?: string;
   disabled: boolean;
   buttonText: string;
-  handleClick: () => void;
+  handleClick?: () => void;
+  type?: 'button' | 'submit' | 'reset' | undefined;
 }
 
 export interface IDropdownMultiSelect {

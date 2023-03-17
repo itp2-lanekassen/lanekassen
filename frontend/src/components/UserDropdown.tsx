@@ -85,22 +85,22 @@ export default function UserDropdown(props: {
           props.isCurrentUser ? 'bg-card-two-light' : 'bg-primary-lighter'
         } text-primary subheading-small py-[10px] rounded-b-[20px] overflow-hidden`}
       >
-        <p>
+        <p className="text-[14px] leading-6">
           Ansattforhold <strong className="body-bold text-[12px]">{employmentType}</strong>
         </p>
-        <p>
+        <p className="text-[14px] leading-6">
           Avdeling <strong className="body-bold text-[12px]">{department?.name}</strong>
         </p>
-        <p>
+        <p className="text-[14px] leading-6">
           Seksjon <strong className="body-bold text-[12px]">{section?.name}</strong>
         </p>
-        <p>
+        <p className="text-[14px] leading-6">
           Fagområde <strong className="body-bold text-[12px]">{subjectFields?.join(', ')}</strong>
         </p>
-        <p>
+        <p className="text-[14px] leading-6">
           Team <strong className="body-bold text-[12px]">{teams?.join(', ')}</strong>
         </p>
-        <p>
+        <p className="text-[14px] leading-6">
           Rolle <strong className="body-bold text-[12px]">{roles?.join(', ')}</strong>
         </p>
         <div
