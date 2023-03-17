@@ -55,13 +55,13 @@ export default function UserDropdown(props: {
       setDepartment((await getDepartmentById(props.user.departmentId)).data);
       setSection((await getSectionById(props.user.sectionId)).data);
 
-      props.user.teams.forEach((team) => listTeam.push(team.name));
+      props.user.teams?.forEach((team) => listTeam.push(team.name));
       setTeams(listTeam);
 
-      props.user.subjectFields.forEach((subjectField) => listSubjectField.push(subjectField.name));
+      props.user.subjectFields?.forEach((subjectField) => listSubjectField.push(subjectField.name));
       setSubjectFields(listSubjectField);
 
-      props.user.roles.forEach((role) => listRole.push(role.name));
+      props.user.roles?.forEach((role) => listRole.push(role.name));
       setRoles(listRole);
 
       if (props.user.employmentType == 1) {
