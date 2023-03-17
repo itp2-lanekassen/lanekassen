@@ -1,79 +1,56 @@
 import { getAbsencesByUserId } from '@/API/AbsenceAPI';
 import { useFilterContext } from '@/context/FilterContext';
-import { useModalContext } from '@/context/ModalContext';
-import { useUserContext } from '@/context/UserContext';
 import { Column } from '@/pages/CalendarPage';
-import { Absence, User } from '@/types/types';
+import { User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
+import { Fragment, useEffect, useState } from 'react';
+import CalendarCell from './CalendarCell';
+import UserDropdown from './UserDropdown';
+import { useUserContext } from '@/context/UserContext';
 
 interface CalendarRowProps {
-  user?: User;
+  user: User;
   isCurrentUser?: boolean;
   columns: Column;
 }
 
-function getBgColor(absences: Absence[] = [], day: string) {
-  const matchedAbsence = absences.find((a) =>
-    moment(day).isBetween(moment(a.startDate), moment(a.endDate), 'd', '[]')
-  );
-
-  if (matchedAbsence) {
-    return { backgroundColor: matchedAbsence.type?.colorCode };
-  }
-}
-
 const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps) => {
-  const currentUser = useUserContext();
-  const { openAbsenceForm } = useModalContext();
   const { fromDate, toDate } = useFilterContext();
+  const [open, setOpen] = useState(false);
+  const currentUser = useUserContext();
 
-  const handleRowClick = (day: string) => {
-    if (!(isCurrentUser || currentUser.admin)) return;
-
-    openAbsenceForm(moment(day).format('yyyy-MM-DD'));
-  };
-
-  const {
-    data: absences,
-    isLoading,
-    isError,
-    error
-  } = useQuery(['absences', { userId: user?.userId, fromDate, toDate }], async () =>
-    user ? (await getAbsencesByUserId(user.userId, fromDate, toDate)).data : []
+  const { data: absences } = useQuery(
+    ['absences', { userId: user.userId, fromDate, toDate }],
+    async () => (await getAbsencesByUserId(user.userId, fromDate, toDate)).data
   );
 
-  if (isLoading) return <div>Laster...</div>;
-  if (isError) return <div>Noe gikk galt: {String(error)}</div>;
+  const absenceOnDate = (date: string) => {
+    return (absences || []).find((absence) =>
+      moment(date).isBetween(absence.startDate, absence.endDate, 'd', '[]')
+    );
+  };
 
   return (
     <div className="contents text-sm">
       {user ? (
-        <div
-          className={`${
-            isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
-          } text-white rounded-full w-full px-4 py`}
-        >
-          {user.firstName}&nbsp;{user.lastName}
-        </div>
+        <UserDropdown user={user} isCurrentUser={isCurrentUser} isAdmin={currentUser.admin} />
       ) : (
         <div></div>
       )}
 
-      {Object.values(columns).map((days, j) => (
-        <div key={(user?.userId || '') + days.map((d) => d.value).join(',')} className="contents">
-          {days.map((day) => (
-            <div
-              key={day.value + j}
-              className={`w-full min-h-[21px] h-full ${
-                getBgColor(absences, day.value) ? '' : j % 2 ? 'bg-card-two' : 'bg-card-one'
-              } ${isCurrentUser ? 'cursor-pointer' : 'wait cursor-default'}`}
-              style={getBgColor(absences, day.value)}
-              role="button"
-              onClick={() => handleRowClick(day.value)}
+      {Object.entries(columns).map(([week, days], j) => (
+        <Fragment key={`${user.userId}-${week}`}>
+          {days.map((date) => (
+            <CalendarCell
+              key={`${user.userId}-${date.value}`}
+              date={date.value}
+              absence={absenceOnDate(date.value)}
+              isCurrentUser={isCurrentUser}
+              defaultColor={j % 2 ? 'bg-card-two' : 'bg-card-one'}
             />
           ))}
-        </div>
+        </Fragment>
       ))}
     </div>
   );
