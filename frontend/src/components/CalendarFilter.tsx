@@ -20,6 +20,7 @@ import moment from 'moment';
 
 export default function FilterComponents() {
   const { departments } = useGlobalContext();
+  const { sections } = useGlobalContext();
   const {
     fromDate,
     setFromDate,
@@ -46,14 +47,6 @@ export default function FilterComponents() {
     async () =>
       selectedDepartments.length > 0
         ? (await getTeamsByDepartmentId(selectedDepartments[0])).data
-        : []
-  );
-
-  const { data: sections } = useQuery(
-    ['section', selectedDepartments[0], { departmentId: selectedDepartments[0] }],
-    async () =>
-      selectedDepartments.length > 0
-        ? (await getSectionsByDepartmentId(selectedDepartments[0])).data
         : []
   );
 
@@ -131,9 +124,9 @@ export default function FilterComponents() {
             isDisabled={false}
           />
           <button
-            className=" border-1 rounded-[20px] border-primary text-center max-h-9 focus:outline-none px-2"
+            className=" border-1 rounded-[20px] border-primary text-center max-h-9 focus:outline-none px-2 text-white bg-primary hover:bg-white hover:text-primary"
             onClick={() => {
-              setDepartments([-1]);
+              setDepartments([]);
               setSections([]);
               setSubjectFields([]);
               setTeams([]);
@@ -145,7 +138,7 @@ export default function FilterComponents() {
         </div>
       </div>
 
-      <div className="flex space-x-3 w-auto pb-3">
+      <div className="flex space-x-3 w-auto pb-3 pt-2">
         {selectedDepartments.length > 0 && selectedDepartments[0] !== -1 && (
           <div className="rounded-[20px] bg-primary text-white px-2 flex justify-center items-center space-x-2">
             <p className="my-1 ">
@@ -153,7 +146,13 @@ export default function FilterComponents() {
             </p>
             <button
               className="text-white text-sm hover:underline focus:outline-none"
-              onClick={() => setDepartments([-1])}
+              onClick={() => {
+                setDepartments([]);
+                setSections([]);
+                setSubjectFields([]);
+                setTeams([]);
+                setRoles([]);
+              }}
             >
               X
             </button>
