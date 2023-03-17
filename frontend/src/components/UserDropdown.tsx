@@ -23,7 +23,6 @@ export default function UserDropdown(props: {
   // Expand/collapse component to show more/less information on click
   // Add data to fields in dropdown if clicked for the first time
   const expandCollapse = async () => {
-    //lag en state for true/false for om du har lasta inn data før
     if (expandStatus[0] == 'none') {
       setExpandStatus(['block', '20px 20px 0px 0px']);
       setArrowRotation('rotate(180deg)');
@@ -96,13 +95,13 @@ export default function UserDropdown(props: {
           Seksjon <strong className="body-bold text-[12px]">{section?.name}</strong>
         </p>
         <p>
-          Fagområde <strong className="body-bold text-[12px]">{subjectFields}</strong>
+          Fagområde <strong className="body-bold text-[12px]">{subjectFields?.join(', ')}</strong>
         </p>
         <p>
-          Team <strong className="body-bold text-[12px]">{teams}</strong>
+          Team <strong className="body-bold text-[12px]">{teams?.join(', ')}</strong>
         </p>
         <p>
-          Rolle <strong className="body-bold text-[12px]">{roles}</strong>
+          Rolle <strong className="body-bold text-[12px]">{roles?.join(', ')}</strong>
         </p>
         <div
           className={`${
