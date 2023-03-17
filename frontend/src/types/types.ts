@@ -106,14 +106,6 @@ export interface NewUser {
   teams?: number[];
 }
 
-export interface ISubmitButton {
-  disabledTitle?: string;
-  disabled: boolean;
-  buttonText: string;
-  handleClick?: () => void;
-  type?: 'button' | 'submit' | 'reset' | undefined;
-}
-
 export interface IDropdownMultiSelect {
   handleChange: (value: number[]) => void;
   value: number[];
