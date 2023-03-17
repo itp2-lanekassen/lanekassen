@@ -1,16 +1,9 @@
 import Dropdown from './Dropdown';
 import DropdownMultiSelect from './DropdownMultiSelect';
-import { useEffect } from 'react';
-import {
-  getRolesByDepartmentId,
-  getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId,
-  getTeamsByDepartmentId
-} from '../API/DepartmentAPI';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useFilterContext } from '@/context/FilterContext';
-import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 
 /**
@@ -131,7 +124,7 @@ export default function FilterComponents() {
                 setRoles([]);
               }}
             >
-              X
+              <CloseIcon />
             </button>
           </div>
         )}
@@ -147,7 +140,7 @@ export default function FilterComponents() {
                 className="text-white text-sm hover:underline focus:outline-none"
                 onClick={() => setSections(selectedSections.filter((s) => s !== sectionId))}
               >
-                X
+                <CloseIcon />
               </button>
             </div>
           ))}
@@ -164,7 +157,7 @@ export default function FilterComponents() {
                 className="text-white text-sm hover:underline focus:outline-none"
                 onClick={() => setSubjectFields(selectedSubjectFields.filter((f) => f !== sf))}
               >
-                X
+                <CloseIcon />
               </button>
             </div>
           ))}
@@ -181,7 +174,7 @@ export default function FilterComponents() {
                 className="text-white text-sm hover:underline focus:outline-none"
                 onClick={() => setTeams(selectedTeams.filter((f) => f !== t))}
               >
-                X
+                <CloseIcon />
               </button>
             </div>
           ))}
@@ -198,7 +191,7 @@ export default function FilterComponents() {
                 className="text-white hover:underline focus:outline-none"
                 onClick={() => setRoles(selectedRoles.filter((f) => f !== r))}
               >
-                X
+                <CloseIcon />
               </button>
             </div>
           ))}
