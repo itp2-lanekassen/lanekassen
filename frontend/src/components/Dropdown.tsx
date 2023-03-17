@@ -1,14 +1,14 @@
 import Select from 'react-select';
-import { IDropdown } from '../types/types';
 
-/**
- *
- * @param placeholder is the "title" of the dropdown
- * @param listOfOptions is list of options retrieved from database
- * @param handleChange is the function that is called when a new option is selected
- * @param value is the value of the selected option
- * @returns dropdown component
- */
+interface DropdownProps {
+  handleChange: (value: number) => void;
+  value: number;
+  placeholder: string;
+  listOfOptions: { name: string; id: number }[];
+  className?: string;
+  cusTheme?: boolean;
+  isDisabled: boolean;
+}
 
 export default function Dropdown({
   handleChange,
@@ -17,24 +17,18 @@ export default function Dropdown({
   value,
   className,
   isDisabled
-}: IDropdown) {
+}: DropdownProps) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
-  const handleOnChange = (selectedOption: any) => {
-    handleChange(selectedOption.value);
-  };
-
   return (
-    <div className="">
+    <div>
       <Select
         className={`text-primary w-80 ${className}`}
         isDisabled={isDisabled}
         options={options}
         placeholder={placeholder}
-        value={
-          value === -1 ? null : options.find((option: { value: number }) => option.value === value)
-        }
-        onChange={handleOnChange}
+        value={value === -1 ? null : options.find((option) => option.value === value)}
+        onChange={(option) => option && handleChange(option.value)}
         theme={(theme) => ({
           ...theme,
           borderRadius: 20,
