@@ -15,6 +15,7 @@ export default function Dropdown({
   placeholder,
   listOfOptions,
   value,
+  className,
   isDisabled
 }: IDropdown) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
@@ -26,11 +27,13 @@ export default function Dropdown({
   return (
     <div className="">
       <Select
+        className={`text-primary w-80 ${className}`}
         isDisabled={isDisabled}
-        className="text-primary w-80"
         options={options}
         placeholder={placeholder}
-        value={value === -1 ? null : options.find((option) => option.value === value)}
+        value={
+          value === -1 ? null : options.find((option: { value: number }) => option.value === value)
+        }
         onChange={handleOnChange}
         theme={(theme) => ({
           ...theme,

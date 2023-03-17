@@ -6,6 +6,7 @@ import { useUserContext } from '@/context/UserContext';
 import CalendarRow from '@/components/CalendarRow';
 import CalendarHeader from '@/components/CalendarHeader';
 import { useFilterContext } from '../context/FilterContext';
+import FilterComponents from '@/components/CalendarFilter';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 
@@ -77,6 +78,10 @@ const CalendarPage = () => {
 
   return (
     <div className="w-full py-8">
+      <div>
+        {' '}
+        <FilterComponents />
+      </div>
       <div className="grid grid-cols-calendar place-content-center place-items-center gap-0.5">
         <div className="row-start-1 row-span-3 flex flex-col items-center gap-1 self-start">
           <button
@@ -116,4 +121,5 @@ const CalendarPage = () => {
     </div>
   );
 };
+
 export default CalendarPage;
