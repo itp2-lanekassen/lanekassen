@@ -1,44 +1,14 @@
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import TabPanel from '@mui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SubmitButton from '../components/SubmitButton';
 import { useUserContext } from '../context/UserContext';
-import ellipse from '../assets/ellipse.png';
-import TabPanel from '@mui/lab/TabPanel';
-import { TabContext } from '@mui/lab';
-import { withStyles } from '@mui/styles';
 import PageLayout from '@/components/PageLayout';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
-
-const CustomTab = withStyles({
-  root: {
-    backgroundColor: 'white',
-    color: 'black',
-    borderTopLeftRadius: '10px',
-    borderBottomLeftRadius: '10px',
-
-    '&$selected': {
-      backgroundColor: '#590689', // primary
-      color: 'white',
-      borderTopLeftRadius: '10px',
-      borderBottomLeftRadius: '10px'
-    },
-    '&:hover': {
-      backgroundColor: '#590689', // primary-light
-      color: 'white',
-      borderTopLeftRadius: '10px',
-      borderBottomLeftRadius: '10px'
-    }
-  },
-  selected: {
-    backgroundColor: '#590689', // primary
-    color: 'white',
-    borderTopLeftRadius: '10px',
-    borderBottomLeftRadius: '10px'
-  }
-})(Tab);
 
 export default function AdminPage() {
   const [value, setValue] = useState(0);
@@ -74,10 +44,32 @@ export default function AdminPage() {
               orientation="vertical"
               variant="scrollable"
               aria-label="My tabs"
-              TabIndicatorProps={{ style: { backgroundColor: '#410464' } }} // primary
+              TabIndicatorProps={{ style: { backgroundColor: '#590689' } }} // primary-light
             >
               {tabLabels.map((label, index) => (
-                <CustomTab key={index} label={label} />
+                // <CustomTab key={index} label={label} />
+                <Tab
+                  key={index}
+                  label={label}
+                  sx={{
+                    backgroundColor: 'white',
+                    color: 'black',
+                    borderTopLeftRadius: '10px',
+                    borderBottomLeftRadius: '10px',
+                    '&:hover': {
+                      backgroundColor: '#F6F0F9', // primary-lighter
+                      color: '#410464', // primary
+                      borderTopLeftRadius: '10px',
+                      borderBottomLeftRadius: '10px'
+                    },
+                    '&.Mui-selected': {
+                      backgroundColor: '#590689', // primary-light
+                      color: '#FAFAFA', // grey-lightest
+                      borderTopLeftRadius: '10px',
+                      borderBottomLeftRadius: '10px'
+                    }
+                  }}
+                />
               ))}
             </Tabs>
           </div>
