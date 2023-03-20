@@ -1,10 +1,11 @@
 import { User } from '@/types/types';
 import { Button } from '@material-tailwind/react';
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import * as React from 'react';
-import { postAbsence } from '../API/AbsenceAPI';
+import { deleteAbsence, postAbsence } from '../API/AbsenceAPI';
 import { useGlobalContext } from '../context/GlobalContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
@@ -70,7 +71,6 @@ const AbsenceForm: React.FC<ModalProps> = ({ user, onClose, startDate = '' }) =>
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    //TODO: userID burde ikke nødvendigvis være egen ID, men ID-en du trykker på
     addAbsence({
       startDate: moment(formValues.startDate).toISOString(),
       endDate: moment(formValues.endDate).toISOString(),
@@ -86,7 +86,10 @@ const AbsenceForm: React.FC<ModalProps> = ({ user, onClose, startDate = '' }) =>
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50">
       <div className="modal-overlay pointer-events-none" onClick={onClose} />
       <div className="relative w-auto my-6 mx-auto max-w-3xl bg-white px-10 pt-10 pb-5 rounded-[40px] ">
-        <h2 className="modal-title text-center ">Fraværsskjema</h2>
+        <h2 className="modal-title text-center ">
+          {' '}
+          {user.firstName} {user.lastName}{' '}
+        </h2>
         <form className="modal-form" onSubmit={handleSubmit}>
           <DateField
             formValues={formValues}
@@ -119,12 +122,14 @@ const AbsenceForm: React.FC<ModalProps> = ({ user, onClose, startDate = '' }) =>
             >
               Legg til
             </Button>
-            <Button
-              type="submit"
-              className="modal-submit-button button heading-xs px-4 py-2 rounded-full bg-error text-white "
-            >
-              Slett fravær
-            </Button>
+            {/* <DeleteOutlineIcon
+              onClick={() => {
+                const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
+                if (confirmDelete) {
+                  deleteAbsence(props.absence.absenceId);
+                }
+              }}
+            ></DeleteOutlineIcon> */}
           </div>
         </form>
         <button
