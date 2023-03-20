@@ -27,7 +27,6 @@ public class AbsenceTypeController : ControllerBase {
       Name = absenceType.Name,
       Code = absenceType.Code,
       ColorCode = absenceType.ColorCode,
-      Absences = await _context.Absences.Where(a => absenceType.Absences!.Contains(a.AbsenceId)).ToListAsync(),
     };
 
     try {

@@ -8,6 +8,8 @@ import ellipse from '../assets/ellipse.png';
 import TabPanel from '@mui/lab/TabPanel';
 import { TabContext } from '@mui/lab';
 import { withStyles } from '@mui/styles';
+/* import UpdateAbsenceTypeComponent from '@/components/AdminPage/UpdateAbsenceTypeComponent';
+ */ import AddAbsenceTypeComponent from '@/components/AdminPage/AddAbsenceTypeComponent';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -73,7 +75,7 @@ export default function AdminPage() {
         />
       </div>
 
-      <div className="mt-16 flex left-10 w-11/12 h-4/6 absolute">
+      <div className="mt-16 flex left-10 w-11/12 h-4/6 max-h-4/6 absolute">
         <TabContext value={value.toString()}>
           <div className=" flex flex-col">
             <Tabs
@@ -94,7 +96,11 @@ export default function AdminPage() {
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
                 {label === 'Brukere' ? <div>brukere{/* Add component here */}</div> : null}
-                {label === 'Fraværstyper' ? <div>fraværstyper</div> : null}
+                {label === 'Fraværstyper' ? (
+                  <div className="">
+                    <AddAbsenceTypeComponent />
+                  </div>
+                ) : null}
                 {label === 'Avdeling' ? <div>avdeling</div> : null}
                 {label === 'Seksjon' ? <div>seksjon</div> : null}
                 {label === 'Fagfelt' ? <div>fagfelt</div> : null}
