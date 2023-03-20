@@ -1,4 +1,4 @@
-import Select from 'react-select';
+import Select, { StylesConfig } from 'react-select';
 import { IDropdown } from '../types/types';
 
 /**
@@ -22,6 +22,17 @@ export default function Dropdown({
 
   const handleOnChange = (selectedOption: any) => {
     handleChange(selectedOption.value);
+  };
+
+  const customStyles: StylesConfig<any, false> = {
+    menu: (base) => ({
+      ...base,
+      width: 'fit-content' + 'px-2'
+    }),
+    menuList: (base) => ({
+      ...base,
+      maxHeight: '500px'
+    })
   };
 
   return (
@@ -52,6 +63,7 @@ export default function Dropdown({
             neutral80: '#410464'
           }
         })}
+        styles={customStyles}
       />
     </div>
   );
