@@ -73,7 +73,7 @@ export default function AdminPage() {
         />
       </div>
 
-      <div className="mt-16 flex left-10 w-11/12 absolute">
+      <div className="mt-16 flex left-10 w-11/12 h-4/6 absolute">
         <TabContext value={value.toString()}>
           <div className=" flex flex-col">
             <Tabs
