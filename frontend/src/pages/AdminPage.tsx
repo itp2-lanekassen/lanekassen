@@ -11,6 +11,49 @@ import { withStyles } from '@mui/styles';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
+const CustomTab = withStyles({
+  /*   root: {
+    backgroundColor: 'white',
+    color: 'black',
+    '&:hover': {
+      backgroundColor: '#590689', // primary-light
+      color: 'white'
+    },
+    borderTopLeftRadius: '10px',
+    borderBottomLeftRadius: '10px'
+  },
+  selected: {
+    backgroundColor: '#410464', // primary
+    color: 'white'
+  } */
+
+  root: {
+    backgroundColor: 'white',
+    color: 'black',
+    borderTopLeftRadius: '10px',
+    borderBottomLeftRadius: '10px',
+
+    '&$selected': {
+      backgroundColor: '#590689', // primary
+      color: 'white',
+      borderTopLeftRadius: '10px',
+      borderBottomLeftRadius: '10px'
+    },
+    '&:hover': {
+      backgroundColor: '#590689', // primary-light
+      color: 'white',
+      borderTopLeftRadius: '10px',
+      borderBottomLeftRadius: '10px'
+    }
+  },
+  selected: {
+    backgroundColor: '#590689', // primary
+    color: 'white',
+    borderTopLeftRadius: '10px',
+    borderBottomLeftRadius: '10px'
+  }
+})(Tab);
+
 export default function AdminPage() {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
@@ -75,20 +118,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
-const CustomTab = withStyles({
-  root: {
-    backgroundColor: 'white',
-    color: 'black',
-    '&:hover': {
-      backgroundColor: '#590689', // primary-light
-      color: 'white'
-    },
-    borderTopLeftRadius: '10px',
-    borderBottomLeftRadius: '10px'
-  },
-  selected: {
-    backgroundColor: '#410464', // primary
-    color: 'white'
-  }
-})(Tab);
