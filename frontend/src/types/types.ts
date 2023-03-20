@@ -112,31 +112,3 @@ export interface NewUser {
   roles?: number[];
   teams?: number[];
 }
-
-export interface ISubmitButton {
-  disabledTitle?: string;
-  disabled: boolean;
-  buttonText: string;
-  handleClick?: () => void;
-  type?: 'button' | 'submit' | 'reset' | undefined;
-}
-
-export interface IDropdownMultiSelect {
-  handleChange: (value: number[]) => void;
-  value: number[];
-  placeholder: string;
-  listOfOptions: { name: string; id: number }[];
-  className?: string;
-  isExpands?: boolean;
-  isDisabled: boolean;
-}
-
-export interface IDropdown {
-  handleChange: (value: number) => void;
-  value: number;
-  placeholder: string;
-  listOfOptions: { name: string; id: number }[];
-  className?: string;
-  cusTheme?: boolean;
-  isDisabled: boolean;
-}
