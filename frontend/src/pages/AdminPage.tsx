@@ -12,21 +12,6 @@ import { withStyles } from '@mui/styles';
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
 const CustomTab = withStyles({
-  /*   root: {
-    backgroundColor: 'white',
-    color: 'black',
-    '&:hover': {
-      backgroundColor: '#590689', // primary-light
-      color: 'white'
-    },
-    borderTopLeftRadius: '10px',
-    borderBottomLeftRadius: '10px'
-  },
-  selected: {
-    backgroundColor: '#410464', // primary
-    color: 'white'
-  } */
-
   root: {
     backgroundColor: 'white',
     color: 'black',
@@ -108,8 +93,13 @@ export default function AdminPage() {
           <div className="w-full border-1 border-gray-200 rounded-r-xl">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
-                {/* Map components here */}
-                {label}
+                {label === 'Brukere' ? <div>brukere{/* Add component here */}</div> : null}
+                {label === 'Fraværstyper' ? <div>fraværstyper</div> : null}
+                {label === 'Avdeling' ? <div>avdeling</div> : null}
+                {label === 'Seksjon' ? <div>seksjon</div> : null}
+                {label === 'Fagfelt' ? <div>fagfelt</div> : null}
+                {label === 'Team' ? <div>team</div> : null}
+                {label === 'Rolle' ? <div>rolle</div> : null}
               </TabPanel>
             ))}
           </div>
