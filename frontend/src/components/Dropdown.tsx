@@ -36,6 +36,8 @@ export default function Dropdown({
       <Select
         className={`text-primary w-80 ${className}`}
         isDisabled={isDisabled}
+        menuPlacement="auto" // auto menu on top code
+        minMenuHeight={500} // auto menu on top code
         options={options}
         placeholder={placeholder}
         value={value === -1 ? null : options.find((option) => option.value === value)}

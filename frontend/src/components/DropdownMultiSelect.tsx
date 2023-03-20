@@ -37,6 +37,8 @@ export default function DropdownMultiSelect({
         className={`text-primary w-80 ${className}`}
         options={options}
         isDisabled={isDisabled}
+        menuPlacement="auto" // auto menu on top code
+        minMenuHeight={500} // auto menu on top code
         placeholder={placeholder}
         isMulti
         value={value ? options.filter((option) => value.includes(option.value)) : []}
