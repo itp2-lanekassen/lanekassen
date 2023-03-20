@@ -1,5 +1,10 @@
-import { ISubmitButton } from '../types/types';
-import '../index.css';
+interface SubmitButtonProps {
+  disabledTitle?: string;
+  disabled?: boolean;
+  buttonText: string;
+  handleClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
+}
 
 /**
  *
@@ -7,6 +12,7 @@ import '../index.css';
  * @param handleClick the onClick function
  * @param disabled whether the button is disabled or not
  * @param disabledTitle the title of the button when it is disabled
+ * @param type button type
  * @returns the big purple button that is used for submitting forms
  */
 export default function SubmitButton({
@@ -14,21 +20,18 @@ export default function SubmitButton({
   handleClick,
   disabled,
   disabledTitle,
-  type
-}: ISubmitButton & { disabled?: boolean; disabledTitle?: string }) {
-  const enabledTitle = '';
-
+  type = 'button'
+}: SubmitButtonProps) {
   return (
     <div>
       <button
-        //className="flex text-white rounded-3xl bg-primary pt-3 pl-3 pr-3 pb-3 hover:text-primary hover:bg-white border-solid border-2 border-primary ${disabled ? 'bg-gray-300 border-gray-300 cursor-not-allowed' : 'bg-primary border-primary'}"
         className={`flex text-white rounded-3xl bg-primary pt-3 pl-3 pr-3 pb-3 hover:text-primary hover:bg-white border-solid border-2 ${
           disabled ? 'bg-gray-300 border-gray-300 cursor-not-allowed' : 'bg-primary border-primary'
         }`}
         onClick={handleClick}
         disabled={disabled}
-        title={disabled ? disabledTitle : enabledTitle}
-        type={type ? type : 'button'}
+        title={disabled ? disabledTitle : ''}
+        type={type}
       >
         {buttonText}
       </button>

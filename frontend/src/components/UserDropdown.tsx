@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Department, Section, User } from '@/types/types';
+import { Department, EmploymentType, Section, User } from '@/types/types';
 import { getDepartmentById } from '@/API/DepartmentAPI';
 import { getSectionById } from '@/API/SectionAPI';
 import { useUserContext } from '@/context/UserContext';
@@ -9,9 +9,8 @@ import { useUserContext } from '@/context/UserContext';
 export default function UserDropdown(props: { user: User; isCurrentUser: boolean }) {
   const currentUser = useUserContext();
 
-  const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
-  const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
   const [isSet, setIsSet] = useState<boolean>(false);
+
   const [department, setDepartment] = useState<Department>();
   const [section, setSection] = useState<Section>();
   const [teams, setTeams] = useState<string[]>();
@@ -19,109 +18,95 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
   const [employmentType, setEmploymentType] = useState<string>('');
   const [roles, setRoles] = useState<string[]>();
 
+  const formatName = (name: string) => {
+    return name
+      .split(' ')
+      .map((n, i, arr) => {
+        // if first or last name, return whole name
+        if (i === 0 || i === arr.length - 1) return n;
+
+        // return first character in uppercase with . after
+        return n[0].toUpperCase() + '.';
+      })
+      .join(' ');
+  };
+
   // Expand/collapse component to show more/less information on click
   // Add data to fields in dropdown if clicked for the first time
   const expandCollapse = async () => {
-    if (expandStatus[0] == 'none') {
-      setExpandStatus(['block', '20px 20px 0px 0px']);
-      setArrowRotation('rotate(180deg)');
-    } else {
-      setExpandStatus(['none', '20px']);
-      setArrowRotation('rotate(0deg)');
-    }
+    if (isSet) return setIsSet(false);
 
-    if (!isSet) {
-      const listTeam: string[] = [];
-      const listSubjectField: string[] = [];
-      const listRole: string[] = [];
+    const listTeam: string[] = [];
+    const listSubjectField: string[] = [];
+    const listRole: string[] = [];
 
-      setDepartment((await getDepartmentById(props.user.departmentId)).data);
-      setSection((await getSectionById(props.user.sectionId)).data);
+    setDepartment((await getDepartmentById(props.user.departmentId)).data);
+    setSection((await getSectionById(props.user.sectionId)).data);
 
-      props.user.teams?.forEach((team) => listTeam.push(team.name));
-      setTeams(listTeam);
+    props.user.teams?.forEach((team) => listTeam.push(team.name));
+    setTeams(listTeam);
 
-      props.user.subjectFields?.forEach((subjectField) => listSubjectField.push(subjectField.name));
-      setSubjectFields(listSubjectField);
+    props.user.subjectFields?.forEach((subjectField) => listSubjectField.push(subjectField.name));
+    setSubjectFields(listSubjectField);
 
-      props.user.roles?.forEach((role) => listRole.push(role.name));
-      setRoles(listRole);
+    props.user.roles?.forEach((role) => listRole.push(role.name));
+    setRoles(listRole);
 
-      if (props.user.employmentType == 1) {
-        setEmploymentType('Konsulent');
-      } else if (props.user.employmentType == 0) {
-        setEmploymentType('Ansatt');
-      } else {
-        setEmploymentType('Noe gikk galt');
-      }
+    setEmploymentType(EmploymentType[props.user.employmentType]);
 
-      setIsSet(true);
-    }
+    setIsSet(true);
   };
 
   return (
-    <div className="w-[180px]  min-h-[fit-content] text-grey-lightest font-Rubik ">
+    <div className="w-full font-header rounded-xl overflow-hidden">
       <div
-        style={{ borderRadius: expandStatus[1] }}
-        onClick={() => expandCollapse()}
         className={`${
           props.isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
-        } flex flex-row justify-between leading-[30px] body-tight`}
+        } flex justify-between items-center text-grey-lightest px-2 cursor-pointer`}
+        onClick={() => expandCollapse()}
       >
-        <p className="ml-[20px]">{props.user.firstName + ' ' + props.user.lastName}</p>
-        <ExpandMoreIcon
-          sx={{
-            color: 'white',
-            height: '30px',
-            mr: '10px',
-            transform: arrowRotation
-          }}
-        ></ExpandMoreIcon>
+        <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+          {formatName(`${props.user.firstName} ${props.user.lastName}`)}
+        </span>
+        <ExpandMoreIcon className={isSet ? 'rotate-180' : 'rotate-0'} />
       </div>
-      <section
-        style={{ display: expandStatus[0] }}
-        className={`${
-          props.isCurrentUser ? 'bg-card-two-light' : 'bg-primary-lighter'
-        } text-primary subheading-small py-[10px] rounded-b-[20px] overflow-hidden`}
+
+      <div
+        className={`${props.isCurrentUser ? 'bg-card-two-light' : 'bg-primary-lighter'} ${
+          isSet ? 'flex' : 'hidden'
+        } text-primary subheading-small p-2 flex flex-col gap-1`}
       >
-        <p className="text-[14px] leading-6">
-          Ansattforhold <strong className="body-bold text-[12px]">{employmentType}</strong>
+        <p className="text-sm flex flex-col">
+          <strong className="body-bold text-xs">Ansattforhold:</strong>
+          {employmentType}
         </p>
-        <p className="text-[14px] leading-6">
-          Avdeling <strong className="body-bold text-[12px]">{department?.name}</strong>
+        <p className="text-sm flex flex-col">
+          <strong className="body-bold text-xs">Avdeling:</strong>
+          {department?.name}
         </p>
-        <p className="text-[14px] leading-6">
-          Seksjon <strong className="body-bold text-[12px]">{section?.name}</strong>
+        <p className="text-sm flex flex-col">
+          <strong className="body-bold text-xs">Seksjon:</strong>
+          {section?.name}
         </p>
-        <p className="text-[14px] leading-6">
-          Fagområde <strong className="body-bold text-[12px]">{subjectFields?.join(', ')}</strong>
+        <p className="text-sm flex flex-col">
+          <strong className="body-bold text-xs">Fagområde:</strong>
+          {subjectFields?.join(', ')}
         </p>
-        <p className="text-[14px] leading-6">
-          Team <strong className="body-bold text-[12px]">{teams?.join(', ')}</strong>
+        <p className="text-sm flex flex-col">
+          <strong className="body-bold text-xs">Team:</strong>
+          {teams?.join(', ')}
         </p>
-        <p className="text-[14px] leading-6">
-          Rolle <strong className="body-bold text-[12px]">{roles?.join(', ')}</strong>
+        <p className="text-sm flex flex-col">
+          <strong className="body-bold text-xs">Rolle:</strong>
+          {roles?.join(', ')}
         </p>
-        <div
-          className={`${
-            props.isCurrentUser || currentUser.admin ? 'block' : 'hidden'
-          } flex flex-row float-right`}
-        >
+        <div className={`${props.isCurrentUser || currentUser.admin ? 'flex' : 'hidden'}`}>
           <EditOutlinedIcon
-            onClick={() => {
-              console.log('Implement edit user here');
-            }}
-            sx={{
-              color: '#410464',
-              height: '30px',
-              mr: '10px',
-              '&:hover': {
-                color: '#26023B'
-              }
-            }}
-          ></EditOutlinedIcon>
+            className="ml-auto cursor-pointer hover:text-secondary-light"
+            onClick={() => console.log('Implement edit user here')}
+          />
         </div>
-      </section>
+      </div>
     </div>
   );
 }

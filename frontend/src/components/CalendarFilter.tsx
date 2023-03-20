@@ -88,7 +88,6 @@ export default function FilterComponents() {
             handleChange={setRoles}
             value={selectedRoles}
             className="!w-auto"
-            menuClassName="dropdown-menu-width"
             isDisabled={false}
           />
           <button

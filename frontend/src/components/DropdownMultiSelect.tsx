@@ -1,20 +1,15 @@
-import Select, { MultiValue, StylesConfig } from 'react-select';
-import { IDropdownMultiSelect } from '../types/types';
-import { TroubleshootSharp } from '@mui/icons-material';
+import Select, { StylesConfig } from 'react-select';
 
-/**
- *
- * @param placeholder is the "title" of the dropdown
- * @param listOfOptions is list of options retrieved from database
- * @param handleChange is the function that is called when a new option is selected
- * @param value is the value of the selected option
- * @returns dropdown component where multiselect is possible
- */
-
-interface IOption {
-  label: string;
-  value: number;
+export interface DropdownMultiselectProps {
+  handleChange: (value: number[]) => void;
+  value: number[];
+  placeholder: string;
+  listOfOptions: { name: string; id: number }[];
+  className?: string;
+  isExpands?: boolean;
+  isDisabled: boolean;
 }
+
 export default function DropdownMultiSelect({
   handleChange,
   placeholder,
@@ -22,15 +17,8 @@ export default function DropdownMultiSelect({
   value,
   className,
   isDisabled
-}: IDropdownMultiSelect) {
+}: DropdownMultiselectProps) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
-
-  const handleOnChange = (selectedOptions: MultiValue<IOption>) => {
-    const selectedValues = selectedOptions
-      ? selectedOptions.map((option: { value: any }) => option.value)
-      : [];
-    handleChange(selectedValues);
-  };
 
   const customStyles: StylesConfig<any, true> = {
     menu: (base) => ({
@@ -48,12 +36,11 @@ export default function DropdownMultiSelect({
       <Select
         className={`text-primary w-80 ${className}`}
         options={options}
+        isDisabled={isDisabled}
         placeholder={placeholder}
         isMulti
-        value={
-          value ? options.filter((option: { value: any }) => value.includes(option.value)) : []
-        }
-        onChange={handleOnChange}
+        value={value ? options.filter((option) => value.includes(option.value)) : []}
+        onChange={(selectedOptions) => handleChange(selectedOptions.map((o) => o.value))}
         theme={(theme) => ({
           ...theme,
           borderRadius: 20,
