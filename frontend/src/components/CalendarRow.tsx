@@ -37,6 +37,7 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
           {days.map((date) => (
             <CalendarCell
               key={`${user.userId}-${date.value}`}
+              user={user}
               date={date.value}
               absence={absenceOnDate(date.value)}
               isCurrentUser={isCurrentUser}

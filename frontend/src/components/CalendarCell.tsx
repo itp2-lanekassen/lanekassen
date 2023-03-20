@@ -1,6 +1,6 @@
 import { useModalContext } from '../context/ModalContext';
 import { useUserContext } from '../context/UserContext';
-import { Absence } from '../types/types';
+import { Absence, User } from '../types/types';
 import moment from 'moment';
 import { FC } from 'react';
 
@@ -9,6 +9,7 @@ interface CalendarCellProps {
   isCurrentUser: boolean;
   defaultColor: string;
   absence?: Absence;
+  user: User;
 }
 
 const getStyle = (absence?: Absence) => {
@@ -29,19 +30,25 @@ const getStyle = (absence?: Absence) => {
   };
 };
 
-const CalendarCell: FC<CalendarCellProps> = ({ date, isCurrentUser, defaultColor, absence }) => {
+const CalendarCell: FC<CalendarCellProps> = ({
+  user,
+  date,
+  isCurrentUser,
+  defaultColor,
+  absence
+}) => {
   const currentUser = useUserContext();
   const { openAbsenceForm } = useModalContext();
 
   const handleCellClick = () => {
     if (!(isCurrentUser || currentUser.admin)) return;
-    openAbsenceForm(moment(date).format('yyyy-MM-DD'));
+    openAbsenceForm(user, moment(date).format('yyyy-MM-DD'));
   };
 
   return (
     <div
       className={`${defaultColor} ${
-        isCurrentUser ? 'cursor-pointer' : 'cursor-default'
+        isCurrentUser || currentUser.admin ? 'cursor-pointer' : 'cursor-default'
       } w-full min-h-[21px] h-full`}
       style={getStyle(absence)}
       onClick={handleCellClick}

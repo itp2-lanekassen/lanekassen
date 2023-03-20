@@ -1,8 +1,9 @@
 import AbsenceForm from '@/components/AbsenceForm';
+import { User } from '@/types/types';
 import { createContext, ReactNode, useContext, useState } from 'react';
 
 interface ModalContextType {
-  openAbsenceForm: (date?: string) => void;
+  openAbsenceForm: (user: User, date?: string) => void;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -18,8 +19,10 @@ export const useModalContext = () => {
 const ModalContextProvider = ({ children }: { children?: ReactNode }) => {
   const [showAbsenceForm, setShowAbsenceForm] = useState(false);
   const [date, setDate] = useState<string>();
+  const [user, setUser] = useState({} as User);
 
-  const openAbsenceForm = (clickedDate?: string) => {
+  const openAbsenceForm = (clickedUser: User, clickedDate?: string) => {
+    setUser(clickedUser);
     setDate(clickedDate);
     setShowAbsenceForm(true);
   };
@@ -29,7 +32,7 @@ const ModalContextProvider = ({ children }: { children?: ReactNode }) => {
       {children}
 
       {showAbsenceForm && (
-        <AbsenceForm startDate={date} onClose={() => setShowAbsenceForm(false)} />
+        <AbsenceForm startDate={date} user={user} onClose={() => setShowAbsenceForm(false)} />
       )}
     </ModalContext.Provider>
   );

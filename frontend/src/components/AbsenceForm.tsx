@@ -1,3 +1,4 @@
+import { User } from '@/types/types';
 import { Button } from '@material-tailwind/react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -5,12 +6,12 @@ import moment from 'moment';
 import * as React from 'react';
 import { postAbsence } from '../API/AbsenceAPI';
 import { useGlobalContext } from '../context/GlobalContext';
-import { useUserContext } from '../context/UserContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
 import { DateField } from './DateField';
 
 type ModalProps = {
+  user: User;
   startDate?: string;
   onClose: () => void;
 };
@@ -22,15 +23,14 @@ export type FormValues = {
   absenceType: number;
 };
 
-const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
+const AbsenceForm: React.FC<ModalProps> = ({ user, onClose, startDate = '' }) => {
   const queryClient = useQueryClient();
 
-  const currentUser = useUserContext();
   const { absenceTypes } = useGlobalContext();
 
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
   });
 
   const [formValues, setFormValues] = React.useState<FormValues>({
@@ -70,13 +70,14 @@ const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    //TODO: userID burde ikke nødvendigvis være egen ID, men ID-en du trykker på
     addAbsence({
       startDate: moment(formValues.startDate).toISOString(),
       endDate: moment(formValues.endDate).toISOString(),
       comment: formValues.comment,
       isApproved: false,
       absenceTypeId: formValues.absenceType,
-      userId: currentUser.userId
+      userId: user.userId
     });
     onClose();
   };
@@ -117,6 +118,12 @@ const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
               className="modal-submit-button button heading-xs px-4 py-2 rounded-full bg-primary text-white "
             >
               Legg til
+            </Button>
+            <Button
+              type="submit"
+              className="modal-submit-button button heading-xs px-4 py-2 rounded-full bg-error text-white "
+            >
+              Slett fravær
             </Button>
           </div>
         </form>
