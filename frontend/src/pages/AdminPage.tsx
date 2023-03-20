@@ -7,6 +7,7 @@ import { useUserContext } from '../context/UserContext';
 import ellipse from '../assets/ellipse.png';
 import TabPanel from '@mui/lab/TabPanel';
 import { TabContext } from '@mui/lab';
+import { makeStyles, createStyles, withStyles } from '@mui/styles';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -53,14 +54,15 @@ export default function AdminPage() {
               orientation="vertical"
               variant="scrollable"
               aria-label="My tabs"
+              TabIndicatorProps={{ style: { backgroundColor: '#410464' } }}
             >
               {tabLabels.map((label, index) => (
-                <Tab key={index} label={label} />
+                <CustomTab key={index} label={label} />
               ))}
             </Tabs>
           </div>
 
-          <div className="w-full border-1 border-gray-200">
+          <div className="w-full border-1 border-gray-200 rounded-r-xl">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
                 {/* Map components here */}
@@ -73,3 +75,20 @@ export default function AdminPage() {
     </div>
   );
 }
+
+const CustomTab = withStyles({
+  root: {
+    backgroundColor: 'white', // primary dark
+    color: 'black',
+    '&:hover': {
+      backgroundColor: '#590689',
+      color: 'white'
+    },
+    borderTopLeftRadius: '10px',
+    borderBottomLeftRadius: '10px'
+  },
+  selected: {
+    backgroundColor: '#410464',
+    color: 'white'
+  }
+})(Tab);
