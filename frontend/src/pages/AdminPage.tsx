@@ -8,6 +8,8 @@ import ellipse from '../assets/ellipse.png';
 import TabPanel from '@mui/lab/TabPanel';
 import { TabContext } from '@mui/lab';
 import { withStyles } from '@mui/styles';
+import PlusButton from '@/components/AdminPage/PlusButton';
+import UserTab from '@/components/AdminPage/UserTab';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -93,7 +95,11 @@ export default function AdminPage() {
           <div className="w-full border-1 border-gray-200 rounded-r-xl">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
-                {label === 'Brukere' ? <div>brukere{/* Add component here */}</div> : null}
+                {label === 'Brukere' ? (
+                  <div>
+                    <UserTab />
+                  </div>
+                ) : null}
                 {label === 'Fraværstyper' ? <div>fraværstyper</div> : null}
                 {label === 'Avdeling' ? <div>avdeling</div> : null}
                 {label === 'Seksjon' ? <div>seksjon</div> : null}
