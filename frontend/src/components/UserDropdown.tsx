@@ -19,12 +19,11 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
   const [roles, setRoles] = useState<string[]>();
 
   const formatName = (name: string) => {
-    const nameList = name.split(' ');
-
-    return nameList
-      .map((n, i) => {
+    return name
+      .split(' ')
+      .map((n, i, arr) => {
         // if first or last name, return whole name
-        if (i === 0 || i === nameList.length - 1) return n;
+        if (i === 0 || i === arr.length - 1) return n;
 
         // return first character in uppercase with . after
         return n[0].toUpperCase() + '.';
@@ -66,11 +65,13 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
         } flex justify-between items-center text-grey-lightest px-2 cursor-pointer`}
         onClick={() => expandCollapse()}
       >
-        <span>{formatName(`${props.user.firstName} ${props.user.lastName}`)}</span>
+        <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+          {formatName(`${props.user.firstName} ${props.user.lastName}`)}
+        </span>
         <ExpandMoreIcon className={isSet ? 'rotate-180' : 'rotate-0'} />
       </div>
 
-      <aside
+      <div
         className={`${props.isCurrentUser ? 'bg-card-two-light' : 'bg-primary-lighter'} ${
           isSet ? 'flex' : 'hidden'
         } text-primary subheading-small p-2 flex flex-col gap-1`}
@@ -99,15 +100,13 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
           <strong className="body-bold text-xs">Rolle:</strong>
           {roles?.join(', ')}
         </p>
-        <div className={`${props.isCurrentUser || currentUser.admin ? 'block' : 'hidden'} flex`}>
+        <div className={`${props.isCurrentUser || currentUser.admin ? 'flex' : 'hidden'}`}>
           <EditOutlinedIcon
-            className={`${
-              props.isCurrentUser || currentUser.admin ? 'block' : 'hidden'
-            } ml-auto cursor-pointer hover:text-secondary-light`}
+            className="ml-auto cursor-pointer hover:text-secondary-light"
             onClick={() => console.log('Implement edit user here')}
           />
         </div>
-      </aside>
+      </div>
     </div>
   );
 }
