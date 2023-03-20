@@ -1,8 +1,8 @@
+import moment from 'moment';
+import { FC } from 'react';
 import { useModalContext } from '../context/ModalContext';
 import { useUserContext } from '../context/UserContext';
 import { Absence, User } from '../types/types';
-import moment from 'moment';
-import { FC } from 'react';
 
 interface CalendarCellProps {
   date: string;
@@ -40,9 +40,12 @@ const CalendarCell: FC<CalendarCellProps> = ({
   const currentUser = useUserContext();
   const { openAbsenceForm } = useModalContext();
 
+  //TODO: bruk moment(date) til å sjekke om den datoen har fravær fra før
   const handleCellClick = () => {
     if (!(isCurrentUser || currentUser.admin)) return;
-    openAbsenceForm(user, moment(date).format('yyyy-MM-DD'));
+    absence
+      ? console.log('absence already registered')
+      : openAbsenceForm(user, moment(date).format('yyyy-MM-DD'));
   };
 
   return (
@@ -51,6 +54,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
         isCurrentUser || currentUser.admin ? 'cursor-pointer' : 'cursor-default'
       } w-full min-h-[21px] h-full`}
       style={getStyle(absence)}
+      // onClick={absence ? undefined : handleCellClick}
       onClick={handleCellClick}
     >
       {absence && (
