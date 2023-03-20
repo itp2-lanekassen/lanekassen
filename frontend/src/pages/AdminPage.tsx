@@ -8,6 +8,7 @@ import ellipse from '../assets/ellipse.png';
 import TabPanel from '@mui/lab/TabPanel';
 import { TabContext } from '@mui/lab';
 import { withStyles } from '@mui/styles';
+import PageLayout from '@/components/PageLayout';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -52,16 +53,7 @@ export default function AdminPage() {
   }, [currentUser.admin, navigate]);
 
   return (
-    <div className="w-full">
-      <div className="flex flex-1 flex-col items-center">
-        <img
-          className="md:w-[70vw] mobile:w-[90vw] md:h-[20vh] mobile:h-[15vh]"
-          src={ellipse}
-          alt=""
-        />
-        <h1 className="mt-[-100px]">Adminfunksjonalitet</h1>
-      </div>
-
+    <PageLayout title="Adminpanel">
       <div className="absolute top-16 left-10 flex justify-end">
         <SubmitButton
           disabled={false}
@@ -73,7 +65,7 @@ export default function AdminPage() {
         />
       </div>
 
-      <div className="mt-16 flex left-10 w-11/12 h-4/6 absolute">
+      <div className="flex left-10 w-11/12 h-4/6 absolute">
         <TabContext value={value.toString()}>
           <div className=" flex flex-col">
             <Tabs
@@ -105,6 +97,6 @@ export default function AdminPage() {
           </div>
         </TabContext>
       </div>
-    </div>
+    </PageLayout>
   );
 }

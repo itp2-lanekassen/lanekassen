@@ -9,6 +9,7 @@ import { useFilterContext } from '../context/FilterContext';
 import FilterComponents from '@/components/CalendarFilter';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
+import PageLayout from '@/components/PageLayout';
 
 export type Column = Record<string, { display: string; value: string }[]>;
 
@@ -77,9 +78,8 @@ const CalendarPage = () => {
   if (isError) return <div>Noe gikk galt</div>;
 
   return (
-    <div className="w-full py-8">
+    <PageLayout title="Fraværsoversikt">
       <div>
-        {' '}
         <FilterComponents />
       </div>
       <div className="grid grid-cols-calendar place-content-center place-items-center gap-0.5">
@@ -118,7 +118,7 @@ const CalendarPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

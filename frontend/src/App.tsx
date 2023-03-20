@@ -24,7 +24,7 @@ const ContextWrapper = ({ children }: { children?: ReactNode }) => (
 
 function App() {
   return (
-    <main className="min-h-screen w-full max-w-screen-xl mx-auto">
+    <>
       <UnauthenticatedTemplate>
         <LoginPage />
       </UnauthenticatedTemplate>
@@ -72,7 +72,7 @@ function App() {
           </GlobalContextProvider>
         </AzureAdContextProvider>
       </AuthenticatedTemplate>
-    </main>
+    </>
   );
 }
 

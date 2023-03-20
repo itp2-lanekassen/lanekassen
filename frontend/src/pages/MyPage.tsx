@@ -1,3 +1,4 @@
+import PageLayout from '@/components/PageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +9,6 @@ import {
   getTeamsByDepartmentId
 } from '../API/DepartmentAPI';
 import { deleteUser, updateUser } from '../API/UserAPI';
-import ellipse from '../assets/ellipse.png';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import { SignOutButton } from '../components/SignOutButton';
@@ -116,16 +116,7 @@ export default function MyPage() {
   };
 
   return (
-    <div className="max-w-full">
-      <div className="flex flex-1 flex-col items-center">
-        <img
-          className="sm:w-[70vw] mobile:w-[90vw] sm:h-[20vh] mobile:h-[15vh]"
-          src={ellipse}
-          alt=""
-        />
-        <h1 className="mt-[-100px]">Profil</h1>
-      </div>
-
+    <PageLayout title="Profil">
       <div className="absolute top-10 right-10 flex justify-end">
         <SignOutButton />
       </div>
@@ -156,7 +147,7 @@ export default function MyPage() {
         <></>
       )}
 
-      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mt-16">
+      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center">
         <p className="font-bold"> Navn: </p>
         <p className=" w-full">
           {currentUser.firstName} {currentUser.lastName}{' '}
@@ -270,6 +261,6 @@ export default function MyPage() {
           )}
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 }
