@@ -10,6 +10,7 @@ import { TabContext } from '@mui/lab';
 import { withStyles } from '@mui/styles';
 /* import UpdateAbsenceTypeComponent from '@/components/AdminPage/UpdateAbsenceTypeComponent';
  */ import AddAbsenceTypeComponent from '@/components/AdminPage/AddAbsenceTypeComponent';
+import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -98,7 +99,7 @@ export default function AdminPage() {
                 {label === 'Brukere' ? <div>brukere{/* Add component here */}</div> : null}
                 {label === 'Fraværstyper' ? (
                   <div className="">
-                    <AddAbsenceTypeComponent />
+                    <AbsenceTypeView />
                   </div>
                 ) : null}
                 {label === 'Avdeling' ? <div>avdeling</div> : null}
