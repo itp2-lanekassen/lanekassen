@@ -126,7 +126,11 @@ export default function AddAbsenceTypeComponent() {
           <div className="flex flex-col items-center">
             <h3 className="text-xl">Forhåndsvisning</h3>
             <br />
-            <div className="flex flex-row">
+            <div className="flex flex-row items-center">
+              <div className="flex flex-col items-center">
+                <p>Godkjent fravær:</p>
+                <p>Ikke-godkjent fravær:</p>
+              </div>
               <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
             </div>
           </div>

@@ -5,6 +5,7 @@ import { updateAbsenceType } from '@/API/AbsenceTypeAPI';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
+import { CalendarCellDisplay } from './CalendarCellDisplay';
 
 type FormValues = {
   name: string;
@@ -132,8 +133,12 @@ export default function UpdateAbsenceTypeComponent() {
           <div className="flex flex-col items-center">
             <h3 className="text-xl">Forhåndsvisning</h3>
             <br />
-            <div className="flex flex-row">
-              <CalendarCell colorCode={formValues.colorCode} code={formValues.code} />
+            <div className="flex flex-row items-center">
+              <div className="flex flex-col items-center">
+                <p>Godkjent fravær:</p>
+                <p>Ikke-godkjent fravær:</p>
+              </div>
+              <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
             </div>
           </div>
           <br />
@@ -150,44 +155,3 @@ export default function UpdateAbsenceTypeComponent() {
     </div>
   );
 }
-
-const CalendarCell = ({ code, colorCode }: { code: string; colorCode: string }) => {
-  //hatch pattern
-  const style = {
-    backgroundImage: `repeating-linear-gradient(
-        135deg,
-        ${colorCode}, 
-        ${colorCode} 4px,
-        #000000 3px,
-        #000000 8px
-      )`
-  };
-
-  const style2 = {
-    backgroundColor: colorCode
-  };
-
-  return (
-    <div className="items-center justify-center">
-      <div className=" grid grid-cols-2 justify-center items-center">
-        <p className="inset-0 flex items-center justify-center">Godkjent fravær: </p>
-        <div className="w-full min-h-[21px] max-h-[21px] h-full max-w-[60px] ml-2" style={style2}>
-          <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold">
-            {code}
-          </span>
-        </div>
-      </div>
-      <div className=" grid grid-cols-2 justify-center items-center">
-        <p className="inset-0 flex items-center justify-center">Ikke-godkjent fravær: </p>
-        <div
-          className="w-full min-h-[21px] max-h-[21px] min-w-[60px] max-w-[60px] ml-2"
-          style={style}
-        >
-          <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold">
-            {code}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
