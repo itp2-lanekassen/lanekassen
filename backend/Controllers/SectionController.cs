@@ -102,7 +102,7 @@ public class SectionController : ControllerBase {
 
   [HttpGet]
   public async Task<IActionResult> GetSections() {
-    return Ok(await _context.Sections.ToListAsync());
+    return Ok(await _context.Sections.Include((s) => s.Departments).ToListAsync());
   }
 
   [HttpGet("{id}")]
