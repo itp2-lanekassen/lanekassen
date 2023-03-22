@@ -60,7 +60,8 @@ const SectionEdit = ({ section, setEdit }: SectionEditProps) => {
       />
       <DropdownMultiSelect
         placeholder="Velg Avdelinger"
-        className="w-2/5"
+        // TODO: shouldn't need important
+        className="!w-2/5"
         value={selectedDepartments}
         listOfOptions={departments.map((d) => ({ id: d.departmentId, name: d.name }))}
         handleChange={setSelectedDepartments}

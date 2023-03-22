@@ -33,7 +33,7 @@ export default function DropdownMultiSelect({
 
   return (
     <Select
-      className={`text-primary rounded w-80 ${className}`}
+      className={`text-primary w-80 ${className}`}
       options={options}
       isDisabled={isDisabled}
       placeholder={placeholder}
