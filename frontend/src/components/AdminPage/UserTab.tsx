@@ -1,11 +1,6 @@
-import { getDepartmentById } from '@/API/DepartmentAPI';
-import { getSectionById } from '@/API/SectionAPI';
 import { getAllUsers } from '@/API/UserAPI';
-import { Department, EmploymentType, Role, Section, SubjectField, Team, User } from '@/types/types';
-import { dialogClasses } from '@mui/material';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { Fragment, useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { User } from '@/types/types';
+import { useEffect, useState } from 'react';
 import PlusButton from './PlusButton';
 import SearchBar from './SearchBar';
 import UserRow from './UserRow';
