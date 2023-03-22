@@ -12,7 +12,10 @@ export default function AbsenceTypeRow(props: {
   const queryClient = useQueryClient();
 
   const handleDelete = async () => {
-    deleteAbsenceTypeFromDatabase(props.absenceType.absenceTypeId);
+    const confirmDelete = window.confirm('Er du sikker på at du vil slette denne fraværstypen?');
+    if (!confirmDelete) {
+      deleteAbsenceTypeFromDatabase(props.absenceType.absenceTypeId);
+    }
   };
 
   const { mutate: deleteAbsenceTypeFromDatabase } = useMutation({
