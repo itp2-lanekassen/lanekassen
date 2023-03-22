@@ -25,7 +25,6 @@ public class SubjectFieldsController : ControllerBase {
 
     SubjectField? newSubjectField = new() {
       Name = subjectField.Name,
-      Users = await _context.Users.Where(u => subjectField.Users!.Contains(u.UserId)).ToListAsync(),
       DepartmentId = subjectField.DepartmentId
     };
 
@@ -58,7 +57,6 @@ public class SubjectFieldsController : ControllerBase {
     }
 
     existingSubjectField.Name = subjectField.Name;
-    existingSubjectField.Users = await _context.Users.Where(u => subjectField.Users!.Contains(u.UserId)).ToListAsync();
     existingSubjectField.DepartmentId = subjectField.DepartmentId;
 
     try {
@@ -103,7 +101,7 @@ public class SubjectFieldsController : ControllerBase {
 
   [HttpGet]
   public async Task<IActionResult> GetSubjectFields() {
-    return Ok(await _context.SubjectFields.ToListAsync());
+    return Ok(await _context.SubjectFields.Include((s) => s.Department).ToListAsync());
   }
 
   [HttpGet("{id}")]

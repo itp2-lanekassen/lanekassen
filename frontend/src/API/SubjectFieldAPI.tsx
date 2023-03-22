@@ -1,4 +1,4 @@
-import { SubjectField } from '../types/types';
+import { SubjectField, SubjectFieldDTO } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -13,13 +13,15 @@ export function getSubjectFieldById(subjectFieldId: number): Promise<AxiosRespon
   return axios.get(`${url}/${subjectFieldId}`);
 }
 
-export function postSubjectField(subjectField: SubjectField): Promise<AxiosResponse<SubjectField>> {
+export function postSubjectField(
+  subjectField: SubjectFieldDTO
+): Promise<AxiosResponse<SubjectField>> {
   return axios.post(url, subjectField);
 }
 
 export function updateSubjectField(
   subjectFieldId: number,
-  subjectField: SubjectField
+  subjectField: SubjectFieldDTO
 ): Promise<AxiosResponse<SubjectField>> {
   return axios.put(`${url}/${subjectFieldId}`, subjectField);
 }

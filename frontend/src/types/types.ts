@@ -22,6 +22,12 @@ export interface SubjectField {
   subjectFieldId: number;
   name: string;
   departmentId: number;
+  department?: Department;
+}
+
+export interface SubjectFieldDTO {
+  name: string;
+  departmentId: number;
 }
 
 export interface Absence {
