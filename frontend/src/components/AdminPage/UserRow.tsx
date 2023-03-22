@@ -3,6 +3,10 @@ import { getSectionById } from '@/API/SectionAPI';
 import { Department, EmploymentType, Section, User } from '@/types/types';
 import { useEffect, useState } from 'react';
 
+interface UserRowProps {
+  user: User;
+  handleClick: () => void;
+}
 // Format first name to avoid table overflow
 const formatFirstName = (name: string) => {
   return name
@@ -21,7 +25,7 @@ const formatFirstName = (name: string) => {
  * @param props takes in a user passed down from user tab on admin page
  * @returns table row with user data filled into table cells
  */
-export default function UserRow(props: { user: User }) {
+export default function UserRow(props: { user: User; handleClick: () => void }) {
   const [department, setDepartment] = useState<Department>();
   const [section, setSection] = useState<Section>();
   const [employmentType, setEmploymentType] = useState<string>('');
@@ -38,7 +42,7 @@ export default function UserRow(props: { user: User }) {
   }, []);
 
   return (
-    <tr className="hover:bg-primary-lighter">
+    <tr onClick={props.handleClick} className="hover:bg-primary-lighter">
       <td className="p-3 pr-5">{formatFirstName(props.user.firstName)}</td>
       <td className="p-3 pr-5">{props.user.lastName}</td>
       <td className="p-3 pr-5">{props.user.email}</td>

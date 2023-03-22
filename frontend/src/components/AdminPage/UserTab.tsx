@@ -18,6 +18,10 @@ export default function UserTab() {
     setUsers((await getAllUsers()).data);
   }
 
+  const openUser = () => {
+    console.log('ow');
+  };
+
   useEffect(() => {
     loadUsers();
   }, []);
@@ -27,17 +31,19 @@ export default function UserTab() {
       <PlusButton handleClick={addNewUser} />
       <SearchBar />
 
-      <table>
-        <tr>
-          {tableHeaders.map((header) => (
-            <th className="p-3 pr-5" key={header}>
-              {header}
-            </th>
+      <table className="ml-10">
+        <tbody>
+          <tr>
+            {tableHeaders.map((header) => (
+              <th className="p-3 pr-5" key={header}>
+                {header}
+              </th>
+            ))}
+          </tr>
+          {users?.map((user) => (
+            <UserRow handleClick={openUser} key={user.azureId} user={user} />
           ))}
-        </tr>
-        {users?.map((user) => (
-          <UserRow key={user.azureId} user={user} />
-        ))}
+        </tbody>
       </table>
     </div>
   );
@@ -46,7 +52,6 @@ export default function UserTab() {
 /**
  * Må gjøres:
  * fikse at add-knappen fungerer (route, add skjema, add tilbakeknapp)
- * legge til mange brukere og se om panelet utvikler seg
  * plassere komponenter riktig
  * adde søkefunksjonalitet til søkefeltet
  * kunne klikke på en ansatt og åpne skjema for å redigere (med rett info)
