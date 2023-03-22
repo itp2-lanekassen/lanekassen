@@ -1,4 +1,4 @@
-import Select from 'react-select';
+import Select, { StylesConfig } from 'react-select';
 
 export interface DropdownMultiselectProps {
   handleChange: (value: number[]) => void;
@@ -16,10 +16,20 @@ export default function DropdownMultiSelect({
   listOfOptions,
   value,
   className,
-  isExpands = true,
   isDisabled
 }: DropdownMultiselectProps) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
+
+  const customStyles: StylesConfig<any, true> = {
+    menu: (base) => ({
+      ...base,
+      width: 'fit-content' + 'px-2'
+    }),
+    menuList: (base) => ({
+      ...base,
+      maxHeight: '500px'
+    })
+  };
 
   return (
     <div className="">
@@ -27,11 +37,12 @@ export default function DropdownMultiSelect({
         className={`text-primary w-80 ${className}`}
         options={options}
         isDisabled={isDisabled}
+        menuPlacement="auto" // auto menu on top code
+        minMenuHeight={500} // auto menu on top code
         placeholder={placeholder}
         isMulti
         value={value ? options.filter((option) => value.includes(option.value)) : []}
         onChange={(selectedOptions) => handleChange(selectedOptions.map((o) => o.value))}
-        menuPlacement={isExpands ? 'auto' : 'bottom'}
         theme={(theme) => ({
           ...theme,
           borderRadius: 20,
@@ -49,6 +60,7 @@ export default function DropdownMultiSelect({
             neutral80: '#410464'
           }
         })}
+        styles={customStyles}
       />
     </div>
   );

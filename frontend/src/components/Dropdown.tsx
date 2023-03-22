@@ -1,4 +1,4 @@
-import Select from 'react-select';
+import Select, { StylesConfig } from 'react-select';
 
 interface DropdownProps {
   handleChange: (value: number) => void;
@@ -20,11 +20,24 @@ export default function Dropdown({
 }: DropdownProps) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
 
+  const customStyles: StylesConfig<any, false> = {
+    menu: (base) => ({
+      ...base,
+      width: 'fit-content' + 'px-2'
+    }),
+    menuList: (base) => ({
+      ...base,
+      maxHeight: '500px'
+    })
+  };
+
   return (
     <div>
       <Select
         className={`text-primary w-80 ${className}`}
         isDisabled={isDisabled}
+        menuPlacement="auto" // auto menu on top code
+        minMenuHeight={500} // auto menu on top code
         options={options}
         placeholder={placeholder}
         value={value === -1 ? null : options.find((option) => option.value === value)}
@@ -46,6 +59,7 @@ export default function Dropdown({
             neutral80: '#410464'
           }
         })}
+        styles={customStyles}
       />
     </div>
   );
