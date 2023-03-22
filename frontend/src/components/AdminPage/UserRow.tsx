@@ -17,20 +17,6 @@ const formatFirstName = (name: string) => {
     .join(' ');
 };
 
-/*
-const formatLastName = (name: string) => {
-    return name
-      .split(' ')
-      .map((n, i, arr) => {
-        // if first or last name, return whole name
-        if (i === arr.length - 1) return n;
-
-        // return first character in uppercase with . after
-        return n[0].toUpperCase() + '.';
-      })
-      .join(' ');
-};*/
-
 export default function UserRow(props: { user: User }) {
   const [department, setDepartment] = useState<Department>();
   const [section, setSection] = useState<Section>();
@@ -52,13 +38,13 @@ export default function UserRow(props: { user: User }) {
 
   return (
     <tr>
-      <td className="p-3">{formatFirstName(props.user.firstName)}</td>
-      <td className="p-3">{props.user.lastName}</td>
-      <td className="p-3">{props.user.email}</td>
-      <td className="p-3">{admin}</td>
-      <td className="p-3">{employmentType}</td>
-      <td className="p-3">{department?.name}</td>
-      <td className="p-3">{section?.name}</td>
+      <td className="m-7 p-3">{formatFirstName(props.user.firstName)}</td>
+      <td className="m-7 p-3">{props.user.lastName}</td>
+      <td className="m-7 p-3">{props.user.email}</td>
+      <td className="m-7 p-3">{admin}</td>
+      <td className="m-7 p-3">{employmentType}</td>
+      <td className="m-7 p-3">{department?.name}</td>
+      <td className="m-7 p-3">{section?.name}</td>
     </tr>
   );
 }

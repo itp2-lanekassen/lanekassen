@@ -40,7 +40,7 @@ export default function UserTab() {
       <table>
         <tr>
           {tableHeaders.map((header) => (
-            <th className="p-3" key={header}>
+            <th className="m-7 p-3" key={header}>
               {header}
             </th>
           ))}
