@@ -15,26 +15,23 @@ export const CalendarCellDisplay = ({ code, colorCode }: { code: string; colorCo
   };
 
   return (
-    <div className="items-center justify-center">
-      <div className=" grid grid-cols-2 justify-center items-center mt-1">
-        <div
-          className="w-full min-h-[21px] max-h-[21px] h-full max-w-[60px] min-w-[60px] ml-2"
-          style={style2}
-        >
-          <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold">
-            {code}
-          </span>
-        </div>
+    <div className="flex items-center justify-center">
+      <div
+        className="w-full min-h-[21px] max-h-[21px] h-full max-w-[60px] min-w-[60px] ml-2"
+        style={style2}
+      >
+        <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold">
+          {code}
+        </span>
       </div>
-      <div className=" grid grid-cols-2 justify-center items-center mt-1">
-        <div
-          className="w-full min-h-[21px] max-h-[21px] min-w-[60px] max-w-[60px] ml-2"
-          style={style}
-        >
-          <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold">
-            {code}
-          </span>
-        </div>
+
+      <div
+        className="w-full min-h-[21px] max-h-[21px] min-w-[60px] max-w-[60px] ml-2"
+        style={style}
+      >
+        <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold">
+          {code}
+        </span>
       </div>
     </div>
   );
