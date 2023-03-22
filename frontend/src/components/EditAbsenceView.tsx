@@ -7,9 +7,26 @@ import { useUserContext } from '../context/UserContext';
 import { Absence } from '../types/types';
 import * as React from 'react';
 import { FormValues } from './AbsenceForm';
-import axios from 'axios';
 import moment from 'moment';
 import { useEffect } from 'react';
+import {
+  getDatePickerMaxForAbsence,
+  getDatePickerMinForAbsence,
+  updateAbsence
+} from '../API/AbsenceAPI';
+import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
+
+async function setMax(currentUser: any, clickedAbsence: Absence, setNextAbsenceStartDate: any) {
+  setNextAbsenceStartDate(
+    await getDatePickerMaxForAbsence(currentUser.userId, clickedAbsence.endDate)
+  );
+}
+
+async function setMin(currentUser: any, clickedAbsence: Absence, setPreviousAbsenceEndDate: any) {
+  setPreviousAbsenceEndDate(
+    await getDatePickerMinForAbsence(currentUser.userId, clickedAbsence.startDate)
+  );
+}
 
 /**
  * Renders a view lets a user edit an absence
@@ -18,14 +35,13 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
   const queryClient = useQueryClient();
 
   const currentUser = useUserContext();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  const urlAbsence = `${backendUrl}/Absence`;
-  const urlAbsenceType = `${backendUrl}/AbsenceType`;
+  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<string>();
+  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<string>();
 
   //initialize mutation for updating an absence
   const { mutate: editAbsence } = useMutation({
-    mutationFn: (absence: Absence) => axios.put(`${urlAbsence}/${absence.absenceId}`, absence),
+    mutationFn: (absence: Absence) => updateAbsence(absence),
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
   });
 
@@ -45,6 +61,8 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       comment: props.absence.comment,
       absenceType: props.absence.absenceTypeId
     });
+    setMax(currentUser, props.absence, setNextAbsenceStartDate);
+    setMin(currentUser, props.absence, setPreviousAbsenceEndDate);
   }, [props.absence]);
 
   //update form values on input change
@@ -68,8 +86,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //get the updated absence type from database
-    const updatedAbsenceType = (await axios.get(`${urlAbsenceType}/${formValues.absenceType}`))
-      .data;
+    const updatedAbsenceType = (await getAbsenceTypeById(formValues.absenceType)).data;
 
     //Make comment undefined if it is an empty string
     let updatedComment;
@@ -104,6 +121,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
             <DateField
               handleInputChange={handleInputChange}
               name="startDate"
+              min={previousAbsenceEndDate}
               max={formValues.endDate}
               value={formValues.startDate}
               label="Fra"
@@ -112,7 +130,10 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
             <DateField
               handleInputChange={handleInputChange}
               name="endDate"
-              min={formValues.startDate}
+              min={new Date(
+                moment(formValues.startDate).add(0, 'days').toISOString().split('T')[0]
+              ).toLocaleDateString('fr-ca')}
+              max={nextAbsenceStartDate}
               value={formValues.endDate}
               label="Til"
               placeholder={new Date(props.absence.endDate).toLocaleDateString()}
