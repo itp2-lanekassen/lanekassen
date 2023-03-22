@@ -1,5 +1,6 @@
 import { Button } from '@material-tailwind/react';
-import * as React from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import {
   getDatePickerMaxForAbsence,
@@ -7,14 +8,14 @@ import {
   postAbsence,
   updateAbsence
 } from '../API/AbsenceAPI';
-import { useUserContext } from '../context/UserContext';
+import * as React from 'react';
 import { useGlobalContext } from '../context/GlobalContext';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DateField } from './DateField';
+import { useUserContext } from '../context/UserContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
 import { Absence } from '../types/types';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
+import { DateField } from './DateField';
 
 type ModalProps = {
   startDate?: string;
@@ -209,7 +210,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
           className="modal-cancel-button absolute top-5 right-5 text-primary"
           onClick={onClose}
         >
-          X
+          <CloseIcon />
         </button>
       </div>
     </div>

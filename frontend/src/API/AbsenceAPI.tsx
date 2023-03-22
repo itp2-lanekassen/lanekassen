@@ -1,6 +1,5 @@
 import { Absence, NewAbsence } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
-import moment from 'moment';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 

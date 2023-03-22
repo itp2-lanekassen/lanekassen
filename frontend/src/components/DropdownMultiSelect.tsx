@@ -1,43 +1,37 @@
-import Select, { MultiValue } from 'react-select';
-import { IDropdownMultiSelect } from '../types/types';
+import Select from 'react-select';
 
-/**
- *
- * @param placeholder is the "title" of the dropdown
- * @param listOfOptions is list of options retrieved from database
- * @param handleChange is the function that is called when a new option is selected
- * @param value is the value of the selected option
- * @returns dropdown component where multiselect is possible
- */
-
-interface IOption {
-  label: string;
-  value: number;
+export interface DropdownMultiselectProps {
+  handleChange: (value: number[]) => void;
+  value: number[];
+  placeholder: string;
+  listOfOptions: { name: string; id: number }[];
+  className?: string;
+  isExpands?: boolean;
+  isDisabled: boolean;
 }
+
 export default function DropdownMultiSelect({
   handleChange,
   placeholder,
   listOfOptions,
   value,
+  className,
+  isExpands = true,
   isDisabled
-}: IDropdownMultiSelect) {
+}: DropdownMultiselectProps) {
   const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
-
-  const handleOnChange = (selectedOptions: MultiValue<IOption>) => {
-    const selectedValues = selectedOptions ? selectedOptions.map((option) => option.value) : [];
-    handleChange(selectedValues);
-  };
 
   return (
     <div className="">
       <Select
-        isDisabled={isDisabled}
-        className="text-primary w-80"
+        className={`text-primary w-80 ${className}`}
         options={options}
+        isDisabled={isDisabled}
         placeholder={placeholder}
         isMulti
         value={value ? options.filter((option) => value.includes(option.value)) : []}
-        onChange={handleOnChange}
+        onChange={(selectedOptions) => handleChange(selectedOptions.map((o) => o.value))}
+        menuPlacement={isExpands ? 'auto' : 'bottom'}
         theme={(theme) => ({
           ...theme,
           borderRadius: 20,

@@ -62,6 +62,13 @@ export interface AbsenceType {
   absences?: Absence[];
 }
 
+export interface NewAbsenceType {
+  name: string;
+  code: string;
+  colorCode: string;
+  absences?: Absence[];
+}
+
 export interface User {
   userId: number;
   azureId: string;
@@ -85,6 +92,13 @@ export enum EmploymentType {
   Konsulent
 }
 
+export interface PageResponse<T> {
+  page: number;
+  size: number;
+  totalPages: number;
+  data: T[];
+}
+
 export interface NewUser {
   azureId: string;
   firstName: string;
@@ -97,28 +111,4 @@ export interface NewUser {
   subjectFields: number[];
   roles?: number[];
   teams?: number[];
-}
-
-export interface ISubmitButton {
-  disabledTitle?: string;
-  disabled: boolean;
-  buttonText: string;
-  handleClick?: () => void;
-  type?: 'button' | 'submit' | 'reset' | undefined;
-}
-
-export interface IDropdownMultiSelect {
-  handleChange: (value: number[]) => void;
-  value: number[];
-  placeholder: string;
-  listOfOptions: { name: string; id: number }[];
-  isDisabled: boolean;
-}
-
-export interface IDropdown {
-  handleChange: (value: number) => void;
-  value: number;
-  placeholder: string;
-  listOfOptions: { name: string; id: number }[];
-  isDisabled: boolean;
 }

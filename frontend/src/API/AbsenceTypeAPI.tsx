@@ -1,4 +1,4 @@
-import { AbsenceType } from '../types/types';
+import { AbsenceType, NewAbsenceType } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -13,7 +13,7 @@ export function getAbsenceTypeById(absenceTypeId: number): Promise<AxiosResponse
   return axios.get(`${url}/${absenceTypeId}`);
 }
 
-export function postAbsenceType(absenceType: AbsenceType): Promise<AxiosResponse<AbsenceType>> {
+export function postAbsenceType(absenceType: NewAbsenceType): Promise<AxiosResponse<AbsenceType>> {
   return axios.post(url, absenceType);
 }
 

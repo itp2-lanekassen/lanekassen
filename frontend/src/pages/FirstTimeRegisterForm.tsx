@@ -8,7 +8,6 @@ import {
   getTeamsByDepartmentId
 } from '../API/DepartmentAPI';
 import { getUserByAzureId, postUser } from '../API/UserAPI';
-import ellipse from '../assets/ellipse.png';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
@@ -16,6 +15,7 @@ import { EmploymentType } from '../types/types';
 import { useNavigate } from 'react-router-dom';
 import { useAzureAdContext } from '../context/AzureAdContext';
 import { SignOutButton } from '../components/SignOutButton';
+import PageLayout from '@/components/PageLayout';
 
 export default function FirstTimeRegisterForm() {
   const navigate = useNavigate();
@@ -106,22 +106,11 @@ export default function FirstTimeRegisterForm() {
   }, [selectedDepartment]);
 
   return (
-    <div className="w-full">
-      <div className="flex flex-1 flex-col items-center">
-        <img
-          className="md:w-[70vw] mobile:w-[90vw] md:h-[20vh] mobile:h-[15vh]"
-          src={ellipse}
-          alt=""
-        />
-        <h1 className="mt-[-100px]">Registrering</h1>
-      </div>
-
-      {/*       <div className="flex flex-1 flex-col items-center tablet:mt-20 mobile:mt-40">
-       */}
+    <PageLayout title="Registrering">
       <div className="absolute top-10 left-10 flex justify-end">
         <SignOutButton />
       </div>
-      <div className="grid mx-auto w-max gap-4 place-items-center mt-16">
+      <div className="grid mx-auto w-max gap-4 place-items-center">
         <Dropdown
           placeholder="Ansattforhold"
           listOfOptions={Object.keys(EmploymentType)
@@ -188,6 +177,6 @@ export default function FirstTimeRegisterForm() {
           disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
         />
       </div>
-    </div>
+    </PageLayout>
   );
 }
