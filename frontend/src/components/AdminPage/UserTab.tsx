@@ -9,15 +9,7 @@ const addNewUser = () => {
   console.log('hallaballa');
 };
 
-const tableHeaders = [
-  'Fornavn',
-  'Etternavn',
-  'E-post',
-  'Admin',
-  'Ansattforhold',
-  'Avdeling',
-  'Seksjon'
-];
+const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon'];
 
 export default function UserTab() {
   const [users, setUsers] = useState<User[]>();
@@ -30,8 +22,6 @@ export default function UserTab() {
     loadUsers();
   }, []);
 
-  console.log(users);
-
   return (
     <div>
       <PlusButton handleClick={addNewUser} />
@@ -40,7 +30,7 @@ export default function UserTab() {
       <table>
         <tr>
           {tableHeaders.map((header) => (
-            <th className="m-7 p-3" key={header}>
+            <th className="p-3 pr-5" key={header}>
               {header}
             </th>
           ))}
@@ -56,7 +46,6 @@ export default function UserTab() {
 /**
  * Må gjøres:
  * fikse at add-knappen fungerer (route, add skjema, add tilbakeknapp)
- * formattere navn
  * legge til mange brukere og se om panelet utvikler seg
  * plassere komponenter riktig
  * adde søkefunksjonalitet til søkefeltet
