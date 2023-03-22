@@ -22,7 +22,7 @@ type ModalProps = {
   user: User;
   startDate?: string;
   type?: string;
-  clickedAbsence: Absence;
+  clickedAbsence?: Absence;
   onClose: () => void;
 };
 
@@ -35,10 +35,10 @@ export type FormValues = {
 
 //set max on datepicker state based on when the next absence starts
 async function setMax(
-  currentUser: any,
-  clickedAbsence: Absence,
+  currentUser: User,
   startDate: string,
-  setNextAbsenceStartDate: any
+  setNextAbsenceStartDate: any,
+  clickedAbsence?: Absence
 ) {
   setNextAbsenceStartDate(
     await getDatePickerMaxForAbsence(currentUser.userId, clickedAbsence?.endDate || startDate)
@@ -47,10 +47,10 @@ async function setMax(
 
 //set min on datepicker state based when the previous absence ends
 async function setMin(
-  currentUser: any,
-  clickedAbsence: Absence,
+  currentUser: User,
   startDate: string,
-  setPreviousAbsenceEndDate: any
+  setPreviousAbsenceEndDate: any,
+  clickedAbsence?: Absence
 ) {
   setPreviousAbsenceEndDate(
     await getDatePickerMinForAbsence(currentUser.userId, clickedAbsence?.startDate || startDate)
@@ -68,10 +68,10 @@ const AbsenceForm: React.FC<ModalProps> = ({
   const { absenceTypes } = useGlobalContext();
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<string>();
   const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<string>();
-  const [absenceId] = React.useState<number>(clickedAbsence.absenceId);
+  const [absenceId] = React.useState<number | undefined>(clickedAbsence?.absenceId);
   let buttonText = 'Legg til';
   if (type === 'edit') {
-    buttonText = 'Rediger';
+    buttonText = 'Lagre';
   }
 
   const { mutate: addAbsence } = useMutation({
@@ -97,8 +97,8 @@ const AbsenceForm: React.FC<ModalProps> = ({
       });
     }
     //set min and max for datepicker based on other absences
-    setMax(user, clickedAbsence, startDate, setNextAbsenceStartDate);
-    setMin(user, clickedAbsence, startDate, setPreviousAbsenceEndDate);
+    setMax(user, startDate, setNextAbsenceStartDate, clickedAbsence);
+    setMin(user, startDate, setPreviousAbsenceEndDate, clickedAbsence);
   }, [clickedAbsence]);
 
   React.useEffect(() => {
@@ -209,22 +209,24 @@ const AbsenceForm: React.FC<ModalProps> = ({
             formValues={formValues}
             handleInputChange={handleInputChange}
           ></CommentField>
-          <div className="modal-buttons relative flex flex-row flex-parent items-center gap-12 justify-center pt-5">
+          <div className="modal-buttons relative flex flex-row flex-parent items-center gap-8 justify-center pt-5">
             <Button
               type="submit"
-              className="flex flex-child modal-submit-button button heading-xs px-4 py-2 rounded-full bg-primary text-white "
+              className="flex flex-child modal-submit-button button heading-xs px-4 py-2 rounded-full bg-primary text-white hover:scale-110"
             >
               {buttonText}
             </Button>
-            <DeleteOutlineIcon
-              onClick={() => {
-                const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
-                if (confirmDelete) {
-                  deleteAbsence(absenceId);
-                }
-              }}
-              className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
-            ></DeleteOutlineIcon>
+            {absenceId && (
+              <DeleteOutlineIcon
+                onClick={() => {
+                  const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
+                  if (confirmDelete) {
+                    deleteAbsence(absenceId);
+                  }
+                }}
+                className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
+              ></DeleteOutlineIcon>
+            )}
           </div>
         </form>
         <button
