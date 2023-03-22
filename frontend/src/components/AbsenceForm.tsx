@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import * as React from 'react';
 import {
+  deleteAbsence,
   getDatePickerMaxForAbsence,
   getDatePickerMinForAbsence,
   postAbsence
@@ -13,6 +14,7 @@ import { useGlobalContext } from '../context/GlobalContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
 
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
 import { DateField } from './DateField';
 
@@ -20,7 +22,7 @@ type ModalProps = {
   user: User;
   startDate?: string;
   type?: string;
-  clickedAbsence?: Absence;
+  clickedAbsence: Absence;
   onClose: () => void;
 };
 
@@ -34,7 +36,7 @@ export type FormValues = {
 //set max on datepicker state based on when the next absence starts
 async function setMax(
   currentUser: any,
-  clickedAbsence: Absence | undefined,
+  clickedAbsence: Absence,
   startDate: string,
   setNextAbsenceStartDate: any
 ) {
@@ -46,7 +48,7 @@ async function setMax(
 //set min on datepicker state based when the previous absence ends
 async function setMin(
   currentUser: any,
-  clickedAbsence: Absence | undefined,
+  clickedAbsence: Absence,
   startDate: string,
   setPreviousAbsenceEndDate: any
 ) {
@@ -66,6 +68,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
   const { absenceTypes } = useGlobalContext();
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<string>();
   const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<string>();
+  const [absenceId] = React.useState<number>(clickedAbsence.absenceId);
   let buttonText = 'Legg til';
   if (type === 'edit') {
     buttonText = 'Rediger';
@@ -206,21 +209,22 @@ const AbsenceForm: React.FC<ModalProps> = ({
             formValues={formValues}
             handleInputChange={handleInputChange}
           ></CommentField>
-          <div className="modal-buttons relative flex flex-col items-center justify-center pt-5">
+          <div className="modal-buttons relative flex flex-row flex-parent items-center gap-12 justify-center pt-5">
             <Button
               type="submit"
-              className="modal-submit-button button heading-xs px-4 py-2 rounded-full bg-primary text-white "
+              className="flex flex-child modal-submit-button button heading-xs px-4 py-2 rounded-full bg-primary text-white "
             >
               {buttonText}
             </Button>
-            {/* <DeleteOutlineIcon
+            <DeleteOutlineIcon
               onClick={() => {
                 const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
                 if (confirmDelete) {
-                  deleteAbsence(props.absence.absenceId);
+                  deleteAbsence(absenceId);
                 }
               }}
-            ></DeleteOutlineIcon> */}
+              className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
+            ></DeleteOutlineIcon>
           </div>
         </form>
         <button
