@@ -4,6 +4,8 @@ import { Button } from '@mui/material';
 import { CalendarCellDisplay } from './CalendarCellDisplay';
 import { AbsenceType } from '@/types/types';
 import UpdateAbsenceTypeComponent from './UpdateAbsencetypeComponent';
+import EditButton from './EditButton';
+import DeleteButton from './DeleteButton';
 
 export default function AbsenceTypeRow(props: {
   absenceType: AbsenceType;
@@ -37,8 +39,8 @@ export default function AbsenceTypeRow(props: {
       <p className="flex-1 text-center">{props.absenceType.code}</p>
       <p className="flex-1 text-center">{props.absenceType.colorCode}</p>
       <CalendarCellDisplay code={props.absenceType.code} colorCode={props.absenceType.colorCode} />
-      <Button onClick={handleEdit}>Edit</Button>
-      <Button onClick={handleDelete}>Delete</Button>
+      <EditButton onClick={handleEdit} />
+      <DeleteButton onClick={handleDelete} />
     </>
   );
 }

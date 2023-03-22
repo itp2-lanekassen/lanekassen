@@ -131,13 +131,13 @@ export default function AddAbsenceTypeComponent(props: {
           <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
 
           <br />
-          <Button
+          <button
             type="submit"
             disabled={isDisabled}
-            className="modal-submit-button button heading-xs px-4 py-2 rounded-full bg-primary text-white "
+            className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light"
           >
             Legg til
-          </Button>
+          </button>
         </form>
       </div>
     </div>

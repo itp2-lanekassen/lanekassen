@@ -4,6 +4,7 @@ import { getAllAbsenceTypes } from '@/API/AbsenceTypeAPI';
 import AddAbsenceTypeComponent from '@/components/AdminPage/AddAbsenceTypeComponent';
 import { useEffect, useState } from 'react';
 import AbsenceTypeRow from './AbsenceTypeRow';
+import { Add } from '@mui/icons-material';
 
 export default function AbsenceTypeView() {
   const { data: absenceTypes } = useQuery({
@@ -18,8 +19,8 @@ export default function AbsenceTypeView() {
 
   const defaultView = (
     <div className="w-full flex flex-col items-center">
-      <div className="flex flex-col items-center w-full">
-        <div className="grid-cols-absence-types grid col-span-6 w-full place-item-center">
+      <div className="flex flex-col items-center w-full ">
+        <div className="grid-cols-absence-types grid col-span-6 w-full place-item-center gap-x-2 gap-y-3">
           <p className="flex-1 text-center font-bold mb-2 border-b-2">Beskrivelse</p>
           <p className="flex-1 text-center font-bold mb-2 border-b-2">Kode</p>
           <p className="flex-1 text-center font-bold mb-2 border-b-2">Farge</p>
@@ -27,12 +28,9 @@ export default function AbsenceTypeView() {
             Visning (Godkjent / Ikke-godkjent)
           </p>
           <div className="col-span-2 flex w-full justify-end mb-2 border-b-2 ">
-            <SubmitButton
-              disabled={false}
-              disabledTitle={'Legg til'}
-              buttonText={'+'}
-              handleClick={handleAdd}
-            />
+            <SubmitButton handleClick={handleAdd}>
+              <Add />
+            </SubmitButton>
           </div>
           {absenceTypes?.data.map((absenceType) => (
             <AbsenceTypeRow
