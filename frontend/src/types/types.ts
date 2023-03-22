@@ -54,6 +54,11 @@ export interface Section {
   departments?: Department[];
 }
 
+export interface SectionDTO {
+  name: string;
+  departments: number[];
+}
+
 export interface AbsenceType {
   absenceTypeId: number;
   name: string;
