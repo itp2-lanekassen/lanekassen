@@ -14,7 +14,8 @@ module.exports = {
       },
       gridTemplateColumns: {
         calendar: '15% repeat(20, 1fr)',
-        'my-page': 'max-content auto'
+        'my-page': 'max-content auto',
+        'sections': 'repeat(2, 1fr) repeat(2, min-content)'
       },
       gridColumn: {
         'span-20': 'span 20  / span 20'
