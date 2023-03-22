@@ -9,6 +9,7 @@ import { useUserContext } from '../context/UserContext';
 import PageLayout from '@/components/PageLayout';
 import SectionView from '@/components/AdminPage/SectionView';
 import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
+import TeamView from '@/components/AdminPage/TeamView';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -83,7 +84,7 @@ export default function AdminPage() {
                 {label === 'Avdeling' && <div>avdeling</div>}
                 {label === 'Seksjon' && <SectionView />}
                 {label === 'Fagfelt' && <div>fagfelt</div>}
-                {label === 'Team' && <div>team</div>}
+                {label === 'Team' && <TeamView />}
                 {label === 'Rolle' && <div>rolle</div>}
               </TabPanel>
             ))}
