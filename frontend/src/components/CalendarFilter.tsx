@@ -2,8 +2,8 @@ import Dropdown from './Dropdown';
 import DropdownMultiSelect from './DropdownMultiSelect';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useGlobalContext } from '@/context/GlobalContext';
-import { useFilterContext } from '@/context/FilterContext';
+import { useGlobalContext } from '../context/GlobalContext';
+import { useFilterContext } from '../context/FilterContext';
 import moment from 'moment';
 
 /**
