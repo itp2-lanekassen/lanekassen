@@ -6,7 +6,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SubmitButton from '../components/SubmitButton';
 import { useUserContext } from '../context/UserContext';
-import PageLayout from '../components/PageLayout';
+import PageLayout from '@/components/PageLayout';
+import SectionView from '@/components/AdminPage/SectionView';
+import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -35,7 +37,7 @@ export default function AdminPage() {
         />
       </div>
 
-      <div className="flex left-10 w-11/12 h-4/6 absolute">
+      <div className="flex w-11/12 h-5/6">
         <TabContext value={value.toString()}>
           <div className=" flex flex-col">
             <Tabs
@@ -47,7 +49,6 @@ export default function AdminPage() {
               TabIndicatorProps={{ style: { backgroundColor: '#590689' } }} // primary-light
             >
               {tabLabels.map((label, index) => (
-                // <CustomTab key={index} label={label} />
                 <Tab
                   key={index}
                   label={label}
@@ -74,16 +75,16 @@ export default function AdminPage() {
             </Tabs>
           </div>
 
-          <div className="w-full border-1 border-gray-200 rounded-r-xl">
+          <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
-                {label === 'Brukere' ? <div>brukere{/* Add component here */}</div> : null}
-                {label === 'Fraværstyper' ? <div>fraværstyper</div> : null}
-                {label === 'Avdeling' ? <div>avdeling</div> : null}
-                {label === 'Seksjon' ? <div>seksjon</div> : null}
-                {label === 'Fagfelt' ? <div>fagfelt</div> : null}
-                {label === 'Team' ? <div>team</div> : null}
-                {label === 'Rolle' ? <div>rolle</div> : null}
+                {label === 'Brukere' && <div>brukere</div>}
+                {label === 'Fraværstyper' && <AbsenceTypeView />}
+                {label === 'Avdeling' && <div>avdeling</div>}
+                {label === 'Seksjon' && <SectionView />}
+                {label === 'Fagfelt' && <div>fagfelt</div>}
+                {label === 'Team' && <div>team</div>}
+                {label === 'Rolle' && <div>rolle</div>}
               </TabPanel>
             ))}
           </div>
