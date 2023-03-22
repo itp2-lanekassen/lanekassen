@@ -16,10 +16,7 @@ const tableHeaders = [
   'Admin',
   'Ansattforhold',
   'Avdeling',
-  'Seksjon',
-  'Fagområde',
-  'Team',
-  'Rolle'
+  'Seksjon'
 ];
 
 export default function UserTab() {
@@ -43,7 +40,9 @@ export default function UserTab() {
       <table>
         <tr>
           {tableHeaders.map((header) => (
-            <th key={header}>{header}</th>
+            <th className="p-3" key={header}>
+              {header}
+            </th>
           ))}
         </tr>
         {users?.map((user) => (
@@ -54,14 +53,12 @@ export default function UserTab() {
   );
 }
 
-// må loade med en gang, ikke en knapp
-// må gjøres for hver user
-// tror ikke du kan overskrive state, blir muligens buggy, så du kan ikke ha globale states
-// kanskje du kan gjøre det inni map-funksjonen?
-
 /**
- * Ideer:
- * Sette states inni map-funksjonen. Problem: map-funksjonen kan ikke være async
- * Kalle funksjon som er async inni map. useEffect? Problem: hvordan hente ut states. kan returnere et user-objekt?
- * Lage en egen komponent for hver rad, deale med det derfra
+ * Må gjøres:
+ * fikse at add-knappen fungerer (route, add skjema, add tilbakeknapp)
+ * formattere navn
+ * legge til mange brukere og se om panelet utvikler seg
+ * plassere komponenter riktig
+ * adde søkefunksjonalitet til søkefeltet
+ * kunne klikke på en ansatt og åpne skjema for å redigere (med rett info)
  */

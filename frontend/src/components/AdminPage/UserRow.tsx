@@ -20,28 +20,12 @@ const formatName = (name: string) => {
 export default function UserRow(props: { user: User }) {
   const [department, setDepartment] = useState<Department>();
   const [section, setSection] = useState<Section>();
-  const [teams, setTeams] = useState<string[]>();
-  const [roles, setRoles] = useState<string[]>();
-  const [subjectFields, setSubjectFields] = useState<string[]>();
   const [employmentType, setEmploymentType] = useState<string>('');
   const [admin, setAdmin] = useState<string>('');
 
   async function loadUserData() {
-    const listTeam: string[] = [];
-    const listSubjectField: string[] = [];
-    const listRole: string[] = [];
-
     setDepartment((await getDepartmentById(props.user.departmentId)).data);
     setSection((await getSectionById(props.user.sectionId)).data);
-
-    props.user.teams?.forEach((team) => listTeam.push(team.name));
-    setTeams(listTeam);
-
-    props.user.subjectFields?.forEach((subjectField) => listSubjectField.push(subjectField.name));
-    setSubjectFields(listSubjectField);
-
-    props.user.roles?.forEach((role) => listRole.push(role.name));
-    setRoles(listRole);
 
     setEmploymentType(EmploymentType[props.user.employmentType]);
 
@@ -54,16 +38,13 @@ export default function UserRow(props: { user: User }) {
 
   return (
     <tr>
-      <td>{props.user.firstName}</td>
-      <td>{props.user.lastName}</td>
-      <td>{props.user.email}</td>
-      <td>{admin}</td>
-      <td>{employmentType}</td>
-      <td>{department?.name}</td>
-      <td>{section?.name}</td>
-      <td>{subjectFields?.join(', ')}</td>
-      <td>{teams?.join(', ')}</td>
-      <td>{roles?.join(', ')}</td>
+      <td className="text-ellipsis p-3">{props.user.firstName}</td>
+      <td className="text-ellipsis p-3">{formatName(props.user.lastName)}</td>
+      <td className="p-3">{props.user.email}</td>
+      <td className="p-3">{admin}</td>
+      <td className="p-3">{employmentType}</td>
+      <td className="p-3">{department?.name}</td>
+      <td className="p-3">{section?.name}</td>
     </tr>
   );
 }
