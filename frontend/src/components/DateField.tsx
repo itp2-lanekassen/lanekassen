@@ -15,10 +15,13 @@ export const DateField = (props: {
   handleInputChange?: ChangeEventHandler<HTMLInputElement> | undefined;
   placeholder?: string;
 }) => {
+  //adjust props.max so it disables the correct dates in datepicker
   let max = props.max;
   if (props.max) {
     max = new Date(props.max.split('T')[0]).toLocaleDateString('fr-ca');
   }
+
+  //adjust props.min so it disables the correct dates in datepicker
   let min = props.min;
   if (props.min) {
     min = new Date(moment(props.min).add(2, 'days').toISOString().split('T')[0]).toLocaleDateString(

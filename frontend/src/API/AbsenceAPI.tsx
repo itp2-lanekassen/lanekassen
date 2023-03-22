@@ -60,7 +60,7 @@ export async function getAbsencesByUserId(
   return axios.get(`${url}/user/${userId}${queryStr.length ? '?' : ''}${queryStr}`);
 }
 
-//Return an absence that incolves the date parameter or return null
+//Return an absence that includes the date parameter or return null
 export async function getAbsencesByUserIdandDate(
   userId: number,
   date: string

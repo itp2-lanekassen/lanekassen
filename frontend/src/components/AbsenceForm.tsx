@@ -31,6 +31,7 @@ export type FormValues = {
   absenceType: number;
 };
 
+//set max on datepicker state based on when the next absence starts
 async function setMax(
   currentUser: any,
   clickedAbsence: Absence | undefined,
@@ -42,6 +43,7 @@ async function setMax(
   );
 }
 
+//set min on datepicker state based when the previous absence ends
 async function setMin(
   currentUser: any,
   clickedAbsence: Absence | undefined,
@@ -52,6 +54,7 @@ async function setMin(
     await getDatePickerMinForAbsence(currentUser.userId, clickedAbsence?.startDate || startDate)
   );
 }
+
 const AbsenceForm: React.FC<ModalProps> = ({
   onClose,
   startDate = '',
@@ -73,10 +76,12 @@ const AbsenceForm: React.FC<ModalProps> = ({
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
   });
 
+  //initialize mutaions for editing absence
   const { mutate: editAbsence } = useMutation({
     mutationFn: (absence: Absence) => updateAbsence(absence),
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
   });
+
   const [formValues, setFormValues] = React.useState<FormValues>({
     startDate,
     endDate: '',
@@ -85,6 +90,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
   });
 
   React.useEffect(() => {
+    //When editing an absence, put all the current values in the fields of the AbsenceForm
     if (clickedAbsence) {
       setFormValues({
         startDate: moment(clickedAbsence.startDate).format('YYYY-MM-DD'),
@@ -93,6 +99,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
         absenceType: clickedAbsence.absenceTypeId
       });
     }
+    //set min and max for datepicker based on other absences
     setMax(currentUser, clickedAbsence, startDate, setNextAbsenceStartDate);
     setMin(currentUser, clickedAbsence, startDate, setPreviousAbsenceEndDate);
   }, [clickedAbsence]);
@@ -126,6 +133,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    //add absence if type is 'add'
     if (type == 'add') {
       addAbsence({
         startDate: moment(formValues.startDate).toISOString(),
@@ -136,6 +144,8 @@ const AbsenceForm: React.FC<ModalProps> = ({
         userId: currentUser.userId
       });
     } else {
+      //edit absence if type is 'edit'
+
       //Make comment undefined if it is an empty string
       let updatedComment;
       if (formValues.comment === '') {
@@ -143,7 +153,10 @@ const AbsenceForm: React.FC<ModalProps> = ({
       } else {
         updatedComment = formValues.comment;
       }
+
       const updatedAbsenceType = (await getAbsenceTypeById(formValues.absenceType)).data;
+
+      //edit absence
       if (clickedAbsence) {
         editAbsence({
           absenceId: clickedAbsence.absenceId,

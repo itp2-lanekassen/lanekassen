@@ -16,12 +16,14 @@ import {
 } from '../API/AbsenceAPI';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
 
+//set max on datepicker state based on when the next absence starts
 async function setMax(currentUser: any, clickedAbsence: Absence, setNextAbsenceStartDate: any) {
   setNextAbsenceStartDate(
     await getDatePickerMaxForAbsence(currentUser.userId, clickedAbsence.endDate)
   );
 }
 
+//set min on datepicker state based when the previous absence ends
 async function setMin(currentUser: any, clickedAbsence: Absence, setPreviousAbsenceEndDate: any) {
   setPreviousAbsenceEndDate(
     await getDatePickerMinForAbsence(currentUser.userId, clickedAbsence.startDate)
@@ -61,6 +63,8 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       comment: props.absence.comment,
       absenceType: props.absence.absenceTypeId
     });
+
+    //set min and max for datepicker based on other absences
     setMax(currentUser, props.absence, setNextAbsenceStartDate);
     setMin(currentUser, props.absence, setPreviousAbsenceEndDate);
   }, [props.absence]);
