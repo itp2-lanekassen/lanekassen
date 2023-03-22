@@ -4,18 +4,32 @@ import { Department, EmploymentType, Section, User } from '@/types/types';
 import { useEffect, useState } from 'react';
 
 // copied from UserDropdown
-const formatName = (name: string) => {
+const formatFirstName = (name: string) => {
   return name
     .split(' ')
-    .map((n, i, arr) => {
+    .map((n, i) => {
       // if first or last name, return whole name
-      if (i === 0 || i === arr.length - 1) return n;
+      if (i === 0) return n;
 
       // return first character in uppercase with . after
       return n[0].toUpperCase() + '.';
     })
     .join(' ');
 };
+
+/*
+const formatLastName = (name: string) => {
+    return name
+      .split(' ')
+      .map((n, i, arr) => {
+        // if first or last name, return whole name
+        if (i === arr.length - 1) return n;
+
+        // return first character in uppercase with . after
+        return n[0].toUpperCase() + '.';
+      })
+      .join(' ');
+};*/
 
 export default function UserRow(props: { user: User }) {
   const [department, setDepartment] = useState<Department>();
@@ -38,8 +52,8 @@ export default function UserRow(props: { user: User }) {
 
   return (
     <tr>
-      <td className="text-ellipsis p-3">{props.user.firstName}</td>
-      <td className="text-ellipsis p-3">{formatName(props.user.lastName)}</td>
+      <td className="p-3">{formatFirstName(props.user.firstName)}</td>
+      <td className="p-3">{props.user.lastName}</td>
       <td className="p-3">{props.user.email}</td>
       <td className="p-3">{admin}</td>
       <td className="p-3">{employmentType}</td>
