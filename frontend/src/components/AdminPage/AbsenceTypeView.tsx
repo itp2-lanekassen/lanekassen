@@ -1,26 +1,22 @@
 import SubmitButton from '../SubmitButton';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteAbsenceType, getAllAbsenceTypes } from '@/API/AbsenceTypeAPI';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
-import { CalendarCellDisplay } from './CalendarCellDisplay';
-import { AbsenceType } from '@/types/types';
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getAllAbsenceTypes } from '@/API/AbsenceTypeAPI';
+import AddAbsenceTypeComponent from '@/components/AdminPage/AddAbsenceTypeComponent';
+import { useEffect, useState } from 'react';
+import AbsenceTypeRow from './AbsenceTypeRow';
 
 export default function AbsenceTypeView() {
-  const navigate = useNavigate();
-
-  const handleAdd = async () => {
-    console.log('add');
-    // display AddAbsenceTypeComponent
-  };
-
   const { data: absenceTypes } = useQuery({
     queryKey: ['absenceTypes'],
     queryFn: getAllAbsenceTypes
   });
+  const [view, setView] = useState<JSX.Element>(<></>);
 
-  return (
+  const handleAdd = () => {
+    setView(<AddAbsenceTypeComponent setView={setView} />);
+  };
+
+  const defaultView = (
     <div className="w-full flex flex-col items-center">
       <div className="flex flex-col items-center w-full">
         <div className="grid-cols-absence-types grid col-span-6 w-full place-item-center">
@@ -39,44 +35,20 @@ export default function AbsenceTypeView() {
             />
           </div>
           {absenceTypes?.data.map((absenceType) => (
-            <AbsenceTypeRow absenceType={absenceType} key={absenceType.absenceTypeId} />
+            <AbsenceTypeRow
+              absenceType={absenceType}
+              key={absenceType.absenceTypeId}
+              setView={setView}
+            />
           ))}
         </div>
       </div>
     </div>
   );
+
+  useEffect(() => {
+    setView(defaultView);
+  }, [absenceTypes]);
+
+  return view;
 }
-
-type AbsenceTypeRowProps = {
-  absenceType: AbsenceType;
-};
-
-const AbsenceTypeRow = ({ absenceType }: AbsenceTypeRowProps) => {
-  const queryClient = useQueryClient();
-  //Delete absenceType
-  const handleDelete = async () => {
-    deleteAbsenceTypeFromDatabase(absenceType.absenceTypeId);
-  };
-
-  //initialize deleteAbsence mutation
-  const { mutate: deleteAbsenceTypeFromDatabase } = useMutation({
-    mutationFn: deleteAbsenceType,
-    onSuccess: () => queryClient.invalidateQueries(['absenceTypes'])
-  });
-
-  //Edit absenceType
-  const handleEdit = async () => {
-    console.log('edit');
-    // display UpdateAbsenceTypeComponent
-  };
-  return (
-    <>
-      <p className="flex-1 text-center">{absenceType.name}</p>
-      <p className="flex-1 text-center">{absenceType.code}</p>
-      <p className="flex-1 text-center">{absenceType.colorCode}</p>
-      <CalendarCellDisplay code={absenceType.code} colorCode={absenceType.colorCode} />
-      <Button onClick={handleEdit}>Edit</Button>
-      <Button onClick={handleDelete}>Delete</Button>
-    </>
-  );
-};

@@ -3,9 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import { postAbsenceType } from '@/API/AbsenceTypeAPI';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { CalendarCellDisplay } from './CalendarCellDisplay';
+import AbsenceTypeView from './AbsenceTypeView';
 
 type FormValues = {
   name: string;
@@ -13,10 +13,11 @@ type FormValues = {
   colorCode: string;
 };
 
-export default function AddAbsenceTypeComponent() {
+export default function AddAbsenceTypeComponent(props: {
+  setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
+}) {
   const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(true);
-  const navigate = useNavigate();
 
   //initialize postAbsence mutation
   const { mutate: addAbsenceType } = useMutation({
@@ -65,6 +66,7 @@ export default function AddAbsenceTypeComponent() {
     form.reset();
 
     alert('Fraværstypen ble lagt til!');
+    props.setView(<AbsenceTypeView />);
   };
 
   // disabled button until all fields are filled
@@ -85,7 +87,7 @@ export default function AddAbsenceTypeComponent() {
             disabledTitle={'Tilbake'}
             buttonText={'Tilbake'}
             handleClick={() => {
-              navigate('/admin');
+              props.setView(<AbsenceTypeView />);
             }}
           />
         </div>
@@ -101,6 +103,7 @@ export default function AddAbsenceTypeComponent() {
             id="name"
             onChange={handleInputChange}
           />
+
           <label className="mt-5" htmlFor="colorCode">
             Velg farge:
           </label>
@@ -111,6 +114,7 @@ export default function AddAbsenceTypeComponent() {
             id="colorCode"
             onChange={handleInputChange}
           />
+
           <label className="mt-5" htmlFor="code">
             Kode:
           </label>
@@ -123,19 +127,10 @@ export default function AddAbsenceTypeComponent() {
           />
           <br />
           {/* Preview Calendarcell component with and without hash */}
-          <div className="flex flex-col items-center">
-            <h3 className="text-xl">Forhåndsvisning</h3>
-            <br />
-            <div className="flex flex-row items-center">
-              <div className="flex flex-col items-center">
-                <p>Godkjent fravær:</p>
-                <p>Ikke-godkjent fravær:</p>
-              </div>
-              <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
-            </div>
-          </div>
-          <br />
+          <label className="">Forhåndsvisning (Godkjent / ikke-godkjent):</label>
+          <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
 
+          <br />
           <Button
             type="submit"
             disabled={isDisabled}

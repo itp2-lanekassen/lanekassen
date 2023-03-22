@@ -3,9 +3,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import { updateAbsenceType } from '@/API/AbsenceTypeAPI';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { CalendarCellDisplay } from './CalendarCellDisplay';
+import { AbsenceType } from '@/types/types';
+import AbsenceTypeView from './AbsenceTypeView';
 
 type FormValues = {
   name: string;
@@ -13,28 +14,18 @@ type FormValues = {
   colorCode: string;
 };
 
-export default function UpdateAbsenceTypeComponent() {
+export default function UpdateAbsenceTypeComponent(props: {
+  absenceType: AbsenceType;
+  setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
+}) {
   const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(true);
-  const navigate = useNavigate();
-
-  //initialize postAbsence mutation
-  /*   const { mutate: updateAbsenceTypeToDatabase } = useMutation({
-    mutationFn: updateAbsenceType(1, {
-      absenceTypeId: 1,
-      name: 'test',
-      code: 'test',
-      colorCode: '#000000'
-    }),
-
-    onSuccess: () => queryClient.invalidateQueries(['absenceTypes'])
-  }); */
 
   //initialize form values
   const [formValues, setFormValues] = useState<FormValues>({
-    name: '',
-    code: '',
-    colorCode: '#000000'
+    name: props.absenceType.name,
+    code: props.absenceType.code,
+    colorCode: props.absenceType.colorCode
   });
 
   //update form values on input change
@@ -46,6 +37,12 @@ export default function UpdateAbsenceTypeComponent() {
     });
   };
 
+  //initialize postAbsence mutation
+  const { mutate: updateAbsenceTypeToDatabase } = useMutation({
+    mutationFn: (options: AbsenceType) => updateAbsenceType(options.absenceTypeId, options),
+    onSuccess: () => queryClient.invalidateQueries(['absenceTypes'])
+  });
+
   //Post absence to database
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (formValues.name === '' || formValues.code === '' || formValues.colorCode === '#000000') {
@@ -53,25 +50,14 @@ export default function UpdateAbsenceTypeComponent() {
     }
     e.preventDefault();
 
-    /*     updateAbsenceTypeToDatabase({
-      absenceTypeId: 1,
+    updateAbsenceTypeToDatabase({
+      absenceTypeId: props.absenceType.absenceTypeId,
       name: formValues.name,
       code: formValues.code,
       colorCode: formValues.colorCode
-    }); */
-
-    //reset form values
-    setFormValues({
-      name: '',
-      code: '',
-      colorCode: '#000000'
     });
-
-    // clear form fields
-    const form = document.getElementById('AbsenceTypeForm') as HTMLFormElement;
-    form.reset();
-
-    alert('Fraværstypen ble lagt til!');
+    alert('Fraværstypen ble oppdatert!');
+    props.setView(<AbsenceTypeView />);
   };
 
   // disabled button until all fields are filled
@@ -92,7 +78,7 @@ export default function UpdateAbsenceTypeComponent() {
             disabledTitle={'Tilbake'}
             buttonText={'Tilbake'}
             handleClick={() => {
-              navigate('/admin');
+              props.setView(<AbsenceTypeView />);
             }}
           />
         </div>
@@ -106,6 +92,7 @@ export default function UpdateAbsenceTypeComponent() {
             type="text"
             name="name"
             id="name"
+            value={formValues.name}
             onChange={handleInputChange}
           />
           <label className="mt-5" htmlFor="colorCode">
@@ -116,6 +103,7 @@ export default function UpdateAbsenceTypeComponent() {
             type="color"
             name="colorCode"
             id="colorCode"
+            value={formValues.colorCode}
             onChange={handleInputChange}
           />
           <label className="mt-5" htmlFor="code">
@@ -126,23 +114,15 @@ export default function UpdateAbsenceTypeComponent() {
             type="text"
             name="code"
             id="code"
+            value={formValues.code}
             onChange={handleInputChange}
           />
           <br />
           {/* Preview Calendarcell component with and without hash */}
-          <div className="flex flex-col items-center">
-            <h3 className="text-xl">Forhåndsvisning</h3>
-            <br />
-            <div className="flex flex-row items-center">
-              <div className="flex flex-col items-center">
-                <p>Godkjent fravær:</p>
-                <p>Ikke-godkjent fravær:</p>
-              </div>
-              <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
-            </div>
-          </div>
-          <br />
+          <label className="">Forhåndsvisning (Godkjent / ikke-godkjent):</label>
+          <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
 
+          <br />
           <Button
             type="submit"
             disabled={isDisabled}

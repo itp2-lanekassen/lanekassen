@@ -36,6 +36,3 @@ export const CalendarCellDisplay = ({ code, colorCode }: { code: string; colorCo
     </div>
   );
 };
-
-/* <p className="inset-0 flex items-center justify-center">Godkjent fravær: </p> */
-/* <p className="inset-0 flex items-center justify-center">Ikke-godkjent fravær: </p> */
