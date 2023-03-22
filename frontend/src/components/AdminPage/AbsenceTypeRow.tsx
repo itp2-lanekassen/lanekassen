@@ -11,17 +11,19 @@ export default function AbsenceTypeRow(props: {
 }) {
   const queryClient = useQueryClient();
 
+  const { mutate: deleteAbsenceTypeFromDatabase } = useMutation({
+    mutationFn: deleteAbsenceType,
+    onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
+    onError: () =>
+      alert('Fraværstypen kunne ikke slettes. Fraværstyper som er i bruk kan ikke slettes.')
+  });
+
   const handleDelete = async () => {
     const confirmDelete = window.confirm('Er du sikker på at du vil slette denne fraværstypen?');
-    if (!confirmDelete) {
+    if (confirmDelete) {
       deleteAbsenceTypeFromDatabase(props.absenceType.absenceTypeId);
     }
   };
-
-  const { mutate: deleteAbsenceTypeFromDatabase } = useMutation({
-    mutationFn: deleteAbsenceType,
-    onSuccess: () => queryClient.invalidateQueries(['absenceTypes'])
-  });
 
   const handleEdit = async () => {
     props.setView(
