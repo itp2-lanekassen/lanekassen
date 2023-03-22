@@ -1,9 +1,9 @@
-import { getAbsencesByUserId } from '@/API/AbsenceAPI';
-import { useFilterContext } from '@/context/FilterContext';
-import { useModalContext } from '@/context/ModalContext';
-import { useUserContext } from '@/context/UserContext';
-import { Column } from '@/pages/CalendarPage';
-import { Absence, User } from '@/types/types';
+import { getAbsenceById, getAbsencesByUserId, getAbsencesByUserIdandDate } from '../API/AbsenceAPI';
+import { useFilterContext } from '../context/FilterContext';
+import { useModalContext } from '../context/ModalContext';
+import { useUserContext } from '../context/UserContext';
+import { Column } from '../pages/CalendarPage';
+import { Absence, User } from '../types/types';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 
@@ -28,10 +28,17 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
   const { openAbsenceForm } = useModalContext();
   const { fromDate, toDate } = useFilterContext();
 
-  const handleRowClick = (day: string) => {
+  const handleRowClick = async (day: string) => {
     if (!(isCurrentUser || currentUser.admin)) return;
-
-    openAbsenceForm(moment(day).format('yyyy-MM-DD'));
+    const absence = await getAbsencesByUserIdandDate(currentUser.userId, day).then(
+      (response) => response?.data
+    );
+    //const absence = getAbsencesByUserIdandDate(currentUser.userId, day);
+    if (absence) {
+      openAbsenceForm(moment(day).format('yyyy-MM-DD'), 'edit', absence);
+    } else {
+      openAbsenceForm(moment(day).format('yyyy-MM-DD'));
+    }
   };
 
   const {
