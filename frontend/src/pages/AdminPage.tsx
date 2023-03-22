@@ -10,6 +10,7 @@ import { TabContext } from '@mui/lab';
 import { withStyles } from '@mui/styles';
 import PlusButton from '@/components/AdminPage/PlusButton';
 import UserTab from '@/components/AdminPage/UserTab';
+import { height } from '@mui/system';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -92,7 +93,7 @@ export default function AdminPage() {
             </Tabs>
           </div>
 
-          <div className="w-full border-1 border-gray-200 rounded-r-xl">
+          <div className="w-full h-fit border-1 border-gray-200 rounded-r-xl">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
                 {label === 'Brukere' ? (
