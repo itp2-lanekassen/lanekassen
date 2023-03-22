@@ -8,6 +8,7 @@ import SubmitButton from '../components/SubmitButton';
 import { useUserContext } from '../context/UserContext';
 import PageLayout from '@/components/PageLayout';
 import SectionView from '@/components/AdminPage/SectionView';
+import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -74,11 +75,11 @@ export default function AdminPage() {
             </Tabs>
           </div>
 
-          <div className="w-full border-1 border-primary-light rounded-r-xl">
+          <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
-                {label === 'Brukere' && <div>brukere{/* Add component here */}</div>}
-                {label === 'Fraværstyper' && <div>fraværstyper</div>}
+                {label === 'Brukere' && <div>brukere</div>}
+                {label === 'Fraværstyper' && <AbsenceTypeView />}
                 {label === 'Avdeling' && <div>avdeling</div>}
                 {label === 'Seksjon' && <SectionView />}
                 {label === 'Fagfelt' && <div>fagfelt</div>}
