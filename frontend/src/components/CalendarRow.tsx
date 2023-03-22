@@ -1,7 +1,7 @@
-import { getAbsencesByUserId } from '@/API/AbsenceAPI';
-import { useFilterContext } from '@/context/FilterContext';
-import { Column } from '@/pages/CalendarPage';
-import { User } from '@/types/types';
+import { getAbsencesByUserId } from '../API/AbsenceAPI';
+import { useFilterContext } from '../context/FilterContext';
+import { Column } from '../pages/CalendarPage';
+import { User } from '../types/types';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 import { Fragment } from 'react';
@@ -16,7 +16,6 @@ interface CalendarRowProps {
 
 const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps) => {
   const { fromDate, toDate } = useFilterContext();
-
   const { data: absences } = useQuery(
     ['absences', { userId: user.userId, fromDate, toDate }],
     async () => (await getAbsencesByUserId(user.userId, fromDate, toDate)).data

@@ -2,8 +2,8 @@ import Dropdown from './Dropdown';
 import DropdownMultiSelect from './DropdownMultiSelect';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useGlobalContext } from '@/context/GlobalContext';
-import { useFilterContext } from '@/context/FilterContext';
+import { useGlobalContext } from '../context/GlobalContext';
+import { useFilterContext } from '../context/FilterContext';
 import moment from 'moment';
 
 /**
@@ -72,7 +72,6 @@ export default function FilterComponents() {
             handleChange={setSubjectFields}
             value={selectedSubjectFields}
             className="!w-auto"
-            isExpands={false}
             isDisabled={false}
           />
           <DropdownMultiSelect
@@ -81,7 +80,6 @@ export default function FilterComponents() {
             handleChange={setTeams}
             value={selectedTeams}
             className="!w-auto"
-            isExpands={true}
             isDisabled={false}
           />
           <DropdownMultiSelect
@@ -90,11 +88,10 @@ export default function FilterComponents() {
             handleChange={setRoles}
             value={selectedRoles}
             className="!w-auto"
-            isExpands={false}
             isDisabled={false}
           />
           <button
-            className=" border-1 rounded-[20px] border-primary text-center max-h-9 focus:outline-none px-2 text-white bg-primary hover:bg-white hover:text-primary"
+            className=" border-1 rounded-[20px] border-primary text-center w-fit focus:outline-none px-2 text-white bg-primary hover:bg-white hover:text-primary"
             onClick={() => {
               setDepartments([]);
               setSections([]);
@@ -116,13 +113,7 @@ export default function FilterComponents() {
             </p>
             <button
               className="text-white text-sm hover:underline focus:outline-none"
-              onClick={() => {
-                setDepartments([]);
-                setSections([]);
-                setSubjectFields([]);
-                setTeams([]);
-                setRoles([]);
-              }}
+              onClick={() => setDepartments([])}
             >
               <CloseIcon />
             </button>

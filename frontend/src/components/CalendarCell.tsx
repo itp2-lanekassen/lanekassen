@@ -35,7 +35,13 @@ const CalendarCell: FC<CalendarCellProps> = ({ date, isCurrentUser, defaultColor
 
   const handleCellClick = () => {
     if (!(isCurrentUser || currentUser.admin)) return;
-    openAbsenceForm(moment(date).format('yyyy-MM-DD'));
+
+    //open editing version of form if an absence was clicked, otherwise open add version
+    if (absence) {
+      openAbsenceForm(moment(date).format('yyyy-MM-DD'), 'edit', absence);
+    } else {
+      openAbsenceForm(moment(date).format('yyyy-MM-DD'));
+    }
   };
 
   return (

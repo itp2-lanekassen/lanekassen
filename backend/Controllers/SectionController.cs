@@ -25,7 +25,6 @@ public class SectionController : ControllerBase {
 
     Section? newSection = new() {
       Name = section.Name,
-      Users = await _context.Users.Where(u => section.Users.Contains(u.UserId)).ToListAsync(),
       Departments = await _context.Departments.Where(d => section.Departments.Contains(d.DepartmentId)).ToListAsync()
     };
 
@@ -52,13 +51,15 @@ public class SectionController : ControllerBase {
       return BadRequest(ModelState);
     }
 
-    Section? existingSection = await _context.Sections.FindAsync(id);
+    Section? existingSection = await _context.Sections.Include(s => s.Departments).FirstOrDefaultAsync(s => s.SectionId == id);
     if (existingSection == null) {
       return BadRequest("Invalid section id");
     }
 
     existingSection.Name = section.Name;
-    existingSection.Users = await _context.Users.Where(u => section.Users.Contains(u.UserId)).ToListAsync();
+
+    existingSection.Departments.Clear();
+
     existingSection.Departments = await _context.Departments.Where(d => section.Departments.Contains(d.DepartmentId)).ToListAsync();
 
     try {
@@ -104,7 +105,7 @@ public class SectionController : ControllerBase {
 
   [HttpGet]
   public async Task<IActionResult> GetSections() {
-    return Ok(await _context.Sections.ToListAsync());
+    return Ok(await _context.Sections.Include((s) => s.Departments).ToListAsync());
   }
 
   [HttpGet("{id}")]
