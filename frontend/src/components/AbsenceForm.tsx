@@ -1,16 +1,25 @@
 import { Button } from '@material-tailwind/react';
 import * as React from 'react';
 import moment from 'moment';
-import { postAbsence } from '../API/AbsenceAPI';
+import {
+  getDatePickerMaxForAbsence,
+  getDatePickerMinForAbsence,
+  postAbsence,
+  updateAbsence
+} from '../API/AbsenceAPI';
 import { useUserContext } from '../context/UserContext';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DateField } from './DateField';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
+import { Absence } from '../types/types';
+import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
 
 type ModalProps = {
   startDate?: string;
+  type?: string;
+  clickedAbsence?: Absence;
   onClose: () => void;
 };
 
@@ -21,23 +30,71 @@ export type FormValues = {
   absenceType: number;
 };
 
-const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
-  const queryClient = useQueryClient();
+async function setMax(
+  currentUser: any,
+  clickedAbsence: Absence | undefined,
+  startDate: string,
+  setNextAbsenceStartDate: any
+) {
+  setNextAbsenceStartDate(
+    await getDatePickerMaxForAbsence(currentUser.userId, clickedAbsence?.endDate || startDate)
+  );
+}
 
+async function setMin(
+  currentUser: any,
+  clickedAbsence: Absence | undefined,
+  startDate: string,
+  setPreviousAbsenceEndDate: any
+) {
+  setPreviousAbsenceEndDate(
+    await getDatePickerMinForAbsence(currentUser.userId, clickedAbsence?.startDate || startDate)
+  );
+}
+const AbsenceForm: React.FC<ModalProps> = ({
+  onClose,
+  startDate = '',
+  type = 'add',
+  clickedAbsence
+}) => {
+  const queryClient = useQueryClient();
   const currentUser = useUserContext();
   const { absenceTypes } = useGlobalContext();
+  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<string>();
+  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<string>();
+  let buttonText = 'Legg til';
+  if (type === 'edit') {
+    buttonText = 'Rediger';
+  }
 
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
   });
 
+  const { mutate: editAbsence } = useMutation({
+    mutationFn: (absence: Absence) => updateAbsence(absence),
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
+  });
   const [formValues, setFormValues] = React.useState<FormValues>({
     startDate,
     endDate: '',
     comment: '',
     absenceType: absenceTypes[0].absenceTypeId
   });
+
+  React.useEffect(() => {
+    if (clickedAbsence) {
+      setFormValues({
+        startDate: moment(clickedAbsence.startDate).format('YYYY-MM-DD'),
+        endDate: moment(clickedAbsence.endDate).format('YYYY-MM-DD'),
+        comment: clickedAbsence.comment,
+        absenceType: clickedAbsence.absenceTypeId
+      });
+    }
+    setMax(currentUser, clickedAbsence, startDate, setNextAbsenceStartDate);
+    setMin(currentUser, clickedAbsence, startDate, setPreviousAbsenceEndDate);
+  }, [clickedAbsence]);
 
   React.useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -68,15 +125,39 @@ const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (type == 'add') {
+      addAbsence({
+        startDate: moment(formValues.startDate).toISOString(),
+        endDate: moment(formValues.endDate).toISOString(),
+        comment: formValues.comment,
+        isApproved: false,
+        absenceTypeId: formValues.absenceType,
+        userId: currentUser.userId
+      });
+    } else {
+      //Make comment undefined if it is an empty string
+      let updatedComment;
+      if (formValues.comment === '') {
+        updatedComment = undefined;
+      } else {
+        updatedComment = formValues.comment;
+      }
+      const updatedAbsenceType = (await getAbsenceTypeById(formValues.absenceType)).data;
+      if (clickedAbsence) {
+        editAbsence({
+          absenceId: clickedAbsence.absenceId,
+          startDate: moment(formValues.startDate).toISOString(),
+          endDate: moment(formValues.endDate).toISOString(),
+          absenceTypeId: formValues.absenceType,
+          type: updatedAbsenceType,
+          userId: currentUser.userId,
+          user: currentUser,
+          isApproved: false,
+          comment: updatedComment
+        });
+      }
+    }
 
-    addAbsence({
-      startDate: moment(formValues.startDate).toISOString(),
-      endDate: moment(formValues.endDate).toISOString(),
-      comment: formValues.comment,
-      isApproved: false,
-      absenceTypeId: formValues.absenceType,
-      userId: currentUser.userId
-    });
     onClose();
   };
 
@@ -89,7 +170,8 @@ const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
           <DateField
             formValues={formValues}
             handleInputChange={handleInputChange}
-            max={formValues.endDate}
+            min={previousAbsenceEndDate}
+            max={formValues.endDate || nextAbsenceStartDate}
             value={formValues.startDate}
             name={'startDate'}
             label="Fra"
@@ -97,7 +179,10 @@ const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
           <DateField
             formValues={formValues}
             handleInputChange={handleInputChange}
-            min={formValues.startDate}
+            min={new Date(
+              moment(formValues.startDate).add(0, 'days').toISOString().split('T')[0]
+            ).toLocaleDateString('fr-ca')}
+            max={nextAbsenceStartDate}
             value={formValues.endDate}
             name={'endDate'}
             label="Til"
@@ -115,7 +200,7 @@ const AbsenceForm: React.FC<ModalProps> = ({ onClose, startDate = '' }) => {
               type="submit"
               className="modal-submit-button button heading-xs px-4 py-2 rounded-full bg-primary text-white "
             >
-              Legg til
+              {buttonText}
             </Button>
           </div>
         </form>
