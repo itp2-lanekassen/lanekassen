@@ -1,5 +1,6 @@
 import { Absence, NewAbsence } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
+import moment from 'moment';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -58,6 +59,74 @@ export async function getAbsencesByUserId(
   const queryStr = query.toString();
 
   return axios.get(`${url}/user/${userId}${queryStr.length ? '?' : ''}${queryStr}`);
+}
+
+//Return an absence that incolves the date parameter or return null
+export async function getAbsencesByUserIdandDate(
+  userId: number,
+  date: string
+): Promise<AxiosResponse<Absence> | null> {
+  const absences = await getAbsencesByUserId(userId).then((response) => response.data);
+  let id = null;
+  absences.map((a) => {
+    if (
+      new Date(a.startDate).valueOf() <= new Date(date).valueOf() &&
+      new Date(date).valueOf() <= new Date(a.endDate).valueOf()
+    ) {
+      id = a.absenceId;
+      return;
+    }
+  });
+  let isAbsence = null;
+  if (id) {
+    isAbsence = axios.get(`${url}/${id}`);
+  }
+
+  return isAbsence;
+}
+
+//return the first startDate of an absence after a specific date, return undefined if there is none
+export async function getDatePickerMaxForAbsence(
+  userId: number,
+  date: string
+): Promise<string | undefined> {
+  const absences = await getAbsencesByUserId(userId).then((response) => response.data);
+  let returnDate = undefined;
+  let earliestDate = date;
+  let diff = Infinity;
+  absences.map((a) => {
+    if (
+      new Date(date).valueOf() < new Date(a.startDate).valueOf() &&
+      new Date(a.startDate).valueOf() - new Date(date).valueOf() < diff
+    ) {
+      earliestDate = a.startDate;
+      returnDate = earliestDate;
+      diff = new Date(a.startDate).valueOf() - new Date(date).valueOf();
+    }
+  });
+  return returnDate;
+}
+
+//return the first endDate of an absence before a specific date, return undefined if there is none
+export async function getDatePickerMinForAbsence(
+  userId: number,
+  date: string
+): Promise<string | undefined> {
+  const absences = await getAbsencesByUserId(userId).then((response) => response.data);
+  let returnDate = undefined;
+  let earliestDate = date;
+  let diff = Infinity;
+  absences.map((a) => {
+    if (
+      new Date(date).valueOf() > new Date(a.endDate).valueOf() &&
+      new Date(date).valueOf() - new Date(a.endDate).valueOf() < diff
+    ) {
+      earliestDate = new Date(a.endDate).toLocaleDateString('fr-ca');
+      returnDate = earliestDate;
+      diff = new Date(date).valueOf() - new Date(a.endDate).valueOf();
+    }
+  });
+  return returnDate;
 }
 
 export default {
