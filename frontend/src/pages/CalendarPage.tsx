@@ -1,15 +1,15 @@
 import { Fragment, useEffect, useState } from 'react';
 import m from 'moment';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { filterUsers } from '@/API/UserAPI';
-import { useUserContext } from '@/context/UserContext';
-import CalendarRow from '@/components/CalendarRow';
-import CalendarHeader from '@/components/CalendarHeader';
+import { filterUsers } from '../API/UserAPI';
+import { useUserContext } from '../context/UserContext';
+import CalendarRow from '../components/CalendarRow';
+import CalendarHeader from '../components/CalendarHeader';
 import { useFilterContext } from '../context/FilterContext';
-import FilterComponents from '@/components/CalendarFilter';
+import FilterComponents from '../components/CalendarFilter';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
-import PageLayout from '@/components/PageLayout';
+import PageLayout from '../components/PageLayout';
 
 export type Column = Record<string, { display: string; value: string }[]>;
 

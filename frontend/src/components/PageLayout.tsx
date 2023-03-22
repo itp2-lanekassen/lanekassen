@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import ellipse from '@/assets/ellipse.png';
+import ellipse from '../assets/ellipse.png';
 
 interface PageLayoutProps {
   title: string;

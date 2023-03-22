@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SubmitButton from '../components/SubmitButton';
 import { useUserContext } from '../context/UserContext';
-import PageLayout from '@/components/PageLayout';
+import PageLayout from '../components/PageLayout';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 

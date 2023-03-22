@@ -43,9 +43,13 @@ const CalendarCell: FC<CalendarCellProps> = ({
   //TODO: bruk moment(date) til å sjekke om den datoen har fravær fra før
   const handleCellClick = () => {
     if (!(isCurrentUser || currentUser.admin)) return;
-    absence
-      ? console.log('absence already registered')
-      : openAbsenceForm(user, moment(date).format('yyyy-MM-DD'));
+
+    //open editing version of form if an absence was clicked, otherwise open add version
+    if (absence) {
+      openAbsenceForm(user, moment(date).format('yyyy-MM-DD'), 'edit', absence);
+    } else {
+      openAbsenceForm(user, moment(date).format('yyyy-MM-DD'));
+    }
   };
 
   return (

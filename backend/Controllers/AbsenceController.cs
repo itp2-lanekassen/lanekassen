@@ -121,7 +121,7 @@ public class AbsenceController : ControllerBase {
     IQueryable<Absence> absences = _context.Absences;
 
     if (FromDate != null) {
-      absences = absences.Where(a => a.StartDate >= FromDate);
+      absences = absences.Where(a => a.EndDate >= FromDate);
     }
 
     if (ToDate != null) {
@@ -146,7 +146,7 @@ public class AbsenceController : ControllerBase {
     IQueryable<Absence> absences = _context.Absences.Where(a => a.UserId == id);
 
     if (FromDate != null) {
-      absences = absences.Where(a => a.StartDate >= FromDate);
+      absences = absences.Where(a => a.EndDate >= FromDate);
     }
 
     if (ToDate != null) {
