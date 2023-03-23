@@ -9,7 +9,8 @@ import { useUserContext } from '../context/UserContext';
 import PageLayout from '@/components/PageLayout';
 import SectionView from '@/components/AdminPage/SectionView';
 import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
-import AdminDepartments from '@/components/AdminPage/Departments';
+import AdminDepartments from '@/components/AdminPage/DepartmentList';
+import DepartmentView from '@/components/AdminPage/DepartmentView';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -83,7 +84,7 @@ export default function AdminPage() {
                 {label === 'Fraværstyper' ? <div>fraværstyper</div> : null}
                 {label === 'Avdeling' ? (
                   <div>
-                    <AdminDepartments />
+                    <DepartmentView />
                   </div>
                 ) : null}
                 {label === 'Seksjon' ? <div>seksjon</div> : null}
