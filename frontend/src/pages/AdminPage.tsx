@@ -9,6 +9,7 @@ import { useUserContext } from '../context/UserContext';
 import PageLayout from '@/components/PageLayout';
 import SectionView from '@/components/AdminPage/SectionView';
 import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
+import AdminDepartments from '@/components/AdminPage/Departments';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -78,13 +79,17 @@ export default function AdminPage() {
           <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
-                {label === 'Brukere' && <div>brukere</div>}
-                {label === 'Fraværstyper' && <AbsenceTypeView />}
-                {label === 'Avdeling' && <div>avdeling</div>}
-                {label === 'Seksjon' && <SectionView />}
-                {label === 'Fagfelt' && <div>fagfelt</div>}
-                {label === 'Team' && <div>team</div>}
-                {label === 'Rolle' && <div>rolle</div>}
+                {label === 'Brukere' ? <div>brukere{/* Add component here */}</div> : null}
+                {label === 'Fraværstyper' ? <div>fraværstyper</div> : null}
+                {label === 'Avdeling' ? (
+                  <div>
+                    <AdminDepartments />
+                  </div>
+                ) : null}
+                {label === 'Seksjon' ? <div>seksjon</div> : null}
+                {label === 'Fagfelt' ? <div>fagfelt</div> : null}
+                {label === 'Team' ? <div>team</div> : null}
+                {label === 'Rolle' ? <div>rolle</div> : null}
               </TabPanel>
             ))}
           </div>
