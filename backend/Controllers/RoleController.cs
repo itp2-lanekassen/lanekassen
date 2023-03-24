@@ -25,7 +25,7 @@ public class RoleController : ControllerBase {
 
     Role? newRole = new() {
       Name = role.Name,
-      Users = await _context.Users.Where(u => role.Users!.Contains(u.UserId)).ToListAsync(),
+      Departments = await _context.Departments.Where(d => role.Departments!.Contains(d.DepartmentId)).ToListAsync(),
     };
 
     try {
@@ -51,13 +51,16 @@ public class RoleController : ControllerBase {
       return BadRequest(ModelState);
     }
 
-    Role? existingRole = await _context.Roles.FindAsync(id);
+    Role? existingRole = await _context.Roles.Include(t => t.Departments).FirstOrDefaultAsync(t => t.RoleId == id);
     if (existingRole == null) {
       return BadRequest("Invalid role id");
     }
 
     existingRole.Name = role.Name;
-    existingRole.Users = await _context.Users.Where(u => role.Users!.Contains(u.UserId)).ToListAsync();
+
+    existingRole.Departments.Clear();
+
+    existingRole.Departments = await _context.Departments.Where(d => role.Departments!.Contains(d.DepartmentId)).ToListAsync();
 
     try {
       _ = _context.Roles.Update(existingRole);
@@ -102,7 +105,7 @@ public class RoleController : ControllerBase {
 
   [HttpGet]
   public async Task<IActionResult> GetRoles() {
-    List<Role> roles = await _context.Roles.ToListAsync();
+    List<Role> roles = await _context.Roles.Include((s) => s.Departments).ToListAsync();
     return Ok(roles);
   }
 

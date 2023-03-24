@@ -1,4 +1,4 @@
-import { Role } from '../types/types';
+import { Role, RoleDTO } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -13,11 +13,11 @@ export function getRoleById(roleId: number): Promise<AxiosResponse<Role>> {
   return axios.get(`${url}/${roleId}`);
 }
 
-export function postRole(role: Role): Promise<AxiosResponse<Role>> {
+export function postRole(role: RoleDTO): Promise<AxiosResponse<Role>> {
   return axios.post(url, role);
 }
 
-export function updateRole(roleId: number, role: Role): Promise<AxiosResponse<Role>> {
+export function updateRole(roleId: number, role: RoleDTO): Promise<AxiosResponse<Role>> {
   return axios.put(`${url}/${roleId}`, role);
 }
 

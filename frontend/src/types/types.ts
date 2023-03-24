@@ -4,6 +4,12 @@ export interface Role {
   roleId: number;
   name: string;
   users?: User[];
+  departments?: Department[];
+}
+
+export interface RoleDTO {
+  name: string;
+  departments: number[];
 }
 
 export interface Team {
