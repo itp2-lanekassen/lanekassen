@@ -16,7 +16,7 @@ export const SignInButton = () => {
   };
   return (
     <button
-      className="bg-primary-light hover:scale-110 text-grey-lightest font-Rubik Medium py-2 px-4 rounded position: relative"
+      className="bg-primary hover:scale-110 text-grey-lightest font-Rubik Medium py-2 px-4 rounded position: relative"
       onClick={() => handleLogin('redirect')}
     >
       Logg inn med Microsoft Azure

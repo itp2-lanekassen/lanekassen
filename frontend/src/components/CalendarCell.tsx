@@ -8,6 +8,7 @@ interface CalendarCellProps {
   date: string;
   isCurrentUser: boolean;
   defaultColor: string;
+  hoverColor: string;
   absence?: Absence;
   user: User;
 }
@@ -35,6 +36,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
   date,
   isCurrentUser,
   defaultColor,
+  hoverColor,
   absence
 }) => {
   const currentUser = useUserContext();
@@ -54,7 +56,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
 
   return (
     <div
-      className={`${defaultColor} ${
+      className={`hover:${hoverColor} ${defaultColor} ${
         isCurrentUser || currentUser.admin ? 'cursor-pointer' : 'cursor-default'
       } w-full min-h-[21px] h-full`}
       style={getStyle(absence)}
@@ -62,7 +64,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
       onClick={handleCellClick}
     >
       {absence && (
-        <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold">
+        <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold hover:scale-115">
           {absence.type.code}
         </span>
       )}

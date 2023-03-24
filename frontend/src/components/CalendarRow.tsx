@@ -1,10 +1,10 @@
+import { useQuery } from '@tanstack/react-query';
+import moment from 'moment';
+import { Fragment } from 'react';
 import { getAbsencesByUserId } from '../API/AbsenceAPI';
 import { useFilterContext } from '../context/FilterContext';
 import { Column } from '../pages/CalendarPage';
 import { User } from '../types/types';
-import { useQuery } from '@tanstack/react-query';
-import moment from 'moment';
-import { Fragment } from 'react';
 import CalendarCell from './CalendarCell';
 import UserDropdown from './UserDropdown';
 
@@ -41,6 +41,7 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
               absence={absenceOnDate(date.value)}
               isCurrentUser={isCurrentUser}
               defaultColor={j % 2 ? 'bg-card-two' : 'bg-card-one'}
+              hoverColor={j % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark'}
             />
           ))}
         </Fragment>
