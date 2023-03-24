@@ -157,10 +157,10 @@ export default function MyPage() {
         <p className="font-bold"> Ansattforhold: </p>
         <Dropdown
           placeholder="Ansattforhold"
-          listOfOptions={Object.keys(EmploymentType)
+          options={Object.keys(EmploymentType)
             .filter((type) => isNaN(Number(type)))
-            .map((type, i) => ({ name: type, id: i }))}
-          handleChange={(e) => setSelectedEmploymentType(e)}
+            .map((type, i) => ({ label: type, value: i }))}
+          onChange={setSelectedEmploymentType}
           value={selectedEmploymentType}
           isDisabled={isDropdownDisabled}
         />
@@ -168,11 +168,11 @@ export default function MyPage() {
         <p className="font-bold"> Avdeling: </p>
         <Dropdown
           placeholder="Avdeling"
-          listOfOptions={departments.map((d: { name: string; departmentId: number }) => ({
-            name: d.name,
-            id: d.departmentId
+          options={departments.map((d) => ({
+            label: d.name,
+            value: d.departmentId
           }))}
-          handleChange={(e) => setSelectedDepartment(e)}
+          onChange={setSelectedDepartment}
           value={selectedDepartment}
           isDisabled={isDropdownDisabled}
         />
@@ -180,11 +180,11 @@ export default function MyPage() {
         <p className="font-bold"> Seksjon: </p>
         <Dropdown
           placeholder="Seksjon"
-          listOfOptions={(sections || []).map((s: { name: string; sectionId: number }) => ({
-            name: s.name,
-            id: s.sectionId
+          options={(sections || []).map((s) => ({
+            label: s.name,
+            value: s.sectionId
           }))}
-          handleChange={(e) => setSelectedSection(e)}
+          onChange={setSelectedSection}
           value={selectedSection}
           isDisabled={isDropdownDisabled}
         />
@@ -192,13 +192,11 @@ export default function MyPage() {
         <p className="font-bold"> Fagområde: </p>
         <DropdownMultiSelect
           placeholder="Fagområde"
-          listOfOptions={(subjectFields || []).map(
-            (s: { name: string; subjectFieldId: number }) => ({
-              name: s.name,
-              id: s.subjectFieldId
-            })
-          )}
-          handleChange={(e) => setSelectedSubjectFields(e)}
+          options={(subjectFields || []).map((s) => ({
+            label: s.name,
+            value: s.subjectFieldId
+          }))}
+          onChange={setSelectedSubjectFields}
           value={selectedSubjectFields}
           isDisabled={isDropdownDisabled}
         />
@@ -206,11 +204,11 @@ export default function MyPage() {
         <p className="font-bold"> Team: </p>
         <DropdownMultiSelect
           placeholder="Team"
-          listOfOptions={(teams || []).map((t: { name: string; teamId: number }) => ({
-            name: t.name,
-            id: t.teamId
+          options={(teams || []).map((t) => ({
+            label: t.name,
+            value: t.teamId
           }))}
-          handleChange={(e) => setSelectedTeams(e)}
+          onChange={setSelectedTeams}
           value={selectedTeams}
           isDisabled={isDropdownDisabled}
         />
@@ -218,11 +216,11 @@ export default function MyPage() {
         <p className="font-bold"> Rolle: </p>
         <DropdownMultiSelect
           placeholder="Rolle"
-          listOfOptions={(roles || []).map((r: { name: string; roleId: number }) => ({
-            name: r.name,
-            id: r.roleId
+          options={(roles || []).map((r) => ({
+            label: r.name,
+            value: r.roleId
           }))}
-          handleChange={(e) => setSelectedRoles(e)}
+          onChange={setSelectedRoles}
           value={selectedRoles}
           isDisabled={isDropdownDisabled}
         />

@@ -6,11 +6,6 @@ import { useGlobalContext } from '../context/GlobalContext';
 import { useFilterContext } from '../context/FilterContext';
 import moment from 'moment';
 
-/**
- *
- * @returns component that is the page for first-time registering
- */
-
 export default function FilterComponents() {
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
   const {
@@ -41,8 +36,8 @@ export default function FilterComponents() {
 
           <Dropdown
             placeholder="Avdeling"
-            listOfOptions={departments.map((d) => ({ name: d.name, id: d.departmentId }))}
-            handleChange={(e) => {
+            options={departments.map((d) => ({ label: d.name, value: d.departmentId }))}
+            onChange={(e) => {
               setDepartments([e]);
               if (e !== -1) {
                 setSections([]);
@@ -57,35 +52,35 @@ export default function FilterComponents() {
           />
           <DropdownMultiSelect
             placeholder="Seksjon"
-            listOfOptions={(sections || []).map((s) => ({ name: s.name, id: s.sectionId }))}
-            handleChange={setSections}
+            options={(sections || []).map((s) => ({ label: s.name, value: s.sectionId }))}
+            onChange={setSections}
             value={selectedSections}
             className="!w-auto"
             isDisabled={false}
           />
           <DropdownMultiSelect
             placeholder="Fagområde"
-            listOfOptions={(subjectFields || []).map((s) => ({
-              name: s.name,
-              id: s.subjectFieldId
+            options={(subjectFields || []).map((s) => ({
+              label: s.name,
+              value: s.subjectFieldId
             }))}
-            handleChange={setSubjectFields}
+            onChange={setSubjectFields}
             value={selectedSubjectFields}
             className="!w-auto"
             isDisabled={false}
           />
           <DropdownMultiSelect
             placeholder="Team"
-            listOfOptions={(teams || []).map((t) => ({ name: t.name, id: t.teamId }))}
-            handleChange={setTeams}
+            options={(teams || []).map((t) => ({ label: t.name, value: t.teamId }))}
+            onChange={setTeams}
             value={selectedTeams}
             className="!w-auto"
             isDisabled={false}
           />
           <DropdownMultiSelect
             placeholder="Rolle"
-            listOfOptions={(roles || []).map((r) => ({ name: r.name, id: r.roleId }))}
-            handleChange={setRoles}
+            options={(roles || []).map((r) => ({ label: r.name, value: r.roleId }))}
+            onChange={setRoles}
             value={selectedRoles}
             className="!w-auto"
             isDisabled={false}

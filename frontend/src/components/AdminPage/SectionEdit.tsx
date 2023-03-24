@@ -63,8 +63,8 @@ const SectionEdit = ({ section, setEdit }: SectionEditProps) => {
         // TODO: shouldn't need important
         className="!w-2/5"
         value={selectedDepartments}
-        listOfOptions={departments.map((d) => ({ id: d.departmentId, name: d.name }))}
-        handleChange={setSelectedDepartments}
+        options={departments.map((d) => ({ value: d.departmentId, label: d.name }))}
+        onChange={setSelectedDepartments}
       />
       <div className="flex gap-4">
         <button
