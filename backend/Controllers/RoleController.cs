@@ -23,6 +23,11 @@ public class RoleController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+    Department? department = await _context.Departments.FindAsync(role.Departments!.First());
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
     Role? newRole = new() {
       Name = role.Name,
       Departments = await _context.Departments.Where(d => role.Departments!.Contains(d.DepartmentId)).ToListAsync(),

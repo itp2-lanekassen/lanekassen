@@ -23,6 +23,16 @@ public class AbsenceController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+    User? user = await _context.Users.FindAsync(absence.UserId);
+    if (user == null) {
+      return BadRequest("Invalid user id");
+    }
+
+    AbsenceType? absenceType = await _context.AbsenceTypes.FindAsync(absence.AbsenceTypeId);
+    if (absenceType == null) {
+      return BadRequest("Invalid absence type id");
+    }
+
     Absence? newAbsence = new() {
       StartDate = absence.StartDate,
       EndDate = absence.EndDate,

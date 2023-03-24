@@ -23,6 +23,11 @@ public class SubjectFieldsController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+    Department? department = await _context.Departments.FindAsync(subjectField.DepartmentId);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
     SubjectField? newSubjectField = new() {
       Name = subjectField.Name,
       DepartmentId = subjectField.DepartmentId

@@ -23,6 +23,11 @@ public class SectionController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+    Department? department = await _context.Departments.FindAsync(section.Departments!.First());
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
     Section? newSection = new() {
       Name = section.Name,
       Departments = await _context.Departments.Where(d => section.Departments.Contains(d.DepartmentId)).ToListAsync()

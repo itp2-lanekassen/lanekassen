@@ -23,6 +23,11 @@ public class TeamController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+
+    Department? department = await _context.Departments.FindAsync(team.Departments!.First());
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
     Team? newTeam = new() {
       Name = team.Name,
       Departments = await _context.Departments.Where(d => team.Departments!.Contains(d.DepartmentId)).ToListAsync(),
