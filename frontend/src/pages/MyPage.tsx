@@ -25,7 +25,7 @@ export default function MyPage() {
   const navigate = useNavigate();
 
   const currentUser = useUserContext();
-  const { departments } = useGlobalContext();
+  const { departments, roles, teams, subjectFields, sections } = useGlobalContext();
 
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
     currentUser.employmentType
@@ -44,26 +44,6 @@ export default function MyPage() {
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [isDropdownDisabled, setIsDropdownDisabled] = useState(true);
-
-  const { data: roles } = useQuery(
-    ['roles', { departmentId: selectedDepartment }],
-    async () => (await getRolesByDepartmentId(selectedDepartment)).data
-  );
-
-  const { data: teams } = useQuery(
-    ['teams', { departmentId: selectedDepartment }],
-    async () => (await getTeamsByDepartmentId(selectedDepartment)).data
-  );
-
-  const { data: sections } = useQuery(
-    ['section', { departmentId: selectedDepartment }],
-    async () => (await getSectionsByDepartmentId(selectedDepartment)).data
-  );
-
-  const { data: subjectFields } = useQuery(
-    ['subject-fields', { departmentId: selectedDepartment }],
-    async () => (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
-  );
 
   const { mutate: userToBeUpdated } = useMutation({
     mutationFn: () =>
@@ -95,16 +75,6 @@ export default function MyPage() {
         selectedEmploymentType === -1
     );
   }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
-
-  // Fetch data when department is selected
-  /*   useEffect(() => {
-      if (selectedDepartment !== -1) {
-        setSelectedSection(-1);
-        setSelectedSubjectFields([]);
-        setSelectedTeams([]);
-        setSelectedRoles([]);
-      }
-    }, [selectedDepartment]); */
 
   const handleDeleteProfileClick = () => {
     const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
