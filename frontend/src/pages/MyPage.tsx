@@ -66,6 +66,16 @@ export default function MyPage() {
     }
   });
 
+  // Validate that required fields are filled out
+  useEffect(() => {
+    setIsDisabled(
+      selectedDepartment === -1 ||
+        selectedSection === -1 ||
+        selectedSubjectFields.length === 0 ||
+        selectedEmploymentType === -1
+    );
+  }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
+
   const handleDeleteProfileClick = () => {
     const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
     if (confirmDelete) {
