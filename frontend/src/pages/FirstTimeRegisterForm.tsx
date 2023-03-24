@@ -22,10 +22,33 @@ export default function FirstTimeRegisterForm() {
   const queryClient = useQueryClient();
 
   const azureUser = useAzureAdContext();
-  const { departments } = useGlobalContext();
+  const { departments, sections } = useGlobalContext();
 
-  const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
-  const [selectedSection, setSelectedSection] = useState<number>(-1);
+  // Set default values for dropdowns based on Azure AD data
+  let defaultDepartment = -1;
+  if (azureUser.department) {
+    const tmp = azureUser.department.split(' (');
+    const departmentName = tmp[0];
+    const department = departments.find((d) => d.name === departmentName);
+    if (department) {
+      defaultDepartment = department.departmentId;
+    }
+  }
+
+  let defaultSection = -1;
+  if (azureUser.officeLocation) {
+    const section = sections.find((s) => s.name === azureUser.officeLocation);
+    if (section) {
+      defaultSection = section.sectionId;
+    }
+  }
+
+  const [selectedDepartment, setSelectedDepartment] = useState<number>(
+    defaultDepartment ? defaultDepartment : -1
+  );
+  const [selectedSection, setSelectedSection] = useState<number>(
+    defaultSection ? defaultSection : -1
+  );
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
@@ -40,8 +63,10 @@ export default function FirstTimeRegisterForm() {
     selectedDepartment === -1 ? [] : (await getTeamsByDepartmentId(selectedDepartment)).data
   );
 
-  const { data: sections } = useQuery(['section', { departmentId: selectedDepartment }], async () =>
-    selectedDepartment === -1 ? [] : (await getSectionsByDepartmentId(selectedDepartment)).data
+  const { data: sections2 } = useQuery(
+    ['section', { departmentId: selectedDepartment }],
+    async () =>
+      selectedDepartment === -1 ? [] : (await getSectionsByDepartmentId(selectedDepartment)).data
   );
 
   const { data: subjectFields } = useQuery(
@@ -137,7 +162,7 @@ export default function FirstTimeRegisterForm() {
         />
         <Dropdown
           placeholder="Seksjon"
-          listOfOptions={(sections || []).map((s: { name: string; sectionId: number }) => ({
+          listOfOptions={(sections2 || []).map((s: { name: string; sectionId: number }) => ({
             name: s.name,
             id: s.sectionId
           }))}
