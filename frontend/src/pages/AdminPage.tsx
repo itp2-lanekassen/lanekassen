@@ -11,6 +11,7 @@ import SectionView from '@/components/AdminPage/SectionView';
 import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
 import TeamView from '@/components/AdminPage/TeamView';
 import SubjectFieldView from '@/components/AdminPage/SubjectFieldView';
+import RoleView from '@/components/AdminPage/RoleView';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -84,7 +85,7 @@ export default function AdminPage() {
                 {label === 'Seksjon' && <SectionView />}
                 {label === 'Fagfelt' && <SubjectFieldView />}
                 {label === 'Team' && <TeamView />}
-                {label === 'Rolle' && <div>rolle</div>}
+                {label === 'Rolle' && <RoleView />}
               </TabPanel>
             ))}
           </div>
