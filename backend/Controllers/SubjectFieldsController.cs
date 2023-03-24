@@ -61,6 +61,11 @@ public class SubjectFieldsController : ControllerBase {
       return BadRequest("Invalid subject field id");
     }
 
+    Department? department = await _context.Departments.FindAsync(subjectField.DepartmentId);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
     existingSubjectField.Name = subjectField.Name;
     existingSubjectField.DepartmentId = subjectField.DepartmentId;
 

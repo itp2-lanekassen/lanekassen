@@ -61,6 +61,11 @@ public class RoleController : ControllerBase {
       return BadRequest("Invalid role id");
     }
 
+    Department? department = await _context.Departments.FindAsync(role.Departments!.First());
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
     existingRole.Name = role.Name;
 
     existingRole.Departments.Clear();

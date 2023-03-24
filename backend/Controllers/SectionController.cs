@@ -61,6 +61,11 @@ public class SectionController : ControllerBase {
       return BadRequest("Invalid section id");
     }
 
+    Department? department = await _context.Departments.FindAsync(section.Departments!.First());
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
     existingSection.Name = section.Name;
 
     existingSection.Departments.Clear();

@@ -61,6 +61,10 @@ public class TeamController : ControllerBase {
       return BadRequest("Invalid team id");
     }
 
+    Department? department = await _context.Departments.FindAsync(team.Departments!.First());
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
     existingTeam.Name = team.Name;
 
     existingTeam.Departments.Clear();
