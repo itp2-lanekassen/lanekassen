@@ -110,6 +110,14 @@ export default function FirstTimeRegisterForm() {
       <div className="absolute top-10 left-10 flex justify-end">
         <SignOutButton />
       </div>
+      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mb-4">
+        <p className="font-bold"> Navn: </p>
+        <p className=" w-full">
+          {azureUser.givenName} {azureUser.surname}
+        </p>
+        <p className="font-bold"> E-post: </p>
+        <p className=" w-full">{azureUser.mail}</p>
+      </div>
       <div className="grid mx-auto w-max gap-4 place-items-center">
         <Dropdown
           placeholder="Ansattforhold"
