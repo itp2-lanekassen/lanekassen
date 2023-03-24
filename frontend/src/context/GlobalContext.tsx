@@ -13,6 +13,7 @@ interface GlobalContextProps {
 }
 
 interface GlobalContextType {
+  map(arg0: (department: any) => JSX.Element): ReactNode;
   absenceTypes: AbsenceType[];
   roles: Role[];
   teams: Team[];
