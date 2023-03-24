@@ -38,45 +38,43 @@ export default function AdminPage() {
         />
       </div>
 
-      <div className="flex w-11/12 h-5/6">
+      <div className="flex w-11/12">
         <TabContext value={value.toString()}>
-          <div className=" flex flex-col">
-            <Tabs
-              value={value}
-              onChange={(event, newValue) => setValue(newValue)}
-              orientation="vertical"
-              variant="scrollable"
-              aria-label="My tabs"
-              TabIndicatorProps={{ style: { backgroundColor: '#590689' } }} // primary-light
-            >
-              {tabLabels.map((label, index) => (
-                <Tab
-                  key={index}
-                  label={label}
-                  sx={{
-                    backgroundColor: 'white',
-                    color: 'black',
+          <Tabs
+            value={value}
+            onChange={(event, newValue) => setValue(newValue)}
+            orientation="vertical"
+            variant="scrollable"
+            aria-label="My tabs"
+            TabIndicatorProps={{ style: { backgroundColor: '#590689' } }} // primary-light
+          >
+            {tabLabels.map((label, index) => (
+              <Tab
+                key={index}
+                label={label}
+                sx={{
+                  backgroundColor: 'white',
+                  color: 'black',
+                  borderTopLeftRadius: '10px',
+                  borderBottomLeftRadius: '10px',
+                  '&:hover': {
+                    backgroundColor: '#F6F0F9', // primary-lighter
+                    color: '#410464', // primary
                     borderTopLeftRadius: '10px',
-                    borderBottomLeftRadius: '10px',
-                    '&:hover': {
-                      backgroundColor: '#F6F0F9', // primary-lighter
-                      color: '#410464', // primary
-                      borderTopLeftRadius: '10px',
-                      borderBottomLeftRadius: '10px'
-                    },
-                    '&.Mui-selected': {
-                      backgroundColor: '#590689', // primary-light
-                      color: '#FAFAFA', // grey-lightest
-                      borderTopLeftRadius: '10px',
-                      borderBottomLeftRadius: '10px'
-                    }
-                  }}
-                />
-              ))}
-            </Tabs>
-          </div>
+                    borderBottomLeftRadius: '10px'
+                  },
+                  '&.Mui-selected': {
+                    backgroundColor: '#590689', // primary-light
+                    color: '#FAFAFA', // grey-lightest
+                    borderTopLeftRadius: '10px',
+                    borderBottomLeftRadius: '10px'
+                  }
+                }}
+              />
+            ))}
+          </Tabs>
 
-          <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto">
+          <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto h-3/5-screen">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
                 {label === 'Brukere' && <div>brukere</div>}
