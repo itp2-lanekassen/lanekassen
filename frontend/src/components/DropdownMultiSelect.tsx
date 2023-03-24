@@ -16,11 +16,12 @@ const DropdownMultiSelect = <T extends number | string>({
 }: DropdownMultiSelectProps<T>) => {
   return (
     <ReactSelect
-      className={`text-primary ${className}`}
-      options={options}
+      className={className}
       isDisabled={isDisabled}
+      menuPlacement="auto" // auto menu on top code
       placeholder={placeholder}
       isMulti
+      options={options}
       value={value ? options.filter((option) => value.includes(option.value)) : []}
       onChange={(selectedOptions) => onChange(selectedOptions.map((o) => o.value))}
       theme={(theme) => ({
@@ -39,6 +40,7 @@ const DropdownMultiSelect = <T extends number | string>({
         menu: (base) => ({
           ...base,
           width: 'fit-content',
+          minWidth: '100%',
           overflow: 'hidden',
           color: '#590689'
         }),

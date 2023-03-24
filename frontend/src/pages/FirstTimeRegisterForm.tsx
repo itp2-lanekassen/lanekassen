@@ -159,7 +159,7 @@ export default function FirstTimeRegisterForm() {
           onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
         />
       </div>
-      <div className="grid mx-auto w-max gap-4 place-items-center">
+      <div className="flex flex-col mx-auto w-1/4 gap-4">
         <Dropdown
           placeholder="Ansattforhold"
           options={Object.keys(EmploymentType)
@@ -167,14 +167,12 @@ export default function FirstTimeRegisterForm() {
             .map((type, i) => ({ label: type, value: i }))}
           onChange={setSelectedEmploymentType}
           value={selectedEmploymentType}
-          isDisabled={false}
         />
         <Dropdown
           placeholder="Avdeling"
           options={departments.map((d) => ({ label: d.name, value: d.departmentId }))}
           onChange={setSelectedDepartment}
           value={selectedDepartment}
-          isDisabled={false}
         />
         <Dropdown
           placeholder="Seksjon"
@@ -184,7 +182,6 @@ export default function FirstTimeRegisterForm() {
           }))}
           onChange={setSelectedSection}
           value={selectedSection}
-          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Fagområde"
@@ -194,7 +191,6 @@ export default function FirstTimeRegisterForm() {
           }))}
           onChange={setSelectedSubjectFields}
           value={selectedSubjectFields}
-          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Team"
@@ -204,7 +200,6 @@ export default function FirstTimeRegisterForm() {
           }))}
           onChange={setSelectedTeams}
           value={selectedTeams}
-          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Rolle"
@@ -214,11 +209,11 @@ export default function FirstTimeRegisterForm() {
           }))}
           onChange={setSelectedRoles}
           value={selectedRoles}
-          isDisabled={false}
         />
 
         <SubmitButton
           buttonText="Registrer deg"
+          className="mx-auto"
           handleClick={registerUser}
           disabled={isDisabled}
           disabledTitle={

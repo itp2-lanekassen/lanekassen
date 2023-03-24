@@ -47,7 +47,6 @@ export default function FilterComponents() {
               }
             }}
             value={selectedDepartments[0]}
-            className="!w-auto"
             isDisabled={false}
           />
           <DropdownMultiSelect
@@ -55,8 +54,6 @@ export default function FilterComponents() {
             options={(sections || []).map((s) => ({ label: s.name, value: s.sectionId }))}
             onChange={setSections}
             value={selectedSections}
-            className="!w-auto"
-            isDisabled={false}
           />
           <DropdownMultiSelect
             placeholder="Fagområde"
@@ -66,27 +63,21 @@ export default function FilterComponents() {
             }))}
             onChange={setSubjectFields}
             value={selectedSubjectFields}
-            className="!w-auto"
-            isDisabled={false}
           />
           <DropdownMultiSelect
             placeholder="Team"
             options={(teams || []).map((t) => ({ label: t.name, value: t.teamId }))}
             onChange={setTeams}
             value={selectedTeams}
-            className="!w-auto"
-            isDisabled={false}
           />
           <DropdownMultiSelect
             placeholder="Rolle"
             options={(roles || []).map((r) => ({ label: r.name, value: r.roleId }))}
             onChange={setRoles}
             value={selectedRoles}
-            className="!w-auto"
-            isDisabled={false}
           />
           <button
-            className=" border-1 rounded-[20px] border-primary text-center w-fit focus:outline-none px-2 text-white bg-primary hover:bg-white hover:text-primary"
+            className="border-1 rounded-[20px] border-primary text-center w-fit focus:outline-none px-2 text-white bg-primary hover:bg-white hover:text-primary"
             onClick={() => {
               setDepartments([]);
               setSections([]);

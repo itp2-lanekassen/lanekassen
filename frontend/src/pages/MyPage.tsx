@@ -117,7 +117,7 @@ export default function MyPage() {
         />
       </div>
 
-      {currentUser.admin ? (
+      {currentUser.admin && (
         <div className="absolute top-18 left-10 flex justify-end">
           <SubmitButton
             disabled={false}
@@ -128,8 +128,6 @@ export default function MyPage() {
             }}
           />
         </div>
-      ) : (
-        <></>
       )}
 
       <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center">
@@ -156,6 +154,7 @@ export default function MyPage() {
 
         <p className="font-bold"> Ansattforhold: </p>
         <Dropdown
+          className="w-full"
           placeholder="Ansattforhold"
           options={Object.keys(EmploymentType)
             .filter((type) => isNaN(Number(type)))
@@ -167,6 +166,7 @@ export default function MyPage() {
 
         <p className="font-bold"> Avdeling: </p>
         <Dropdown
+          className="w-full"
           placeholder="Avdeling"
           options={departments.map((d) => ({
             label: d.name,
@@ -179,6 +179,7 @@ export default function MyPage() {
 
         <p className="font-bold"> Seksjon: </p>
         <Dropdown
+          className="w-full"
           placeholder="Seksjon"
           options={(sections || []).map((s) => ({
             label: s.name,
@@ -191,6 +192,7 @@ export default function MyPage() {
 
         <p className="font-bold"> Fagområde: </p>
         <DropdownMultiSelect
+          className="w-full"
           placeholder="Fagområde"
           options={(subjectFields || []).map((s) => ({
             label: s.name,
@@ -203,6 +205,7 @@ export default function MyPage() {
 
         <p className="font-bold"> Team: </p>
         <DropdownMultiSelect
+          className="w-full"
           placeholder="Team"
           options={(teams || []).map((t) => ({
             label: t.name,
@@ -215,6 +218,7 @@ export default function MyPage() {
 
         <p className="font-bold"> Rolle: </p>
         <DropdownMultiSelect
+          className="w-full"
           placeholder="Rolle"
           options={(roles || []).map((r) => ({
             label: r.name,

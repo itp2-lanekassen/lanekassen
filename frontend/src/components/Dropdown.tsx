@@ -22,8 +22,8 @@ const Dropdown = <T extends number | string>({
       className={className}
       isDisabled={isDisabled}
       menuPlacement="auto" // auto menu on top code
-      options={options}
       placeholder={placeholder}
+      options={options}
       value={value && options.find((option) => option.value === value)}
       onChange={(option) => option && onChange(option.value)}
       theme={(theme) => ({
@@ -42,6 +42,7 @@ const Dropdown = <T extends number | string>({
         menu: (base) => ({
           ...base,
           width: 'fit-content',
+          minWidth: '100%',
           overflow: 'hidden',
           color: '#590689'
         }),

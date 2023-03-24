@@ -61,8 +61,7 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
       />
       <Dropdown
         placeholder="Velg Avdelinger"
-        // TODO: shouldn't need important
-        className="!w-2/5"
+        className="w-2/5"
         value={selectedDepartment}
         options={departments.map((d) => ({ value: d.departmentId, label: d.name }))}
         onChange={setSelectedDepartment}

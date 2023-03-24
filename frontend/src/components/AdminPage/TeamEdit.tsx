@@ -59,8 +59,7 @@ const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
       />
       <DropdownMultiSelect
         placeholder="Velg Avdelinger"
-        // TODO: shouldn't need important
-        className="!w-2/5"
+        className="w-2/5"
         value={selectedDepartments}
         options={departments.map((d) => ({ value: d.departmentId, label: d.name }))}
         onChange={setSelectedDepartments}
