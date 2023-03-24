@@ -32,16 +32,7 @@ export function getRolesByDepartmentId(departmentId: number): Promise<AxiosRespo
 }
 
 export function postDepartment(department: NewDepartment): Promise<AxiosResponse<NewDepartment>> {
-  return axios
-    .post(url, department)
-    .then((response) => {
-      console.log(response);
-      return response;
-    })
-    .catch((error) => {
-      console.log(error);
-      throw error;
-    });
+  return axios.post(url, department);
 }
 
 export function updateDepartment(
