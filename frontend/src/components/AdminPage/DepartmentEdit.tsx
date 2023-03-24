@@ -1,4 +1,3 @@
-import { useGlobalContext } from '@/context/GlobalContext';
 import { NewDepartment } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
@@ -12,7 +11,6 @@ interface DepartmentEditProps {
 const DepartmentEdit = ({ department, setEdit }: DepartmentEditProps) => {
   const queryClient = useQueryClient();
 
-  const { departments } = useGlobalContext();
   const [departmentName, setDepartmentName] = useState('');
   const [departmentAbbreviation, setDepartmentAbbrevation] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
@@ -21,6 +19,7 @@ const DepartmentEdit = ({ department, setEdit }: DepartmentEditProps) => {
     if (department) {
       setDepartmentName(department.name);
       setDepartmentAbbrevation(department.abbreviation);
+      setSelectedDepartment(department.departmentId ?? -1);
     }
   }, [department]);
 
@@ -42,9 +41,6 @@ const DepartmentEdit = ({ department, setEdit }: DepartmentEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['departments']);
       setEdit(false);
-    },
-    onError: (error) => {
-      console.log('Error creating department:', error);
     }
   });
 
@@ -53,7 +49,10 @@ const DepartmentEdit = ({ department, setEdit }: DepartmentEditProps) => {
       return updateExistingsDepartment();
     }
 
-    createDepartment({ name: departmentName, abbreviation: departmentAbbreviation });
+    createDepartment({
+      name: departmentName,
+      abbreviation: departmentAbbreviation
+    });
   };
 
   return (

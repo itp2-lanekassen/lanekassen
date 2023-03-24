@@ -48,6 +48,7 @@ export interface Department {
 }
 
 export interface NewDepartment {
+  departmentId?: number;
   name: string;
   abbreviation: string;
   subjectFields?: SubjectField[];

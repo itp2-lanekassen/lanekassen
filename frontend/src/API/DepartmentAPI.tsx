@@ -31,7 +31,7 @@ export function getRolesByDepartmentId(departmentId: number): Promise<AxiosRespo
   return axios.get(`${url}/${departmentId}/roles`);
 }
 
-export function postDepartment(department: NewDepartment): Promise<AxiosResponse<Department>> {
+export function postDepartment(department: NewDepartment): Promise<AxiosResponse<NewDepartment>> {
   return axios
     .post(url, department)
     .then((response) => {
