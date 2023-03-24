@@ -30,7 +30,7 @@ const TeamList = ({ setEdit }: TeamListProps) => {
 
   return (
     <div className="grid grid-cols-sections text-center gap-x-2 gap-y-3 place-items-center">
-      <div className="heading-3xs">Seksjon</div>
+      <div className="heading-3xs">Team</div>
       <div className="heading-3xs">Avdelinger</div>
       <div className="col-span-2">
         <SubmitButton handleClick={() => setEdit(true)}>
