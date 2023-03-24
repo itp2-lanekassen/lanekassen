@@ -7,6 +7,9 @@ interface SubmitButtonProps {
   handleClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   children?: ReactNode;
+  rounded?: string;
+  bgColor?: string;
+  hover?: string;
 }
 
 /**
@@ -24,14 +27,17 @@ export default function SubmitButton({
   disabled,
   disabledTitle,
   children,
-  type = 'button'
+  rounded = 'rounded-full',
+  bgColor = 'bg-primary',
+  type = 'button',
+  hover = 'hover:text-primary hover:bg-white'
 }: SubmitButtonProps) {
   return (
     <div>
       <button
-        className={`flex text-white rounded-full bg-primary p-3 hover:text-primary hover:bg-white border-solid border-2 ${
-          disabled ? 'bg-gray-300 border-gray-300 cursor-not-allowed' : 'bg-primary border-primary'
-        }`}
+        className={`flex ${rounded} text-grey-lightest ${bgColor} p-3 ${hover} border-solid border-2  ${
+          disabled ? 'bg-gray-300 border-gray-300 cursor-not-allowed' : ''
+        } '}`}
         onClick={handleClick}
         disabled={disabled}
         title={disabled ? disabledTitle : ''}

@@ -120,6 +120,16 @@ export default function MyPage() {
       <div className="absolute top-10 right-10 flex justify-end">
         <SignOutButton />
       </div>
+      <div className="absolute bottom-10 right-10 flex justify-end">
+        <SubmitButton
+          rounded={'4px rounded'}
+          disabled={false}
+          disabledTitle={'Slett bruker'}
+          buttonText={'Slett bruker'}
+          handleClick={handleDeleteProfileClick}
+          hover={'hover:scale-110'}
+        />
+      </div>
 
       <div className="absolute top-10 left-10 flex justify-end">
         <SubmitButton
@@ -250,12 +260,6 @@ export default function MyPage() {
                 handleClick={userToBeUpdated}
                 disabled={isDisabled}
                 disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
-              />
-              <SubmitButton
-                disabled={isDropdownDisabled}
-                disabledTitle={'Slett bruker'}
-                buttonText={'Slett bruker'}
-                handleClick={handleDeleteProfileClick}
               />
             </>
           )}
