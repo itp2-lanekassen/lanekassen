@@ -85,6 +85,7 @@ public class ApiDbContext : DbContext {
     );
 
 
+
     _ = modelBuilder.Entity<SubjectField>().HasData(
       subjectField1,
       new SubjectField { SubjectFieldId = 2, Name = "Applikasjonsdrift", DepartmentId = department1.DepartmentId },
@@ -133,7 +134,6 @@ public class ApiDbContext : DbContext {
         .UsingEntity(j => j.HasData(
           new { UsersUserId = 1, SubjectFieldsSubjectFieldId = subjectField1.SubjectFieldId }
         ));
-
     });
 
     _ = modelBuilder.Entity<Team>().HasData(
