@@ -24,6 +24,11 @@ module.exports = {
       screens: {
         mobile: '320px',
         tablet: '481px'
+      },
+      height: {
+        '1/5-screen': '20vh', 
+        '1/4-screen': '25vh',
+        '3/5-screen': '60vh' 
       }
     },
     colors: {
