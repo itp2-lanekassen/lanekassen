@@ -10,10 +10,22 @@ export interface Team {
   teamId: number;
   name: string;
   users?: User[];
+  departments?: Department[];
+}
+
+export interface TeamDTO {
+  name: string;
+  departments: number[];
 }
 
 export interface SubjectField {
   subjectFieldId: number;
+  name: string;
+  departmentId: number;
+  department?: Department;
+}
+
+export interface SubjectFieldDTO {
   name: string;
   departmentId: number;
 }

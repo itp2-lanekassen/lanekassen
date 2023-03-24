@@ -9,7 +9,8 @@ import { useUserContext } from '../context/UserContext';
 import PageLayout from '@/components/PageLayout';
 import SectionView from '@/components/AdminPage/SectionView';
 import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
-import AdminDepartments from '@/components/AdminPage/DepartmentList';
+import TeamView from '@/components/AdminPage/TeamView';
+import SubjectFieldView from '@/components/AdminPage/SubjectFieldView';
 import DepartmentView from '@/components/AdminPage/DepartmentView';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
@@ -39,58 +40,52 @@ export default function AdminPage() {
         />
       </div>
 
-      <div className="flex w-11/12 h-5/6">
+      <div className="flex w-11/12">
         <TabContext value={value.toString()}>
-          <div className=" flex flex-col">
-            <Tabs
-              value={value}
-              onChange={(event, newValue) => setValue(newValue)}
-              orientation="vertical"
-              variant="scrollable"
-              aria-label="My tabs"
-              TabIndicatorProps={{ style: { backgroundColor: '#590689' } }} // primary-light
-            >
-              {tabLabels.map((label, index) => (
-                <Tab
-                  key={index}
-                  label={label}
-                  sx={{
-                    backgroundColor: 'white',
-                    color: 'black',
+          <Tabs
+            value={value}
+            onChange={(event, newValue) => setValue(newValue)}
+            orientation="vertical"
+            variant="scrollable"
+            aria-label="My tabs"
+            TabIndicatorProps={{ style: { backgroundColor: '#590689' } }} // primary-light
+          >
+            {tabLabels.map((label, index) => (
+              <Tab
+                key={index}
+                label={label}
+                sx={{
+                  backgroundColor: 'white',
+                  color: 'black',
+                  borderTopLeftRadius: '10px',
+                  borderBottomLeftRadius: '10px',
+                  '&:hover': {
+                    backgroundColor: '#F6F0F9', // primary-lighter
+                    color: '#410464', // primary
                     borderTopLeftRadius: '10px',
-                    borderBottomLeftRadius: '10px',
-                    '&:hover': {
-                      backgroundColor: '#F6F0F9', // primary-lighter
-                      color: '#410464', // primary
-                      borderTopLeftRadius: '10px',
-                      borderBottomLeftRadius: '10px'
-                    },
-                    '&.Mui-selected': {
-                      backgroundColor: '#590689', // primary-light
-                      color: '#FAFAFA', // grey-lightest
-                      borderTopLeftRadius: '10px',
-                      borderBottomLeftRadius: '10px'
-                    }
-                  }}
-                />
-              ))}
-            </Tabs>
-          </div>
+                    borderBottomLeftRadius: '10px'
+                  },
+                  '&.Mui-selected': {
+                    backgroundColor: '#590689', // primary-light
+                    color: '#FAFAFA', // grey-lightest
+                    borderTopLeftRadius: '10px',
+                    borderBottomLeftRadius: '10px'
+                  }
+                }}
+              />
+            ))}
+          </Tabs>
 
-          <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto">
+          <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto h-3/5-screen">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
-                {label === 'Brukere' ? <div>brukere{/* Add component here */}</div> : null}
-                {label === 'Fraværstyper' ? <div>fraværstyper</div> : null}
-                {label === 'Avdeling' ? (
-                  <div>
-                    <DepartmentView />
-                  </div>
-                ) : null}
-                {label === 'Seksjon' ? <div>seksjon</div> : null}
-                {label === 'Fagfelt' ? <div>fagfelt</div> : null}
-                {label === 'Team' ? <div>team</div> : null}
-                {label === 'Rolle' ? <div>rolle</div> : null}
+                {label === 'Brukere' && <div>brukere</div>}
+                {label === 'Fraværstyper' && <AbsenceTypeView />}
+                {label === 'Avdeling' && <DepartmentView />}
+                {label === 'Seksjon' && <SectionView />}
+                {label === 'Fagfelt' && <SubjectFieldView />}
+                {label === 'Team' && <TeamView />}
+                {label === 'Rolle' && <div>rolle</div>}
               </TabPanel>
             ))}
           </div>

@@ -1,4 +1,4 @@
-import { Team } from '../types/types';
+import { Team, TeamDTO } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -13,11 +13,11 @@ export function getTeamById(teamId: number): Promise<AxiosResponse<Team>> {
   return axios.get(`${url}/${teamId}`);
 }
 
-export function postTeam(team: Team): Promise<AxiosResponse<Team>> {
+export function postTeam(team: TeamDTO): Promise<AxiosResponse<Team>> {
   return axios.post(url, team);
 }
 
-export function updateTeam(teamId: number, team: Team): Promise<AxiosResponse<Team>> {
+export function updateTeam(teamId: number, team: TeamDTO): Promise<AxiosResponse<Team>> {
   return axios.put(`${url}/${teamId}`, team);
 }
 
