@@ -13,7 +13,7 @@ import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import SubmitButton from '../SubmitButton';
 
-export default function UserTabSelectedContent(props: { selectedUser: User }) {
+export default function UserTabSelectedContent(props: { selectedUser: User | undefined }) {
   const queryClient = useQueryClient();
   const { departments } = useGlobalContext();
 

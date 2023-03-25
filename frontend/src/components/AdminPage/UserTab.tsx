@@ -3,6 +3,7 @@ import { User } from '@/types/types';
 import { useEffect, useState } from 'react';
 import SearchBar from './SearchBar';
 import UserRow from './UserRow';
+import UserTabSelectedContent from './UserTabSelectedContent';
 
 const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon'];
 
@@ -16,6 +17,7 @@ export default function UserTab() {
   }
 
   async function getSelectedUser() {
+    console.log(clickedUserId);
     setSelectedUser((await getUserById(clickedUserId)).data);
   }
 
@@ -24,28 +26,34 @@ export default function UserTab() {
   }, []);
 
   useEffect(() => {
-    getSelectedUser();
+    if (clickedUserId > -1) {
+      getSelectedUser();
+    }
   }, [clickedUserId]);
 
-  return (
-    <div>
-      <SearchBar />
-      <table className="ml-10">
-        <tbody>
-          <tr>
-            {tableHeaders.map((header) => (
-              <th className="p-3 pr-5" key={header}>
-                {header}
-              </th>
+  if (clickedUserId >= 0) {
+    return <UserTabSelectedContent selectedUser={selectedUser} />;
+  } else {
+    return (
+      <div>
+        <SearchBar />
+        <table className="ml-10">
+          <tbody>
+            <tr>
+              {tableHeaders.map((header) => (
+                <th className="p-3 pr-5" key={header}>
+                  {header}
+                </th>
+              ))}
+            </tr>
+            {users?.map((user) => (
+              <UserRow setClickedUser={setClickedUserId} key={user.azureId} user={user} />
             ))}
-          </tr>
-          {users?.map((user) => (
-            <UserRow setClickedUser={setClickedUserId} key={user.azureId} user={user} />
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 }
 
 /**
