@@ -2,7 +2,8 @@ import moment from 'moment';
 import { FC } from 'react';
 import { useModalContext } from '../context/ModalContext';
 import { useUserContext } from '../context/UserContext';
-import { Absence, User } from '../types/types';
+import { Absence, Holiday, User } from '../types/types';
+import { useGlobalContext } from '@/context/GlobalContext';
 
 interface CalendarCellProps {
   date: string;
@@ -13,7 +14,9 @@ interface CalendarCellProps {
   user: User;
 }
 
-const getStyle = (absence?: Absence) => {
+const getStyle = (absence?: Absence, holiday?: Holiday) => {
+  if (holiday) return { backgroundColor: '#FF0000' };
+
   if (!absence) return {};
 
   // solid background with absence.type?.colorCode as background color
@@ -41,6 +44,8 @@ const CalendarCell: FC<CalendarCellProps> = ({
 }) => {
   const currentUser = useUserContext();
   const { openAbsenceForm } = useModalContext();
+  const { holidays } = useGlobalContext();
+  const holiday = holidays?.find((h) => moment(date).isSame(h.date, 'd'));
 
   //TODO: bruk moment(date) til å sjekke om den datoen har fravær fra før
   const handleCellClick = () => {
@@ -59,14 +64,28 @@ const CalendarCell: FC<CalendarCellProps> = ({
       className={`hover:${hoverColor} ${defaultColor} ${
         isCurrentUser || currentUser.admin ? 'cursor-pointer' : 'cursor-default'
       } w-full min-h-[21px] h-full`}
-      style={getStyle(absence)}
+      style={getStyle(absence, holiday)}
       // onClick={absence ? undefined : handleCellClick}
       onClick={handleCellClick}
     >
-      {absence && (
-        <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold hover:scale-115">
-          {absence.type.code}
+      {/* If absence and holiday on same day, only display holiday */}
+      {absence && holiday ? (
+        <span className="inset-0 flex items-center justify-center text-[0.65rem] text-white px-1 hover:scale-115">
+          {holiday.description}
         </span>
+      ) : (
+        <>
+          {absence && (
+            <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold hover:scale-115">
+              {absence.type.code}
+            </span>
+          )}
+          {holiday && (
+            <span className="inset-0 flex items-center justify-center text-[0.65rem] text-white px-1 hover:scale-115">
+              {holiday.description}
+            </span>
+          )}
+        </>
       )}
     </div>
   );
