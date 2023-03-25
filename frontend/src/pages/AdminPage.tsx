@@ -61,7 +61,7 @@ export default function AdminPage() {
           src={ellipse}
           alt=""
         />
-        <h1 className="mt-[-100px]">Adminfunksjonalitet</h1>
+        <h1 className="mt-[-100px]">Admin</h1>
       </div>
 
       <div className="absolute top-16 left-10 flex justify-end">
