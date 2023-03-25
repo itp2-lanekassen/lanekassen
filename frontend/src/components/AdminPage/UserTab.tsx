@@ -1,18 +1,14 @@
 import { getAllUsers } from '@/API/UserAPI';
 import { User } from '@/types/types';
 import { useEffect, useState } from 'react';
-import PlusButton from './PlusButton';
 import SearchBar from './SearchBar';
 import UserRow from './UserRow';
-
-const addNewUser = () => {
-  console.log('hallaballa');
-};
 
 const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon'];
 
 export default function UserTab() {
   const [users, setUsers] = useState<User[]>();
+  const [clickedUserId, setClickedUserId] = useState<number>(-1);
 
   async function loadUsers() {
     setUsers((await getAllUsers()).data);
@@ -28,7 +24,6 @@ export default function UserTab() {
 
   return (
     <div>
-      <PlusButton handleClick={addNewUser} />
       <SearchBar />
 
       <table className="ml-10">
@@ -41,7 +36,7 @@ export default function UserTab() {
             ))}
           </tr>
           {users?.map((user) => (
-            <UserRow handleClick={openUser} key={user.azureId} user={user} />
+            <UserRow setClickedUser={setClickedUserId} key={user.azureId} user={user} />
           ))}
         </tbody>
       </table>
@@ -56,3 +51,21 @@ export default function UserTab() {
  * adde søkefunksjonalitet til søkefeltet
  * kunne klikke på en ansatt og åpne skjema for å redigere (med rett info)
  */
+
+/**
+ * hvordan henter man ut bruker når man trykker?
+ * hvis man lager onclick-funksjonen i UserRow kan du bruke brukeren sin ID :D
+ * men hvordan rerendrer man taben?
+ * kan man passe inn en state som en variabel og endre den fra UserRow?
+ * men hvordan sender man ned setUserIsClicked?
+ */
+
+/**
+ * plan:
+ * 1. sjekke om man kan passe ned en state
+ * 2. lage en onclick-funksjon i UserRow
+ * 3. ta det derfra
+ */
+
+// lag en handlefunksjon i UserRow
+//

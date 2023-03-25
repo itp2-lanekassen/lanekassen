@@ -8,7 +8,6 @@ import ellipse from '../assets/ellipse.png';
 import TabPanel from '@mui/lab/TabPanel';
 import { TabContext } from '@mui/lab';
 import { withStyles } from '@mui/styles';
-import PlusButton from '@/components/AdminPage/PlusButton';
 import UserTab from '@/components/AdminPage/UserTab';
 import { height } from '@mui/system';
 
