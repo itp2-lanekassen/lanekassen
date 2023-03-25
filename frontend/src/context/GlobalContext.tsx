@@ -14,7 +14,7 @@ import {
   Team
 } from '../types/types';
 import { useQuery } from '@tanstack/react-query';
-import { createContext, ReactNode, useContext } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { getHolidaysByYear } from '@/API/HolidaysAPI';
 
 interface GlobalContextProps {
@@ -30,6 +30,7 @@ interface GlobalContextType {
   departments: Department[];
   subjectFields: SubjectField[];
   holidays: Holiday[];
+  handleYearChange: (year: number) => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -52,10 +53,19 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
     ['subject-fields'],
     async () => (await getAllSubjectFields()).data
   );
+  const [year, setYear] = useState(new Date().getFullYear());
   const holidays = useQuery(
-    ['holidays'],
-    async () => (await getHolidaysByYear(new Date().getFullYear())).data.data // gir feilmedling, men er riktig
+    ['holidays', year],
+    async () => (await getHolidaysByYear(year)).data.data // gir feilmedling, men er riktig
   );
+
+  useEffect(() => {
+    holidays.refetch();
+  }, [year]);
+
+  const handleYearChange = (newYear: number) => {
+    if (newYear !== year) setYear(newYear);
+  };
 
   // TODO: Single return or individual?
   if (absenceTypes.isLoading) return <div>Laster fraværstyper...</div>;
@@ -86,7 +96,8 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
         sections: sections.data,
         departments: departments.data,
         subjectFields: subjectFields.data,
-        holidays: holidays.data
+        holidays: holidays.data,
+        handleYearChange
       }}
     >
       {children}
