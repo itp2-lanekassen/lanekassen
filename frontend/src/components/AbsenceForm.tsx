@@ -1,24 +1,28 @@
+import { Absence, User } from '@/types/types';
 import { Button } from '@material-tailwind/react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
+import * as React from 'react';
 import {
+  deleteAbsence,
   getDatePickerMaxForAbsence,
   getDatePickerMinForAbsence,
   postAbsence,
   updateAbsence
 } from '../API/AbsenceAPI';
-import * as React from 'react';
 import { useGlobalContext } from '../context/GlobalContext';
-import { useUserContext } from '../context/UserContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
-import { Absence } from '../types/types';
+
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
 import { DateField } from './DateField';
+import { useUserContext } from '@/context/UserContext';
 
 type ModalProps = {
   startDate?: Date;
+  user: User;
   type?: string;
   clickedAbsence?: Absence;
   onClose: () => void;
@@ -72,31 +76,37 @@ async function setMin(
 }
 
 const AbsenceForm: React.FC<ModalProps> = ({
+  user,
   onClose,
   startDate = undefined,
   type = 'add',
   clickedAbsence
 }) => {
   const queryClient = useQueryClient();
-  const currentUser = useUserContext();
   const { absenceTypes } = useGlobalContext();
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
   const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
 
+  const [isApproved, setIsApproved] = React.useState<boolean>(
+    type === 'edit' && clickedAbsence ? clickedAbsence.isApproved : false
+  );
+
+  const [absenceId] = React.useState<number | undefined>(clickedAbsence?.absenceId);
   let buttonText = 'Legg til';
   if (type === 'edit') {
-    buttonText = 'Rediger';
+    buttonText = 'Lagre';
   }
+
+  const currentUser = useUserContext();
 
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
   });
 
-  //initialize mutaions for editing absence
   const { mutate: editAbsence } = useMutation({
-    mutationFn: (absence: Absence) => updateAbsence(absence),
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
+    mutationFn: updateAbsence,
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
   });
 
   const [formValues, setFormValues] = React.useState<FormValues>({
@@ -154,6 +164,10 @@ const AbsenceForm: React.FC<ModalProps> = ({
     });
   };
 
+  const handleIsApprovedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsApproved(e.target.checked);
+  };
+
   //update form values on radio change
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
@@ -170,9 +184,9 @@ const AbsenceForm: React.FC<ModalProps> = ({
         startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
         endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
         comment: formValues.comment,
-        isApproved: false,
+        isApproved,
         absenceTypeId: formValues.absenceType,
-        userId: currentUser.userId
+        userId: user.userId
       });
       alert('Fraværet ble lagt til!');
     } else {
@@ -190,15 +204,15 @@ const AbsenceForm: React.FC<ModalProps> = ({
 
       //edit absence
       if (clickedAbsence) {
-        editAbsence({
+        await editAbsence({
           absenceId: clickedAbsence.absenceId,
           startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
           endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
           absenceTypeId: formValues.absenceType,
           type: updatedAbsenceType,
-          userId: currentUser.userId,
-          user: currentUser,
-          isApproved: false,
+          userId: user.userId,
+          user: user,
+          isApproved,
           comment: updatedComment
         });
       }
@@ -212,7 +226,10 @@ const AbsenceForm: React.FC<ModalProps> = ({
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50">
       <div className="modal-overlay pointer-events-none" onClick={onClose} />
       <div className="relative w-auto my-6 mx-auto max-w-3xl bg-white px-10 pt-10 pb-5 rounded-[40px] ">
-        <h2 className="modal-title text-center ">Fraværsskjema</h2>
+        <h2 className="modal-title text-center ">
+          {' '}
+          {user.firstName} {user.lastName}{' '}
+        </h2>
         <form className="modal-form" onSubmit={handleSubmit}>
           <DateField
             handleInputChange={handleInputChange}
@@ -238,13 +255,38 @@ const AbsenceForm: React.FC<ModalProps> = ({
             formValues={formValues}
             handleInputChange={handleTextAreaChange}
           ></CommentField>
-          <div className="modal-buttons relative flex flex-col items-center justify-center pt-5">
+          {currentUser.admin && (
+            <div className="flex items-center heading-xs space-x-5">
+              <p>Godkjenn fravær</p>
+              <input
+                type="checkbox"
+                id="isApproved"
+                checked={isApproved}
+                onChange={handleIsApprovedChange}
+                // eslint-disable-next-line react/no-unknown-property
+                className="space-x-5 h-5 w-5 accent-primary "
+              />
+            </div>
+          )}
+
+          <div className="modal-buttons relative flex flex-row flex-parent items-center gap-8 justify-center pt-5">
             <Button
               type="submit"
-              className="modal-submit-button button heading-xs px-4 py-2 rounded-full bg-primary text-white "
+              className="flex flex-child modal-submit-button button heading-xs px-4 py-2 rounded-full bg-primary text-white hover:scale-110"
             >
               {buttonText}
             </Button>
+            {absenceId && (
+              <DeleteOutlineIcon
+                onClick={() => {
+                  const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
+                  if (confirmDelete) {
+                    deleteAbsence(absenceId);
+                  }
+                }}
+                className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
+              ></DeleteOutlineIcon>
+            )}
           </div>
         </form>
         <button

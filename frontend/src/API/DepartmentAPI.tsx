@@ -1,4 +1,4 @@
-import { Department, Role, Section, SubjectField, Team } from '../types/types';
+import { Department, NewDepartment, Role, Section, SubjectField, Team } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -31,7 +31,7 @@ export function getRolesByDepartmentId(departmentId: number): Promise<AxiosRespo
   return axios.get(`${url}/${departmentId}/roles`);
 }
 
-export function postDepartment(department: Department): Promise<AxiosResponse<Department>> {
+export function postDepartment(department: NewDepartment): Promise<AxiosResponse<NewDepartment>> {
   return axios.post(url, department);
 }
 

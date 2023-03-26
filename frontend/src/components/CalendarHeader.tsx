@@ -20,14 +20,14 @@ const CalendarHeader = ({ columns }: CalendarHeaderProps) => {
             setFromDate((d) => m(d).subtract(1, 'y').startOf('isoWeek').add(1, 'w').toISOString())
           }
         >
-          <ArrowBack />
+          <ArrowBack className="hover:scale-115" />
         </button>
         {m(fromDate).year()}
         <button
           className="text-sm"
           onClick={() => setFromDate((d) => m(d).add(1, 'y').startOf('isoWeek').toISOString())}
         >
-          <ArrowForward />
+          <ArrowForward className="hover:scale-115" />
         </button>
       </h6>
       {Object.entries(columns).map(([week, days], i) => (
@@ -38,7 +38,7 @@ const CalendarHeader = ({ columns }: CalendarHeaderProps) => {
                 className="text-sm absolute left-0"
                 onClick={() => setFromDate((d) => m(d).subtract(1, 'w').toISOString())}
               >
-                <ArrowBack />
+                <ArrowBack className="hover:scale-115" />
               </button>
             )}
             {week}
@@ -47,7 +47,7 @@ const CalendarHeader = ({ columns }: CalendarHeaderProps) => {
                 className="text-sm absolute right-0"
                 onClick={() => setFromDate((d) => m(d).add(1, 'w').toISOString())}
               >
-                <ArrowForward />
+                <ArrowForward className="hover:scale-115" />
               </button>
             )}
           </h6>

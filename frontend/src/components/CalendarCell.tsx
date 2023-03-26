@@ -1,14 +1,16 @@
-import { useModalContext } from '../context/ModalContext';
-import { useUserContext } from '../context/UserContext';
-import { Absence } from '../types/types';
 import moment from 'moment';
 import { FC } from 'react';
+import { useModalContext } from '../context/ModalContext';
+import { useUserContext } from '../context/UserContext';
+import { Absence, User } from '../types/types';
 
 interface CalendarCellProps {
   date: string;
   isCurrentUser: boolean;
   defaultColor: string;
+  hoverColor: string;
   absence?: Absence;
+  user: User;
 }
 
 const getStyle = (absence?: Absence) => {
@@ -29,31 +31,40 @@ const getStyle = (absence?: Absence) => {
   };
 };
 
-const CalendarCell: FC<CalendarCellProps> = ({ date, isCurrentUser, defaultColor, absence }) => {
+const CalendarCell: FC<CalendarCellProps> = ({
+  user,
+  date,
+  isCurrentUser,
+  defaultColor,
+  hoverColor,
+  absence
+}) => {
   const currentUser = useUserContext();
   const { openAbsenceForm } = useModalContext();
 
+  //TODO: bruk moment(date) til å sjekke om den datoen har fravær fra før
   const handleCellClick = () => {
     if (!(isCurrentUser || currentUser.admin)) return;
 
     //open editing version of form if an absence was clicked, otherwise open add version
     if (absence) {
-      openAbsenceForm(moment(date).format('yyyy-MM-DD'), 'edit', absence);
+      openAbsenceForm(user, moment(date).format('yyyy-MM-DD'), 'edit', absence);
     } else {
-      openAbsenceForm(moment(date).format('yyyy-MM-DD'));
+      openAbsenceForm(user, moment(date).format('yyyy-MM-DD'));
     }
   };
 
   return (
     <div
-      className={`${defaultColor} ${
-        isCurrentUser ? 'cursor-pointer' : 'cursor-default'
+      className={`hover:${hoverColor} ${defaultColor} ${
+        isCurrentUser || currentUser.admin ? 'cursor-pointer' : 'cursor-default'
       } w-full min-h-[21px] h-full`}
       style={getStyle(absence)}
+      // onClick={absence ? undefined : handleCellClick}
       onClick={handleCellClick}
     >
       {absence && (
-        <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold">
+        <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold hover:scale-115">
           {absence.type.code}
         </span>
       )}

@@ -577,6 +577,10 @@ namespace Lanekassen.Migrations
                         .HasColumnType("text")
                         .HasColumnOrder(0);
 
+                    b.Property<string>("BusinessAffiliation")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("integer");
 
@@ -613,6 +617,7 @@ namespace Lanekassen.Migrations
                             UserId = 1,
                             Admin = false,
                             AzureId = "Falsk-azure-id",
+                            BusinessAffiliation = "Lånekassen",
                             DepartmentId = 1,
                             Email = "ola@nordmann.no",
                             EmploymentType = 0,
@@ -752,11 +757,13 @@ namespace Lanekassen.Migrations
 
             modelBuilder.Entity("Lanekassen.Models.SubjectField", b =>
                 {
-                    b.HasOne("Lanekassen.Models.Department", null)
+                    b.HasOne("Lanekassen.Models.Department", "Department")
                         .WithMany("SubjectFields")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Lanekassen.Models.User", b =>

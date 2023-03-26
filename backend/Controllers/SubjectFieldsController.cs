@@ -23,9 +23,13 @@ public class SubjectFieldsController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+    Department? department = await _context.Departments.FindAsync(subjectField.DepartmentId);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
     SubjectField? newSubjectField = new() {
       Name = subjectField.Name,
-      Users = await _context.Users.Where(u => subjectField.Users!.Contains(u.UserId)).ToListAsync(),
       DepartmentId = subjectField.DepartmentId
     };
 
@@ -57,8 +61,12 @@ public class SubjectFieldsController : ControllerBase {
       return BadRequest("Invalid subject field id");
     }
 
+    Department? department = await _context.Departments.FindAsync(subjectField.DepartmentId);
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
+
     existingSubjectField.Name = subjectField.Name;
-    existingSubjectField.Users = await _context.Users.Where(u => subjectField.Users!.Contains(u.UserId)).ToListAsync();
     existingSubjectField.DepartmentId = subjectField.DepartmentId;
 
     try {
@@ -103,7 +111,7 @@ public class SubjectFieldsController : ControllerBase {
 
   [HttpGet]
   public async Task<IActionResult> GetSubjectFields() {
-    return Ok(await _context.SubjectFields.ToListAsync());
+    return Ok(await _context.SubjectFields.Include((s) => s.Department).ToListAsync());
   }
 
   [HttpGet("{id}")]

@@ -4,16 +4,34 @@ export interface Role {
   roleId: number;
   name: string;
   users?: User[];
+  departments?: Department[];
+}
+
+export interface RoleDTO {
+  name: string;
+  departments: number[];
 }
 
 export interface Team {
   teamId: number;
   name: string;
   users?: User[];
+  departments?: Department[];
+}
+
+export interface TeamDTO {
+  name: string;
+  departments: number[];
 }
 
 export interface SubjectField {
   subjectFieldId: number;
+  name: string;
+  departmentId: number;
+  department?: Department;
+}
+
+export interface SubjectFieldDTO {
   name: string;
   departmentId: number;
 }
@@ -47,11 +65,24 @@ export interface Department {
   sections?: Section[];
 }
 
+export interface NewDepartment {
+  departmentId?: number;
+  name: string;
+  abbreviation: string;
+  subjectFields?: SubjectField[];
+  sections?: Section[];
+}
+
 export interface Section {
   sectionId: number;
   name: string;
   users?: User[];
   departments?: Department[];
+}
+
+export interface SectionDTO {
+  name: string;
+  departments: number[];
 }
 
 export interface AbsenceType {
@@ -77,6 +108,7 @@ export interface User {
   email: string;
   employmentType: EmploymentType;
   admin: boolean;
+  businessAffiliation: string;
   sectionId: number;
   section?: Section;
   absences?: Absence[];
@@ -106,6 +138,7 @@ export interface NewUser {
   email: string;
   employmentType: EmploymentType;
   admin: boolean;
+  businessAffiliation: string;
   sectionId: number;
   departmentId: number;
   subjectFields: number[];

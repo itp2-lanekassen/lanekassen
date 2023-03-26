@@ -8,6 +8,7 @@ public class UserDTO {
   public string Email { get; set; } = "";
   public EmploymentType EmploymentType { get; set; } = EmploymentType.Ansatt;
   public bool Admin { get; set; }
+  public string BusinessAffiliation { get; set; } = "";
   public int SectionId { get; set; }
   public ICollection<int> SubjectFields { get; set; } = null!;
   public ICollection<int>? Roles { get; set; }
