@@ -8,7 +8,8 @@ import {
   deleteAbsence,
   getDatePickerMaxForAbsence,
   getDatePickerMinForAbsence,
-  postAbsence
+  postAbsence,
+  updateAbsence
 } from '../API/AbsenceAPI';
 import { useGlobalContext } from '../context/GlobalContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
@@ -17,6 +18,7 @@ import { CommentField } from './CommentField';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
 import { DateField } from './DateField';
+import { useUserContext } from '@/context/UserContext';
 
 type ModalProps = {
   user: User;
@@ -68,14 +70,25 @@ const AbsenceForm: React.FC<ModalProps> = ({
   const { absenceTypes } = useGlobalContext();
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<string>();
   const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<string>();
+  const [isApproved, setIsApproved] = React.useState<boolean>(
+    type === 'edit' && clickedAbsence ? clickedAbsence.isApproved : false
+  );
+
   const [absenceId] = React.useState<number | undefined>(clickedAbsence?.absenceId);
   let buttonText = 'Legg til';
   if (type === 'edit') {
     buttonText = 'Lagre';
   }
 
+  const currentUser = useUserContext();
+
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
+  });
+
+  const { mutate: editAbsence } = useMutation({
+    mutationFn: updateAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
   });
 
@@ -121,6 +134,10 @@ const AbsenceForm: React.FC<ModalProps> = ({
     });
   };
 
+  const handleIsApprovedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsApproved(e.target.checked);
+  };
+
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -136,7 +153,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
         startDate: moment(formValues.startDate).toISOString(),
         endDate: moment(formValues.endDate).toISOString(),
         comment: formValues.comment,
-        isApproved: false,
+        isApproved,
         absenceTypeId: formValues.absenceType,
         userId: user.userId
       });
@@ -155,7 +172,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
 
       //edit absence
       if (clickedAbsence) {
-        editAbsence({
+        await editAbsence({
           absenceId: clickedAbsence.absenceId,
           startDate: moment(formValues.startDate).toISOString(),
           endDate: moment(formValues.endDate).toISOString(),
@@ -163,7 +180,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
           type: updatedAbsenceType,
           userId: user.userId,
           user: user,
-          isApproved: false,
+          isApproved,
           comment: updatedComment
         });
       }
@@ -209,6 +226,20 @@ const AbsenceForm: React.FC<ModalProps> = ({
             formValues={formValues}
             handleInputChange={handleInputChange}
           ></CommentField>
+          {currentUser.admin && (
+            <div className="flex items-center heading-xs space-x-5">
+              <p>Godkjenn fravær</p>
+              <input
+                type="checkbox"
+                id="isApproved"
+                checked={isApproved}
+                onChange={handleIsApprovedChange}
+                // eslint-disable-next-line react/no-unknown-property
+                className="space-x-5 h-5 w-5 accent-primary "
+              />
+            </div>
+          )}
+
           <div className="modal-buttons relative flex flex-row flex-parent items-center gap-8 justify-center pt-5">
             <Button
               type="submit"
@@ -242,16 +273,3 @@ const AbsenceForm: React.FC<ModalProps> = ({
 };
 
 export default AbsenceForm;
-function editAbsence(arg0: {
-  absenceId: number;
-  startDate: string;
-  endDate: string;
-  absenceTypeId: number;
-  type: import('@/types/types').AbsenceType;
-  userId: number;
-  user: User;
-  isApproved: boolean;
-  comment: string | undefined;
-}) {
-  throw new Error('Function not implemented.');
-}
