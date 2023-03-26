@@ -1,5 +1,6 @@
 import { Absence, NewAbsence } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
+import moment from 'moment';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -87,18 +88,20 @@ export async function getAbsencesByUserIdandDate(
 //return the first startDate of an absence after a specific date, return undefined if there is none
 export async function getDatePickerMaxForAbsence(
   userId: number,
-  date: string
-): Promise<string | undefined> {
+  date: Date
+): Promise<Date | undefined> {
   const absences = await getAbsencesByUserId(userId).then((response) => response.data);
   let returnDate = undefined;
   let earliestDate = date;
   let diff = Infinity;
   absences.map((a) => {
     if (
-      new Date(date).valueOf() < new Date(a.startDate).valueOf() &&
-      new Date(a.startDate).valueOf() - new Date(date).valueOf() < diff
+      date.valueOf() < new Date(a.startDate).valueOf() &&
+      new Date(a.startDate).valueOf() - date.valueOf() < diff
     ) {
-      earliestDate = a.startDate;
+      earliestDate = new Date(
+        moment(a.startDate).add(-1, 'days').toISOString(true).split('+')[0] + 'Z'
+      );
       returnDate = earliestDate;
       diff = new Date(a.startDate).valueOf() - new Date(date).valueOf();
     }
@@ -109,7 +112,7 @@ export async function getDatePickerMaxForAbsence(
 //return the first endDate of an absence before a specific date, return undefined if there is none
 export async function getDatePickerMinForAbsence(
   userId: number,
-  date: string
+  date: Date
 ): Promise<string | undefined> {
   const absences = await getAbsencesByUserId(userId).then((response) => response.data);
   let returnDate = undefined;
@@ -117,15 +120,34 @@ export async function getDatePickerMinForAbsence(
   let diff = Infinity;
   absences.map((a) => {
     if (
-      new Date(date).valueOf() > new Date(a.endDate).valueOf() &&
-      new Date(date).valueOf() - new Date(a.endDate).valueOf() < diff
+      date.valueOf() > new Date(a.endDate).valueOf() &&
+      date.valueOf() - new Date(a.endDate).valueOf() < diff
     ) {
-      earliestDate = new Date(a.endDate).toLocaleDateString('fr-ca');
+      earliestDate = new Date(
+        moment(a.endDate).add(1, 'days').toISOString(true).split('+')[0] + 'Z'
+      );
       returnDate = earliestDate;
       diff = new Date(date).valueOf() - new Date(a.endDate).valueOf();
     }
   });
   return returnDate;
+}
+
+//Return array with all dates that a user has registered an absence
+export async function getDisableDates(userId: number): Promise<Date[]> {
+  const absences = await getAbsencesByUserId(userId).then((response) => response.data);
+  const dateArray: Date[] = [];
+  absences.map((a) => {
+    let tempDate = new Date(a.startDate);
+    dateArray.push(tempDate);
+    while (
+      tempDate.toISOString().split('T')[0] !== new Date(a.endDate).toISOString().split('T')[0]
+    ) {
+      tempDate = new Date(moment(tempDate).add(1, 'days').toISOString());
+      dateArray.push(tempDate);
+    }
+  });
+  return dateArray;
 }
 
 export default {
