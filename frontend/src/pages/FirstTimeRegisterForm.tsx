@@ -49,6 +49,8 @@ export default function FirstTimeRegisterForm() {
   const [selectedSection, setSelectedSection] = useState<number>(
     defaultSection ? defaultSection : -1
   );
+  const [selectedBusinessAffiliation, setSelectedBusinessAffiliation] =
+    useState<string>('Lånekassen');
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
@@ -85,6 +87,7 @@ export default function FirstTimeRegisterForm() {
         lastName: azureUser.surname,
         email: azureUser.mail,
         admin: false,
+        businessAffiliation: selectedBusinessAffiliation,
         sectionId: selectedSection,
         departmentId: selectedDepartment,
         subjectFields: selectedSubjectFields,
@@ -104,9 +107,16 @@ export default function FirstTimeRegisterForm() {
       selectedDepartment === -1 ||
         selectedSection === -1 ||
         selectedSubjectFields.length === 0 ||
-        selectedEmploymentType === -1
+        selectedEmploymentType === -1 ||
+        selectedBusinessAffiliation === ''
     );
-  }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
+  }, [
+    selectedDepartment,
+    selectedSection,
+    selectedSubjectFields,
+    selectedEmploymentType,
+    selectedBusinessAffiliation
+  ]);
 
   async function checkIfUserIsRegistered() {
     const user = await getUserByAzureId(azureUser.id);
@@ -137,11 +147,19 @@ export default function FirstTimeRegisterForm() {
       </div>
       <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mb-4">
         <p className="font-bold"> Navn: </p>
-        <p className=" w-full">
+        <p className="w-full text-primary">
           {azureUser.givenName} {azureUser.surname}
         </p>
         <p className="font-bold"> E-post: </p>
-        <p className=" w-full">{azureUser.mail}</p>
+        <p className="w-full text-primary">{azureUser.mail}</p>
+        <p className="font-bold"> Virksomhetstilhørighet: </p>
+        <input
+          type={'text'}
+          value={selectedBusinessAffiliation}
+          placeholder="Virksomhetstilhørighet"
+          className="w-full border-1 border-primary-light rounded-full p-2 text-primary"
+          onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
+        />
       </div>
       <div className="grid mx-auto w-max gap-4 place-items-center">
         <Dropdown
@@ -207,7 +225,9 @@ export default function FirstTimeRegisterForm() {
           buttonText="Registrer deg"
           handleClick={registerUser}
           disabled={isDisabled}
-          disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
+          disabledTitle={
+            'Fyll ut virksomhetstilhørighet, ansattforhold, avdeling, seksjon og fagområde'
+          }
         />
       </div>
     </PageLayout>

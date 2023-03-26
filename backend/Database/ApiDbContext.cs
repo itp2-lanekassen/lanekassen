@@ -107,6 +107,7 @@ public class ApiDbContext : DbContext {
           Email = "ola@nordmann.no",
           section1.SectionId,
           Admin = false,
+          BusinessAffiliation = "Lånekassen",
           EmploymentType = EmploymentType.Ansatt,
           department1.DepartmentId,
         }
