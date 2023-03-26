@@ -113,8 +113,8 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
     }
     editAbsence({
       absenceId: props.absence.absenceId,
-      startDate: moment(formValues.startDate).toISOString(),
-      endDate: moment(formValues.endDate).toISOString(),
+      startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
+      endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
       absenceTypeId: formValues.absenceType,
       type: updatedAbsenceType,
       userId: currentUser.userId,

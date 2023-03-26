@@ -143,8 +143,7 @@ export async function getDisableDates(userId: number): Promise<Date[]> {
     while (
       tempDate.toISOString().split('T')[0] !== new Date(a.endDate).toISOString().split('T')[0]
     ) {
-      tempDate = new Date(moment(tempDate).add(1, 'days').toISOString());
-      dateArray.push(tempDate);
+      tempDate = new Date(moment(tempDate).add(1, 'days').toISOString(true).split('+')[0] + 'Z');
     }
   });
   return dateArray;
