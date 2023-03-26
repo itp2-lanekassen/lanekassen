@@ -12,20 +12,26 @@ import { useNavigate } from 'react-router-dom';
 export const AbsenceView = () => {
   const navigate = useNavigate();
 
-  const [absence, setAbsence] = useState<Absence>();
+  const [selectedAbsence, setAbsence] = useState<Absence | null>(null);
+  const [absences, setAbsences] = useState<Absence[]>([]);
 
   //Show AddAbsenceView if no absence has been seleced, show EditAbsenceView if an absence has been selected
   let view;
-  if (!absence) {
-    view = <AddAbsenceView></AddAbsenceView>;
+  if (!selectedAbsence) {
+    view = <AddAbsenceView absences={absences}></AddAbsenceView>;
   } else {
-    view = <EditAbsenceView absence={absence} setAbsence={setAbsence}></EditAbsenceView>;
+    view = <EditAbsenceView absence={selectedAbsence} setAbsence={setAbsence}></EditAbsenceView>;
   }
 
   return (
     <div className="relative m-auto bg-grey-lightest w-[800px] h-[550px] rounded-[20px] p-[25px]">
       <div className="flex flex-row">
-        <AbsencePeriods selectedAbsence={absence} setAbsence={setAbsence}></AbsencePeriods>
+        <AbsencePeriods
+          setAbsences={setAbsences}
+          absences={absences}
+          selectedAbsence={selectedAbsence ? selectedAbsence : null}
+          setAbsence={setAbsence}
+        ></AbsencePeriods>
         {view}
       </div>
       <div className="absolute top-[5px] right-[5px]">

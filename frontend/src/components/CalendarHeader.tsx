@@ -1,5 +1,5 @@
-import { useFilterContext } from '@/context/FilterContext';
-import { Column } from '@/pages/CalendarPage';
+import { useFilterContext } from '../context/FilterContext';
+import { Column } from '../pages/CalendarPage';
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
 import m from 'moment';
 import { Fragment } from 'react';
