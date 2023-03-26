@@ -1,13 +1,7 @@
 import PageLayout from '@/components/PageLayout';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  getRolesByDepartmentId,
-  getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId,
-  getTeamsByDepartmentId
-} from '../API/DepartmentAPI';
 import { deleteUser, updateUser } from '../API/UserAPI';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
@@ -29,6 +23,9 @@ export default function MyPage() {
 
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
     currentUser.employmentType
+  );
+  const [selectedBusinessAffiliation, setSelectedBusinessAffiliation] = useState<string>(
+    currentUser.businessAffiliation
   );
   const [selectedDepartment, setSelectedDepartment] = useState<number>(currentUser.departmentId);
   const [selectedSection, setSelectedSection] = useState<number>(currentUser.sectionId);
@@ -53,6 +50,7 @@ export default function MyPage() {
         lastName: currentUser.lastName,
         email: currentUser.email,
         admin: currentUser.admin,
+        businessAffiliation: selectedBusinessAffiliation,
         employmentType: currentUser.employmentType,
         sectionId: selectedSection,
         subjectFields: selectedSubjectFields,
@@ -72,9 +70,16 @@ export default function MyPage() {
       selectedDepartment === -1 ||
         selectedSection === -1 ||
         selectedSubjectFields.length === 0 ||
-        selectedEmploymentType === -1
+        selectedEmploymentType === -1 ||
+        selectedBusinessAffiliation === ''
     );
-  }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
+  }, [
+    selectedDepartment,
+    selectedSection,
+    selectedSubjectFields,
+    selectedEmploymentType,
+    selectedBusinessAffiliation
+  ]);
 
   const handleDeleteProfileClick = () => {
     const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
@@ -129,12 +134,25 @@ export default function MyPage() {
 
       <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center">
         <p className="font-bold"> Navn: </p>
-        <p className=" w-full">
-          {currentUser.firstName} {currentUser.lastName}{' '}
+        <p className=" w-full text-primary">
+          {currentUser.firstName} {currentUser.lastName}
         </p>
 
         <p className="font-bold"> E-post: </p>
-        <p className=" w-full">{currentUser.email}</p>
+        <p className=" w-full text-primary">{currentUser.email}</p>
+        <p className="font-bold"> Virksomhetstilhørighet: </p>
+        <input
+          type={'text'}
+          value={selectedBusinessAffiliation}
+          disabled={isDropdownDisabled}
+          placeholder="Virksomhetstilhørighet"
+          className={`w-full rounded-full p-2 bg-white text-primary ${
+            isDropdownDisabled
+              ? 'disabled: bg-disabled-blue border-0'
+              : 'border-1 border-primary-light'
+          }`}
+          onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
+        />
 
         <p className="font-bold"> Ansattforhold: </p>
         <Dropdown

@@ -108,6 +108,7 @@ export interface User {
   email: string;
   employmentType: EmploymentType;
   admin: boolean;
+  businessAffiliation: string;
   sectionId: number;
   section?: Section;
   absences?: Absence[];
@@ -137,6 +138,7 @@ export interface NewUser {
   email: string;
   employmentType: EmploymentType;
   admin: boolean;
+  businessAffiliation: string;
   sectionId: number;
   departmentId: number;
   subjectFields: number[];
