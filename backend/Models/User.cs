@@ -12,6 +12,7 @@ public class User {
   public string Email { get; set; } = null!;
   public EmploymentType EmploymentType { get; set; } = EmploymentType.Ansatt;
   public bool Admin { get; set; }
+  public string BusinessAffiliation { get; set; } = null!;
   // Optional foreign key means user is not deleted when section is deleted
   public int? SectionId { get; set; }
   public Section Section { get; set; } = null!;
