@@ -57,17 +57,6 @@ export default function UserTabSelectedContent(props: {
     loadUserData();
   }, [props.selectedUser]);
 
-  /*
-  const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>(
-    props.selectedUser!.subjectFields.map((sf: SubjectField) => sf.subjectFieldId)
-  );
-  const [selectedTeams, setSelectedTeams] = useState<number[]>(
-    props.selectedUser!.teams.map((t: Team) => t.teamId)
-  );
-  const [selectedRoles, setSelectedRoles] = useState<number[]>(
-    props.selectedUser!.roles.map((r: Role) => r.roleId)
-  );*/
-
   const { data: roles } = useQuery(
     ['roles', { departmentId: selectedDepartment }],
     async () => (await getRolesByDepartmentId(selectedDepartment)).data

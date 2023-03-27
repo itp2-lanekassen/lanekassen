@@ -67,7 +67,7 @@ export default function UserTab() {
             className="flex modal-input w-4/12 border-2 rounded-[20px] p-2 border-primary"
             type="text"
             placeholder="Søk"
-            onKeyDown={searchForUsers}
+            onChange={searchForUsers}
           ></input>
         </div>
         <table className="ml-10">
