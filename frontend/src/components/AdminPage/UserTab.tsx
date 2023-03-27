@@ -1,7 +1,6 @@
 import { getAllUsers, getUserById } from '@/API/UserAPI';
 import { User } from '@/types/types';
 import { useEffect, useState } from 'react';
-import SearchBar from './SearchBar';
 import UserRow from './UserRow';
 import UserTabSelectedContent from './UserTabSelectedContent';
 
@@ -9,6 +8,7 @@ const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeli
 
 export default function UserTab() {
   const [users, setUsers] = useState<User[]>();
+  const [matchingUsers, setMatchingUsers] = useState<User[]>();
   const [clickedUserId, setClickedUserId] = useState<number>(-1);
   const [selectedUser, setSelectedUser] = useState<User>();
 
@@ -17,9 +17,31 @@ export default function UserTab() {
   }
 
   async function getSelectedUser() {
-    console.log(clickedUserId);
     setSelectedUser((await getUserById(clickedUserId)).data);
   }
+
+  const searchForUsers = (event: any) => {
+    const matches: User[] = [];
+    users?.forEach((user) => {
+      if (user.firstName.toLowerCase().startsWith('a')) {
+        matches.push(user);
+      }
+    });
+    /**
+     * hva skjer her?
+     * vi har allerede en liste med users
+     * kan lage en ny state og oppdatere den?
+     * det finnes ikke API for å hente etter bokstaver
+     *
+     *
+     * hver gang man trykker på en tast i search bar vil man kjøre searchFunction
+     * man vil hente ut hva som står i search bar og bruke dette som keyword
+     * hvis baren er tom skal alle brukere vises
+     * fikse event:any til riktig type
+     */
+    setMatchingUsers(matches);
+    console.log(matches);
+  };
 
   useEffect(() => {
     loadUsers();
@@ -32,11 +54,24 @@ export default function UserTab() {
   }, [clickedUserId]);
 
   if (selectedUser) {
-    return <UserTabSelectedContent selectedUser={selectedUser} setSelectedUser={setSelectedUser} />;
+    return (
+      <UserTabSelectedContent
+        selectedUser={selectedUser}
+        setSelectedUser={setSelectedUser}
+        setClickedUserId={setClickedUserId}
+      />
+    );
   } else {
     return (
       <div>
-        <SearchBar />
+        <div className="flex">
+          <input
+            className="flex modal-input w-4/12 border-2 rounded-[20px] p-2 border-primary"
+            type="text"
+            placeholder="Søk"
+            onKeyDown={searchForUsers}
+          ></input>
+        </div>
         <table className="ml-10">
           <tbody>
             <tr>
@@ -58,19 +93,8 @@ export default function UserTab() {
 
 /**
  * Må gjøres:
- * fikse at add-knappen fungerer (route, add skjema, add tilbakeknapp)
  * plassere komponenter riktig
  * adde søkefunksjonalitet til søkefeltet
- * kunne klikke på en ansatt og åpne skjema for å redigere (med rett info)
- */
-
-/**
- * Current problems:
- * den kommer bare til å rendre 1 gang, så det if else funker nok ikke
- * den setter states med en gang, så selectedUser er null
- */
-
-/**
- * løsning på at ting er null? lage egne komponenter for ulike "pages",
- * på den måten kan du kjøre state-greiene kun når selectedUser ikke er null
+ * sortere alfabetisk?
+ * fikse roles/team/subject field
  */

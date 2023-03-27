@@ -16,7 +16,9 @@ import SubmitButton from '../SubmitButton';
 export default function UserTabSelectedContent(props: {
   selectedUser: User | undefined;
   setSelectedUser: Dispatch<SetStateAction<User | undefined>>;
+  setClickedUserId: Dispatch<SetStateAction<number>>;
 }) {
+  // doesn't work, gets null from API
   async function loadUserData() {
     const listTeam: number[] = [];
     const listSubjectField: number[] = [];
@@ -35,8 +37,7 @@ export default function UserTabSelectedContent(props: {
 
     console.log(listRole);
   }
-  console.log(props.selectedUser);
-  // problemet er at man får null fra databasen, kjører en useEffect og loadUser
+
   const queryClient = useQueryClient();
   const { departments } = useGlobalContext();
 
@@ -118,6 +119,7 @@ export default function UserTabSelectedContent(props: {
 
   const handleBackButton = () => {
     props.setSelectedUser(undefined);
+    props.setClickedUserId(-1);
   };
 
   return (
