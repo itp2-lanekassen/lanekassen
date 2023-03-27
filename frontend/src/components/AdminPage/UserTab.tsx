@@ -85,4 +85,5 @@ export default function UserTab() {
  * plassere komponenter riktig
  * må kunne gi adminrettigheter
  * feedback når man oppdaterer bruker
+ * blyant og søppelkasse
  */

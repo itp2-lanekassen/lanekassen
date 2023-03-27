@@ -19,6 +19,21 @@ export default function UserTabSelectedContent(props: {
   setClickedUserId: Dispatch<SetStateAction<number>>;
   setUsers: Dispatch<SetStateAction<User[] | undefined>>;
 }) {
+  const queryClient = useQueryClient();
+  const { departments } = useGlobalContext();
+
+  const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
+    props.selectedUser!.employmentType
+  );
+  const [selectedDepartment, setSelectedDepartment] = useState<number>(
+    props.selectedUser!.departmentId
+  );
+  const [selectedSection, setSelectedSection] = useState<number>(props.selectedUser!.sectionId);
+  const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
+  const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
+  const [isAdminChecked, setIsAdminChecked] = useState<boolean>(props.selectedUser!.admin);
+
   async function loadUserData() {
     const listTeam: number[] = [];
     const listSubjectField: number[] = [];
@@ -35,20 +50,6 @@ export default function UserTabSelectedContent(props: {
     props.selectedUser!.roles?.forEach((role) => listRole.push(role.roleId));
     setSelectedRoles(listRole);
   }
-
-  const queryClient = useQueryClient();
-  const { departments } = useGlobalContext();
-
-  const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
-    props.selectedUser!.employmentType
-  );
-  const [selectedDepartment, setSelectedDepartment] = useState<number>(
-    props.selectedUser!.departmentId
-  );
-  const [selectedSection, setSelectedSection] = useState<number>(props.selectedUser!.sectionId);
-  const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
-  const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
-  const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
 
   useEffect(() => {
     loadUserData();
@@ -81,8 +82,8 @@ export default function UserTabSelectedContent(props: {
         firstName: props.selectedUser!.firstName,
         lastName: props.selectedUser!.lastName,
         email: props.selectedUser!.email,
-        admin: props.selectedUser!.admin,
-        employmentType: props.selectedUser!.employmentType,
+        admin: isAdminChecked,
+        employmentType: selectedEmploymentType,
         sectionId: selectedSection,
         subjectFields: selectedSubjectFields,
         roles: selectedRoles,
@@ -109,6 +110,10 @@ export default function UserTabSelectedContent(props: {
     props.setClickedUserId(-1);
   };
 
+  const handleAdminCheckbox = () => {
+    setIsAdminChecked(!isAdminChecked);
+  };
+
   return (
     <div>
       <SubmitButton handleClick={handleGoBack} buttonText={'Tilbake'} />
@@ -122,6 +127,9 @@ export default function UserTabSelectedContent(props: {
         <p className=" w-full">{props.selectedUser?.email}</p>
 
         <p className="font-bold"> Admin: </p>
+        <input type="checkbox" checked={isAdminChecked} onChange={handleAdminCheckbox} />
+
+        <p className="font-bold"> Ansattforhold: </p>
         <Dropdown
           placeholder="Ansattforhold"
           listOfOptions={Object.keys(EmploymentType)
