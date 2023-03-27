@@ -24,7 +24,7 @@ const Dropdown = <T extends number | string>({
       menuPlacement="auto" // auto menu on top code
       placeholder={placeholder}
       options={options}
-      value={value && options.find((option) => option.value === value)}
+      value={value !== undefined && options.find((option) => option.value === value)}
       onChange={(option) => option && onChange(option.value)}
       theme={(theme) => ({
         ...theme,

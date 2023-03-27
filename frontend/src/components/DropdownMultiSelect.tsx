@@ -22,7 +22,7 @@ const DropdownMultiSelect = <T extends number | string>({
       placeholder={placeholder}
       isMulti
       options={options}
-      value={value ? options.filter((option) => value.includes(option.value)) : []}
+      value={value !== undefined ? options.filter((option) => value.includes(option.value)) : []}
       onChange={(selectedOptions) => onChange(selectedOptions.map((o) => o.value))}
       theme={(theme) => ({
         ...theme,
