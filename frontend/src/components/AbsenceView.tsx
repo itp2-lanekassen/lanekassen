@@ -36,15 +36,15 @@ export const AbsenceView = () => {
           ></AbsencePeriods>
           {view}
         </div>
-        <div className="absolute top-10 left-10 flex justify-end">
-          <SubmitButton
-            disabledTitle={'Tilbake'}
-            buttonText={'Tilbake til kalender'}
-            handleClick={() => {
-              navigate('/');
-            }}
-          />
-        </div>
+      </div>
+      <div className="absolute top-10 left-10 flex justify-end">
+        <SubmitButton
+          disabledTitle={'Tilbake'}
+          buttonText={'Tilbake til kalender'}
+          handleClick={() => {
+            navigate('/');
+          }}
+        />
       </div>
     </PageLayout>
   );
