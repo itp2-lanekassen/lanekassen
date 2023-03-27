@@ -50,7 +50,7 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
         <p className="ml-[20px]">{absencePeriod}</p>
         <ExpandMoreIcon
           sx={{
-            color: 'white',
+            color: 'primary-contrast',
             height: '30px',
             mr: '10px',
             transform: arrowRotation

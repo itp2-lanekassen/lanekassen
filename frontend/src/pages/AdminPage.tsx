@@ -56,7 +56,7 @@ export default function AdminPage() {
                 key={index}
                 label={label}
                 sx={{
-                  backgroundColor: 'white',
+                  backgroundColor: 'primary-contrast',
                   color: 'black',
                   borderTopLeftRadius: '10px',
                   borderBottomLeftRadius: '10px',

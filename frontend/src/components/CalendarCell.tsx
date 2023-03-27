@@ -70,18 +70,18 @@ const CalendarCell: FC<CalendarCellProps> = ({
     >
       {/* If absence and holiday on same day, only display holiday */}
       {absence && holiday ? (
-        <span className="inset-0 flex items-center justify-center text-[0.65rem] text-white px-1 hover:scale-115">
+        <span className="inset-0 flex items-center justify-center text-[0.65rem] text-primary-contrast px-1 hover:scale-115">
           {holiday.description}
         </span>
       ) : (
         <>
           {absence && (
-            <span className="inset-0 flex items-center justify-center text-sm text-white px-1 font-bold hover:scale-115">
+            <span className="inset-0 flex items-center justify-center text-sm text-primary-contrast px-1 font-bold hover:scale-115">
               {absence.type.code}
             </span>
           )}
           {holiday && (
-            <span className="inset-0 flex items-center justify-center text-[0.65rem] text-white px-1 hover:scale-115">
+            <span className="inset-0 flex items-center justify-center text-[0.65rem] text-primary-contrast px-1 hover:scale-115">
               {holiday.description}
             </span>
           )}

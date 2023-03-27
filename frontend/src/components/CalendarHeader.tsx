@@ -19,7 +19,7 @@ const CalendarHeader = ({ columns }: CalendarHeaderProps) => {
 
   return (
     <>
-      <h6 className="row-start-1 col-span-20 w-full bg-primary-light text-white text-center flex justify-between items-center">
+      <h6 className="row-start-1 col-span-20 w-full bg-primary-light text-primary-contrast text-center flex justify-between items-center">
         <button
           className="text-sm"
           onClick={() =>
@@ -38,7 +38,7 @@ const CalendarHeader = ({ columns }: CalendarHeaderProps) => {
       </h6>
       {Object.entries(columns).map(([week, days], i) => (
         <Fragment key={week}>
-          <h6 className="col-span-5 row-start-2 w-full bg-primary-light text-white text-center relative flex items-center justify-center">
+          <h6 className="col-span-5 row-start-2 w-full bg-primary-light text-primary-contrast text-center relative flex items-center justify-center">
             {i === 0 && (
               <button
                 className="text-sm absolute left-0"
