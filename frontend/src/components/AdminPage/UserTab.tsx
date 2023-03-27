@@ -28,21 +28,12 @@ export default function UserTab() {
         matches.push(user);
       }
     });
-    /**
-     * hver gang man trykker på en tast i search bar vil man kjøre searchFunction
-     * man vil hente ut hva som står i search bar og bruke dette som keyword
-     * hvis baren er tom skal alle brukere vises
-     * fikse event:any til riktig type
-     *
-     * den ligger ett steg bak
-     */
     setMatchingUsers(matches);
-    console.log(matches);
   };
 
   useEffect(() => {
     loadUsers();
-  }, []);
+  }, [clickedUserId]);
 
   useEffect(() => {
     if (clickedUserId > -1) {
@@ -92,7 +83,6 @@ export default function UserTab() {
 /**
  * Må gjøres:
  * plassere komponenter riktig
- * adde søkefunksjonalitet til søkefeltet
- * fikse roles/team/subject field
  * må kunne gi adminrettigheter
+ * feedback når man oppdaterer bruker
  */

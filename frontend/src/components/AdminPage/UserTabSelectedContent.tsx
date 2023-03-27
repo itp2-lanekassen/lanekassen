@@ -34,9 +34,6 @@ export default function UserTabSelectedContent(props: {
 
     props.selectedUser!.roles?.forEach((role) => listRole.push(role.roleId));
     setSelectedRoles(listRole);
-
-    console.log(listRole);
-    console.log(props.selectedUser);
   }
 
   const queryClient = useQueryClient();
@@ -101,24 +98,20 @@ export default function UserTabSelectedContent(props: {
     const confirmDelete = confirm('Er du sikker på at du vil slette denne profilen?');
     if (confirmDelete) {
       deleteUser(props.selectedUser!.userId).then(async () => {
-        // sletting funker, men fjernes ikke fra displayet
-        // sette setUsers på nytt?
-        // nei
-        // husk at du også må sette matchingUsers
         props.setUsers((await getAllUsers()).data);
-        handleBackButton();
+        handleGoBack();
       });
     }
   };
 
-  const handleBackButton = () => {
+  const handleGoBack = () => {
     props.setSelectedUser(undefined);
     props.setClickedUserId(-1);
   };
 
   return (
     <div>
-      <SubmitButton handleClick={handleBackButton} buttonText={'Tilbake'} />
+      <SubmitButton handleClick={handleGoBack} buttonText={'Tilbake'} />
       <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mt-16">
         <p className="font-bold"> Navn: </p>
         <p className=" w-full">
@@ -128,7 +121,7 @@ export default function UserTabSelectedContent(props: {
         <p className="font-bold"> E-post: </p>
         <p className=" w-full">{props.selectedUser?.email}</p>
 
-        <p className="font-bold"> Ansattforhold: </p>
+        <p className="font-bold"> Admin: </p>
         <Dropdown
           placeholder="Ansattforhold"
           listOfOptions={Object.keys(EmploymentType)
