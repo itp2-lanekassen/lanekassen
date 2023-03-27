@@ -25,7 +25,7 @@ export const AbsenceView = () => {
   }
 
   return (
-    <PageLayout title="Din egen fraværsoversikt">
+    <PageLayout title="Min fraværsoversikt">
       <div className="relative m-auto w-[800px] h-[550px] p-[25px]">
         <div className="flex flex-row">
           <AbsencePeriods
