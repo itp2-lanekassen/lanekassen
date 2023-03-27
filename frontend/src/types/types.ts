@@ -145,3 +145,8 @@ export interface NewUser {
   roles?: number[];
   teams?: number[];
 }
+
+export interface Holiday {
+  date: string;
+  description: string;
+}

@@ -1,8 +1,9 @@
 import { useFilterContext } from '../context/FilterContext';
 import { Column } from '../pages/CalendarPage';
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
+import { useGlobalContext } from '@/context/GlobalContext';
 import m from 'moment';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 
 interface CalendarHeaderProps {
   columns: Column;
@@ -10,6 +11,11 @@ interface CalendarHeaderProps {
 
 const CalendarHeader = ({ columns }: CalendarHeaderProps) => {
   const { fromDate, setFromDate } = useFilterContext();
+  const { handleYearChange } = useGlobalContext();
+
+  useEffect(() => {
+    handleYearChange(m(fromDate).year());
+  }, [fromDate]);
 
   return (
     <>
