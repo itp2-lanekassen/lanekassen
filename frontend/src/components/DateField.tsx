@@ -27,7 +27,6 @@ export const DateField = (props: {
   ) => {
     props.handleInputChange(date, e, props.name);
   };
-  console.log(props.disableArray);
   //set max to null if it is undefined
   let max = null;
   if (props.max) {
