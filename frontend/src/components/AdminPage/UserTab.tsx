@@ -1,4 +1,4 @@
-import { deleteUser, getAllUsers, getUserById } from '@/API/UserAPI';
+import { getAllUsers, getUserById } from '@/API/UserAPI';
 import { User } from '@/types/types';
 import { useEffect, useState } from 'react';
 import SearchBar from './SearchBar';
@@ -31,7 +31,7 @@ export default function UserTab() {
     }
   }, [clickedUserId]);
 
-  if (clickedUserId >= 0) {
+  if (selectedUser) {
     return <UserTabSelectedContent selectedUser={selectedUser} />;
   } else {
     return (

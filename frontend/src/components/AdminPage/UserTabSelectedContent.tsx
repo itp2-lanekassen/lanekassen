@@ -8,12 +8,32 @@ import { deleteUser, updateUser } from '@/API/UserAPI';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { EmploymentType, Role, SubjectField, Team, User } from '@/types/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import SubmitButton from '../SubmitButton';
 
 export default function UserTabSelectedContent(props: { selectedUser: User | undefined }) {
+  async function loadUserData() {
+    const listTeam: number[] = [];
+    const listSubjectField: number[] = [];
+    const listRole: number[] = [];
+
+    props.selectedUser!.teams?.forEach((team) => listTeam.push(team.teamId));
+    setSelectedTeams(listTeam);
+
+    props.selectedUser!.subjectFields?.forEach((subjectField) =>
+      listSubjectField.push(subjectField.subjectFieldId)
+    );
+    setSelectedSubjectFields(listSubjectField);
+
+    props.selectedUser!.roles?.forEach((role) => listRole.push(role.roleId));
+    setSelectedRoles(listRole);
+
+    console.log(listRole);
+  }
+  console.log(props.selectedUser);
+  // problemet er at man får null fra databasen, kjører en useEffect og loadUser
   const queryClient = useQueryClient();
   const { departments } = useGlobalContext();
 
@@ -24,6 +44,15 @@ export default function UserTabSelectedContent(props: { selectedUser: User | und
     props.selectedUser!.departmentId
   );
   const [selectedSection, setSelectedSection] = useState<number>(props.selectedUser!.sectionId);
+  const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
+  const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  /*
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>(
     props.selectedUser!.subjectFields.map((sf: SubjectField) => sf.subjectFieldId)
   );
@@ -32,7 +61,7 @@ export default function UserTabSelectedContent(props: { selectedUser: User | und
   );
   const [selectedRoles, setSelectedRoles] = useState<number[]>(
     props.selectedUser!.roles.map((r: Role) => r.roleId)
-  );
+  );*/
 
   const { data: roles } = useQuery(
     ['roles', { departmentId: selectedDepartment }],

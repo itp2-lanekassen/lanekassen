@@ -3,20 +3,6 @@ import { getSectionById } from '@/API/SectionAPI';
 import { Department, EmploymentType, Section, User } from '@/types/types';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-// Format first name to avoid table overflow
-const formatFirstName = (name: string) => {
-  return name
-    .split(' ')
-    .map((n, i) => {
-      // if first name, return whole name
-      if (i === 0) return n;
-
-      // return first character in uppercase with . after
-      return n[0].toUpperCase() + '.';
-    })
-    .join(' ');
-};
-
 /**
  * @param props takes in a user passed down from user tab on admin page
  * @returns table row with user data filled into table cells
@@ -35,6 +21,20 @@ export default function UserRow(props: {
     setSection((await getSectionById(props.user.sectionId)).data);
     setEmploymentType(EmploymentType[props.user.employmentType]);
   }
+
+  // Format first name to avoid table overflow
+  const formatFirstName = (name: string) => {
+    return name
+      .split(' ')
+      .map((n, i) => {
+        // if first name, return whole name
+        if (i === 0) return n;
+
+        // return first character in uppercase with . after
+        return n[0].toUpperCase() + '.';
+      })
+      .join(' ');
+  };
 
   const handleUserClick = () => {
     props.setClickedUser(props.user.userId);
