@@ -21,55 +21,72 @@ import { DateField } from './DateField';
 import { useUserContext } from '@/context/UserContext';
 
 type ModalProps = {
+  startDate?: Date;
   user: User;
-  startDate?: string;
   type?: string;
   clickedAbsence?: Absence;
   onClose: () => void;
 };
 
 export type FormValues = {
-  startDate: string;
-  endDate: string;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
   comment: string | undefined;
   absenceType: number;
 };
 
 //set max on datepicker state based on when the next absence starts
 async function setMax(
-  currentUser: User,
-  startDate: string,
-  setNextAbsenceStartDate: any,
-  clickedAbsence?: Absence
+  currentUser: any,
+  clickedAbsence: Absence | undefined,
+  startDate: Date | undefined,
+  setNextAbsenceStartDate: any
 ) {
-  setNextAbsenceStartDate(
-    await getDatePickerMaxForAbsence(currentUser.userId, clickedAbsence?.endDate || startDate)
-  );
+  if (clickedAbsence) {
+    setNextAbsenceStartDate(
+      await getDatePickerMaxForAbsence(currentUser.userId, new Date(clickedAbsence.endDate))
+    );
+  } else {
+    if (startDate) {
+      setNextAbsenceStartDate(
+        await getDatePickerMaxForAbsence(currentUser.userId, new Date(startDate))
+      );
+    }
+  }
 }
 
 //set min on datepicker state based when the previous absence ends
 async function setMin(
-  currentUser: User,
-  startDate: string,
-  setPreviousAbsenceEndDate: any,
-  clickedAbsence?: Absence
+  currentUser: any,
+  clickedAbsence: Absence | undefined,
+  startDate: Date | undefined,
+  setPreviousAbsenceEndDate: any
 ) {
-  setPreviousAbsenceEndDate(
-    await getDatePickerMinForAbsence(currentUser.userId, clickedAbsence?.startDate || startDate)
-  );
+  if (clickedAbsence) {
+    setPreviousAbsenceEndDate(
+      await getDatePickerMinForAbsence(currentUser.userId, new Date(clickedAbsence.startDate))
+    );
+  } else {
+    if (startDate) {
+      setPreviousAbsenceEndDate(
+        await getDatePickerMinForAbsence(currentUser.userId, new Date(startDate))
+      );
+    }
+  }
 }
 
 const AbsenceForm: React.FC<ModalProps> = ({
   user,
   onClose,
-  startDate = '',
+  startDate = undefined,
   type = 'add',
   clickedAbsence
 }) => {
   const queryClient = useQueryClient();
   const { absenceTypes } = useGlobalContext();
-  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<string>();
-  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<string>();
+  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
+  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
+
   const [isApproved, setIsApproved] = React.useState<boolean>(
     type === 'edit' && clickedAbsence ? clickedAbsence.isApproved : false
   );
@@ -94,7 +111,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
 
   const [formValues, setFormValues] = React.useState<FormValues>({
     startDate,
-    endDate: '',
+    endDate: undefined,
     comment: '',
     absenceType: absenceTypes[0].absenceTypeId
   });
@@ -103,16 +120,16 @@ const AbsenceForm: React.FC<ModalProps> = ({
     //When editing an absence, put all the current values in the fields of the AbsenceForm
     if (clickedAbsence) {
       setFormValues({
-        startDate: moment(clickedAbsence.startDate).format('YYYY-MM-DD'),
-        endDate: moment(clickedAbsence.endDate).format('YYYY-MM-DD'),
+        startDate: new Date(moment(clickedAbsence.startDate).format('YYYY-MM-DD')),
+        endDate: new Date(moment(clickedAbsence.endDate).format('YYYY-MM-DD')),
         comment: clickedAbsence.comment,
         absenceType: clickedAbsence.absenceTypeId
       });
     }
     //set min and max for datepicker based on other absences
-    setMax(user, startDate, setNextAbsenceStartDate, clickedAbsence);
-    setMin(user, startDate, setPreviousAbsenceEndDate, clickedAbsence);
-  }, [clickedAbsence]);
+    setMax(currentUser, clickedAbsence, startDate, setNextAbsenceStartDate);
+    setMin(currentUser, clickedAbsence, startDate, setPreviousAbsenceEndDate);
+  }, []);
 
   React.useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -126,7 +143,20 @@ const AbsenceForm: React.FC<ModalProps> = ({
     };
   }, [onClose]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //update form values on date picker change
+  const handleInputChange = (
+    date: Date | null,
+    event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement, Event> | undefined,
+    name: string
+  ) => {
+    setFormValues({
+      ...formValues,
+      [name]: date
+    });
+  };
+
+  //update form values on comment change
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormValues({
       ...formValues,
@@ -138,6 +168,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
     setIsApproved(e.target.checked);
   };
 
+  //update form values on radio change
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -150,13 +181,14 @@ const AbsenceForm: React.FC<ModalProps> = ({
     //add absence if type is 'add'
     if (type == 'add') {
       addAbsence({
-        startDate: moment(formValues.startDate).toISOString(),
-        endDate: moment(formValues.endDate).toISOString(),
+        startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
+        endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
         comment: formValues.comment,
         isApproved,
         absenceTypeId: formValues.absenceType,
         userId: user.userId
       });
+      alert('Fraværet ble lagt til!');
     } else {
       //edit absence if type is 'edit'
 
@@ -174,8 +206,8 @@ const AbsenceForm: React.FC<ModalProps> = ({
       if (clickedAbsence) {
         await editAbsence({
           absenceId: clickedAbsence.absenceId,
-          startDate: moment(formValues.startDate).toISOString(),
-          endDate: moment(formValues.endDate).toISOString(),
+          startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
+          endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
           absenceTypeId: formValues.absenceType,
           type: updatedAbsenceType,
           userId: user.userId,
@@ -184,6 +216,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
           comment: updatedComment
         });
       }
+      alert('Du har redigert fraværet!');
     }
 
     onClose();
@@ -199,23 +232,19 @@ const AbsenceForm: React.FC<ModalProps> = ({
         </h2>
         <form className="modal-form" onSubmit={handleSubmit}>
           <DateField
-            formValues={formValues}
             handleInputChange={handleInputChange}
             min={previousAbsenceEndDate}
             max={formValues.endDate || nextAbsenceStartDate}
             value={formValues.startDate}
-            name={'startDate'}
+            name="startDate"
             label="Fra"
           ></DateField>
           <DateField
-            formValues={formValues}
             handleInputChange={handleInputChange}
-            min={new Date(
-              moment(formValues.startDate).add(0, 'days').toISOString().split('T')[0]
-            ).toLocaleDateString('fr-ca')}
+            min={formValues.startDate}
             max={nextAbsenceStartDate}
             value={formValues.endDate}
-            name={'endDate'}
+            name="endDate"
             label="Til"
           ></DateField>
           <AbsenceRadioField
@@ -224,7 +253,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
           ></AbsenceRadioField>
           <CommentField
             formValues={formValues}
-            handleInputChange={handleInputChange}
+            handleInputChange={handleTextAreaChange}
           ></CommentField>
           {currentUser.admin && (
             <div className="flex items-center heading-xs space-x-5">
