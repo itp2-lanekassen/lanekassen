@@ -24,21 +24,17 @@ export default function UserTab() {
   const searchForUsers = (event: any) => {
     const matches: User[] = [];
     users?.forEach((user) => {
-      if (user.firstName.toLowerCase().startsWith('a')) {
+      if (user.firstName.toLowerCase().startsWith(event.target.value)) {
         matches.push(user);
       }
     });
     /**
-     * hva skjer her?
-     * vi har allerede en liste med users
-     * kan lage en ny state og oppdatere den?
-     * det finnes ikke API for å hente etter bokstaver
-     *
-     *
      * hver gang man trykker på en tast i search bar vil man kjøre searchFunction
      * man vil hente ut hva som står i search bar og bruke dette som keyword
      * hvis baren er tom skal alle brukere vises
      * fikse event:any til riktig type
+     *
+     * den ligger ett steg bak
      */
     setMatchingUsers(matches);
     console.log(matches);
@@ -96,6 +92,5 @@ export default function UserTab() {
  * Må gjøres:
  * plassere komponenter riktig
  * adde søkefunksjonalitet til søkefeltet
- * sortere alfabetisk?
  * fikse roles/team/subject field
  */
