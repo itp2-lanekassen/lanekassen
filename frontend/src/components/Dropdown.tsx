@@ -33,8 +33,12 @@ const Dropdown = <T extends number | string>({
           ...theme.colors,
           primary25: '#F6F0F9', // option highlight color
           primary: '#590689', // selected color
+          danger: '#590689',
+          dangerLight: '#D8BCE6',
           neutral20: '#590689', // border color
           neutral30: '#590689', // border hover color
+          neutral40: '',
+          neutral60: '#590689',
           neutral80: '#410464' // selected option color
         }
       })}
@@ -49,7 +53,8 @@ const Dropdown = <T extends number | string>({
         menuList: (base) => ({
           ...base,
           zIndex: 100,
-          maxHeight: '250px'
+          maxHeight: '250px',
+          overflowX: 'hidden'
         })
       }}
     />
