@@ -14,6 +14,7 @@ export default function UserTab() {
 
   async function loadUsers() {
     setUsers((await getAllUsers()).data);
+    setMatchingUsers((await getAllUsers()).data);
   }
 
   async function getSelectedUser() {
@@ -81,7 +82,7 @@ export default function UserTab() {
                 </th>
               ))}
             </tr>
-            {users?.map((user) => (
+            {matchingUsers?.map((user) => (
               <UserRow setClickedUser={setClickedUserId} key={user.azureId} user={user} />
             ))}
           </tbody>
