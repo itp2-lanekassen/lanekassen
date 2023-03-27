@@ -14,7 +14,7 @@ import {
   Team
 } from '../types/types';
 import { useQuery } from '@tanstack/react-query';
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 import { getHolidaysByYear } from '@/API/HolidaysAPI';
 
 interface GlobalContextProps {
@@ -22,7 +22,6 @@ interface GlobalContextProps {
 }
 
 interface GlobalContextType {
-  map(arg0: (department: any) => JSX.Element): ReactNode;
   absenceTypes: AbsenceType[];
   roles: Role[];
   teams: Team[];
@@ -58,10 +57,6 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
     ['holidays', year],
     async () => (await getHolidaysByYear(year)).data.data // gir feilmedling, men er riktig
   );
-
-  useEffect(() => {
-    holidays.refetch();
-  }, [year]);
 
   const handleYearChange = (newYear: number) => {
     if (newYear !== year) setYear(newYear);
