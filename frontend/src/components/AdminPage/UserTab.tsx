@@ -56,6 +56,7 @@ export default function UserTab() {
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
         setClickedUserId={setClickedUserId}
+        setUsers={setUsers}
       />
     );
   } else {
@@ -93,4 +94,5 @@ export default function UserTab() {
  * plassere komponenter riktig
  * adde søkefunksjonalitet til søkefeltet
  * fikse roles/team/subject field
+ * må kunne gi adminrettigheter
  */

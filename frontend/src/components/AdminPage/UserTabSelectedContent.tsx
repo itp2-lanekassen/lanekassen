@@ -4,7 +4,7 @@ import {
   getSubjectFieldsByDepartmentId,
   getTeamsByDepartmentId
 } from '@/API/DepartmentAPI';
-import { deleteUser, updateUser } from '@/API/UserAPI';
+import { deleteUser, getAllUsers, updateUser } from '@/API/UserAPI';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { EmploymentType, Role, SubjectField, Team, User } from '@/types/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -17,8 +17,8 @@ export default function UserTabSelectedContent(props: {
   selectedUser: User | undefined;
   setSelectedUser: Dispatch<SetStateAction<User | undefined>>;
   setClickedUserId: Dispatch<SetStateAction<number>>;
+  setUsers: Dispatch<SetStateAction<User[] | undefined>>;
 }) {
-  // doesn't work, gets null from API
   async function loadUserData() {
     const listTeam: number[] = [];
     const listSubjectField: number[] = [];
@@ -36,6 +36,7 @@ export default function UserTabSelectedContent(props: {
     setSelectedRoles(listRole);
 
     console.log(listRole);
+    console.log(props.selectedUser);
   }
 
   const queryClient = useQueryClient();
@@ -54,7 +55,7 @@ export default function UserTabSelectedContent(props: {
 
   useEffect(() => {
     loadUserData();
-  }, []);
+  }, [props.selectedUser]);
 
   /*
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>(
@@ -108,11 +109,15 @@ export default function UserTabSelectedContent(props: {
   });
 
   const handleDeleteProfileClick = () => {
-    const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
+    const confirmDelete = confirm('Er du sikker på at du vil slette denne profilen?');
     if (confirmDelete) {
-      deleteUser(props.selectedUser!.userId).then(() => {
-        //navigate('/registrer-bruker');
-        console.log('hdhddh');
+      deleteUser(props.selectedUser!.userId).then(async () => {
+        // sletting funker, men fjernes ikke fra displayet
+        // sette setUsers på nytt?
+        // nei
+        // husk at du også må sette matchingUsers
+        props.setUsers((await getAllUsers()).data);
+        handleBackButton();
       });
     }
   };
