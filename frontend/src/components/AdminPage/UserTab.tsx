@@ -32,7 +32,7 @@ export default function UserTab() {
   }, [clickedUserId]);
 
   if (selectedUser) {
-    return <UserTabSelectedContent selectedUser={selectedUser} />;
+    return <UserTabSelectedContent selectedUser={selectedUser} setSelectedUser={setSelectedUser} />;
   } else {
     return (
       <div>

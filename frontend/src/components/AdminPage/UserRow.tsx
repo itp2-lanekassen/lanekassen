@@ -38,7 +38,6 @@ export default function UserRow(props: {
 
   const handleUserClick = () => {
     props.setClickedUser(props.user.userId);
-    console.log('i did <33');
   };
 
   useEffect(() => {

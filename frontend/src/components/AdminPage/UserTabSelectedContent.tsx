@@ -8,12 +8,15 @@ import { deleteUser, updateUser } from '@/API/UserAPI';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { EmploymentType, Role, SubjectField, Team, User } from '@/types/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import SubmitButton from '../SubmitButton';
 
-export default function UserTabSelectedContent(props: { selectedUser: User | undefined }) {
+export default function UserTabSelectedContent(props: {
+  selectedUser: User | undefined;
+  setSelectedUser: Dispatch<SetStateAction<User | undefined>>;
+}) {
   async function loadUserData() {
     const listTeam: number[] = [];
     const listSubjectField: number[] = [];
@@ -113,8 +116,13 @@ export default function UserTabSelectedContent(props: { selectedUser: User | und
     }
   };
 
+  const handleBackButton = () => {
+    props.setSelectedUser(undefined);
+  };
+
   return (
     <div>
+      <SubmitButton handleClick={handleBackButton} buttonText={'Tilbake'} />
       <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mt-16">
         <p className="font-bold"> Navn: </p>
         <p className=" w-full">
