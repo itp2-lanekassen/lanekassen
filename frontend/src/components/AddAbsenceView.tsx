@@ -3,7 +3,12 @@ import { DateField } from './DateField';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import SubmitButton from './SubmitButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { getDisableDates, postAbsence } from '../API/AbsenceAPI';
+import {
+  getDatePickerMaxForAbsence,
+  getDatePickerMinForAbsence,
+  getDisableDates,
+  postAbsence
+} from '../API/AbsenceAPI';
 import { useUserContext } from '../context/UserContext';
 import moment from 'moment';
 import { useGlobalContext } from '../context/GlobalContext';
@@ -16,6 +21,28 @@ async function setDates(currentUser: any, setDisableDates: any) {
   setDisableDates(await getDisableDates(currentUser.userId));
 }
 
+//set max on datepicker state based on when the next absence starts
+async function setMax(currentUser: any, startDate: Date | undefined, setNextAbsenceStartDate: any) {
+  if (startDate) {
+    setNextAbsenceStartDate(
+      await getDatePickerMaxForAbsence(currentUser.userId, new Date(startDate))
+    );
+  }
+}
+
+//set min on datepicker state based when the previous absence ends
+async function setMin(
+  currentUser: any,
+  startDate: Date | undefined,
+  setPreviousAbsenceEndDate: any
+) {
+  if (startDate) {
+    setPreviousAbsenceEndDate(
+      await getDatePickerMinForAbsence(currentUser.userId, new Date(startDate))
+    );
+  }
+}
+
 /**
  * Renders a view lets a user add new absences
  */
@@ -24,6 +51,8 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   const currentUser = useUserContext();
   const { absenceTypes } = useGlobalContext();
 
+  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
+  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
   const [disableDates, setDisableDates] = React.useState<Date[]>();
 
   //initialize postAbsence mutation
@@ -43,6 +72,8 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   //get all dates that a user has registered an absence for in an array
   React.useEffect(() => {
     setDates(currentUser, setDisableDates);
+    setMax(currentUser, formValues.startDate, setNextAbsenceStartDate);
+    setMin(currentUser, formValues.startDate, setPreviousAbsenceEndDate);
   }, [props.absences]);
 
   //update form values on date picker change
@@ -106,6 +137,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
             <DateField
               handleInputChange={handleInputChange}
               name="startDate"
+              min={previousAbsenceEndDate}
               max={formValues.endDate}
               value={formValues.startDate}
               label="Fra"
@@ -115,6 +147,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               handleInputChange={handleInputChange}
               name="endDate"
               min={formValues.startDate}
+              max={nextAbsenceStartDate}
               value={formValues.endDate}
               label="Til"
               disableArray={disableDates}

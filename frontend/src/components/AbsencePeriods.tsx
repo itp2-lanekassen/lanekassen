@@ -31,7 +31,7 @@ export const AbsencePeriods = (props: {
 
   //Sort and return all absences in AbsencePeriod components
   const absencePeriods = props.absences
-    .sort((a, b) => moment(b.startDate).unix() - moment(a.startDate).unix())
+    .sort((a, b) => moment(a.startDate).unix() - moment(b.startDate).unix())
     .map((absence) => {
       return (
         <AbsencePeriod
