@@ -124,8 +124,6 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
       comment: '',
       absenceType: absenceTypes[0].absenceTypeId
     });
-
-    alert('Fraværet ble lagt til!');
   };
 
   return (
