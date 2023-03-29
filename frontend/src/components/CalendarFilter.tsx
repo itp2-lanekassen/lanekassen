@@ -5,6 +5,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useFilterContext } from '../context/FilterContext';
 import moment from 'moment';
+import { useState } from 'react';
+import { useModalContext } from '@/context/ModalContext';
 
 /**
  *
@@ -27,6 +29,11 @@ export default function FilterComponents() {
     subjectFields: selectedSubjectFields,
     setSubjectFields
   } = useFilterContext();
+  const [isShown, setIsShown] = useState(false);
+  const { openQuestionField } = useModalContext();
+  const handleQuestionHover = () => {
+    openQuestionField();
+  };
 
   return (
     <>
@@ -102,6 +109,16 @@ export default function FilterComponents() {
           >
             Tøm filter
           </button>
+
+          <button
+            className=" border-1 rounded-[20px] border-primary text-center w-fit focus:outline-none px-2 text-white bg-primary hover:bg-white hover:text-primary"
+            onMouseEnter={() => setIsShown(true)}
+            onMouseLeave={() => setIsShown(false)}
+          >
+            ?
+          </button>
+          {isShown && { handleQuestionHover }}
+          {isShown && <div>hei</div>}
         </div>
       </div>
 
