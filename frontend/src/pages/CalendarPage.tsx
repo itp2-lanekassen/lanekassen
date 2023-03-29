@@ -74,7 +74,6 @@ const CalendarPage = () => {
     setCalendarColumns(columns);
   }, [fromDate]);
 
-  if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
 
   return (
@@ -102,7 +101,7 @@ const CalendarPage = () => {
 
         <CalendarRow user={currentUser} isCurrentUser={true} columns={calendarColumns} />
 
-        {data.pages.map((currentPage, i) => (
+        {(data?.pages || []).map((currentPage, i) => (
           <Fragment key={i}>
             {currentPage.data.map((user) => (
               <CalendarRow key={user.userId} user={user} columns={calendarColumns} />
@@ -112,9 +111,13 @@ const CalendarPage = () => {
 
         {hasNextPage && (
           <div className="col-span-full text-primary mt-3">
-            <button ref={ref} onClick={() => fetchNextPage()}>
-              Hent mer data
-            </button>
+            {isLoading ? (
+              <div>laster...</div>
+            ) : (
+              <button ref={ref} onClick={() => fetchNextPage()}>
+                Hent mer data
+              </button>
+            )}
           </div>
         )}
       </div>
