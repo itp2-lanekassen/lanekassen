@@ -44,7 +44,8 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
   //initialize mutation for updating an absence
   const { mutate: editAbsence } = useMutation({
     mutationFn: (absence: Absence) => updateAbsence(absence),
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
+    onError: () => alert('Fravær kunne ikke oppdateres')
   });
 
   //initialize form values with current values for the absence selected for editing

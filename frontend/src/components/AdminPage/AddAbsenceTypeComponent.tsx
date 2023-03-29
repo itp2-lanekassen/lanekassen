@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import { postAbsenceType } from '@/API/AbsenceTypeAPI';
 import { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
 import { CalendarCellDisplay } from './CalendarCellDisplay';
 import AbsenceTypeView from './AbsenceTypeView';
 
@@ -22,7 +21,8 @@ export default function AddAbsenceTypeComponent(props: {
   //initialize postAbsence mutation
   const { mutate: addAbsenceType } = useMutation({
     mutationFn: postAbsenceType,
-    onSuccess: () => queryClient.invalidateQueries(['absenceTypes'])
+    onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
+    onError: () => alert('Fraværstypen eksisterer allerede')
   });
 
   //initialize form values
@@ -65,7 +65,6 @@ export default function AddAbsenceTypeComponent(props: {
     const form = document.getElementById('AbsenceTypeForm') as HTMLFormElement;
     form.reset();
 
-    alert('Fraværstypen ble lagt til!');
     props.setView(<AbsenceTypeView />);
   };
 

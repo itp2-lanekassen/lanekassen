@@ -26,7 +26,8 @@ const SectionEdit = ({ section, setEdit }: SectionEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['sections']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Seksjonen eksisterer allerede')
   });
 
   const { mutate: createSection } = useMutation({
@@ -34,7 +35,8 @@ const SectionEdit = ({ section, setEdit }: SectionEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['sections']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Seksjonen eksisterer allerede')
   });
 
   const handleSave = () => {
