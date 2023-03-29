@@ -139,95 +139,127 @@ export default function MyPage() {
         <p className="font-bold"> E-post: </p>
         <p className=" w-full text-primary">{currentUser.email}</p>
         <p className="font-bold"> Virksomhetstilhørighet: </p>
-        <input
-          type={'text'}
-          value={selectedBusinessAffiliation}
-          disabled={isDropdownDisabled}
-          placeholder="Virksomhetstilhørighet"
-          className={`w-full rounded-full p-2 bg-white text-primary ${
-            isDropdownDisabled
-              ? 'disabled: bg-disabled-blue border-0'
-              : 'border-1 border-primary-light'
-          }`}
-          onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
-        />
+        {isDropdownDisabled ? (
+          <>
+            <p className=" w-full text-primary">{selectedBusinessAffiliation}</p>
+            <p className="font-bold"> Ansattforhold: </p>
+            <p className=" w-full text-primary">{EmploymentType[selectedEmploymentType]}</p>
+            <p className="font-bold"> Avdeling: </p>
+            <p className=" w-full text-primary"> {departments[selectedDepartment - 1].name}</p>
+            <p className="font-bold"> Seksjon: </p>
+            <p className=" w-full text-primary"> {sections[selectedSection - 1].name}</p>
+            <p className="font-bold"> Fagfelt: </p>
+            <div className="flex flex-col">
+              {selectedSubjectFields.map((sf) => (
+                <p className="w-full text-primary" key={sf}>
+                  {subjectFields[sf - 1].name}
+                </p>
+              ))}
+            </div>
 
-        <p className="font-bold"> Ansattforhold: </p>
-        <Dropdown
-          className="w-full"
-          placeholder="Ansattforhold"
-          options={Object.keys(EmploymentType)
-            .filter((type) => isNaN(Number(type)))
-            .map((type, i) => ({ label: type, value: i }))}
-          onChange={setSelectedEmploymentType}
-          value={selectedEmploymentType}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Team: </p>
+            <p className="w-full text-primary">
+              {selectedTeams.map((t) => teams[t - 1].name).join(', ')}
+            </p>
 
-        <p className="font-bold"> Avdeling: </p>
-        <Dropdown
-          className="w-full"
-          placeholder="Avdeling"
-          options={departments.map((d) => ({
-            label: d.name,
-            value: d.departmentId
-          }))}
-          onChange={setSelectedDepartment}
-          value={selectedDepartment}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Roller: </p>
+            <p className="w-full text-primary">
+              {selectedRoles.map((r) => roles[r - 1].name).join(', ')}
+            </p>
+          </>
+        ) : (
+          <>
+            <input
+              type={'text'}
+              value={selectedBusinessAffiliation}
+              disabled={isDropdownDisabled}
+              placeholder="Virksomhetstilhørighet"
+              className={`w-full rounded-full p-2 bg-white text-primary ${
+                isDropdownDisabled
+                  ? 'disabled: bg-disabled-blue border-0'
+                  : 'border-1 border-primary-light'
+              }`}
+              onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
+            />
 
-        <p className="font-bold"> Seksjon: </p>
-        <Dropdown
-          className="w-full"
-          placeholder="Seksjon"
-          options={(sections || []).map((s) => ({
-            label: s.name,
-            value: s.sectionId
-          }))}
-          onChange={setSelectedSection}
-          value={selectedSection}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Ansattforhold: </p>
+            <Dropdown
+              className="w-full"
+              placeholder="Ansattforhold"
+              options={Object.keys(EmploymentType)
+                .filter((type) => isNaN(Number(type)))
+                .map((type, i) => ({ label: type, value: i }))}
+              onChange={setSelectedEmploymentType}
+              value={selectedEmploymentType}
+              isDisabled={isDropdownDisabled}
+            />
 
-        <p className="font-bold"> Fagområde: </p>
-        <DropdownMultiSelect
-          className="w-full"
-          placeholder="Fagområde"
-          options={(subjectFields || []).map((s) => ({
-            label: s.name,
-            value: s.subjectFieldId
-          }))}
-          onChange={setSelectedSubjectFields}
-          value={selectedSubjectFields}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Avdeling: </p>
+            <Dropdown
+              className="w-full"
+              placeholder="Avdeling"
+              options={departments.map((d) => ({
+                label: d.name,
+                value: d.departmentId
+              }))}
+              onChange={setSelectedDepartment}
+              value={selectedDepartment}
+              isDisabled={isDropdownDisabled}
+            />
 
-        <p className="font-bold"> Team: </p>
-        <DropdownMultiSelect
-          className="w-full"
-          placeholder="Team"
-          options={(teams || []).map((t) => ({
-            label: t.name,
-            value: t.teamId
-          }))}
-          onChange={setSelectedTeams}
-          value={selectedTeams}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Seksjon: </p>
+            <Dropdown
+              className="w-full"
+              placeholder="Seksjon"
+              options={(sections || []).map((s) => ({
+                label: s.name,
+                value: s.sectionId
+              }))}
+              onChange={setSelectedSection}
+              value={selectedSection}
+              isDisabled={isDropdownDisabled}
+            />
 
-        <p className="font-bold"> Rolle: </p>
-        <DropdownMultiSelect
-          className="w-full"
-          placeholder="Rolle"
-          options={(roles || []).map((r) => ({
-            label: r.name,
-            value: r.roleId
-          }))}
-          onChange={setSelectedRoles}
-          value={selectedRoles}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Fagområde: </p>
+            <DropdownMultiSelect
+              className="w-full"
+              placeholder="Fagområde"
+              options={(subjectFields || []).map((s) => ({
+                label: s.name,
+                value: s.subjectFieldId
+              }))}
+              onChange={setSelectedSubjectFields}
+              value={selectedSubjectFields}
+              isDisabled={isDropdownDisabled}
+            />
+
+            <p className="font-bold"> Team: </p>
+            <DropdownMultiSelect
+              className="w-full"
+              placeholder="Team"
+              options={(teams || []).map((t) => ({
+                label: t.name,
+                value: t.teamId
+              }))}
+              onChange={setSelectedTeams}
+              value={selectedTeams}
+              isDisabled={isDropdownDisabled}
+            />
+
+            <p className="font-bold"> Rolle: </p>
+            <DropdownMultiSelect
+              className="w-full"
+              placeholder="Rolle"
+              options={(roles || []).map((r) => ({
+                label: r.name,
+                value: r.roleId
+              }))}
+              onChange={setSelectedRoles}
+              value={selectedRoles}
+              isDisabled={isDropdownDisabled}
+            />
+          </>
+        )}
 
         <div className="flex items-center gap-2 col-span-2">
           {isDropdownDisabled ? (
