@@ -161,8 +161,8 @@ public class ApiDbContext : DbContext {
     );
 
     _ = modelBuilder.Entity<AbsenceType>().HasData(
-      new AbsenceType { AbsenceTypeId = 1, Name = "Tilgjengelig fravær", Code = "T", ColorCode = "#00b500" },
-      new AbsenceType { AbsenceTypeId = 2, Name = "Utilgjengelig fravær", Code = "F", ColorCode = "#d90404" },
+      new AbsenceType { AbsenceTypeId = 1, Name = "Tilgjengelig", Code = "T", ColorCode = "#00b500" },
+      new AbsenceType { AbsenceTypeId = 2, Name = "Utilgjengelig", Code = "F", ColorCode = "#d90404" },
       new AbsenceType { AbsenceTypeId = 3, Name = "Permisjon/Sykmelding", Code = "P/S", ColorCode = "#eb9900" }
     );
 
