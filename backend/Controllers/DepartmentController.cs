@@ -23,6 +23,11 @@ public class DepartmentController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+    // Check if department already exists
+    if (await _context.Departments.AnyAsync(d => d.Name == department.Name || d.Abbreviation == department.Abbreviation)) {
+      return BadRequest("Department already exists");
+    }
+
     Department? newDepartment = new() {
       Name = department.Name,
       Abbreviation = department.Abbreviation,
@@ -56,9 +61,14 @@ public class DepartmentController : ControllerBase {
       return BadRequest("Invalid department id");
     }
 
+    // Check if department already exists
+    if (await _context.Departments.AnyAsync(d => (d.Name == department.Name || d.Abbreviation == department.Abbreviation) && d.DepartmentId != id)) {
+      return BadRequest("Department already exists");
+    }
+
     existingDepartment.Name = department.Name;
     existingDepartment.Abbreviation = department.Abbreviation;
-    
+
     try {
       _ = await _context.SaveChangesAsync();
     } catch (DbUpdateException ex) {
