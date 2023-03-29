@@ -13,6 +13,7 @@ import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import SubmitButton from '../SubmitButton';
 
+// The component that is displayed when a user is chosen
 export default function UserTabSelectedContent(props: {
   selectedUser: User | undefined;
   setSelectedUser: Dispatch<SetStateAction<User | undefined>>;
@@ -92,6 +93,7 @@ export default function UserTabSelectedContent(props: {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
+      alert('Brukeren ble oppdatert!');
     }
   });
 
@@ -105,6 +107,8 @@ export default function UserTabSelectedContent(props: {
     }
   };
 
+  // The table of all users is displayed when no user is chosen,
+  // set user to undefined to go back to the table page
   const handleGoBack = () => {
     props.setSelectedUser(undefined);
     props.setClickedUserId(-1);

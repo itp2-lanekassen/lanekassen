@@ -21,6 +21,8 @@ export default function UserTab() {
     setSelectedUser((await getUserById(clickedUserId)).data);
   }
 
+  // Add matching users to new list to avoid having to load data again
+  // when the query changes
   const searchForUsers = (event: any) => {
     const matches: User[] = [];
     users?.forEach((user) => {
