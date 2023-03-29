@@ -127,8 +127,8 @@ const AbsenceForm: React.FC<ModalProps> = ({
       });
     }
     //set min and max for datepicker based on other absences
-    setMax(currentUser, clickedAbsence, startDate, setNextAbsenceStartDate);
-    setMin(currentUser, clickedAbsence, startDate, setPreviousAbsenceEndDate);
+    setMax(user, clickedAbsence, startDate, setNextAbsenceStartDate);
+    setMin(user, clickedAbsence, startDate, setPreviousAbsenceEndDate);
   }, []);
 
   React.useEffect(() => {
