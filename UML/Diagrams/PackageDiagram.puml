@@ -1,0 +1,44 @@
+@startuml Lanekassen Package Diagram
+
+title Lanekassen Package Diagram
+
+package "Frontend" {
+    component API 
+    package "components" {
+        component AdminPage
+    }
+    component context
+    component pages
+}
+
+package "Backend" {
+    component Controllers
+    component DatabaseContext
+    package "Models" {
+        component DTO
+    }
+}
+
+package "Database" {
+    
+}
+
+API ..> Controllers
+Controllers ..> API
+Controllers ..> DatabaseContext
+DatabaseContext ..> Database
+Database ..> DatabaseContext
+DTO ..> Controllers
+Models ..> DatabaseContext
+Models ..> Controllers
+
+context ..> AdminPage
+context ..> pages
+context ..> components
+AdminPage ..> API
+components ..> API
+pages ..> API
+
+
+@enduml
+

@@ -1,0 +1,15 @@
+@startuml
+class ApiDbContext {
+    + Absences : DbSet<Absence> <<get>>
+    + AbsenceTypes : DbSet<AbsenceType> <<get>>
+    + Departments : DbSet<Department> <<get>>
+    + Roles : DbSet<Role> <<get>>
+    + Sections : DbSet<Section> <<get>>
+    + SubjectFields : DbSet<SubjectField> <<get>>
+    + Teams : DbSet<Team> <<get>>
+    + Users : DbSet<User> <<get>>
+    + ApiDbContext(options:DbContextOptions<ApiDbContext>)
+    # <<override>> OnModelCreating(modelBuilder:ModelBuilder) : void
+}
+DbContext <|-- ApiDbContext
+@enduml
