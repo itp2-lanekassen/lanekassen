@@ -3,7 +3,6 @@ import { SubjectField, SubjectFieldDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateSubjectField, postSubjectField } from '@/API/SubjectFieldAPI';
-import DropdownMultiSelect from '../DropdownMultiSelect';
 import Dropdown from '../Dropdown';
 
 interface SubjectFieldEditProps {
@@ -62,11 +61,10 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
       />
       <Dropdown
         placeholder="Velg Avdelinger"
-        // TODO: shouldn't need important
-        className="!w-2/5"
+        className="w-2/5"
         value={selectedDepartment}
-        listOfOptions={departments.map((d) => ({ id: d.departmentId, name: d.name }))}
-        handleChange={setSelectedDepartment}
+        options={departments.map((d) => ({ value: d.departmentId, label: d.name }))}
+        onChange={setSelectedDepartment}
         isDisabled={false}
       />
       <div className="flex gap-4">
