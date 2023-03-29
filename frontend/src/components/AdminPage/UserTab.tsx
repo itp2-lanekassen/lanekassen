@@ -55,7 +55,7 @@ export default function UserTab() {
   } else {
     return (
       <div>
-        <div className="flex">
+        <div className="flex justify-center">
           <input
             className="flex modal-input w-4/12 border-2 rounded-[20px] p-2 border-primary"
             type="text"
@@ -81,10 +81,3 @@ export default function UserTab() {
     );
   }
 }
-
-/**
- * Må gjøres:
- * plassere komponenter riktig
- * feedback når man oppdaterer bruker
- * blyant og søppelkasse
- */
