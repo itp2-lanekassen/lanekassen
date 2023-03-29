@@ -9,4 +9,6 @@ export interface AzureAdUser {
   mobilePhone?: number;
   officeLocation?: string;
   preferredLanguage?: string;
+  department?: string;
+  manager?: string;
 }

@@ -23,6 +23,16 @@ public class AbsenceController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+    User? user = await _context.Users.FindAsync(absence.UserId);
+    if (user == null) {
+      return BadRequest("Invalid user id");
+    }
+
+    AbsenceType? absenceType = await _context.AbsenceTypes.FindAsync(absence.AbsenceTypeId);
+    if (absenceType == null) {
+      return BadRequest("Invalid absence type id");
+    }
+
     Absence? newAbsence = new() {
       StartDate = absence.StartDate,
       EndDate = absence.EndDate,
@@ -58,6 +68,16 @@ public class AbsenceController : ControllerBase {
     Absence? existingAbsence = await _context.Absences.FindAsync(id);
     if (existingAbsence == null) {
       return BadRequest("Invalid absence id");
+    }
+
+    User? user = await _context.Users.FindAsync(absence.UserId);
+    if (user == null) {
+      return BadRequest("Invalid user id");
+    }
+
+    AbsenceType? absenceType = await _context.AbsenceTypes.FindAsync(absence.AbsenceTypeId);
+    if (absenceType == null) {
+      return BadRequest("Invalid absence type id");
     }
 
     existingAbsence.StartDate = absence.StartDate;
@@ -121,7 +141,7 @@ public class AbsenceController : ControllerBase {
     IQueryable<Absence> absences = _context.Absences;
 
     if (FromDate != null) {
-      absences = absences.Where(a => a.StartDate >= FromDate);
+      absences = absences.Where(a => a.EndDate >= FromDate);
     }
 
     if (ToDate != null) {
@@ -146,7 +166,7 @@ public class AbsenceController : ControllerBase {
     IQueryable<Absence> absences = _context.Absences.Where(a => a.UserId == id);
 
     if (FromDate != null) {
-      absences = absences.Where(a => a.StartDate >= FromDate);
+      absences = absences.Where(a => a.EndDate >= FromDate);
     }
 
     if (ToDate != null) {

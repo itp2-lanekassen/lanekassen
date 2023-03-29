@@ -23,9 +23,14 @@ public class TeamController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+
+    Department? department = await _context.Departments.FindAsync(team.Departments!.First());
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
     Team? newTeam = new() {
       Name = team.Name,
-      Users = await _context.Users.Where(u => team.Users!.Contains(u.UserId)).ToListAsync(),
+      Departments = await _context.Departments.Where(d => team.Departments!.Contains(d.DepartmentId)).ToListAsync(),
     };
 
     try {
@@ -51,13 +56,20 @@ public class TeamController : ControllerBase {
       return BadRequest(ModelState);
     }
 
-    Team? existingTeam = await _context.Teams.FindAsync(id);
+    Team? existingTeam = await _context.Teams.Include(t => t.Departments).FirstOrDefaultAsync(t => t.TeamId == id);
     if (existingTeam == null) {
       return BadRequest("Invalid team id");
     }
 
+    Department? department = await _context.Departments.FindAsync(team.Departments!.First());
+    if (department == null) {
+      return BadRequest("Invalid department id");
+    }
     existingTeam.Name = team.Name;
-    existingTeam.Users = await _context.Users.Where(u => team.Users!.Contains(u.UserId)).ToListAsync();
+
+    existingTeam.Departments.Clear();
+
+    existingTeam.Departments = await _context.Departments.Where(d => team.Departments!.Contains(d.DepartmentId)).ToListAsync();
 
     try {
       _ = _context.Teams.Update(existingTeam);
@@ -102,7 +114,7 @@ public class TeamController : ControllerBase {
 
   [HttpGet]
   public async Task<IActionResult> GetTeams() {
-    List<Team> teams = await _context.Teams.ToListAsync();
+    List<Team> teams = await _context.Teams.Include((s) => s.Departments).ToListAsync();
     return Ok(teams);
   }
 

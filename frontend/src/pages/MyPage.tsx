@@ -1,14 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import PageLayout from '@/components/PageLayout';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  getRolesByDepartmentId,
-  getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId,
-  getTeamsByDepartmentId
-} from '../API/DepartmentAPI';
 import { deleteUser, updateUser } from '../API/UserAPI';
-import ellipse from '../assets/ellipse.png';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import { SignOutButton } from '../components/SignOutButton';
@@ -25,10 +19,13 @@ export default function MyPage() {
   const navigate = useNavigate();
 
   const currentUser = useUserContext();
-  const { departments } = useGlobalContext();
+  const { departments, roles, teams, subjectFields, sections } = useGlobalContext();
 
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
     currentUser.employmentType
+  );
+  const [selectedBusinessAffiliation, setSelectedBusinessAffiliation] = useState<string>(
+    currentUser.businessAffiliation
   );
   const [selectedDepartment, setSelectedDepartment] = useState<number>(currentUser.departmentId);
   const [selectedSection, setSelectedSection] = useState<number>(currentUser.sectionId);
@@ -45,26 +42,6 @@ export default function MyPage() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [isDropdownDisabled, setIsDropdownDisabled] = useState(true);
 
-  const { data: roles } = useQuery(
-    ['roles', { departmentId: selectedDepartment }],
-    async () => (await getRolesByDepartmentId(selectedDepartment)).data
-  );
-
-  const { data: teams } = useQuery(
-    ['teams', { departmentId: selectedDepartment }],
-    async () => (await getTeamsByDepartmentId(selectedDepartment)).data
-  );
-
-  const { data: sections } = useQuery(
-    ['section', { departmentId: selectedDepartment }],
-    async () => (await getSectionsByDepartmentId(selectedDepartment)).data
-  );
-
-  const { data: subjectFields } = useQuery(
-    ['subject-fields', { departmentId: selectedDepartment }],
-    async () => (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
-  );
-
   const { mutate: userToBeUpdated } = useMutation({
     mutationFn: () =>
       updateUser(currentUser.userId, {
@@ -73,6 +50,7 @@ export default function MyPage() {
         lastName: currentUser.lastName,
         email: currentUser.email,
         admin: currentUser.admin,
+        businessAffiliation: selectedBusinessAffiliation,
         employmentType: currentUser.employmentType,
         sectionId: selectedSection,
         subjectFields: selectedSubjectFields,
@@ -92,19 +70,16 @@ export default function MyPage() {
       selectedDepartment === -1 ||
         selectedSection === -1 ||
         selectedSubjectFields.length === 0 ||
-        selectedEmploymentType === -1
+        selectedEmploymentType === -1 ||
+        selectedBusinessAffiliation === ''
     );
-  }, [selectedDepartment, selectedSection, selectedSubjectFields, selectedEmploymentType]);
-
-  // Fetch data when department is selected
-  /*   useEffect(() => {
-      if (selectedDepartment !== -1) {
-        setSelectedSection(-1);
-        setSelectedSubjectFields([]);
-        setSelectedTeams([]);
-        setSelectedRoles([]);
-      }
-    }, [selectedDepartment]); */
+  }, [
+    selectedDepartment,
+    selectedSection,
+    selectedSubjectFields,
+    selectedEmploymentType,
+    selectedBusinessAffiliation
+  ]);
 
   const handleDeleteProfileClick = () => {
     const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
@@ -116,18 +91,19 @@ export default function MyPage() {
   };
 
   return (
-    <div className="max-w-full">
-      <div className="flex flex-1 flex-col items-center">
-        <img
-          className="sm:w-[70vw] mobile:w-[90vw] sm:h-[20vh] mobile:h-[15vh]"
-          src={ellipse}
-          alt=""
-        />
-        <h1 className="mt-[-100px]">Profil</h1>
-      </div>
-
+    <PageLayout title="Profil">
       <div className="absolute top-10 right-10 flex justify-end">
         <SignOutButton />
+      </div>
+      <div className="absolute bottom-10 right-10 flex justify-end">
+        <SubmitButton
+          rounded={'4px rounded'}
+          disabled={false}
+          disabledTitle={'Slett bruker'}
+          buttonText={'Slett bruker'}
+          handleClick={handleDeleteProfileClick}
+          hover={'hover:scale-110'}
+        />
       </div>
 
       <div className="absolute top-10 left-10 flex justify-end">
@@ -156,14 +132,27 @@ export default function MyPage() {
         <></>
       )}
 
-      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mt-16">
+      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center">
         <p className="font-bold"> Navn: </p>
-        <p className=" w-full">
-          {currentUser.firstName} {currentUser.lastName}{' '}
+        <p className=" w-full text-primary">
+          {currentUser.firstName} {currentUser.lastName}
         </p>
 
         <p className="font-bold"> E-post: </p>
-        <p className=" w-full">{currentUser.email}</p>
+        <p className=" w-full text-primary">{currentUser.email}</p>
+        <p className="font-bold"> Virksomhetstilhørighet: </p>
+        <input
+          type={'text'}
+          value={selectedBusinessAffiliation}
+          disabled={isDropdownDisabled}
+          placeholder="Virksomhetstilhørighet"
+          className={`w-full rounded-full p-2 bg-white text-primary ${
+            isDropdownDisabled
+              ? 'disabled: bg-disabled-blue border-0'
+              : 'border-1 border-primary-light'
+          }`}
+          onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
+        />
 
         <p className="font-bold"> Ansattforhold: </p>
         <Dropdown
@@ -260,16 +249,10 @@ export default function MyPage() {
                 disabled={isDisabled}
                 disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
               />
-              <SubmitButton
-                disabled={isDropdownDisabled}
-                disabledTitle={'Slett bruker'}
-                buttonText={'Slett bruker'}
-                handleClick={handleDeleteProfileClick}
-              />
             </>
           )}
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 }

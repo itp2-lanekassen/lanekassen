@@ -1,10 +1,10 @@
-import { getAbsencesByUserId } from '@/API/AbsenceAPI';
-import { useFilterContext } from '@/context/FilterContext';
-import { Column } from '@/pages/CalendarPage';
-import { User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 import { Fragment } from 'react';
+import { getAbsencesByUserId } from '../API/AbsenceAPI';
+import { useFilterContext } from '../context/FilterContext';
+import { Column } from '../pages/CalendarPage';
+import { User } from '../types/types';
 import CalendarCell from './CalendarCell';
 import UserDropdown from './UserDropdown';
 
@@ -16,7 +16,6 @@ interface CalendarRowProps {
 
 const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps) => {
   const { fromDate, toDate } = useFilterContext();
-
   const { data: absences } = useQuery(
     ['absences', { userId: user.userId, fromDate, toDate }],
     async () => (await getAbsencesByUserId(user.userId, fromDate, toDate)).data
@@ -37,10 +36,12 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
           {days.map((date) => (
             <CalendarCell
               key={`${user.userId}-${date.value}`}
+              user={user}
               date={date.value}
               absence={absenceOnDate(date.value)}
               isCurrentUser={isCurrentUser}
               defaultColor={j % 2 ? 'bg-card-two' : 'bg-card-one'}
+              hoverColor={j % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark'}
             />
           ))}
         </Fragment>

@@ -46,6 +46,7 @@ public class UserController : ControllerBase {
       Email = user.Email,
       EmploymentType = user.EmploymentType,
       Admin = user.Admin,
+      BusinessAffiliation = user.BusinessAffiliation,
       Section = section,
       SubjectFields = await _context.SubjectFields.Where(sf => user.SubjectFields.Contains(sf.SubjectFieldId)).ToListAsync(),
       Roles = await _context.Roles.Where(r => user.Roles!.Contains(r.RoleId)).ToListAsync(),
@@ -114,6 +115,7 @@ public class UserController : ControllerBase {
     userToUpdate.Email = user.Email;
     userToUpdate.EmploymentType = user.EmploymentType;
     userToUpdate.Admin = user.Admin;
+    userToUpdate.BusinessAffiliation = user.BusinessAffiliation;
     userToUpdate.Section = section;
     userToUpdate.Department = department;
 

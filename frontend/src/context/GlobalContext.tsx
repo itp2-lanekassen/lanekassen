@@ -4,9 +4,18 @@ import { getAllRoles } from '../API/RoleAPI';
 import { getAllSections } from '../API/SectionAPI';
 import { getAllSubjectFields } from '../API/SubjectFieldAPI';
 import { getAllTeams } from '../API/TeamAPI';
-import { AbsenceType, Department, Role, Section, SubjectField, Team } from '../types/types';
+import {
+  AbsenceType,
+  Department,
+  Holiday,
+  Role,
+  Section,
+  SubjectField,
+  Team
+} from '../types/types';
 import { useQuery } from '@tanstack/react-query';
-import { createContext, ReactNode, useContext } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
+import { getHolidaysByYear } from '@/API/HolidaysAPI';
 
 interface GlobalContextProps {
   children?: ReactNode;
@@ -19,6 +28,8 @@ interface GlobalContextType {
   sections: Section[];
   departments: Department[];
   subjectFields: SubjectField[];
+  holidays: Holiday[];
+  handleYearChange: (year: number) => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -41,6 +52,15 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
     ['subject-fields'],
     async () => (await getAllSubjectFields()).data
   );
+  const [year, setYear] = useState(new Date().getFullYear());
+  const holidays = useQuery(
+    ['holidays', year],
+    async () => (await getHolidaysByYear(year)).data.data // gir feilmedling, men er riktig
+  );
+
+  const handleYearChange = (newYear: number) => {
+    if (newYear !== year) setYear(newYear);
+  };
 
   // TODO: Single return or individual?
   if (absenceTypes.isLoading) return <div>Laster fraværstyper...</div>;
@@ -49,6 +69,7 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
   if (sections.isLoading) return <div>Laster seksjoner...</div>;
   if (departments.isLoading) return <div>Laster avdelinger...</div>;
   if (subjectFields.isLoading) return <div>Laster fagfelt...</div>;
+  if (holidays.isLoading) return <div>Laster høytider...</div>;
 
   if (
     absenceTypes.isError ||
@@ -56,7 +77,8 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
     teams.isError ||
     sections.isError ||
     departments.isError ||
-    subjectFields.isError
+    subjectFields.isError ||
+    holidays.isError
   )
     return <div>Error :/</div>;
 
@@ -68,7 +90,9 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
         teams: teams.data,
         sections: sections.data,
         departments: departments.data,
-        subjectFields: subjectFields.data
+        subjectFields: subjectFields.data,
+        holidays: holidays.data,
+        handleYearChange
       }}
     >
       {children}
