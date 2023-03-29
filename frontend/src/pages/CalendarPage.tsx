@@ -63,7 +63,10 @@ const CalendarPage = () => {
 
       if (!currentDay.format('ddd').match(/Sat|Sun/)) {
         columns[key].push({
-          display: currentDay.format('DD.MM'),
+          display: currentDay.toDate().toLocaleDateString(undefined, {
+            month: 'numeric',
+            day: 'numeric'
+          }),
           value: currentDay.toISOString()
         });
       }
