@@ -4,6 +4,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { deleteAbsence } from '../API/AbsenceAPI';
 import { Absence } from '../types/types';
+import { darken } from '@mui/material/styles';
 /**
  * Renders a component that shows a users absence instance
  */
@@ -39,13 +40,21 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
       </p>
     );
   }
+  const [hover, setHover] = useState(false);
 
   return (
     <div className="w-[300px]  min-h-[fit-content] text-grey-lightest font-Rubik ">
       <div
-        style={{ borderRadius: expandStatus[1] }}
+        style={{
+          borderRadius: expandStatus[1],
+          backgroundColor: hover
+            ? darken(props.absence.type.colorCode, 0.2)
+            : props.absence.type.colorCode
+        }}
         onClick={() => expandCollapse()}
-        className="flex flex-row justify-between bg-primary hover:bg-primary-dark leading-[30px] body-tight"
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        className="flex flex-row justify-between leading-[30px] body-tight"
       >
         <p className="ml-[20px]">{absencePeriod}</p>
         <ExpandMoreIcon
