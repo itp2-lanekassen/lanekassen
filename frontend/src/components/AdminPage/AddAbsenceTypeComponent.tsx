@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { CalendarCellDisplay } from './CalendarCellDisplay';
 import AbsenceTypeView from './AbsenceTypeView';
+import ColorPickerComponent from './ColorPicker';
 
 type FormValues = {
   name: string;
@@ -78,6 +79,18 @@ export default function AddAbsenceTypeComponent(props: {
     }
   }, [formValues]);
 
+  const [open, setOpen] = React.useState(false);
+  const [color, setColor] = useState('#000000');
+  const ref = React.useRef(null);
+
+  function handleColorChange(selectedColor: any) {
+    setColor(selectedColor); // update state with selected color value
+    setFormValues({
+      ...formValues,
+      colorCode: selectedColor
+    });
+  }
+
   return (
     <div className="w-full flex flex-col items-center">
       <div className="flex flex-col items-center">
@@ -107,13 +120,36 @@ export default function AddAbsenceTypeComponent(props: {
           <label className="mt-5" htmlFor="colorCode">
             Velg farge:
           </label>
-          <input
-            className="border-2 border-gray-300 p-2 rounded-md"
-            type="color"
-            name="colorCode"
-            id="colorCode"
-            onChange={handleInputChange}
-          />
+          <div className="flex flex-row items-center">
+            <input
+              className="modal-input w-full border-2 rounded-[20px] p-3 border-primary"
+              type="text"
+              id="colorCode"
+              name="colorCode"
+              value={color}
+              onChange={handleInputChange}
+            />
+            <button
+              className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light"
+              onClick={(e) => {
+                e.preventDefault();
+                open ? setOpen(false) : setOpen(true);
+              }}
+            >
+              Velg farge
+            </button>
+            <div ref={ref}>
+              {open && (
+                <div className="absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center">
+                  <ColorPickerComponent
+                    onColorChange={handleColorChange}
+                    setOpen={setOpen}
+                    colorHook={color}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
 
           <label className="mt-5" htmlFor="code">
             Kode:
