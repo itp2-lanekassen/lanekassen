@@ -1,5 +1,5 @@
-import { Component, Dispatch, SetStateAction } from 'react';
-import { PhotoshopPicker } from 'react-color';
+import { Component, Dispatch, SetStateAction, createRef } from 'react';
+import { PhotoshopPicker, ColorResult } from 'react-color';
 
 interface ColorPickerProps {
   onColorChange: (color: string) => void;
@@ -9,13 +9,28 @@ interface ColorPickerProps {
 
 class ColorPicker extends Component<ColorPickerProps> {
   previousColor: string;
+  pickerRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: ColorPickerProps) {
     super(props);
     this.previousColor = props.colorHook;
+    this.pickerRef = createRef();
+  }
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
   }
 
-  handleChangeComplete = (color: any) => {
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  handleClickOutside = (event: MouseEvent) => {
+    if (this.pickerRef.current && !this.pickerRef.current.contains(event.target as Node)) {
+      this.handleCancel();
+    }
+  };
+
+  handleChangeComplete = (color: ColorResult) => {
     const { onColorChange } = this.props;
     this.setState({ background: color.hex });
     onColorChange(color.hex);
@@ -39,16 +54,20 @@ class ColorPicker extends Component<ColorPickerProps> {
 
   render() {
     return (
-      <PhotoshopPicker
-        header="Velg farge"
-        color={this.props.colorHook}
-        onChangeComplete={this.handleChangeComplete}
-        onAccept={this.handleAccept}
-        onCancel={this.handleCancel}
-        onChange={this.handleChangeComplete}
-      />
+      <div ref={this.pickerRef}>
+        <PhotoshopPicker
+          header="Velg farge"
+          color={this.props.colorHook}
+          onChangeComplete={this.handleChangeComplete}
+          onAccept={this.handleAccept}
+          onCancel={this.handleCancel}
+          onChange={this.handleChangeComplete}
+        />
+      </div>
     );
   }
 }
 
 export default ColorPicker;
+
+// Inspired by: http://casesandberg.github.io/react-color/
