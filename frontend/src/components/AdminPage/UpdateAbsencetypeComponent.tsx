@@ -1,4 +1,3 @@
-import SubmitButton from '../SubmitButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import { updateAbsenceType } from '@/API/AbsenceTypeAPI';
@@ -7,6 +6,9 @@ import { CalendarCellDisplay } from './CalendarCellDisplay';
 import { AbsenceType } from '@/types/types';
 import AbsenceTypeView from './AbsenceTypeView';
 import ColorPickerComponent from './ColorPicker';
+import InputAdornment from '@mui/material/InputAdornment';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
+import { IconButton, Input } from '@mui/material';
 
 type FormValues = {
   name: string;
@@ -88,7 +90,7 @@ export default function UpdateAbsenceTypeComponent(props: {
             Navn på fraværstype:
           </label>
           <input
-            className="modal-input w-full border-2 rounded-[20px] p-3 border-primary"
+            className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
             type="text"
             name="name"
             id="name"
@@ -98,26 +100,28 @@ export default function UpdateAbsenceTypeComponent(props: {
           <label className="mt-2" htmlFor="colorCode">
             Velg farge:
           </label>
-          <div className="flex flex-row items-center">
-            <input
-              className="modal-input w-full border-2 rounded-[20px] p-3 border-primary mr-2"
+          <div className="relative">
+            <Input
               type="text"
+              className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary mr-2"
               id="colorCode"
               name="colorCode"
               value={color}
-              onChange={handleInputChange}
-            />
-            <button
-              className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light"
-              onClick={(e) => {
+              disableUnderline={true}
+              onChange={(e) => {
                 e.preventDefault();
-                open ? setOpen(false) : setOpen(true);
+                handleColorChange(e.target.value);
               }}
-            >
-              Velg farge
-            </button>
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setOpen(!open)}>
+                    <ColorLensIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
             {open && (
-              <div className="absolute top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center">
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-center">
                 <ColorPickerComponent
                   onColorChange={handleColorChange}
                   setOpen={setOpen}
@@ -130,7 +134,7 @@ export default function UpdateAbsenceTypeComponent(props: {
             Kode:
           </label>
           <input
-            className="modal-input w-full border-2 rounded-[20px] p-3 border-primary"
+            className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
             type="text"
             name="code"
             id="code"
