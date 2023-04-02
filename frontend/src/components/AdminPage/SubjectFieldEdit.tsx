@@ -25,7 +25,7 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
       queryClient.invalidateQueries(['subjectField']);
       setEdit(false);
     },
-    onError: () => alert('Fagfeltet eksisterer allerede')
+    onError: () => alert('Fagområdet eksisterer allerede')
   });
 
   const { mutate: createSubjectField } = useMutation({
@@ -34,7 +34,7 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
       queryClient.invalidateQueries(['subjectField']);
       setEdit(false);
     },
-    onError: () => alert('Fagfeltet eksisterer allerede')
+    onError: () => alert('Fagområdet eksisterer allerede')
   });
 
   const handleSave = () => {
@@ -54,7 +54,7 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
 
   return (
     <div className="flex flex-col w-full items-center gap-8">
-      <h4>{subjectField ? 'Rediger fagfelt' : 'Nytt fagfelt'}</h4>
+      <h4>{subjectField ? 'Rediger fagområde' : 'Nytt fagområde'}</h4>
       <input
         value={subjectFieldName}
         onChange={(e) => setSubjectFieldName(e.target.value)}
