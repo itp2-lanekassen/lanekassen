@@ -188,7 +188,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
         absenceTypeId: formValues.absenceType,
         userId: user.userId
       });
-      alert('Fraværet ble lagt til!');
     } else {
       //edit absence if type is 'edit'
 
@@ -216,7 +215,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
           comment: updatedComment
         });
       }
-      alert('Du har redigert fraværet!');
     }
 
     onClose();

@@ -122,8 +122,6 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       isApproved: false,
       comment: updatedComment
     });
-    //Alert user of edit success
-    alert('Du har redigert fraværet!');
     //redirect to AddAbsenceView
     props.setAbsence(null);
   };
