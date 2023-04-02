@@ -6,12 +6,18 @@ import { deleteAbsence } from '../API/AbsenceAPI';
 import { Absence } from '../types/types';
 import { darken } from '@mui/material/styles';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useGlobalContext } from '@/context/GlobalContext';
+import { useUserContext } from '@/context/UserContext';
 /**
  * Renders a component that shows a users absence instance
  */
 export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
+  const [hover, setHover] = useState(false);
+  const queryClient = useQueryClient();
+  const { absenceTypes } = useGlobalContext();
+  const currentUser = useUserContext();
 
   //Expand/collapse component to show more/less information on click
   const expandCollapse = () => {
@@ -41,14 +47,13 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
       </p>
     );
   }
-  const [hover, setHover] = useState(false);
-  const queryClient = useQueryClient();
 
   const { mutate: deleteExistingAbsence } = useMutation({
     mutationFn: deleteAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['departments']),
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
     onError: () => alert('Fraværet kunne ikke slettes.')
   });
+
   return (
     <div className="w-[300px]  min-h-[fit-content] text-grey-lightest font-Rubik ">
       <div
