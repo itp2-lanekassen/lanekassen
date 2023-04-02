@@ -111,6 +111,12 @@ const AbsenceForm: React.FC<ModalProps> = ({
     onError: () => alert('Kunne ikke endre fravær')
   });
 
+  const { mutate: deleteAbsenceMutation } = useMutation({
+    mutationFn: deleteAbsence,
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
+    onError: () => alert('Kunne ikke slette fravær')
+  });
+
   const [formValues, setFormValues] = React.useState<FormValues>({
     startDate,
     endDate: undefined,
@@ -176,6 +182,13 @@ const AbsenceForm: React.FC<ModalProps> = ({
       ...formValues,
       absenceType: Number(e.target.value)
     });
+  };
+
+  const handleDeleteAbsence = async () => {
+    if (absenceId) {
+      deleteAbsenceMutation(absenceId);
+      onClose();
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -281,7 +294,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
                 onClick={() => {
                   const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
                   if (confirmDelete) {
-                    deleteAbsence(absenceId);
+                    handleDeleteAbsence();
                   }
                 }}
                 className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
