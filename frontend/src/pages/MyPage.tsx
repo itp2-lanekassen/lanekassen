@@ -61,6 +61,9 @@ export default function MyPage() {
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
       setIsDropdownDisabled(true);
+    },
+    onError: () => {
+      alert('Feil ved oppdatering av bruker');
     }
   });
 

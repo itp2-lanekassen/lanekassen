@@ -101,12 +101,14 @@ const AbsenceForm: React.FC<ModalProps> = ({
 
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
+    onError: () => alert('Kunne ikke legge til fravær')
   });
 
   const { mutate: editAbsence } = useMutation({
     mutationFn: updateAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
+    onError: () => alert('Kunne ikke endre fravær')
   });
 
   const [formValues, setFormValues] = React.useState<FormValues>({
