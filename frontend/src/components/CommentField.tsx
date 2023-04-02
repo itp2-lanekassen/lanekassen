@@ -11,14 +11,14 @@ export const CommentField = (props: {
 }) => {
   return (
     <div className="modal-field">
-      <label htmlFor="comment" className="block heading-xs pb-2 pt-3">
+      <label htmlFor="comment" className="block md:heading-xs base pb-2 md:pt-3">
         Personlig notis
       </label>
       <textarea
         name="comment"
         value={props.formValues?.comment || ''}
         onChange={props.handleInputChange}
-        className="modal-input w-full border-2 rounded-[20px] p-3 border-primary"
+        className="modal-input w-full border-2 rounded-[20px] p-3 border-primary h-[85px] md:h-full"
         rows={3}
       />
     </div>

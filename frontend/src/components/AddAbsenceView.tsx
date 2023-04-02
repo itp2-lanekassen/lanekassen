@@ -132,7 +132,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
       <h3 className="ml-[25px] md:text-left text-center">Legg til fravær</h3>
       <div className="md:h-[460px] overflow-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
         <form className="modal-form" onSubmit={handleSubmit}>
-          <div className="m-auto flex flex-row gap-[20px] justify-evenly w-[350px]">
+          <div className="m-auto flex flex-row gap-[20px] justify-evenly md:w-[350px]">
             <DateField
               handleInputChange={handleInputChange}
               name="startDate"
@@ -152,15 +152,20 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               disableArray={disableDates}
             ></DateField>
           </div>
-          <div className="m-auto flex flex-row md:flex-col justify-evenly mt-[10px] w-[300px]">
-            <AbsenceRadioField
-              formValues={formValues}
-              handleRadioChange={handleRadioChange}
-            ></AbsenceRadioField>
-            <CommentField
-              formValues={formValues}
-              handleInputChange={handleTextAreaChange}
-            ></CommentField>
+          <div className="m-auto flex flex-row md:flex-col gap-[20px] justify-evenly mt-[10px] md:w-[300px]">
+            <div className="w-[190px] md:w-full">
+              <AbsenceRadioField
+                formValues={formValues}
+                handleRadioChange={handleRadioChange}
+              ></AbsenceRadioField>
+            </div>
+
+            <div className="w-[190px] md:w-full">
+              <CommentField
+                formValues={formValues}
+                handleInputChange={handleTextAreaChange}
+              ></CommentField>
+            </div>
           </div>
           <div className="m-auto w-[300px] flex justify-center">
             <SubmitButton
