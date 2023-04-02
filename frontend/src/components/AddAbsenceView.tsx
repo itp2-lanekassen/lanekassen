@@ -128,8 +128,8 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   };
 
   return (
-    <div className="md:h-[500px] h-[400px] w-[400px] relative">
-      <h3 className="ml-[25px] md:text-left text-center">Legg til fravær</h3>
+    <div className="md:h-[500px] h-[320px] w-[400px] relative">
+      <h3 className="md:ml-[25px] md:text-left text-center md:text-2xl text-xl">Legg til fravær</h3>
       <div className="md:h-[460px] overflow-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
         <form className="modal-form" onSubmit={handleSubmit}>
           <div className="m-auto flex flex-row gap-[20px] justify-evenly md:w-[350px]">
