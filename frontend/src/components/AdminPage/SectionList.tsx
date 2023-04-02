@@ -54,7 +54,12 @@ const SectionList = ({ setEdit }: SectionListProps) => {
             <div>{section.name}</div>
             <div>{section.departments?.map((dep) => dep.name).join(', ')}</div>
             <EditButton onClick={() => setEdit(true, section)} />
-            <DeleteButton onClick={() => deleteExistingSection(section.sectionId)} />
+            <DeleteButton
+              onClick={() => {
+                const confirmDelete = confirm('Er du sikker på at du vil slette denne seksjonen?');
+                if (confirmDelete) deleteExistingSection(section.sectionId);
+              }}
+            />
           </Fragment>
         ))}
       </div>
