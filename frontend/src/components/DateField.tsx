@@ -41,7 +41,7 @@ export const DateField = (props: {
 
   return (
     <div className="modal-field">
-      <label htmlFor={props.name} className="block heading-xs">
+      <label htmlFor={props.name} className="block md:heading-xs text-[16px] ">
         {props.label}
       </label>
       <DatePicker

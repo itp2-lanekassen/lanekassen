@@ -12,16 +12,16 @@ export const AbsenceRadioField = (props: {
 
   return (
     <div className="modal-field">
-      <div className="heading-xs block pb-2">Type fravær</div>
+      <div className="md:heading-xs text-[16px] block pb-2">Type fravær</div>
       <div className="bg-card-one-dark rounded-[20px] p-4 flex flex-col">
         {absenceTypes.map((type) => (
           <label
             key={type.absenceTypeId}
-            className="inline-flex justify-start items-center heading-2xs"
+            className="inline-flex justify-start items-center md:heading-2xs text-[14px]"
           >
             <input
               type="radio"
-              className="form-radio h-4 w-4 accent-primary"
+              className="form-radio h-4 w-4 md:accent"
               value={type.absenceTypeId}
               checked={props.formValues?.absenceType === type.absenceTypeId}
               onChange={props.handleRadioChange}
