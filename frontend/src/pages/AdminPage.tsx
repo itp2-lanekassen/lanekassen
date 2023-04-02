@@ -14,7 +14,7 @@ import SubjectFieldView from '@/components/AdminPage/SubjectFieldView';
 import DepartmentView from '@/components/AdminPage/DepartmentView';
 import RoleView from '@/components/AdminPage/RoleView';
 
-const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
+const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagområde', 'Team', 'Rolle'];
 
 export default function AdminPage() {
   const [value, setValue] = useState(0);
@@ -84,7 +84,7 @@ export default function AdminPage() {
                 {label === 'Fraværstyper' && <AbsenceTypeView />}
                 {label === 'Avdeling' && <DepartmentView />}
                 {label === 'Seksjon' && <SectionView />}
-                {label === 'Fagfelt' && <SubjectFieldView />}
+                {label === 'Fagområde' && <SubjectFieldView />}
                 {label === 'Team' && <TeamView />}
                 {label === 'Rolle' && <RoleView />}
               </TabPanel>
