@@ -158,7 +158,7 @@ export default function MyPage() {
             <p className=" w-full text-primary">
               {selectedSection && sections.find((item) => item.sectionId === selectedSection)?.name}
             </p>
-            <p className="font-bold"> Fagfelt: </p>
+            <p className="font-bold"> Fagområde: </p>
             <div className=" w-full text-primary">
               {selectedSubjectFields.map((sf) => {
                 const subj = subjectFields.find((item) => item.subjectFieldId === sf);

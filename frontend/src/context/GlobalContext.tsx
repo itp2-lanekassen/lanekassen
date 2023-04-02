@@ -68,7 +68,7 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
   if (teams.isLoading) return <div>Laster team...</div>;
   if (sections.isLoading) return <div>Laster seksjoner...</div>;
   if (departments.isLoading) return <div>Laster avdelinger...</div>;
-  if (subjectFields.isLoading) return <div>Laster fagfelt...</div>;
+  if (subjectFields.isLoading) return <div>Laster fagområde...</div>;
   if (holidays.isLoading) return <div>Laster høytider...</div>;
 
   if (
