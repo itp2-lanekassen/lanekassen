@@ -5,6 +5,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { deleteAbsence } from '../API/AbsenceAPI';
 import { Absence } from '../types/types';
 import { darken } from '@mui/material/styles';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 /**
  * Renders a component that shows a users absence instance
  */
@@ -41,7 +42,13 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
     );
   }
   const [hover, setHover] = useState(false);
+  const queryClient = useQueryClient();
 
+  const { mutate: deleteExistingAbsence } = useMutation({
+    mutationFn: deleteAbsence,
+    onSuccess: () => queryClient.invalidateQueries(['departments']),
+    onError: () => alert('Fraværet kunne ikke slettes.')
+  });
   return (
     <div className="w-[300px]  min-h-[fit-content] text-grey-lightest font-Rubik ">
       <div
@@ -92,7 +99,7 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
             onClick={() => {
               const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
               if (confirmDelete) {
-                deleteAbsence(props.absence.absenceId);
+                deleteExistingAbsence(props.absence.absenceId);
               }
             }}
             sx={{
