@@ -5,9 +5,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useFilterContext } from '../context/FilterContext';
 import moment from 'moment';
+import { useUserContext } from '@/context/UserContext';
+import { useEffect } from 'react';
 
 export default function FilterComponents() {
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
+  const currentUser = useUserContext();
   const {
     fromDate,
     setFromDate,
@@ -22,6 +25,13 @@ export default function FilterComponents() {
     subjectFields: selectedSubjectFields,
     setSubjectFields
   } = useFilterContext();
+
+  // Sets the department to the current user's department if it exists as default
+  useEffect(() => {
+    if (currentUser?.departmentId) {
+      setDepartments([currentUser.departmentId]);
+    }
+  }, [currentUser]);
 
   return (
     <>
