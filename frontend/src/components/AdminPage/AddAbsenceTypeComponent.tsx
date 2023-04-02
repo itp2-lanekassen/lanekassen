@@ -124,7 +124,7 @@ export default function AddAbsenceTypeComponent(props: {
               }}
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton onClick={() => setOpen(!open)}>
+                  <IconButton onClick={() => setOpen(!open)} sx={{ color: '#410464' }}>
                     <ColorLensIcon />
                   </IconButton>
                 </InputAdornment>
