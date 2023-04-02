@@ -55,7 +55,7 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
   });
 
   return (
-    <div className="w-[300px]  min-h-[fit-content] text-grey-lightest font-Rubik ">
+    <div className="md:w-[300px] w-full px-[50px] md:px-0 md:mx-6 min-h-[fit-content] text-grey-lightest font-Rubik ">
       <div
         style={{
           borderRadius: expandStatus[1],
