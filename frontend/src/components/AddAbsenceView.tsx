@@ -58,7 +58,8 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   //initialize postAbsence mutation
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
+    onError: () => alert('Fraværet eksisterer allerede')
   });
 
   //initialize form values
@@ -124,8 +125,6 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
       comment: '',
       absenceType: absenceTypes[0].absenceTypeId
     });
-
-    alert('Fraværet ble lagt til!');
   };
 
   return (

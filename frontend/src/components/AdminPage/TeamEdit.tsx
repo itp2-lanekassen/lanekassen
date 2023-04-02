@@ -25,7 +25,8 @@ const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['teams']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Teamet eksisterer allerede')
   });
 
   const { mutate: createTeam } = useMutation({
@@ -33,7 +34,8 @@ const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['teams']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Teamet eksisterer allerede')
   });
 
   const handleSave = () => {

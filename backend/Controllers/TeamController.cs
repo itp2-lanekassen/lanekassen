@@ -28,6 +28,11 @@ public class TeamController : ControllerBase {
     if (department == null) {
       return BadRequest("Invalid department id");
     }
+
+    // Check if team already exists
+    if (await _context.Teams.AnyAsync(t => t.Name == team.Name && t.Departments!.Contains(department))) {
+      return BadRequest("Team already exists");
+    }
     Team? newTeam = new() {
       Name = team.Name,
       Departments = await _context.Departments.Where(d => team.Departments!.Contains(d.DepartmentId)).ToListAsync(),
@@ -64,6 +69,11 @@ public class TeamController : ControllerBase {
     Department? department = await _context.Departments.FindAsync(team.Departments!.First());
     if (department == null) {
       return BadRequest("Invalid department id");
+    }
+
+    // Check if team already exists
+    if (await _context.Teams.AnyAsync(t => t.Name == team.Name && t.Departments!.Contains(department) && t.TeamId != id)) {
+      return BadRequest("Team already exists");
     }
     existingTeam.Name = team.Name;
 

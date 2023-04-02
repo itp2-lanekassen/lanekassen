@@ -96,6 +96,9 @@ export default function FirstTimeRegisterForm() {
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
       navigate('/');
+    },
+    onError: (error) => {
+      alert(error);
     }
   });
 
