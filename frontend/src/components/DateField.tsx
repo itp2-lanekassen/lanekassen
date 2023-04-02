@@ -54,7 +54,7 @@ export const DateField = (props: {
         maxDate={max}
         value={props.value?.toLocaleDateString()}
         onChange={handleInputChange}
-        className="modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center"
+        className="modal-input heading-2xs py-3 tablet:w-full w-[190px] border-2 rounded-[20px] border-primary text-center"
         required
       />
     </div>
