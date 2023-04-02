@@ -147,27 +147,49 @@ export default function MyPage() {
             <p className=" w-full text-primary">{selectedBusinessAffiliation}</p>
             <p className="font-bold"> Ansattforhold: </p>
             <p className=" w-full text-primary">{EmploymentType[selectedEmploymentType]}</p>
+
             <p className="font-bold"> Avdeling: </p>
-            <p className=" w-full text-primary"> {departments[selectedDepartment - 1].name}</p>
+            <p className=" w-full text-primary">
+              {selectedDepartment &&
+                departments.find((item) => item.departmentId === selectedDepartment)?.name}
+            </p>
+
             <p className="font-bold"> Seksjon: </p>
-            <p className=" w-full text-primary"> {sections[selectedSection - 1].name}</p>
+            <p className=" w-full text-primary">
+              {selectedSection && sections.find((item) => item.sectionId === selectedSection)?.name}
+            </p>
             <p className="font-bold"> Fagfelt: </p>
-            <div className="flex flex-col">
-              {selectedSubjectFields.map((sf) => (
-                <p className="w-full text-primary" key={sf}>
-                  {subjectFields[sf - 1].name}
-                </p>
-              ))}
+            <div className=" w-full text-primary">
+              {selectedSubjectFields.map((sf) => {
+                const subj = subjectFields.find((item) => item.subjectFieldId === sf);
+                return subj ? (
+                  <p className="w-full text-primary" key={subj.subjectFieldId}>
+                    {subj.name}
+                  </p>
+                ) : null;
+              })}
             </div>
 
             <p className="font-bold"> Team: </p>
-            <p className="w-full text-primary">
-              {selectedTeams.map((t) => teams[t - 1].name).join(', ')}
+            <p className=" w-full text-primary">
+              {selectedTeams
+                .map((t) => {
+                  const teamToBeDisplayed = teams.find((item) => item.teamId === t);
+                  return teamToBeDisplayed ? teamToBeDisplayed.name : null;
+                })
+                .filter((t) => t !== null)
+                .join(', ')}
             </p>
 
             <p className="font-bold"> Roller: </p>
             <p className="w-full text-primary">
-              {selectedRoles.map((r) => roles[r - 1].name).join(', ')}
+              {selectedRoles
+                .map((r) => {
+                  const roleToBeDisplayed = roles.find((item) => item.roleId === r);
+                  return roleToBeDisplayed ? roleToBeDisplayed.name : null;
+                })
+                .filter((r) => r !== null)
+                .join(', ')}
             </p>
           </>
         ) : (
