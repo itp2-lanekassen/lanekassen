@@ -44,7 +44,8 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
   //initialize mutation for updating an absence
   const { mutate: editAbsence } = useMutation({
     mutationFn: (absence: Absence) => updateAbsence(absence),
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
+    onError: () => alert('Fravær kunne ikke oppdateres')
   });
 
   //initialize form values with current values for the absence selected for editing
@@ -122,8 +123,6 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       isApproved: false,
       comment: updatedComment
     });
-    //Alert user of edit success
-    alert('Du har redigert fraværet!');
     //redirect to AddAbsenceView
     props.setAbsence(null);
   };
@@ -151,7 +150,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
               label="Til"
             ></DateField>
           </div>
-          <div className="m-auto flex flex-col justify-evenly mt-[10px] w-[300px]">
+          <div className="m-auto flex flex-col justify-evenly mt-[10px] w-[350px]">
             <AbsenceRadioField
               formValues={formValues}
               handleRadioChange={handleRadioChange}

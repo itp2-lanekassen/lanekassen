@@ -42,7 +42,8 @@ export default function UpdateAbsenceTypeComponent(props: {
   //initialize postAbsence mutation
   const { mutate: updateAbsenceTypeToDatabase } = useMutation({
     mutationFn: (options: AbsenceType) => updateAbsenceType(options.absenceTypeId, options),
-    onSuccess: () => queryClient.invalidateQueries(['absenceTypes'])
+    onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
+    onError: () => alert('Fraværstypen eksisterer allerede')
   });
 
   //Post absence to database
@@ -58,7 +59,6 @@ export default function UpdateAbsenceTypeComponent(props: {
       code: formValues.code,
       colorCode: formValues.colorCode
     });
-    alert('Fraværstypen ble oppdatert!');
     props.setView(<AbsenceTypeView />);
   };
 

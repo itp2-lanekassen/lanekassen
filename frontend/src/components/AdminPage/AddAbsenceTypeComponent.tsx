@@ -24,7 +24,8 @@ export default function AddAbsenceTypeComponent(props: {
   //initialize postAbsence mutation
   const { mutate: addAbsenceType } = useMutation({
     mutationFn: postAbsenceType,
-    onSuccess: () => queryClient.invalidateQueries(['absenceTypes'])
+    onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
+    onError: () => alert('Fraværstypen eksisterer allerede')
   });
 
   //initialize form values
@@ -67,7 +68,6 @@ export default function AddAbsenceTypeComponent(props: {
     const form = document.getElementById('AbsenceTypeForm') as HTMLFormElement;
     form.reset();
 
-    alert('Fraværstypen ble lagt til!');
     props.setView(<AbsenceTypeView />);
   };
 
@@ -137,7 +137,7 @@ export default function AddAbsenceTypeComponent(props: {
           </div>
 
           <label className="mt-2" htmlFor="code">
-            Kode:
+            Forkortelse:
           </label>
           <input
             className="modal-input w-full border-2 rounded-[20px] p-2 border-primary"
