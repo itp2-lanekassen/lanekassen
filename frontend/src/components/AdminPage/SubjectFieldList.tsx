@@ -27,7 +27,7 @@ const SubjectFieldList = ({ setEdit }: SubjectFieldListProps) => {
     mutationFn: deleteSubjectField,
     onSuccess: () => queryClient.invalidateQueries(['subjectField']),
     onError: (error: Error) => {
-      setErrorAlertMessage('Et fagfelt kan ikke være i bruk før den slettes!');
+      setErrorAlertMessage('Et fagområde kan ikke være i bruk før den slettes!');
       setErrorAlertOpen(true);
     }
   });
@@ -39,7 +39,7 @@ const SubjectFieldList = ({ setEdit }: SubjectFieldListProps) => {
     <>
       {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
       <div className="grid grid-cols-sections text-center gap-x-2 gap-y-3 place-items-center">
-        <div className="heading-3xs">Fagfelt</div>
+        <div className="heading-3xs">Fagområde</div>
         <div className="heading-3xs">Avdeling</div>
         <div className="col-span-2">
           <SubmitButton handleClick={() => setEdit(true)}>
@@ -57,7 +57,7 @@ const SubjectFieldList = ({ setEdit }: SubjectFieldListProps) => {
             <EditButton onClick={() => setEdit(true, subjectField)} />
             <DeleteButton
               onClick={() => {
-                const confirmDelete = confirm('Er du sikker på at du vil slette dette fagfeltet?');
+                const confirmDelete = confirm('Er du sikker på at du vil slette dette fagområdet?');
                 if (confirmDelete) deleteExistingSubjectField(subjectField.subjectFieldId);
               }}
             />
