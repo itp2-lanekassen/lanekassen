@@ -81,7 +81,7 @@ export default function AddAbsenceTypeComponent(props: {
   return (
     <div className="w-full flex flex-col items-center">
       <div className="flex flex-col items-center">
-        <div className="absolute left-44 justify-end">
+        <div className="absolute left-60 justify-end">
           <SubmitButton
             disabled={false}
             disabledTitle={'Tilbake'}
@@ -116,7 +116,7 @@ export default function AddAbsenceTypeComponent(props: {
           />
 
           <label className="mt-5" htmlFor="code">
-            Kode:
+            Forkortelse:
           </label>
           <input
             className="modal-input w-full border-2 rounded-[20px] p-3 border-primary"
