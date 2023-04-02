@@ -24,7 +24,8 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['subjectField']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Fagfeltet eksisterer allerede')
   });
 
   const { mutate: createSubjectField } = useMutation({
@@ -32,7 +33,8 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['subjectField']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Fagfeltet eksisterer allerede')
   });
 
   const handleSave = () => {

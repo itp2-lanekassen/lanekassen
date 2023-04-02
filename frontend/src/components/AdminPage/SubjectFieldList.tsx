@@ -55,7 +55,12 @@ const SubjectFieldList = ({ setEdit }: SubjectFieldListProps) => {
             <div>{subjectField.department?.name}</div>
 
             <EditButton onClick={() => setEdit(true, subjectField)} />
-            <DeleteButton onClick={() => deleteExistingSubjectField(subjectField.subjectFieldId)} />
+            <DeleteButton
+              onClick={() => {
+                const confirmDelete = confirm('Er du sikker på at du vil slette dette fagfeltet?');
+                if (confirmDelete) deleteExistingSubjectField(subjectField.subjectFieldId);
+              }}
+            />
           </Fragment>
         ))}
       </div>

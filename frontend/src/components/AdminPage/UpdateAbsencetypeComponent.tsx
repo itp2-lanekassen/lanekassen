@@ -40,7 +40,8 @@ export default function UpdateAbsenceTypeComponent(props: {
   //initialize postAbsence mutation
   const { mutate: updateAbsenceTypeToDatabase } = useMutation({
     mutationFn: (options: AbsenceType) => updateAbsenceType(options.absenceTypeId, options),
-    onSuccess: () => queryClient.invalidateQueries(['absenceTypes'])
+    onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
+    onError: () => alert('Fraværstypen eksisterer allerede')
   });
 
   //Post absence to database
@@ -56,7 +57,6 @@ export default function UpdateAbsenceTypeComponent(props: {
       code: formValues.code,
       colorCode: formValues.colorCode
     });
-    alert('Fraværstypen ble oppdatert!');
     props.setView(<AbsenceTypeView />);
   };
 
@@ -72,7 +72,7 @@ export default function UpdateAbsenceTypeComponent(props: {
   return (
     <div className="w-full flex flex-col items-center">
       <div className="flex flex-col items-center">
-        <div className="absolute left-44 justify-end">
+        <div className="absolute left-60 justify-end">
           <SubmitButton
             disabled={false}
             disabledTitle={'Tilbake'}
@@ -107,7 +107,7 @@ export default function UpdateAbsenceTypeComponent(props: {
             onChange={handleInputChange}
           />
           <label className="mt-5" htmlFor="code">
-            Kode:
+            Forkortelse:
           </label>
           <input
             className="modal-input w-full border-2 rounded-[20px] p-3 border-primary"

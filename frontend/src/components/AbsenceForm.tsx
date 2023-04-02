@@ -101,12 +101,14 @@ const AbsenceForm: React.FC<ModalProps> = ({
 
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
+    onError: () => alert('Kunne ikke legge til fravær')
   });
 
   const { mutate: editAbsence } = useMutation({
     mutationFn: updateAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
+    onError: () => alert('Kunne ikke endre fravær')
   });
 
   const [formValues, setFormValues] = React.useState<FormValues>({
@@ -127,8 +129,8 @@ const AbsenceForm: React.FC<ModalProps> = ({
       });
     }
     //set min and max for datepicker based on other absences
-    setMax(currentUser, clickedAbsence, startDate, setNextAbsenceStartDate);
-    setMin(currentUser, clickedAbsence, startDate, setPreviousAbsenceEndDate);
+    setMax(user, clickedAbsence, startDate, setNextAbsenceStartDate);
+    setMin(user, clickedAbsence, startDate, setPreviousAbsenceEndDate);
   }, []);
 
   React.useEffect(() => {
@@ -188,7 +190,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
         absenceTypeId: formValues.absenceType,
         userId: user.userId
       });
-      alert('Fraværet ble lagt til!');
     } else {
       //edit absence if type is 'edit'
 
@@ -216,7 +217,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
           comment: updatedComment
         });
       }
-      alert('Du har redigert fraværet!');
     }
 
     onClose();

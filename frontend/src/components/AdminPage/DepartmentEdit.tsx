@@ -33,7 +33,8 @@ const DepartmentEdit = ({ department, setEdit }: DepartmentEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['departments']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Avdelingen eksisterer allerede')
   });
 
   const { mutate: createDepartment } = useMutation({
@@ -41,7 +42,8 @@ const DepartmentEdit = ({ department, setEdit }: DepartmentEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['departments']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Avdelingen eksisterer allerede')
   });
 
   const handleSave = () => {
