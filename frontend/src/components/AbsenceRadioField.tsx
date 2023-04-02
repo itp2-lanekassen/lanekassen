@@ -1,6 +1,7 @@
 import { useGlobalContext } from '../context/GlobalContext';
 import { ChangeEventHandler } from 'react';
 import { FormValues } from './AbsenceForm';
+import { SingleCalendarCellDisplay } from './SingleCalendarCellDisplay';
 /**
  * Renders a radio component for absence types
  */
@@ -27,6 +28,7 @@ export const AbsenceRadioField = (props: {
               onChange={props.handleRadioChange}
               required
             />
+            &nbsp; <SingleCalendarCellDisplay code={type.code} colorCode={type.colorCode} />
             &nbsp;<span>{type.name}</span>
           </label>
         ))}

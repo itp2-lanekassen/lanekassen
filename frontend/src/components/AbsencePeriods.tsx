@@ -1,17 +1,9 @@
 import { AbsencePeriod } from './AbsencePeriod';
 import { Absence } from '../types/types';
-import { useEffect } from 'react';
 import { getAbsencesByUserId } from '../API/AbsenceAPI';
 import { useUserContext } from '../context/UserContext';
 import moment from 'moment';
-
-//Get all absences for a user from database
-export async function getAbsences(
-  currentUser: { userId: number },
-  setAbsences: React.Dispatch<React.SetStateAction<Absence[]>>
-) {
-  setAbsences(await getAbsencesByUserId(currentUser.userId).then((response) => response.data));
-}
+import { useQuery } from '@tanstack/react-query';
 
 /**
  * Renders a scroll window that shows all absence periods for a user
@@ -24,14 +16,18 @@ export const AbsencePeriods = (props: {
 }) => {
   const currentUser = useUserContext();
 
-  //update absences displayed in AbsenceView when absences changes
-  useEffect(() => {
-    getAbsences(currentUser, props.setAbsences);
-  }, [props.absences]);
+  const { data: absences } = useQuery(
+    ['absences', { userId: currentUser.userId }],
+    () => getAbsencesByUserId(currentUser.userId).then((response) => response.data),
+    {
+      onSuccess: (data) => {
+        props.setAbsences(data);
+      }
+    }
+  );
 
-  //Sort and return all absences in AbsencePeriod components
-  const absencePeriods = props.absences
-    .sort((a, b) => moment(a.startDate).unix() - moment(b.startDate).unix())
+  const absencePeriods = absences
+    ?.sort((a, b) => moment(b.startDate).unix() - moment(a.startDate).unix())
     .map((absence) => {
       return (
         <AbsencePeriod
