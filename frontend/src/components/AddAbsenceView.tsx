@@ -152,7 +152,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               disableArray={disableDates}
             ></DateField>
           </div>
-          <div className="m-auto flex flex-col justify-evenly mt-[10px] w-[300px]">
+          <div className="m-auto flex flex-col justify-evenly mt-[10px] w-[350px]">
             <AbsenceRadioField
               formValues={formValues}
               handleRadioChange={handleRadioChange}
