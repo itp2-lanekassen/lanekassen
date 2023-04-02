@@ -1,12 +1,14 @@
-import SubmitButton from '../SubmitButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import { updateAbsenceType } from '@/API/AbsenceTypeAPI';
 import { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
 import { CalendarCellDisplay } from './CalendarCellDisplay';
 import { AbsenceType } from '@/types/types';
 import AbsenceTypeView from './AbsenceTypeView';
+import ColorPickerComponent from './ColorPicker';
+import InputAdornment from '@mui/material/InputAdornment';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
+import { IconButton, Input } from '@mui/material';
 
 type FormValues = {
   name: string;
@@ -18,15 +20,17 @@ export default function UpdateAbsenceTypeComponent(props: {
   absenceType: AbsenceType;
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
-  const queryClient = useQueryClient();
-  const [isDisabled, setIsDisabled] = useState(true);
-
   //initialize form values
   const [formValues, setFormValues] = useState<FormValues>({
     name: props.absenceType.name,
     code: props.absenceType.code,
     colorCode: props.absenceType.colorCode
   });
+
+  const queryClient = useQueryClient();
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [open, setOpen] = React.useState(false);
+  const [color, setColor] = useState(formValues.colorCode);
 
   //update form values on input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -69,48 +73,68 @@ export default function UpdateAbsenceTypeComponent(props: {
     }
   }, [formValues]);
 
+  function handleColorChange(selectedColor: string) {
+    setColor(selectedColor); // update state with selected color value
+    setFormValues({
+      ...formValues,
+      colorCode: selectedColor
+    });
+  }
+
   return (
     <div className="w-full flex flex-col items-center">
       <div className="flex flex-col items-center">
-        <div className="absolute left-60 justify-end">
-          <SubmitButton
-            disabled={false}
-            disabledTitle={'Tilbake'}
-            buttonText={'Tilbake'}
-            handleClick={() => {
-              props.setView(<AbsenceTypeView />);
-            }}
-          />
-        </div>
         <h3 className="text-xl">Oppdater fraværstype</h3>
         <form className="flex flex-col items-center" onSubmit={handleSubmit} id="AbsenceTypeForm">
-          <label className="mt-5" htmlFor="name">
+          <label className="mt-2" htmlFor="name">
             Navn på fraværstype:
           </label>
           <input
-            className="modal-input w-full border-2 rounded-[20px] p-3 border-primary"
+            className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
             type="text"
             name="name"
             id="name"
             value={formValues.name}
             onChange={handleInputChange}
           />
-          <label className="mt-5" htmlFor="colorCode">
+          <label className="mt-2" htmlFor="colorCode">
             Velg farge:
           </label>
-          <input
-            className="border-2 border-gray-300 p-2 rounded-md"
-            type="color"
-            name="colorCode"
-            id="colorCode"
-            value={formValues.colorCode}
-            onChange={handleInputChange}
-          />
-          <label className="mt-5" htmlFor="code">
-            Forkortelse:
+          <div className="relative">
+            <Input
+              type="text"
+              className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary mr-2"
+              id="colorCode"
+              name="colorCode"
+              value={color}
+              disableUnderline={true}
+              onChange={(e) => {
+                e.preventDefault();
+                handleColorChange(e.target.value);
+              }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setOpen(!open)} sx={{ color: '#410464' }}>
+                    <ColorLensIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            {open && (
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-center">
+                <ColorPickerComponent
+                  onColorChange={handleColorChange}
+                  setOpen={setOpen}
+                  colorHook={color}
+                />
+              </div>
+            )}
+          </div>
+          <label className="mt-2" htmlFor="code">
+            Kode:
           </label>
           <input
-            className="modal-input w-full border-2 rounded-[20px] p-3 border-primary"
+            className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
             type="text"
             name="code"
             id="code"
@@ -123,13 +147,23 @@ export default function UpdateAbsenceTypeComponent(props: {
           <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
 
           <br />
-          <button
-            type="submit"
-            disabled={isDisabled}
-            className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light"
-          >
-            Oppdater
-          </button>
+          <div className="flex gap-4">
+            <button
+              type="submit"
+              disabled={isDisabled}
+              className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light disabled:cursor-not-allowed"
+            >
+              Oppdater
+            </button>
+            <button
+              className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light"
+              onClick={() => {
+                props.setView(<AbsenceTypeView />);
+              }}
+            >
+              Avbryt
+            </button>
+          </div>
         </form>
       </div>
     </div>
