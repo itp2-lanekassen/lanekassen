@@ -39,9 +39,9 @@ export const AbsencePeriods = (props: {
     });
 
   return (
-    <div className="h-[500px] tablet:w-[350px] m-auto">
+    <div className="h-full md:h-[500px] w-full md:w-[350px] m-auto">
       <h3 className="md:ml-[25px] md:text-left text-center md:text-2xl text-xl">Dine fravær</h3>
-      <div className="overflow-scroll overflow-x-hidden h-[460px] w-[340px] flex flex-col items-center gap-[10px] scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
+      <div className="overflow-scroll overflow-x-hidden md:h-[460px] flex flex-col items-center gap-[10px] scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
         {absencePeriods}
       </div>
     </div>

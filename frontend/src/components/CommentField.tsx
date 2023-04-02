@@ -11,7 +11,7 @@ export const CommentField = (props: {
 }) => {
   return (
     <div className="modal-field">
-      <label htmlFor="comment" className="block md:heading-xs base pb-2 md:pt-3">
+      <label htmlFor="comment" className="block md:heading-xs base pb-2">
         Personlig notis
       </label>
       <textarea
