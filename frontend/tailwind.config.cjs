@@ -8,9 +8,6 @@ module.exports = {
             pattern: /col-span-.+/
         },
         {
-            pattern: /row-span-.+/
-        },
-        {
             pattern: /bg-card-(one|two)/,
             variants: ['hover']
         }

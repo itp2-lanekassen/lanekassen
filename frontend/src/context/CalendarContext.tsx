@@ -10,7 +10,7 @@ import {
   useEffect
 } from 'react';
 import { filterUsers } from '@/API/UserAPI';
-import { Holiday, PageResponse, User } from '@/types/types';
+import { Holiday, PageResponse, User, UserFilter } from '@/types/types';
 import { useUserContext } from './UserContext';
 import { getHolidaysByYear } from '@/API/HolidaysAPI';
 
@@ -21,19 +21,11 @@ interface CalendarContextType {
   setFromDate: Dispatch<SetStateAction<string>>;
   toDate: string;
   setToDate: Dispatch<SetStateAction<string>>;
-  departments: number[];
-  setDepartments: Dispatch<SetStateAction<number[]>>;
-  sections: number[];
-  setSections: Dispatch<SetStateAction<number[]>>;
-  teams: number[];
-  setTeams: Dispatch<SetStateAction<number[]>>;
-  roles: number[];
-  setRoles: Dispatch<SetStateAction<number[]>>;
-  subjectFields: number[];
-  setSubjectFields: Dispatch<SetStateAction<number[]>>;
   queryResult: UseInfiniteQueryResult<PageResponse<User>, unknown>;
   columns: Columns;
   holidays?: Holiday[];
+  filter: UserFilter;
+  setFilter: Dispatch<SetStateAction<UserFilter>>;
 }
 
 const CalendarContext = createContext<CalendarContextType | undefined>(undefined);
@@ -60,6 +52,7 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
   const [columns, setColumns] = useState<Columns>({});
 
   useEffect(() => {
+    // Set toDate when fromDate is after and vice-versa
     // return when we need to update to prevent early rerender
     if (m(fromDate).isSameOrAfter(m(toDate))) {
       return setToDate(m(fromDate).add(4, 'w').subtract(1, 'd').toISOString());
@@ -69,9 +62,13 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
       return setFromDate(m(toDate).subtract(4, 'w').add(1, 'd').toISOString());
     }
 
+    // ## Calculate calendar columns
+
+    // make copies of current from and to date
     const currentDay = m(fromDate);
     const lastDay = m(toDate);
 
+    // columns is an object where key is 'Uke xx' and value is an array of days
     const cols: Columns = {};
 
     while (currentDay.isSameOrBefore(lastDay)) {
@@ -99,24 +96,22 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
     setColumns(cols);
   }, [fromDate, toDate]);
 
-  const [departments, setDepartments] = useState<number[]>([]);
-  const [sections, setSections] = useState<number[]>([]);
-  const [teams, setTeams] = useState<number[]>([]);
-  const [roles, setRoles] = useState<number[]>([]);
-  const [subjectFields, setSubjectFields] = useState<number[]>([]);
+  const [filter, setFilter] = useState<UserFilter>({
+    departments: [],
+    sections: [],
+    teams: [],
+    roles: [],
+    subjectFields: []
+  });
 
   const queryResult = useInfiniteQuery(
-    ['users', { departments, sections, teams, roles, subjectFields }],
+    ['users', { filter }],
     async ({ pageParam = 1 }) =>
       (
         await filterUsers({
           page: pageParam,
           excludeIds: [currentUser.userId],
-          departments,
-          sections,
-          teams,
-          roles,
-          subjectFields
+          ...filter
         })
       ).data,
     {
@@ -131,23 +126,15 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
   return (
     <CalendarContext.Provider
       value={{
-        fromDate: fromDate,
+        fromDate,
         setFromDate,
         toDate,
         setToDate,
-        departments,
-        setDepartments,
-        sections,
-        setSections,
-        teams,
-        setTeams,
-        roles,
-        setRoles,
-        subjectFields,
-        setSubjectFields,
         queryResult,
         columns,
-        holidays
+        holidays,
+        filter,
+        setFilter
       }}
     >
       {children}
