@@ -1,21 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 import { Fragment } from 'react';
-import { getAbsencesByUserId } from '../API/AbsenceAPI';
-import { useFilterContext } from '../context/FilterContext';
-import { Column } from '../pages/CalendarPage';
-import { User } from '../types/types';
+import { getAbsencesByUserId } from '@/API/AbsenceAPI';
+import { useCalendarContext } from '@/context/CalendarContext';
+import { User } from '@/types/types';
 import CalendarCell from './CalendarCell';
 import UserDropdown from './UserDropdown';
 
 interface CalendarRowProps {
   user: User;
   isCurrentUser?: boolean;
-  columns: Column;
 }
 
-const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps) => {
-  const { fromDate, toDate } = useFilterContext();
+const CalendarRow = ({ user, isCurrentUser = false }: CalendarRowProps) => {
+  const { fromDate, toDate, columns } = useCalendarContext();
   const { data: absences } = useQuery(
     ['absences', { userId: user.userId, fromDate, toDate }],
     async () => (await getAbsencesByUserId(user.userId, fromDate, toDate)).data
@@ -28,10 +26,10 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
   };
 
   return (
-    <div className="contents text-sm">
-      {user ? <UserDropdown user={user} isCurrentUser={isCurrentUser} /> : <div />}
+    <>
+      <UserDropdown user={user} isCurrentUser={isCurrentUser} />
 
-      {Object.entries(columns).map(([week, days], j) => (
+      {Object.entries(columns).map(([week, days], idx) => (
         <Fragment key={`${user.userId}-${week}`}>
           {days.map((date) => (
             <CalendarCell
@@ -40,13 +38,13 @@ const CalendarRow = ({ columns, user, isCurrentUser = false }: CalendarRowProps)
               date={date.value}
               absence={absenceOnDate(date.value)}
               isCurrentUser={isCurrentUser}
-              defaultColor={j % 2 ? 'bg-card-two' : 'bg-card-one'}
-              hoverColor={j % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark'}
+              defaultColor={idx % 2 ? 'bg-card-two' : 'bg-card-one'}
+              hoverColor={idx % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark'}
             />
           ))}
         </Fragment>
       ))}
-    </div>
+    </>
   );
 };
 
