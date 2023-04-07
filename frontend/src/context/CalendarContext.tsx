@@ -1,14 +1,23 @@
 import m from 'moment';
-import { ReactNode, createContext, useContext, useState, SetStateAction, Dispatch } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useState,
+  SetStateAction,
+  Dispatch,
+  useEffect
+} from 'react';
 
-interface FilterContextProps {
+interface CalendarContextProps {
   children: ReactNode;
 }
 
-interface FilterContextType {
+interface CalendarContextType {
   fromDate: string;
   setFromDate: Dispatch<SetStateAction<string>>;
   toDate: string;
+  setToDate: Dispatch<SetStateAction<string>>;
   departments: number[];
   setDepartments: Dispatch<SetStateAction<number[]>>;
   sections: number[];
@@ -21,20 +30,33 @@ interface FilterContextType {
   setSubjectFields: Dispatch<SetStateAction<number[]>>;
 }
 
-const FilterContext = createContext<FilterContextType | undefined>(undefined);
+const CalendarContext = createContext<CalendarContextType | undefined>(undefined);
 
-export const useFilterContext = () => {
-  const context = useContext(FilterContext);
+export const useCalendarContext = () => {
+  const context = useContext(CalendarContext);
 
-  if (!context) throw new Error('FilterContext must be used within its provider');
+  if (!context) throw new Error('CalendarContext must be used within its provider');
 
   return context;
 };
 
-const FilterContextProvider = ({ children }: FilterContextProps) => {
-  // TODO: set values from fitler options
-  // isoWeek is needed to make week start on monday
+const CalendarContextProvider = ({ children }: CalendarContextProps) => {
   const [fromDate, setFromDate] = useState(m().startOf('isoWeek').toISOString());
+  const [toDate, setToDate] = useState(m().add(3, 'w').endOf('isoWeek').toISOString());
+
+  useEffect(() => {
+    if (m(fromDate).isSameOrAfter(m(toDate))) {
+      setToDate(m(fromDate).add(4, 'w').subtract(1, 'd').toISOString());
+    }
+
+    if (m(toDate).isSameOrBefore(m(fromDate))) {
+      setFromDate(m(toDate).subtract(4, 'w').add(1, 'd').toISOString());
+    }
+  }, [fromDate, toDate]);
+
+  useEffect(() => {
+    console.log(m(fromDate).format('DD.MM'), m(toDate).format('DD.MM'));
+  }, [fromDate, toDate]);
 
   const [departments, setDepartments] = useState<number[]>([]);
   const [sections, setSections] = useState<number[]>([]);
@@ -43,11 +65,12 @@ const FilterContextProvider = ({ children }: FilterContextProps) => {
   const [subjectFields, setSubjectFields] = useState<number[]>([]);
 
   return (
-    <FilterContext.Provider
+    <CalendarContext.Provider
       value={{
         fromDate: fromDate,
         setFromDate,
-        toDate: m(fromDate).add(3, 'w').endOf('isoWeek').toISOString(),
+        toDate,
+        setToDate,
         departments,
         setDepartments,
         sections,
@@ -61,8 +84,8 @@ const FilterContextProvider = ({ children }: FilterContextProps) => {
       }}
     >
       {children}
-    </FilterContext.Provider>
+    </CalendarContext.Provider>
   );
 };
 
-export default FilterContextProvider;
+export default CalendarContextProvider;
