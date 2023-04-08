@@ -31,27 +31,39 @@ export default function FilterComponents() {
   return (
     <div className="grid grid-cols-calendar-filters gap-2 py-2">
       {/* TODO: only show weekdays in calendar */}
-      <input
-        type="date"
-        value={moment(fromDate).format('yyyy-MM-DD')}
-        onChange={(e) => setFromDate(moment(e.target.value).toISOString())}
-        className={classNames(
-          'col-start-1 w-10/12 justify-self-center h-9 pr-2',
-          'border-1 rounded-full border-primary text-center focus:outline-none'
-        )}
-      />
+      <div className="col-start-1 flex flex-col w-10/12 justify-self-center">
+        <label htmlFor="fromDate" className="body-bold text-sm">
+          Fra:
+        </label>
+        <input
+          id="fromDate"
+          type="date"
+          value={moment(fromDate).format('yyyy-MM-DD')}
+          onChange={(e) => setFromDate(moment(e.target.value).toISOString())}
+          className={classNames(
+            'px-2 py-1 rounded-full text-center',
+            'border-1 border-primary focus:outline-none'
+          )}
+        />
+      </div>
 
-      <input
-        type="date"
-        value={moment(toDate).format('yyyy-MM-DD')}
-        onChange={(e) => setToDate(moment(e.target.value).toISOString())}
-        className={classNames(
-          'col-start-1 row-start-2 w-10/12 justify-self-center h-9 pr-2',
-          'border-1 rounded-full border-primary text-center focus:outline-none'
-        )}
-      />
+      <div className="col-start-1 row-start-2 w-10/12 justify-self-center">
+        <label htmlFor="toDate" className="body-bold text-sm">
+          Til:
+        </label>
+        <input
+          id="toDate"
+          type="date"
+          value={moment(toDate).format('yyyy-MM-DD')}
+          onChange={(e) => setToDate(moment(e.target.value).toISOString())}
+          className={classNames(
+            'px-2 py-1 rounded-full text-center',
+            'border-1 border-primary focus:outline-none'
+          )}
+        />
+      </div>
 
-      <div className="flex gap-4">
+      <div className="flex items-end gap-4">
         <Dropdown
           placeholder="Avdeling"
           options={departments.map((d) => ({ label: d.name, value: d.departmentId }))}
@@ -87,7 +99,7 @@ export default function FilterComponents() {
           value={filter.roles}
         />
         <button
-          className="border-1 rounded-[20px] border-primary text-center w-fit focus:outline-none px-2 text-white bg-primary hover:bg-white hover:text-primary"
+          className="border-1 rounded-full border-primary text-center focus:outline-none px-2 h-9 flex items-center text-white bg-primary hover:bg-white hover:text-primary"
           onClick={() => {
             setFilter({
               departments: [],
