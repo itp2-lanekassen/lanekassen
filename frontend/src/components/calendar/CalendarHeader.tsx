@@ -36,10 +36,14 @@ const CalendarHeader = () => {
       {/* year indicator */}
       <h6
         className={classNames(
-          `row-start-1 col-start-2 col-span-${totalColumns}`,
+          `row-start-1 col-start-2`,
           'bg-primary-light text-white text-center',
           'w-full flex justify-between items-center'
         )}
+        // tailwind does not include all col spans, using style instead
+        style={{
+          gridColumn: `span ${totalColumns} / span ${totalColumns}`
+        }}
       >
         <button className="text-sm" onClick={() => handleYear()}>
           <ArrowBack className="hover:scale-115" />

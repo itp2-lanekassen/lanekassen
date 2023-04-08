@@ -44,7 +44,9 @@ const CalendarCell: FC<CalendarCellProps> = ({
 }) => {
   const currentUser = useUserContext();
   const { openAbsenceForm } = useModalContext();
-  const { holidays } = useCalendarContext();
+  const { holidays, queryResult } = useCalendarContext();
+
+  const totalRows = queryResult.data?.pages.reduce((tot, page) => (tot += page.data.length), 1);
 
   const holiday = holidays?.find((h) => moment(date).isSame(h.date, 'd'));
 
@@ -60,18 +62,22 @@ const CalendarCell: FC<CalendarCellProps> = ({
     }
   };
 
+  // Only show holiday cell
+  if (holiday && !isCurrentUser) return null;
+
   return (
     <div
       className={classNames(
         holiday
-          ? 'bg-error hover:bg-error-dark text-2xs'
+          ? 'bg-error-light hover:bg-error text-2xs'
           : `${defaultColor} hover:${hoverColor} text-sm`,
         isCurrentUser || currentUser.admin ? 'cursor-pointer' : 'cursor-default',
         'w-full h-full px-1 py-0.5',
         'text-center text-grey-lightest font-bold',
         'whitespace-nowrap overflow-hidden'
       )}
-      style={holiday ? {} : getStyle(absence)}
+      // make holiday cell span all rows
+      style={holiday ? { gridRow: `span ${totalRows} / span ${totalRows}` } : getStyle(absence)}
       onClick={handleCellClick}
     >
       {holiday ? isCurrentUser && holiday.description : absence && absence.type.code}
