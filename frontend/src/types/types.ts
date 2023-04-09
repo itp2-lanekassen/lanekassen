@@ -131,6 +131,14 @@ export interface PageResponse<T> {
   data: T[];
 }
 
+export interface UserFilter {
+  departments: number[];
+  sections: number[];
+  teams: number[];
+  roles: number[];
+  subjectFields: number[];
+}
+
 export interface NewUser {
   azureId: string;
   firstName: string;
