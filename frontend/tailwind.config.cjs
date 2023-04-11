@@ -4,9 +4,13 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     safelist: [
-        'hover:bg-card-one-dark',
-        'hover:bg-card-two-dark',
-        'bg-error-dark',
+        {
+            pattern: /col-span-.+/
+        },
+        {
+            pattern: /bg-card-(one|two)/,
+            variants: ['hover']
+        }
     ],
     theme: {
         borderWidth: {
@@ -18,13 +22,11 @@ module.exports = {
                 115: '1.15'
             },
             gridTemplateColumns: {
-                calendar: '15% repeat(20, 1fr)',
+                'calendar-filters': 'minmax(150px, 15%) auto',
+                'calendar-columns': 'minmax(150px, 15%) repeat(auto-fit, minmax(45px, 1fr))',
                 'my-page': 'max-content auto',
                 sections: 'repeat(2, 1fr) repeat(2, min-content)',
                 'absence-types': 'repeat(4, 1fr) repeat(2, min-content)'
-            },
-            gridColumn: {
-                'span-20': 'span 20  / span 20'
             },
             screens: {
                 mobile: '320px',
@@ -112,7 +114,8 @@ module.exports = {
             md: '1.125rem', // 18px
             lg: '1.25rem', // 20px
             xl: '1.5rem', // 24px
-            '2xl': '2rem' // 32px
+            '2xl': '2rem', // 32px
+            '3xl': '3rem' // 
         },
         fontFamily: {
             sans: ['Roboto', ...defaultTheme.fontFamily.sans],

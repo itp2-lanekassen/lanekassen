@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Department, EmploymentType, Section, User } from '../types/types';
-import { getDepartmentById } from '../API/DepartmentAPI';
-import { getSectionById } from '../API/SectionAPI';
-import { useUserContext } from '../context/UserContext';
+import { Department, EmploymentType, Section, User } from '@/types/types';
+import { getDepartmentById } from '@/API/DepartmentAPI';
+import { getSectionById } from '@/API/SectionAPI';
+import { useUserContext } from '@/context/UserContext';
 
 export default function UserDropdown(props: { user: User; isCurrentUser: boolean }) {
   const currentUser = useUserContext();
@@ -58,7 +58,7 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
   };
 
   return (
-    <div className="w-full font-header rounded-xl overflow-hidden">
+    <div className="col-start-1 w-full font-header rounded-xl overflow-hidden">
       <div
         className={`${
           props.isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'

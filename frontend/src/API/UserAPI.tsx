@@ -1,4 +1,4 @@
-import { User, NewUser, PageResponse } from '../types/types';
+import { User, NewUser, PageResponse, UserFilter } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -30,15 +30,7 @@ export function deleteUser(userId: number): Promise<AxiosResponse<User>> {
 }
 
 export function filterUsers(
-  filters: Partial<{
-    page: number;
-    excludeIds: number[];
-    departments: number[];
-    sections: number[];
-    teams: number[];
-    roles: number[];
-    subjectFields: number[];
-  }>
+  filters: { page: number; excludeIds: number[] } & UserFilter
 ): Promise<AxiosResponse<PageResponse<User>>> {
   const query = new URLSearchParams();
 

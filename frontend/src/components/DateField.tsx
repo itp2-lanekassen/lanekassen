@@ -1,49 +1,59 @@
-import moment from 'moment';
-import { ChangeEventHandler } from 'react';
 import { FormValues } from './AbsenceForm';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
 
 /**
  * Renders a date field necessary for posting and editing absence
  */
 export const DateField = (props: {
   name: string;
-  formValues?: FormValues;
   label: string;
-  max?: string | undefined;
-  min?: string;
-  value: string;
-  handleInputChange?: ChangeEventHandler<HTMLInputElement> | undefined;
+  max?: Date | undefined;
+  min?: Date | undefined;
+  value: Date | undefined;
+  handleInputChange: (
+    date: Date | null,
+    event: React.SyntheticEvent<any, Event> | undefined,
+    name: string
+  ) => void;
   placeholder?: string;
+  disableArray?: Date[];
 }) => {
-  //adjust props.max so it disables the correct dates in datepicker
-  let max = props.max;
+  //update form values on input change
+  const handleInputChange = (
+    date: Date | null,
+    e: React.SyntheticEvent<HTMLInputElement> | undefined
+  ) => {
+    props.handleInputChange(date, e, props.name);
+  };
+  //set max to null if it is undefined
+  let max = null;
   if (props.max) {
-    max = new Date(props.max.split('T')[0]).toLocaleDateString('fr-ca');
+    max = props.max;
   }
 
-  //adjust props.min so it disables the correct dates in datepicker
-  let min = props.min;
+  //set min to null if it is undefined
+  let min = null;
   if (props.min) {
-    min = new Date(moment(props.min).add(2, 'days').toISOString().split('T')[0]).toLocaleDateString(
-      'fr-ca'
-    );
-    if (props.min === props.value) {
-      min = new Date(props.min.split('T')[0]).toLocaleDateString('fr-ca');
-    }
+    min = props.min;
   }
+
   return (
     <div className="modal-field">
-      <label htmlFor={props.name} className="block heading-xs">
+      <label htmlFor={props.name} className="block md:heading-xs base ">
         {props.label}
       </label>
-      <input
-        type="date"
-        placeholder={props.placeholder}
+      <DatePicker
+        selected={props.value}
+        autoComplete="off"
+        id="datePicker"
+        excludeDates={props.disableArray}
         name={props.name}
-        max={max}
-        min={min}
-        value={props.value}
-        onChange={props.handleInputChange}
+        minDate={min}
+        maxDate={max}
+        value={props.value?.toLocaleDateString()}
+        onChange={handleInputChange}
         className="modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center"
         required
       />

@@ -54,7 +54,12 @@ const TeamList = ({ setEdit }: TeamListProps) => {
             <div>{team.name}</div>
             <div>{team.departments?.map((dep) => dep.name).join(', ')}</div>
             <EditButton onClick={() => setEdit(true, team)} />
-            <DeleteButton onClick={() => deleteExistingTeam(team.teamId)} />
+            <DeleteButton
+              onClick={() => {
+                const confirmDelete = confirm('Er du sikker på at du vil slette dette teamet?');
+                if (confirmDelete) deleteExistingTeam(team.teamId);
+              }}
+            />
           </Fragment>
         ))}
       </div>

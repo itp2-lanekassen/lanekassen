@@ -1,5 +1,5 @@
-import logo from '@/assets/lanekassen_logo.png';
-import { SignInButton } from '@/components/SignInButton';
+import logo from '../assets/lanekassen_logo.png';
+import { SignInButton } from '../components/SignInButton';
 
 const LoginPage = () => {
   return (

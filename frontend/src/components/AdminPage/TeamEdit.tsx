@@ -25,7 +25,8 @@ const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['teams']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Teamet eksisterer allerede')
   });
 
   const { mutate: createTeam } = useMutation({
@@ -33,7 +34,8 @@ const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['teams']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Teamet eksisterer allerede')
   });
 
   const handleSave = () => {
@@ -59,11 +61,10 @@ const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
       />
       <DropdownMultiSelect
         placeholder="Velg Avdelinger"
-        // TODO: shouldn't need important
-        className="!w-2/5"
+        className="w-2/5"
         value={selectedDepartments}
-        listOfOptions={departments.map((d) => ({ id: d.departmentId, name: d.name }))}
-        handleChange={setSelectedDepartments}
+        options={departments.map((d) => ({ value: d.departmentId, label: d.name }))}
+        onChange={setSelectedDepartments}
       />
       <div className="flex gap-4">
         <button

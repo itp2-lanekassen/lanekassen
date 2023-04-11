@@ -3,7 +3,6 @@ import { SubjectField, SubjectFieldDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateSubjectField, postSubjectField } from '@/API/SubjectFieldAPI';
-import DropdownMultiSelect from '../DropdownMultiSelect';
 import Dropdown from '../Dropdown';
 
 interface SubjectFieldEditProps {
@@ -25,7 +24,8 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['subjectField']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Fagområdet eksisterer allerede')
   });
 
   const { mutate: createSubjectField } = useMutation({
@@ -33,7 +33,8 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['subjectField']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Fagområdet eksisterer allerede')
   });
 
   const handleSave = () => {
@@ -53,7 +54,7 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
 
   return (
     <div className="flex flex-col w-full items-center gap-8">
-      <h4>{subjectField ? 'Rediger fagfelt' : 'Nytt fagfelt'}</h4>
+      <h4>{subjectField ? 'Rediger fagområde' : 'Nytt fagområde'}</h4>
       <input
         value={subjectFieldName}
         onChange={(e) => setSubjectFieldName(e.target.value)}
@@ -62,11 +63,10 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
       />
       <Dropdown
         placeholder="Velg Avdelinger"
-        // TODO: shouldn't need important
-        className="!w-2/5"
+        className="w-2/5"
         value={selectedDepartment}
-        listOfOptions={departments.map((d) => ({ id: d.departmentId, name: d.name }))}
-        handleChange={setSelectedDepartment}
+        options={departments.map((d) => ({ value: d.departmentId, label: d.name }))}
+        onChange={setSelectedDepartment}
         isDisabled={false}
       />
       <div className="flex gap-4">
