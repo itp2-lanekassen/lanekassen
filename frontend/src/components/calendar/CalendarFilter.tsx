@@ -7,11 +7,13 @@ import { UserFilter } from '@/types/types';
 import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import { useState } from 'react';
+import { SingleCalendarCellDisplay } from '../SingleCalendarCellDisplay';
 
 export default function FilterComponents() {
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
   const { fromDate, setFromDate, toDate, setToDate, filter, setFilter } = useCalendarContext();
   const [showDescription, setShowDescription] = useState(false);
+  const { absenceTypes } = useGlobalContext();
 
   const handleChange = (key: keyof UserFilter, value: number[]) => {
     if (key === 'departments' && value.length) {
@@ -127,13 +129,22 @@ export default function FilterComponents() {
             onMouseEnter={() => setShowDescription(true)}
             onMouseLeave={() => setShowDescription(false)}
           >
-            <h2 className="text-xl mb-2 text-white">Forklaring av farger og koder</h2>
-            <p className="text-lg"></p>
-            <p className="text-lg">Her er en Forklaring</p>
-            <p className="text-lg">Her er en </p>
-            <p className="text-lg">Her er efsefsefsfn </p>
-            <p className="text-lg">Her er efsefsefsfn </p>
-            <p className="text-lg">Her er efsefsdfsfefsfn </p>
+            <h2 className="text-xl mb-6 text-white">Forklaring av farger og koder</h2>
+            <div className="flex flex-col">
+              {absenceTypes.map((type) => (
+                <div
+                  key={type.absenceTypeId}
+                  className="w-100 inline-flex justify-start items-center md:heading-2xs text-xs"
+                >
+                  <div className="mb-2">
+                    <SingleCalendarCellDisplay code={type.code} colorCode={type.colorCode} />
+                  </div>
+                  <span className="overflow-hidden text-ellipsis text-white whitespace-nowrap">
+                    {type.name}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
