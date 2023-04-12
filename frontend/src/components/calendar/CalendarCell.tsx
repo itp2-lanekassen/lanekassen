@@ -29,7 +29,7 @@ const getStyle = (absence?: Absence) => {
       ${absence.type.colorCode},
       ${absence.type.colorCode} 4px,
       #000000 3px,
-      #000000 8px
+      #000000 5px
     )`
   };
 };
