@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId,
-  getTeamsByDepartmentId
+  getSubjectFieldsByDepartmentId
 } from '../API/DepartmentAPI';
 import { getUserByAzureId, postUser } from '../API/UserAPI';
 import Dropdown from '../components/Dropdown';
@@ -16,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAzureAdContext } from '../context/AzureAdContext';
 import { SignOutButton } from '../components/SignOutButton';
 import PageLayout from '@/components/PageLayout';
+import { getAllTeams } from '@/API/TeamAPI';
 
 export default function FirstTimeRegisterForm() {
   const navigate = useNavigate();
@@ -61,9 +61,7 @@ export default function FirstTimeRegisterForm() {
     selectedDepartment === -1 ? [] : (await getRolesByDepartmentId(selectedDepartment)).data
   );
 
-  const { data: teams } = useQuery(['teams', { departmentId: selectedDepartment }], async () =>
-    selectedDepartment === -1 ? [] : (await getTeamsByDepartmentId(selectedDepartment)).data
-  );
+  const { data: teams } = useQuery(['teams'], async () => (await getAllTeams()).data);
 
   const { data: sections } = useQuery(['section', { departmentId: selectedDepartment }], async () =>
     selectedDepartment === -1 ? [] : (await getSectionsByDepartmentId(selectedDepartment)).data
