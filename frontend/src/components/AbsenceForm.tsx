@@ -15,10 +15,11 @@ import { useGlobalContext } from '../context/GlobalContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
 
+import { useUserContext } from '@/context/UserContext';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
+import ConfirmationBox from './ConfirmationBox';
 import { DateField } from './DateField';
-import { useUserContext } from '@/context/UserContext';
 
 type ModalProps = {
   user: User;
@@ -26,6 +27,7 @@ type ModalProps = {
   type?: string;
   clickedAbsence?: Absence;
   onClose: () => void;
+  handleClickOpen?: (event: MouseEvent) => void;
 };
 
 export type FormValues = {
@@ -250,10 +252,16 @@ const AbsenceForm: React.FC<ModalProps> = ({
             {absenceId && (
               <DeleteOutlineIcon
                 onClick={() => {
-                  const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
+                  const confirmDelete = (
+                    <ConfirmationBox
+                      confirmationText="Er du sikker på at du vil slette fraværet?"
+                      isOpen={true}
+                    />
+                  );
                   if (confirmDelete) {
                     deleteAbsence(absenceId);
                   }
+                  console.log('confirmdelete test');
                 }}
                 className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
               ></DeleteOutlineIcon>

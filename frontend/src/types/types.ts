@@ -1,3 +1,4 @@
+import ConfirmationBox from '../components/ConfirmationBox';
 export const backendUrl = 'https://localhost:7184';
 
 export interface Role {
@@ -144,4 +145,8 @@ export interface NewUser {
   subjectFields: number[];
   roles?: number[];
   teams?: number[];
+}
+
+export interface ConfirmationBox {
+  confirmationText: string;
 }
