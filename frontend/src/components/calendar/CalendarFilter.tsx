@@ -6,10 +6,12 @@ import { useCalendarContext } from '@/context/CalendarContext';
 import { UserFilter } from '@/types/types';
 import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
+import { useState } from 'react';
 
 export default function FilterComponents() {
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
   const { fromDate, setFromDate, toDate, setToDate, filter, setFilter } = useCalendarContext();
+  const [showDescription, setShowDescription] = useState(false);
 
   const handleChange = (key: keyof UserFilter, value: number[]) => {
     if (key === 'departments' && value.length) {
@@ -112,6 +114,28 @@ export default function FilterComponents() {
         >
           Tøm filter
         </button>
+        <button
+          className="border-1 rounded-full border-primary text-center focus:outline-none px-2 h-9 flex items-center text-white bg-primary hover:bg-white hover:text-primary"
+          onMouseEnter={() => setShowDescription(true)}
+          onMouseLeave={() => setShowDescription(false)}
+        >
+          ?
+        </button>
+        {showDescription && (
+          <div
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary z-50 px-4 py-2 rounded-lg text-white"
+            onMouseEnter={() => setShowDescription(true)}
+            onMouseLeave={() => setShowDescription(false)}
+          >
+            <h2 className="text-xl mb-2 text-white">Forklaring av farger og koder</h2>
+            <p className="text-lg"></p>
+            <p className="text-lg">Her er en Forklaring</p>
+            <p className="text-lg">Her er en </p>
+            <p className="text-lg">Her er efsefsefsfn </p>
+            <p className="text-lg">Her er efsefsefsfn </p>
+            <p className="text-lg">Her er efsefsdfsfefsfn </p>
+          </div>
+        )}
       </div>
 
       <div className="flex gap-2 w-full">
