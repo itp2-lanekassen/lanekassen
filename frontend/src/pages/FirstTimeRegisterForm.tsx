@@ -143,26 +143,28 @@ export default function FirstTimeRegisterForm() {
 
   return (
     <PageLayout title="Registrering">
-      <div className="absolute top-10 left-10 flex justify-end">
+      <div className="absolute top-1 right-1 flex justify-end">
         <SignOutButton />
       </div>
-      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mb-4">
+      <div className="grid grid-cols-my-page mx-auto max-w-[70vw] sm:max-w-[400px] w-max gap-4 place-items-center mb-4">
         <p className="font-bold"> Navn: </p>
-        <p className="w-full text-primary">
+        <p className="w-full max-w-[350px] md:overflow-visible text-primary">
           {azureUser.givenName} {azureUser.surname}
         </p>
         <p className="font-bold"> E-post: </p>
-        <p className="w-full text-primary">{azureUser.mail}</p>
-        <p className="font-bold"> Virksomhetstilhørighet: </p>
+        <p className="w-full max-w-[350px] md:overflow-visible text-primary overflow-hidden whitespace-wrap text-ellipsis">
+          {azureUser.mail}
+        </p>
+        <p className="font-bold"> Virksomhet: </p>
         <input
           type={'text'}
           value={selectedBusinessAffiliation}
           placeholder="Virksomhetstilhørighet"
-          className="w-full border-1 border-primary-light rounded-full p-2 text-primary"
+          className="w-full max-w-[350px] border-1 border-primary-light rounded-full p-2 text-primary"
           onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
         />
       </div>
-      <div className="flex flex-col mx-auto w-1/4 gap-4">
+      <div className="flex flex-col mx-auto w-[70vw] md:w-[50vw] max-w-[350px] gap-4">
         <Dropdown
           placeholder="Ansattforhold"
           options={Object.keys(EmploymentType)
