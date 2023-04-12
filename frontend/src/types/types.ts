@@ -34,6 +34,19 @@ export interface SubjectFieldDTO {
   departmentId: number;
 }
 
+export interface Section {
+  sectionId: number;
+  name: string;
+  users?: User[];
+  departmentId: number;
+  department?: Department;
+}
+
+export interface SectionDTO {
+  name: string;
+  departmentId: number;
+}
+
 export interface Absence {
   absenceId: number;
   startDate: string; // 0001-01-01T00:00:00
@@ -69,18 +82,6 @@ export interface NewDepartment {
   abbreviation: string;
   subjectFields?: SubjectField[];
   sections?: Section[];
-}
-
-export interface Section {
-  sectionId: number;
-  name: string;
-  users?: User[];
-  departments?: Department[];
-}
-
-export interface SectionDTO {
-  name: string;
-  departments: number[];
 }
 
 export interface AbsenceType {

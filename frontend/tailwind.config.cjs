@@ -26,6 +26,7 @@ module.exports = {
                 'calendar-columns': 'minmax(150px, 15%) repeat(auto-fit, minmax(45px, 1fr))',
                 'my-page': 'max-content auto',
                 sections: 'repeat(2, 1fr) repeat(2, min-content)',
+                'teams': 'repeat(1, 1fr) repeat(1, min-content)',
                 'absence-types': 'repeat(4, 1fr) repeat(2, min-content)'
             },
             screens: {
