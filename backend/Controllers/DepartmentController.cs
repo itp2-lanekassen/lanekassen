@@ -126,18 +126,8 @@ public class DepartmentController : ControllerBase {
     if (department == null) {
       return BadRequest("Invalid department id");
     }
-    List<Section> sections = await _context.Sections.Where(u => u.Departments.Contains(department)).ToListAsync();
+    List<Section> sections = await _context.Sections.Where(u => u.DepartmentId == department.DepartmentId).ToListAsync();
     return Ok(sections);
-  }
-
-  [HttpGet("{id}/teams")]
-  public async Task<IActionResult> GetDepartmentTeams(int id) {
-    Department? department = await _context.Departments.FindAsync(id);
-    if (department == null) {
-      return BadRequest("Invalid department id");
-    }
-    List<Team> teams = await _context.Teams.Where(u => u.Departments.Contains(department)).ToListAsync();
-    return Ok(teams);
   }
 
   [HttpGet("{id}/roles")]
@@ -150,8 +140,6 @@ public class DepartmentController : ControllerBase {
     return Ok(roles);
   }
 
-
-
   [HttpGet("{id}/subjectfields")]
   public async Task<IActionResult> GetDepartmentSubjectFields(int id) {
     Department? department = await _context.Departments.FindAsync(id);
@@ -161,6 +149,4 @@ public class DepartmentController : ControllerBase {
     List<SubjectField> subjectFields = await _context.SubjectFields.Where(u => u.DepartmentId == department.DepartmentId).ToListAsync();
     return Ok(subjectFields);
   }
-
-
 }
