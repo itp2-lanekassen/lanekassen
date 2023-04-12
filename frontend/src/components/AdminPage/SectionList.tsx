@@ -52,7 +52,7 @@ const SectionList = ({ setEdit }: SectionListProps) => {
         {sections.map((section) => (
           <Fragment key={section.sectionId}>
             <div>{section.name}</div>
-            <div>{section.departments?.map((dep) => dep.name).join(', ')}</div>
+            <div>{section.department?.name}</div>
             <EditButton onClick={() => setEdit(true, section)} />
             <DeleteButton
               onClick={() => {
