@@ -145,6 +145,7 @@ export default function FilterComponents() {
                 </div>
               ))}
             </div>
+            <p>Skravert rute betyr at fraværet ikke er godkjent enda</p>
           </div>
         )}
       </div>
