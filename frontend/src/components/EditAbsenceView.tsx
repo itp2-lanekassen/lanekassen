@@ -44,7 +44,8 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
   //initialize mutation for updating an absence
   const { mutate: editAbsence } = useMutation({
     mutationFn: (absence: Absence) => updateAbsence(absence),
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
+    onError: () => alert('Fravær kunne ikke oppdateres')
   });
 
   //initialize form values with current values for the absence selected for editing
@@ -122,18 +123,16 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       isApproved: false,
       comment: updatedComment
     });
-    //Alert user of edit success
-    alert('Du har redigert fraværet!');
     //redirect to AddAbsenceView
     props.setAbsence(null);
   };
 
   return (
-    <div className="h-[500px] w-[400px] relative">
-      <h3 className="ml-[25px]">Rediger fravær</h3>
-      <div className="h-[460px] overflow-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
-        <form className="modal-form" onSubmit={handleSubmit}>
-          <div className="m-auto flex flex-row gap-[20px] justify-evenly w-[350px]">
+    <div className="md:h-[500px] w-full px-[50px] md:px-0 relative m-auto">
+      <h3 className="md:ml-[25px] md:text-left text-center md:text-2xl text-xl">Rediger fravær</h3>
+      <div className="md:h-[460px] overflow-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
+        <form className="modal-form md:mx-6" onSubmit={handleSubmit}>
+          <div className="m-auto flex flex-col md:flex-row md:gap-[20px] md:justify-evenly">
             <DateField
               handleInputChange={handleInputChange}
               name="startDate"
@@ -151,7 +150,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
               label="Til"
             ></DateField>
           </div>
-          <div className="m-auto flex flex-col justify-evenly mt-[10px] w-[300px]">
+          <div className="m-auto flex flex-col md:flex-row md:flex-col md:gap-[20px] md:justify-evenly mt-[10px] md:w-[350px]">
             <AbsenceRadioField
               formValues={formValues}
               handleRadioChange={handleRadioChange}
@@ -162,7 +161,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
               formValues={formValues}
             ></CommentField>
           </div>
-          <div className="m-auto w-[300px] flex justify-center gap-[20px]">
+          <div className="m-auto flex justify-center gap-[20px]">
             <SubmitButton
               disabledTitle={'Fyll ut alle feltene'}
               disabled={false}

@@ -54,7 +54,12 @@ const RoleList = ({ setEdit }: RoleListProps) => {
             <div>{role.name}</div>
             <div>{role.departments?.map((dep) => dep.name).join(', ')}</div>
             <EditButton onClick={() => setEdit(true, role)} />
-            <DeleteButton onClick={() => deleteExistingRole(role.roleId)} />
+            <DeleteButton
+              onClick={() => {
+                const confirmDelete = confirm('Er du sikker på at du vil slette denne rollen?');
+                if (confirmDelete) deleteExistingRole(role.roleId);
+              }}
+            />
           </Fragment>
         ))}
       </div>

@@ -11,7 +11,7 @@ const DropdownMultiSelect = <T extends number | string>({
   value,
   onChange,
   placeholder,
-  className = '',
+  className = 'bg-primary-contrast',
   isDisabled = false
 }: DropdownMultiSelectProps<T>) => {
   return (

@@ -101,12 +101,20 @@ const AbsenceForm: React.FC<ModalProps> = ({
 
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
+    onError: () => alert('Kunne ikke legge til fravær')
   });
 
   const { mutate: editAbsence } = useMutation({
     mutationFn: updateAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
+    onError: () => alert('Kunne ikke endre fravær')
+  });
+
+  const { mutate: deleteAbsenceMutation } = useMutation({
+    mutationFn: deleteAbsence,
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
+    onError: () => alert('Kunne ikke slette fravær')
   });
 
   const [formValues, setFormValues] = React.useState<FormValues>({
@@ -127,8 +135,8 @@ const AbsenceForm: React.FC<ModalProps> = ({
       });
     }
     //set min and max for datepicker based on other absences
-    setMax(currentUser, clickedAbsence, startDate, setNextAbsenceStartDate);
-    setMin(currentUser, clickedAbsence, startDate, setPreviousAbsenceEndDate);
+    setMax(user, clickedAbsence, startDate, setNextAbsenceStartDate);
+    setMin(user, clickedAbsence, startDate, setPreviousAbsenceEndDate);
   }, []);
 
   React.useEffect(() => {
@@ -176,6 +184,13 @@ const AbsenceForm: React.FC<ModalProps> = ({
     });
   };
 
+  const handleDeleteAbsence = async () => {
+    if (absenceId) {
+      deleteAbsenceMutation(absenceId);
+      onClose();
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //add absence if type is 'add'
@@ -188,7 +203,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
         absenceTypeId: formValues.absenceType,
         userId: user.userId
       });
-      alert('Fraværet ble lagt til!');
     } else {
       //edit absence if type is 'edit'
 
@@ -216,7 +230,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
           comment: updatedComment
         });
       }
-      alert('Du har redigert fraværet!');
     }
 
     onClose();
@@ -281,7 +294,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
                 onClick={() => {
                   const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
                   if (confirmDelete) {
-                    deleteAbsence(absenceId);
+                    handleDeleteAbsence();
                   }
                 }}
                 className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"

@@ -28,6 +28,11 @@ public class RoleController : ControllerBase {
       return BadRequest("Invalid department id");
     }
 
+    // Check if role already exists
+    if (await _context.Roles.AnyAsync(r => r.Name == role.Name && r.Departments.Contains(department))) {
+      return BadRequest("Role already exists");
+    }
+
     Role? newRole = new() {
       Name = role.Name,
       Departments = await _context.Departments.Where(d => role.Departments!.Contains(d.DepartmentId)).ToListAsync(),
@@ -64,6 +69,11 @@ public class RoleController : ControllerBase {
     Department? department = await _context.Departments.FindAsync(role.Departments!.First());
     if (department == null) {
       return BadRequest("Invalid department id");
+    }
+
+    // Check if role already exists
+    if (await _context.Roles.AnyAsync(r => r.Name == role.Name && r.Departments.Contains(department) && r.RoleId != id)) {
+      return BadRequest("Role already exists");
     }
 
     existingRole.Name = role.Name;

@@ -14,7 +14,7 @@ const Dropdown = <T extends number | string>({
   value,
   onChange,
   placeholder,
-  className = '',
+  className = 'bg-primary-contrast',
   isDisabled = false
 }: DropdownProps<T>) => {
   return (

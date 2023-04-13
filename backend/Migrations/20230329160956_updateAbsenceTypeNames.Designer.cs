@@ -3,6 +3,7 @@ using System;
 using Lanekassen.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lanekassen.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230329160956_updateAbsenceTypeNames")]
+    partial class updateAbsenceTypeNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,6 +84,95 @@ namespace Lanekassen.Migrations
                         {
                             DepartmentsDepartmentId = 1,
                             RolesRoleId = 9
+                        });
+                });
+
+            modelBuilder.Entity("DepartmentSection", b =>
+                {
+                    b.Property<int>("DepartmentsDepartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SectionsSectionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DepartmentsDepartmentId", "SectionsSectionId");
+
+                    b.HasIndex("SectionsSectionId");
+
+                    b.ToTable("DepartmentSection");
+
+                    b.HasData(
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            SectionsSectionId = 1
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            SectionsSectionId = 2
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            SectionsSectionId = 3
+                        });
+                });
+
+            modelBuilder.Entity("DepartmentTeam", b =>
+                {
+                    b.Property<int>("DepartmentsDepartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TeamsTeamId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DepartmentsDepartmentId", "TeamsTeamId");
+
+                    b.HasIndex("TeamsTeamId");
+
+                    b.ToTable("DepartmentTeam");
+
+                    b.HasData(
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 1
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 2
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 3
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 4
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 5
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 6
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 7
+                        },
+                        new
+                        {
+                            DepartmentsDepartmentId = 1,
+                            TeamsTeamId = 8
                         });
                 });
 
@@ -309,16 +401,11 @@ namespace Lanekassen.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SectionId"));
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("SectionId");
-
-                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Sections");
 
@@ -326,19 +413,16 @@ namespace Lanekassen.Migrations
                         new
                         {
                             SectionId = 1,
-                            DepartmentId = 1,
                             Name = "Trondheim"
                         },
                         new
                         {
                             SectionId = 2,
-                            DepartmentId = 1,
                             Name = "Oslo"
                         },
                         new
                         {
                             SectionId = 3,
-                            DepartmentId = 1,
                             Name = "Hjemmekollega"
                         });
                 });
@@ -627,6 +711,36 @@ namespace Lanekassen.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DepartmentSection", b =>
+                {
+                    b.HasOne("Lanekassen.Models.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentsDepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lanekassen.Models.Section", null)
+                        .WithMany()
+                        .HasForeignKey("SectionsSectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DepartmentTeam", b =>
+                {
+                    b.HasOne("Lanekassen.Models.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentsDepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lanekassen.Models.Team", null)
+                        .WithMany()
+                        .HasForeignKey("TeamsTeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Lanekassen.Models.Absence", b =>
                 {
                     b.HasOne("Lanekassen.Models.AbsenceType", "Type")
@@ -642,17 +756,6 @@ namespace Lanekassen.Migrations
                     b.Navigation("Type");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Lanekassen.Models.Section", b =>
-                {
-                    b.HasOne("Lanekassen.Models.Department", "Department")
-                        .WithMany("Sections")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Lanekassen.Models.SubjectField", b =>
@@ -733,8 +836,6 @@ namespace Lanekassen.Migrations
 
             modelBuilder.Entity("Lanekassen.Models.Department", b =>
                 {
-                    b.Navigation("Sections");
-
                     b.Navigation("SubjectFields");
 
                     b.Navigation("Users");

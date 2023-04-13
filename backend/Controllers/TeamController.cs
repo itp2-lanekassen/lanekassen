@@ -23,14 +23,12 @@ public class TeamController : ControllerBase {
       return BadRequest(ModelState);
     }
 
-
-    Department? department = await _context.Departments.FindAsync(team.Departments!.First());
-    if (department == null) {
-      return BadRequest("Invalid department id");
+    // Check if team already exists
+    if (await _context.Teams.AnyAsync(t => t.Name == team.Name)) {
+      return BadRequest("Team already exists");
     }
     Team? newTeam = new() {
       Name = team.Name,
-      Departments = await _context.Departments.Where(d => team.Departments!.Contains(d.DepartmentId)).ToListAsync(),
     };
 
     try {
@@ -56,20 +54,16 @@ public class TeamController : ControllerBase {
       return BadRequest(ModelState);
     }
 
-    Team? existingTeam = await _context.Teams.Include(t => t.Departments).FirstOrDefaultAsync(t => t.TeamId == id);
+    Team? existingTeam = await _context.Teams.FindAsync(id);
     if (existingTeam == null) {
       return BadRequest("Invalid team id");
     }
 
-    Department? department = await _context.Departments.FindAsync(team.Departments!.First());
-    if (department == null) {
-      return BadRequest("Invalid department id");
+    // Check if team already exists
+    if (await _context.Teams.AnyAsync(t => t.Name == team.Name && t.TeamId != id)) {
+      return BadRequest("Team already exists");
     }
     existingTeam.Name = team.Name;
-
-    existingTeam.Departments.Clear();
-
-    existingTeam.Departments = await _context.Departments.Where(d => team.Departments!.Contains(d.DepartmentId)).ToListAsync();
 
     try {
       _ = _context.Teams.Update(existingTeam);
@@ -114,7 +108,7 @@ public class TeamController : ControllerBase {
 
   [HttpGet]
   public async Task<IActionResult> GetTeams() {
-    List<Team> teams = await _context.Teams.Include((s) => s.Departments).ToListAsync();
+    List<Team> teams = await _context.Teams.ToListAsync();
     return Ok(teams);
   }
 
