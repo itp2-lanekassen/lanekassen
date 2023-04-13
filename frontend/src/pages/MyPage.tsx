@@ -199,7 +199,7 @@ export default function MyPage() {
               value={selectedBusinessAffiliation}
               disabled={isDropdownDisabled}
               placeholder="Virksomhetstilhørighet"
-              className={`w-full rounded-full p-2 bg-white text-primary ${
+              className={`w-full rounded-full p-2 bg-primary-contrast text-primary ${
                 isDropdownDisabled
                   ? 'disabled: bg-disabled-blue border-0'
                   : 'border-1 border-primary-light'

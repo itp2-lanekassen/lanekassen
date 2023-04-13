@@ -99,7 +99,7 @@ export default function FilterComponents() {
           value={filter.roles}
         />
         <button
-          className="border-1 rounded-full border-primary text-center focus:outline-none px-2 h-9 flex items-center text-white bg-primary hover:bg-white hover:text-primary"
+          className="border-1 rounded-full border-primary text-center focus:outline-none px-2 h-9 flex items-center text-primary-contrast bg-primary hover:bg-primary-contrast hover:text-primary"
           onClick={() => {
             setFilter({
               departments: [],
@@ -116,12 +116,12 @@ export default function FilterComponents() {
 
       <div className="flex gap-2 w-full">
         {filter.departments.length > 0 && filter.departments[0] !== -1 && (
-          <div className="rounded-[20px] bg-primary text-white px-2 flex justify-center items-center space-x-2">
+          <div className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2">
             <p className="my-1 ">
               {departments.find((d) => d.departmentId === filter.departments[0])?.name}
             </p>
             <button
-              className="text-white text-sm hover:underline focus:outline-none"
+              className="text-primary-contrast text-sm hover:underline focus:outline-none"
               onClick={() => handleChange('departments', [])}
             >
               <CloseIcon />
@@ -133,11 +133,11 @@ export default function FilterComponents() {
           {filter.sections.map((sectionId) => (
             <div
               key={sectionId}
-              className="rounded-[20px] bg-primary text-white px-2 flex justify-center items-center space-x-2"
+              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
             >
               <p className="my-1">{sections?.find((s) => s.sectionId === sectionId)?.name}</p>
               <button
-                className="text-white text-sm hover:underline focus:outline-none"
+                className="text-primary-contrast text-sm hover:underline focus:outline-none"
                 onClick={() =>
                   handleChange(
                     'sections',
@@ -155,11 +155,11 @@ export default function FilterComponents() {
           {filter.subjectFields.map((sf) => (
             <div
               key={sf}
-              className="rounded-[20px] bg-primary text-white px-2 flex justify-center items-center space-x-2"
+              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
             >
               <p className="my-1">{subjectFields?.find((s) => s.subjectFieldId === sf)?.name}</p>
               <button
-                className="text-white text-sm hover:underline focus:outline-none"
+                className="text-primary-contrast text-sm hover:underline focus:outline-none"
                 onClick={() =>
                   handleChange(
                     'subjectFields',
@@ -177,11 +177,11 @@ export default function FilterComponents() {
           {filter.teams.map((t) => (
             <div
               key={t}
-              className="rounded-[20px] bg-primary text-white px-2 flex justify-center items-center space-x-2"
+              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
             >
               <p className="my-1">{teams?.find((tm) => tm.teamId === t)?.name}</p>
               <button
-                className="text-white text-sm hover:underline focus:outline-none"
+                className="text-primary-contrast text-sm hover:underline focus:outline-none"
                 onClick={() =>
                   handleChange(
                     'teams',
@@ -199,11 +199,11 @@ export default function FilterComponents() {
           {filter.roles.map((r) => (
             <div
               key={r}
-              className="rounded-[20px] bg-primary text-white px-2 flex justify-center items-center space-x-2"
+              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
             >
               <p className="my-1 mr2 ">{roles?.find((rl) => rl.roleId === r)?.name}</p>
               <button
-                className="text-white hover:underline focus:outline-none"
+                className="text-primary-contrast hover:underline focus:outline-none"
                 onClick={() =>
                   handleChange(
                     'roles',

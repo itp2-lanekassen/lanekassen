@@ -227,8 +227,7 @@ module.exports = {
     fontFamily: {
       sans: ['Roboto', ...defaultTheme.fontFamily.sans],
       header: ['Rubik', ...defaultTheme.fontFamily.sans]
-    }
-  },
+    },
   plugins: [
     // ...
     require('tailwind-scrollbar')({ nocompatible: true })

@@ -37,7 +37,7 @@ const CalendarHeader = () => {
       <h6
         className={classNames(
           `row-start-1 col-start-2`,
-          'bg-primary-light text-white text-center',
+          'bg-primary-light text-primary-contrast text-center',
           'w-full flex justify-between items-center'
         )}
         // tailwind does not include all col spans, using style instead
@@ -60,7 +60,7 @@ const CalendarHeader = () => {
           <h6
             className={classNames(
               `col-span-${days.length} row-start-2`,
-              'bg-primary-light text-white text-center whitespace-nowrap',
+              'bg-primary-light text-primary-contrast text-center whitespace-nowrap',
               'w-full h-full relative',
               'flex items-center justify-center'
             )}
