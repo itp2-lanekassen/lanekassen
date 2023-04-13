@@ -23,21 +23,19 @@ public class SectionController : ControllerBase {
       return BadRequest(ModelState);
     }
 
-    Department? department = await _context.Departments.FindAsync(section.Departments!.First());
+    Department? department = await _context.Departments.FindAsync(section.DepartmentId);
     if (department == null) {
       return BadRequest("Invalid department id");
     }
     // Check if section already exists
-    if (await _context.Sections.AnyAsync(s => s.Name == section.Name && s.Departments.Contains(department))) {
+    if (await _context.Sections.AnyAsync(s => s.Name == section.Name && s.DepartmentId == section.DepartmentId)) {
       return BadRequest("Section already exists");
     }
 
     Section? newSection = new() {
       Name = section.Name,
-      Departments = await _context.Departments.Where(d => section.Departments.Contains(d.DepartmentId)).ToListAsync()
+      DepartmentId = section.DepartmentId
     };
-
-
 
     try {
       _ = _context.Sections.Add(newSection);
@@ -62,26 +60,23 @@ public class SectionController : ControllerBase {
       return BadRequest(ModelState);
     }
 
-    Section? existingSection = await _context.Sections.Include(s => s.Departments).FirstOrDefaultAsync(s => s.SectionId == id);
+    Section? existingSection = await _context.Sections.FindAsync(id);
     if (existingSection == null) {
       return BadRequest("Invalid section id");
     }
 
-    Department? department = await _context.Departments.FindAsync(section.Departments!.First());
+    Department? department = await _context.Departments.FindAsync(section.DepartmentId);
     if (department == null) {
       return BadRequest("Invalid department id");
     }
 
     // Check if section already exists
-    if (await _context.Sections.AnyAsync(s => s.Name == section.Name && s.Departments.Contains(department) && s.SectionId != id)) {
+    if (await _context.Sections.AnyAsync(s => s.Name == section.Name && s.SectionId != id && s.DepartmentId == section.DepartmentId)) {
       return BadRequest("Section already exists");
     }
 
     existingSection.Name = section.Name;
-
-    existingSection.Departments.Clear();
-
-    existingSection.Departments = await _context.Departments.Where(d => section.Departments.Contains(d.DepartmentId)).ToListAsync();
+    existingSection.DepartmentId = section.DepartmentId;
 
     try {
       _ = _context.Sections.Update(existingSection);
@@ -126,7 +121,7 @@ public class SectionController : ControllerBase {
 
   [HttpGet]
   public async Task<IActionResult> GetSections() {
-    return Ok(await _context.Sections.Include((s) => s.Departments).ToListAsync());
+    return Ok(await _context.Sections.Include((s) => s.Department).ToListAsync());
   }
 
   [HttpGet("{id}")]

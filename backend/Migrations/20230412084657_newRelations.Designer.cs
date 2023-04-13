@@ -3,6 +3,7 @@ using System;
 using Lanekassen.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lanekassen.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230412084657_newRelations")]
+    partial class newRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -429,11 +432,16 @@ namespace Lanekassen.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TeamId"));
 
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("TeamId");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Teams");
 
@@ -666,6 +674,13 @@ namespace Lanekassen.Migrations
                     b.Navigation("Department");
                 });
 
+            modelBuilder.Entity("Lanekassen.Models.Team", b =>
+                {
+                    b.HasOne("Lanekassen.Models.Department", null)
+                        .WithMany("Teams")
+                        .HasForeignKey("DepartmentId");
+                });
+
             modelBuilder.Entity("Lanekassen.Models.User", b =>
                 {
                     b.HasOne("Lanekassen.Models.Department", "Department")
@@ -736,6 +751,8 @@ namespace Lanekassen.Migrations
                     b.Navigation("Sections");
 
                     b.Navigation("SubjectFields");
+
+                    b.Navigation("Teams");
 
                     b.Navigation("Users");
                 });
