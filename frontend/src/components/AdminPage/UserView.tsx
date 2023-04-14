@@ -16,7 +16,9 @@ export default function UserView() {
   const searchForUsers = (event: any) => {
     const matches: User[] = [];
     users?.forEach((user) => {
-      if (user.firstName.toLowerCase().startsWith(event.target.value)) {
+      if (user.firstName.toLowerCase().startsWith(event.target.value.toLowerCase())) {
+        matches.push(user);
+      } else if (user.lastName.toLowerCase().startsWith(event.target.value.toLowerCase())) {
         matches.push(user);
       }
     });
