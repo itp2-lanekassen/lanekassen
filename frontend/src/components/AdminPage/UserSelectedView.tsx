@@ -8,17 +8,16 @@ import { updateUser } from '@/API/UserAPI';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { EmploymentType, User } from '@/types/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import SubmitButton from '../SubmitButton';
+import UserView from './UserView';
 
 // The component that is displayed when a user is chosen
 export default function UserSelectedView(props: {
   selectedUser: User | undefined;
-  setSelectedUser: Dispatch<SetStateAction<User | undefined>>;
-  setClickedUserId: Dispatch<SetStateAction<number>>;
-  handleGoBack: () => void;
+  setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
   const queryClient = useQueryClient();
   const { departments } = useGlobalContext();
@@ -95,7 +94,7 @@ export default function UserSelectedView(props: {
     onSuccess: async () => {
       queryClient.invalidateQueries(['current-user']);
       alert('Brukeren ble oppdatert!');
-      props.handleGoBack;
+      props.setView(<UserView />);
     }
   });
 
@@ -105,7 +104,7 @@ export default function UserSelectedView(props: {
 
   return (
     <div>
-      <SubmitButton handleClick={props.handleGoBack} buttonText={'Tilbake'} />
+      <SubmitButton handleClick={() => props.setView(<UserView />)} buttonText={'Tilbake'} />
       <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mt-16">
         <p className="font-bold"> Navn: </p>
         <p className=" w-full">

@@ -2,9 +2,11 @@ import { getDepartmentById } from '@/API/DepartmentAPI';
 import { getSectionById } from '@/API/SectionAPI';
 import { deleteUser, getAllUsers } from '@/API/UserAPI';
 import { Department, EmploymentType, Section, User } from '@/types/types';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
+import UserSelectedView from './UserSelectedView';
 
 /**
  * @param props takes in a user passed down from user tab on admin page
@@ -12,12 +14,12 @@ import EditButton from './EditButton';
  */
 export default function UserRow(props: {
   user: User;
-  setClickedUser: Dispatch<SetStateAction<number>>;
-  handleDeleteUpdate: () => void;
+  setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
   const [department, setDepartment] = useState<Department>();
   const [section, setSection] = useState<Section>();
   const [employmentType, setEmploymentType] = useState<string>('');
+  const queryClient = useQueryClient();
 
   // Load user data into states
   async function loadUserData() {
@@ -26,10 +28,11 @@ export default function UserRow(props: {
     setSection((await getSectionById(props.user.sectionId)).data);
     setEmploymentType(EmploymentType[props.user.employmentType]);
   }
-  /*
-    useEffect (() => {
-      console.log(department);
-    }, [department]);*/
+
+  const handleEdit = async () => {
+    console.log('jdhdd');
+    props.setView(<UserSelectedView setView={props.setView} selectedUser={props.user} />);
+  };
 
   // Format first name to avoid table overflow
   const formatFirstName = (name: string) => {
@@ -45,18 +48,12 @@ export default function UserRow(props: {
       .join(' ');
   };
 
-  // Pass the ID of the selected user to UserTab
-  const handleUserClick = () => {
-    props.setClickedUser(props.user.userId);
-  };
-
   // When a user is deleted, the list of users reloads
   const handleDeleteProfileClick = () => {
     const confirmDelete = confirm('Er du sikker på at du vil slette denne profilen?');
     if (confirmDelete) {
       deleteUser(props.user!.userId).then(async () => {
-        //props.setUsers((await getAllUsers()).data);
-        props.handleDeleteUpdate();
+        queryClient.invalidateQueries(['users']);
       });
     }
   };
@@ -74,7 +71,7 @@ export default function UserRow(props: {
       <td className="p-3 pr-5">{department?.name}</td>
       <td className="p-3 pr-5">{section?.name}</td>
       <td className="p-3 pr-5">
-        <EditButton className={'m-2'} onClick={handleUserClick} />
+        <EditButton className={'m-2'} onClick={handleEdit} />
         <DeleteButton onClick={handleDeleteProfileClick} />
       </td>
     </tr>
