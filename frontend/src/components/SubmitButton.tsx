@@ -31,7 +31,7 @@ export default function SubmitButton({
   rounded = 'rounded-full',
   bgColor = 'bg-primary',
   type = 'button',
-  hover = 'hover:text-primary hover:bg-white',
+  hover = 'hover:text-primary hover:bg-primary-contrast',
   className = ''
 }: SubmitButtonProps) {
   return (

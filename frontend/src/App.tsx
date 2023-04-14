@@ -22,7 +22,7 @@ const ContextWrapper = ({ children }: { children?: ReactNode }) => (
 
 function App() {
   return (
-    <>
+    <div className="bg-primary-contrast">
       <UnauthenticatedTemplate>
         <LoginPage />
       </UnauthenticatedTemplate>
@@ -72,7 +72,7 @@ function App() {
           </GlobalContextProvider>
         </AzureAdContextProvider>
       </AuthenticatedTemplate>
-    </>
+    </div>
   );
 }
 
