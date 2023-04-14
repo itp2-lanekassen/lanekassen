@@ -116,39 +116,6 @@ export default function FilterComponents() {
         >
           Tøm filter
         </button>
-        <button
-          className="border-1 rounded-full border-primary text-center focus:outline-none px-2 h-9 flex items-center text-white bg-primary hover:bg-white hover:text-primary"
-          onMouseEnter={() => setShowDescription(true)}
-          onMouseLeave={() => setShowDescription(false)}
-        >
-          ?
-        </button>
-        {showDescription && (
-          <div
-            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary z-50 px-4 py-2 rounded-lg text-white"
-            onMouseEnter={() => setShowDescription(true)}
-            onMouseLeave={() => setShowDescription(false)}
-          >
-            <h2 className="text-xl mb-6 text-white">Forklaring av farger og koder</h2>
-            <div className="flex flex-col">
-              {absenceTypes.map((type) => (
-                <div
-                  key={type.absenceTypeId}
-                  className="w-100 inline-flex justify-start items-center md:heading-2xs text-xs"
-                >
-                  <div className="mb-2">
-                    <SingleCalendarCellDisplay code={type.code} colorCode={type.colorCode} />
-                  </div>
-                  <span className="overflow-hidden text-ellipsis text-white whitespace-nowrap">
-                    {type.name}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <p>Skravert rute betyr at fraværet ikke er godkjent enda</p>
-            {/* <p className="flex-1 text-center">{props.absenceType.name}</p> */}
-          </div>
-        )}
       </div>
 
       <div className="flex gap-2 w-full">
@@ -165,7 +132,6 @@ export default function FilterComponents() {
             </button>
           </div>
         )}
-
         <div className="flex flex-wrap space-x-2">
           {filter.sections.map((sectionId) => (
             <div
@@ -253,6 +219,38 @@ export default function FilterComponents() {
             </div>
           ))}
         </div>
+        <button
+          className="border-1 rounded-full border-primary text-center focus:outline-none px-2 h-9 flex items-center text-white bg-primary hover:bg-white hover:text-primary"
+          onMouseEnter={() => setShowDescription(true)}
+          onMouseLeave={() => setShowDescription(false)}
+        >
+          ?
+        </button>
+        {showDescription && (
+          <div
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary z-50 px-4 py-2 rounded-lg text-white"
+            onMouseEnter={() => setShowDescription(true)}
+            onMouseLeave={() => setShowDescription(false)}
+          >
+            <h2 className="text-xl mb-6 text-white">Forklaring av farger og koder</h2>
+            <div className="flex flex-col">
+              {absenceTypes.map((type) => (
+                <div
+                  key={type.absenceTypeId}
+                  className="w-100 inline-flex justify-start items-center md:heading-2xs text-xs"
+                >
+                  <div className="mb-2">
+                    <SingleCalendarCellDisplay code={type.code} colorCode={type.colorCode} />
+                  </div>
+                  <span className="overflow-hidden text-ellipsis text-white whitespace-nowrap">
+                    {type.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p>Skravert rute betyr at fraværet ikke er godkjent enda</p>
+          </div>
+        )}
       </div>
     </div>
   );
