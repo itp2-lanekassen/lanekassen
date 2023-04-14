@@ -91,7 +91,6 @@ export default function MyPage() {
       });
     }
   };
-
   return (
     <PageLayout title="Profil">
       <div className="absolute bottom-10 right-10 flex justify-end">
