@@ -104,7 +104,7 @@ export default function FilterComponents() {
           value={filter.roles}
         />
         <button
-          className="border-1 rounded-full border-primary text-center focus:outline-none px-2 h-9 flex items-center text-primary-contrast bg-primary hover:bg-white hover:text-primary"
+          className="border-1 rounded-full border-primary text-center focus:outline-none px-2 h-9 flex items-center text-primary-contrast bg-primary hover:bg-primary-contrast hover:text-primary"
           onClick={() => {
             setFilter({
               departments: [],
