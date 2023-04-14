@@ -8,10 +8,11 @@ import moment from 'moment';
  */
 export const DateField = (props: {
   name: string;
-  label: string;
+  label?: string;
   max?: Date | undefined;
   min?: Date | undefined;
   value: Date | undefined;
+  customClass?: string;
   handleInputChange: (
     date: Date | null,
     event: React.SyntheticEvent<any, Event> | undefined,
@@ -56,7 +57,9 @@ export const DateField = (props: {
         onChange={handleInputChange}
         showWeekNumbers
         dateFormat="MM/dd/yyyy"
-        className="modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center"
+        className={`modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center bg-primary-contrast ${
+          props.customClass ? props.customClass : ''
+        }`}
         required
       />
     </div>

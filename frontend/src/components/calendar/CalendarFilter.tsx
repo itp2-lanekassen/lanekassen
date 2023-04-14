@@ -12,14 +12,9 @@ import { DateField } from '../DateField';
 import { FormValues, setMax, setMin } from '../AbsenceForm';
 
 export default function FilterComponents() {
-  const startDate = undefined;
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
   const { fromDate, setFromDate, toDate, setToDate, filter, setFilter } = useCalendarContext();
   const currentUser = useUserContext();
-  const [fieldValues, setFormValues] = React.useState<FormValues>({
-    startDate,
-    endDate: undefined
-  });
 
   const handleChange = (key: keyof UserFilter, value: number[]) => {
     if (key === 'departments' && value.length) {
@@ -37,48 +32,47 @@ export default function FilterComponents() {
       [key]: value
     }));
   };
-  // Sets the department to the current user's department if it exists as default
-  useEffect(() => {
-    if (currentUser?.departmentId) {
-      handleChange('departments', [currentUser.departmentId]);
-    }
-  }, [currentUser]);
 
-  //update form values on date picker change
-  const handleInputChange = (
+  const handleDateChange = (
     date: Date | null,
-    event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement, Event> | undefined,
+    event: React.SyntheticEvent<any, Event> | undefined,
     name: string
   ) => {
-    setFormValues({
-      ...fieldValues,
-      [name]: date
-    });
+    if (date && name === 'fromDate') {
+      setFromDate(moment(date).toISOString());
+    } else if (date && name === 'toDate') {
+      setToDate(moment(date).toISOString());
+    }
   };
+
+  const minFromDate = moment().subtract(30, 'days').toDate();
 
   return (
     <div className="grid grid-cols-calendar-filters gap-2 py-2">
       {/* TODO: only show weekdays in calendar */}
       <div className="col-start-1 flex flex-col w-10/12 justify-self-center">
+        <label htmlFor="fromDate" className="body-bold text-sm text-primary">
+          Fra:
+        </label>
         <DateField
-          handleInputChange={handleInputChange}
-          max={fieldValues.endDate}
-          value={fieldValues.startDate}
-          name="startDate"
-          label="Fra"
+          handleInputChange={handleDateChange}
+          min={minFromDate}
+          value={fromDate ? new Date(fromDate) : undefined}
+          name="fromDate"
+          customClass="h-10"
         ></DateField>
       </div>
 
       <div className="col-start-1 row-start-2 w-10/12 justify-self-center">
+        <label htmlFor="fromDate" className="body-bold text-sm text-primary">
+          Til:
+        </label>
         <DateField
-          handleInputChange={handleInputChange}
-          min={fieldValues.startDate}
-          value={fieldValues.endDate}
-          name="endDate"
-          label="Til"
-          onChange={(e) => setToDate(moment(e.target.value).toISOString())}
-          className="px-2 py-1 rounded-full text-center
-          border-1 border-primary focus:outline-none"
+          handleInputChange={handleDateChange}
+          min={fromDate ? new Date(fromDate) : undefined}
+          value={toDate ? new Date(toDate) : undefined}
+          name="toDate"
+          customClass="h-10"
         ></DateField>
       </div>
 
