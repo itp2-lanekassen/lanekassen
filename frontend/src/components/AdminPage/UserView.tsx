@@ -1,11 +1,8 @@
-import { getAllUsers, getUserById } from '@/API/UserAPI';
+import { getAllUsers } from '@/API/UserAPI';
 import { User } from '@/types/types';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import UserRow from './UserRow';
-import UserSelectedView from './UserSelectedView';
-import UserTabSelectedContent from './UserSelectedView';
-
 const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon', ''];
 
 export default function UserView() {
@@ -46,7 +43,7 @@ export default function UserView() {
       </div>
       <table className="ml-10">
         <tbody>
-          <tr>
+          <tr className="border-b-2">
             {tableHeaders.map((header) => (
               <th className="p-3 pr-5" key={header}>
                 {header}

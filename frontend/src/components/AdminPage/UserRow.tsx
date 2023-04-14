@@ -1,6 +1,6 @@
 import { getDepartmentById } from '@/API/DepartmentAPI';
 import { getSectionById } from '@/API/SectionAPI';
-import { deleteUser, getAllUsers } from '@/API/UserAPI';
+import { deleteUser } from '@/API/UserAPI';
 import { Department, EmploymentType, Section, User } from '@/types/types';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
