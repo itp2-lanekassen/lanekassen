@@ -1,7 +1,10 @@
 import { getDepartmentById } from '@/API/DepartmentAPI';
 import { getSectionById } from '@/API/SectionAPI';
+import { deleteUser, getAllUsers } from '@/API/UserAPI';
 import { Department, EmploymentType, Section, User } from '@/types/types';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import DeleteButton from './DeleteButton';
+import EditButton from './EditButton';
 
 /**
  * @param props takes in a user passed down from user tab on admin page
@@ -10,6 +13,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 export default function UserRow(props: {
   user: User;
   setClickedUser: Dispatch<SetStateAction<number>>;
+  handleDeleteUpdate: () => void;
 }) {
   const [department, setDepartment] = useState<Department>();
   const [section, setSection] = useState<Section>();
@@ -18,9 +22,14 @@ export default function UserRow(props: {
   // Load user data into states
   async function loadUserData() {
     setDepartment((await getDepartmentById(props.user.departmentId)).data);
+    console.log(props.user.departmentId);
     setSection((await getSectionById(props.user.sectionId)).data);
     setEmploymentType(EmploymentType[props.user.employmentType]);
   }
+  /*
+    useEffect (() => {
+      console.log(department);
+    }, [department]);*/
 
   // Format first name to avoid table overflow
   const formatFirstName = (name: string) => {
@@ -36,8 +45,20 @@ export default function UserRow(props: {
       .join(' ');
   };
 
+  // Pass the ID of the selected user to UserTab
   const handleUserClick = () => {
     props.setClickedUser(props.user.userId);
+  };
+
+  // When a user is deleted, the list of users reloads
+  const handleDeleteProfileClick = () => {
+    const confirmDelete = confirm('Er du sikker på at du vil slette denne profilen?');
+    if (confirmDelete) {
+      deleteUser(props.user!.userId).then(async () => {
+        //props.setUsers((await getAllUsers()).data);
+        props.handleDeleteUpdate();
+      });
+    }
   };
 
   useEffect(() => {
@@ -45,13 +66,17 @@ export default function UserRow(props: {
   }, []);
 
   return (
-    <tr onClick={handleUserClick} className="hover:bg-primary-lighter">
+    <tr className="">
       <td className="p-3 pr-5">{formatFirstName(props.user.firstName)}</td>
       <td className="p-3 pr-5">{props.user.lastName}</td>
       <td className="p-3 pr-5">{props.user.email}</td>
       <td className="p-3 pr-5">{employmentType}</td>
       <td className="p-3 pr-5">{department?.name}</td>
       <td className="p-3 pr-5">{section?.name}</td>
+      <td className="p-3 pr-5">
+        <EditButton className={'m-2'} onClick={handleUserClick} />
+        <DeleteButton onClick={handleDeleteProfileClick} />
+      </td>
     </tr>
   );
 }

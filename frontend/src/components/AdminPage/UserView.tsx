@@ -1,21 +1,31 @@
 import { getAllUsers, getUserById } from '@/API/UserAPI';
 import { User } from '@/types/types';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import UserRow from './UserRow';
-import UserTabSelectedContent from './UserTabSelectedContent';
+import UserTabSelectedContent from './UserSelectedView';
 
-const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon'];
+const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon', ''];
 
-export default function UserTab() {
-  const [users, setUsers] = useState<User[]>();
+export default function UserView() {
+  const queryClient = useQueryClient();
   const [matchingUsers, setMatchingUsers] = useState<User[]>();
   const [clickedUserId, setClickedUserId] = useState<number>(-1);
   const [selectedUser, setSelectedUser] = useState<User>();
 
+  /*
   async function loadUsers() {
-    setUsers((await getAllUsers()).data);
-    setMatchingUsers((await getAllUsers()).data);
-  }
+    setUsers(queryClient.invalidateQueries(['current-user']).data);
+    
+    console.log("hdhdhdhd")
+    //setMatchingUsers((await getAllUsers()).data);
+  }*/
+  const { data: users } = useQuery(['users'], async () => (await getAllUsers()).data);
+
+  useEffect(() => {
+    setMatchingUsers(users);
+    console.log(users);
+  }, [users]);
 
   async function getSelectedUser() {
     setSelectedUser((await getUserById(clickedUserId)).data);
@@ -33,9 +43,18 @@ export default function UserTab() {
     setMatchingUsers(matches);
   };
 
+  // The table of all users is displayed when no user is chosen,
+  // set user to undefined to go back to the table page
+  const handleReset = () => {
+    setSelectedUser(undefined);
+    setClickedUserId(-1);
+    queryClient.invalidateQueries(['current-user']);
+  };
+
+  /*
   useEffect(() => {
     loadUsers();
-  }, [clickedUserId]);
+  }, [clickedUserId]);*/
 
   useEffect(() => {
     if (clickedUserId > -1) {
@@ -49,7 +68,7 @@ export default function UserTab() {
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
         setClickedUserId={setClickedUserId}
-        setUsers={setUsers}
+        handleGoBack={handleReset}
       />
     );
   } else {
@@ -73,7 +92,12 @@ export default function UserTab() {
               ))}
             </tr>
             {matchingUsers?.map((user) => (
-              <UserRow setClickedUser={setClickedUserId} key={user.azureId} user={user} />
+              <UserRow
+                setClickedUser={setClickedUserId}
+                handleDeleteUpdate={handleReset}
+                key={user.azureId}
+                user={user}
+              />
             ))}
           </tbody>
         </table>

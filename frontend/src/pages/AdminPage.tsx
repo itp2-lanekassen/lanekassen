@@ -13,7 +13,7 @@ import TeamView from '@/components/AdminPage/TeamView';
 import SubjectFieldView from '@/components/AdminPage/SubjectFieldView';
 import DepartmentView from '@/components/AdminPage/DepartmentView';
 import RoleView from '@/components/AdminPage/RoleView';
-import UserTab from '@/components/AdminPage/UserTab';
+import UserTab from '@/components/AdminPage/UserView';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
 
@@ -30,7 +30,7 @@ export default function AdminPage() {
   }, [currentUser.admin, navigate]);
 
   return (
-    <PageLayout title="Adminpanel">
+    <PageLayout title="Admin">
       <div className="absolute top-16 left-10 flex justify-end">
         <SubmitButton
           disabled={false}

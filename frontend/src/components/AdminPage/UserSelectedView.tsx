@@ -4,9 +4,9 @@ import {
   getSubjectFieldsByDepartmentId,
   getTeamsByDepartmentId
 } from '@/API/DepartmentAPI';
-import { deleteUser, getAllUsers, updateUser } from '@/API/UserAPI';
+import { updateUser } from '@/API/UserAPI';
 import { useGlobalContext } from '@/context/GlobalContext';
-import { EmploymentType, Role, SubjectField, Team, User } from '@/types/types';
+import { EmploymentType, User } from '@/types/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Dropdown from '../Dropdown';
@@ -14,11 +14,11 @@ import DropdownMultiSelect from '../DropdownMultiSelect';
 import SubmitButton from '../SubmitButton';
 
 // The component that is displayed when a user is chosen
-export default function UserTabSelectedContent(props: {
+export default function UserSelectedView(props: {
   selectedUser: User | undefined;
   setSelectedUser: Dispatch<SetStateAction<User | undefined>>;
   setClickedUserId: Dispatch<SetStateAction<number>>;
-  setUsers: Dispatch<SetStateAction<User[] | undefined>>;
+  handleGoBack: () => void;
 }) {
   const queryClient = useQueryClient();
   const { departments } = useGlobalContext();
@@ -89,30 +89,15 @@ export default function UserTabSelectedContent(props: {
         subjectFields: selectedSubjectFields,
         roles: selectedRoles,
         teams: selectedTeams,
-        departmentId: selectedDepartment
+        departmentId: selectedDepartment,
+        businessAffiliation: props.selectedUser!.businessAffiliation
       }),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries(['current-user']);
       alert('Brukeren ble oppdatert!');
+      props.handleGoBack;
     }
   });
-
-  const handleDeleteProfileClick = () => {
-    const confirmDelete = confirm('Er du sikker på at du vil slette denne profilen?');
-    if (confirmDelete) {
-      deleteUser(props.selectedUser!.userId).then(async () => {
-        props.setUsers((await getAllUsers()).data);
-        handleGoBack();
-      });
-    }
-  };
-
-  // The table of all users is displayed when no user is chosen,
-  // set user to undefined to go back to the table page
-  const handleGoBack = () => {
-    props.setSelectedUser(undefined);
-    props.setClickedUserId(-1);
-  };
 
   const handleAdminCheckbox = () => {
     setIsAdminChecked(!isAdminChecked);
@@ -120,7 +105,7 @@ export default function UserTabSelectedContent(props: {
 
   return (
     <div>
-      <SubmitButton handleClick={handleGoBack} buttonText={'Tilbake'} />
+      <SubmitButton handleClick={props.handleGoBack} buttonText={'Tilbake'} />
       <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mt-16">
         <p className="font-bold"> Navn: </p>
         <p className=" w-full">
@@ -213,12 +198,6 @@ export default function UserTabSelectedContent(props: {
               handleClick={userToBeUpdated}
               disabled={false}
               disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
-            />
-            <SubmitButton
-              disabled={false}
-              disabledTitle={'Slett bruker'}
-              buttonText={'Slett bruker'}
-              handleClick={handleDeleteProfileClick}
             />
           </>
         </div>
