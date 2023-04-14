@@ -6,10 +6,13 @@ import { useCalendarContext } from '@/context/CalendarContext';
 import { UserFilter } from '@/types/types';
 import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
+import { useUserContext } from '@/context/UserContext';
+import { useEffect } from 'react';
 
 export default function FilterComponents() {
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
   const { fromDate, setFromDate, toDate, setToDate, filter, setFilter } = useCalendarContext();
+  const currentUser = useUserContext();
 
   const handleChange = (key: keyof UserFilter, value: number[]) => {
     if (key === 'departments' && value.length) {
@@ -27,6 +30,12 @@ export default function FilterComponents() {
       [key]: value
     }));
   };
+  // Sets the department to the current user's department if it exists as default
+  useEffect(() => {
+    if (currentUser?.departmentId) {
+      handleChange('departments', [currentUser.departmentId]);
+    }
+  }, [currentUser]);
 
   return (
     <div className="grid grid-cols-calendar-filters gap-2 py-2">
