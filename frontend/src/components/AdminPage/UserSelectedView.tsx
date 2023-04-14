@@ -32,6 +32,9 @@ export default function UserSelectedView(props: {
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
+  const [businessAffiliation, setBusinessAffiliation] = useState<string>(
+    props.selectedUser!.businessAffiliation
+  );
   const [isAdminChecked, setIsAdminChecked] = useState<boolean>(props.selectedUser!.admin);
 
   async function loadUserData() {
@@ -89,7 +92,7 @@ export default function UserSelectedView(props: {
         roles: selectedRoles,
         teams: selectedTeams,
         departmentId: selectedDepartment,
-        businessAffiliation: props.selectedUser!.businessAffiliation
+        businessAffiliation: businessAffiliation
       }),
     onSuccess: async () => {
       queryClient.invalidateQueries(['current-user']);
@@ -105,7 +108,7 @@ export default function UserSelectedView(props: {
   return (
     <div>
       <SubmitButton handleClick={() => props.setView(<UserView />)} buttonText={'Tilbake'} />
-      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mt-16">
+      <div className="grid grid-cols-my-page mx-auto w-max gap-4 mt-16">
         <p className="font-bold"> Navn: </p>
         <p className=" w-full">
           {props.selectedUser?.firstName} {props.selectedUser?.lastName}{' '}
@@ -114,8 +117,21 @@ export default function UserSelectedView(props: {
         <p className="font-bold"> E-post: </p>
         <p className=" w-full">{props.selectedUser?.email}</p>
 
+        <p className="font-bold"> Virksomhet: </p>
+        <input
+          className="w-full rounded-full p-2 bg-white text-primary border-1 border-primary-light"
+          type="text"
+          value={businessAffiliation}
+          onChange={(e) => setBusinessAffiliation(e.target.value)}
+        />
+
         <p className="font-bold"> Admin: </p>
-        <input type="checkbox" checked={isAdminChecked} onChange={handleAdminCheckbox} />
+        <input
+          className="flex w-5"
+          type="checkbox"
+          checked={isAdminChecked}
+          onChange={handleAdminCheckbox}
+        />
 
         <p className="font-bold"> Ansattforhold: </p>
         <Dropdown
