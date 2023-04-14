@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import CloseIcon from '@mui/icons-material/Close';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useCalendarContext } from '@/context/CalendarContext';
-import { UserFilter } from '@/types/types';
+import { UserFilter, AbsenceType } from '@/types/types';
 import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import { useState } from 'react';
@@ -146,6 +146,7 @@ export default function FilterComponents() {
               ))}
             </div>
             <p>Skravert rute betyr at fraværet ikke er godkjent enda</p>
+            {/* <p className="flex-1 text-center">{props.absenceType.name}</p> */}
           </div>
         )}
       </div>
