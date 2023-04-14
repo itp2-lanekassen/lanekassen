@@ -43,6 +43,10 @@ const Dropdown = <T extends number | string>({
         }
       })}
       styles={{
+        control: (base) => ({
+          ...base,
+          backgroundColor: '#FAFAFA'
+        }),
         menu: (base) => ({
           ...base,
           width: 'fit-content',
@@ -54,7 +58,8 @@ const Dropdown = <T extends number | string>({
           ...base,
           zIndex: 100,
           maxHeight: '250px',
-          overflowX: 'hidden'
+          overflowX: 'hidden',
+          backgroundColor: '#FAFAFA'
         })
       }}
     />
