@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { deleteUser, updateUser } from '../API/UserAPI';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
-import { SignOutButton } from '../components/SignOutButton';
 import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
@@ -95,9 +94,6 @@ export default function MyPage() {
 
   return (
     <PageLayout title="Profil">
-      <div className="absolute top-10 right-10 flex justify-end">
-        <SignOutButton />
-      </div>
       <div className="absolute bottom-10 right-10 flex justify-end">
         <SubmitButton
           rounded={'4px rounded'}
@@ -200,7 +196,7 @@ export default function MyPage() {
               value={selectedBusinessAffiliation}
               disabled={isDropdownDisabled}
               placeholder="Virksomhetstilhørighet"
-              className={`w-[90%] md:w-[60%] rounded-full p-2 bg-white text-left text-primary ${
+              className={`w-[90%] md:w-[60%] rounded-full p-2 bg-primary-contrast text-left text-primary ${
                 isDropdownDisabled
                   ? 'disabled: bg-disabled-blue border-0'
                   : 'border-1 border-primary-light'
