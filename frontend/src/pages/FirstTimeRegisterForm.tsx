@@ -14,8 +14,8 @@ import { EmploymentType } from '../types/types';
 import { useNavigate } from 'react-router-dom';
 import { useAzureAdContext } from '../context/AzureAdContext';
 import { SignOutButton } from '../components/SignOutButton';
-import PageLayout from '@/components/PageLayout';
-import { getAllTeams } from '@/API/TeamAPI';
+import { getAllTeams } from '../API/TeamAPI';
+import RegisterPageLayout from '../components/RegisterPageLayout';
 
 export default function FirstTimeRegisterForm() {
   const navigate = useNavigate();
@@ -140,10 +140,7 @@ export default function FirstTimeRegisterForm() {
   }, [selectedDepartment]);
 
   return (
-    <PageLayout title="Registrering">
-      <div className="absolute top-10 left-10 flex justify-end">
-        <SignOutButton />
-      </div>
+    <RegisterPageLayout title="Registrering">
       <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mb-4">
         <p className="font-bold"> Navn: </p>
         <p className="w-full text-primary">
@@ -222,6 +219,6 @@ export default function FirstTimeRegisterForm() {
           }
         />
       </div>
-    </PageLayout>
+    </RegisterPageLayout>
   );
 }
