@@ -108,7 +108,7 @@ export default function UserSelectedView(props: {
   return (
     <div>
       <SubmitButton handleClick={() => props.setView(<UserView />)} buttonText={'Tilbake'} />
-      <div className="grid grid-cols-my-page mx-auto w-max gap-4 mt-16">
+      <div className="grid grid-cols-my-page mx-auto w-max gap-4 mt-16 place-items-baseline">
         <p className="font-bold"> Navn: </p>
         <p className=" w-full">
           {props.selectedUser?.firstName} {props.selectedUser?.lastName}{' '}
@@ -206,7 +206,7 @@ export default function UserSelectedView(props: {
           isDisabled={false}
         />
 
-        <div className="flex items-center gap-2 col-span-2">
+        <div className="flex justify-center gap-2 col-span-2 w-full">
           <>
             <SubmitButton
               buttonText="Oppdater bruker"
