@@ -1,20 +1,15 @@
 import moment from 'moment';
-import classNames from 'classnames';
 import CloseIcon from '@mui/icons-material/Close';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { UserFilter } from '@/types/types';
 import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
-import { useUserContext } from '@/context/UserContext';
-import { useEffect } from 'react';
 import { DateField } from '../DateField';
-import { FormValues, setMax, setMin } from '../AbsenceForm';
 
 export default function FilterComponents() {
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
-  const { fromDate, setFromDate, toDate, setToDate, filter, setFilter } = useCalendarContext();
-  const currentUser = useUserContext();
+  const { dates, setDates, filter, setFilter } = useCalendarContext();
 
   const handleChange = (key: keyof UserFilter, value: number[]) => {
     if (key === 'departments' && value.length) {
@@ -33,18 +28,6 @@ export default function FilterComponents() {
     }));
   };
 
-  const handleDateChange = (
-    date: Date | null,
-    event: React.SyntheticEvent<any, Event> | undefined,
-    name: string
-  ) => {
-    if (date && name === 'fromDate') {
-      setFromDate(moment(date).toISOString());
-    } else if (date && name === 'toDate') {
-      setToDate(moment(date).toISOString());
-    }
-  };
-
   const minFromDate = moment().subtract(30, 'days').toDate();
 
   return (
@@ -55,12 +38,14 @@ export default function FilterComponents() {
           Fra:
         </label>
         <DateField
-          handleInputChange={handleDateChange}
+          handleInputChange={(date) =>
+            setDates((d) => ({ ...d, from: moment(date).toISOString() }))
+          }
           min={minFromDate}
-          value={fromDate ? new Date(fromDate) : undefined}
+          value={new Date(dates.from)}
           name="fromDate"
           customClass="h-10"
-        ></DateField>
+        />
       </div>
 
       <div className="col-start-1 row-start-2 w-10/12 justify-self-center">
@@ -68,12 +53,11 @@ export default function FilterComponents() {
           Til:
         </label>
         <DateField
-          handleInputChange={handleDateChange}
-          min={fromDate ? new Date(fromDate) : undefined}
-          value={toDate ? new Date(toDate) : undefined}
+          handleInputChange={(date) => setDates((d) => ({ ...d, to: moment(date).toISOString() }))}
+          value={new Date(dates.to)}
           name="toDate"
           customClass="h-10"
-        ></DateField>
+        />
       </div>
 
       <div className="flex items-end gap-4">

@@ -19,7 +19,7 @@ export const DateField = (props: {
   placeholder?: string;
   disableArray?: Date[];
   disabled?: boolean;
-  title: string;
+  title?: string;
 }) => {
   //update form values on input change
   const handleInputChange = (
