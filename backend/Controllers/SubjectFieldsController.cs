@@ -102,6 +102,11 @@ public class SubjectFieldsController : ControllerBase {
       return BadRequest("Invalid subject field id");
     }
 
+    // Check if subject field is in use
+    if (await _context.Users.AnyAsync(u => u.SubjectFields.Contains(subjectField))) {
+      return BadRequest("Subject field is in use and cannot be deleted.");
+    }
+
     try {
       _ = _context.SubjectFields.Remove(subjectField);
       _ = await _context.SaveChangesAsync();
