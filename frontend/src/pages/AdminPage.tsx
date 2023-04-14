@@ -30,17 +30,16 @@ export default function AdminPage() {
 
   return (
     <PageLayout title="Adminpanel">
-      <div className="absolute top-16 left-10 flex justify-end">
+      <div className="absolute top-10 left-10 flex justify-end">
         <SubmitButton
           disabled={false}
-          disabledTitle={'minside'}
-          buttonText={'Til min side'}
+          disabledTitle={'Tilbake'}
+          buttonText={'Tilbake til kalender'}
           handleClick={() => {
-            navigate('/profil');
+            navigate('/');
           }}
         />
       </div>
-
       <div className="flex w-11/12">
         <TabContext value={value.toString()}>
           <Tabs
