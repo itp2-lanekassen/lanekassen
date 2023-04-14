@@ -19,14 +19,19 @@ export default function UserRow(props: {
   const [department, setDepartment] = useState<Department>();
   const [section, setSection] = useState<Section>();
   const [employmentType, setEmploymentType] = useState<string>('');
+  const [email, setEmail] = useState<string>(props.user!.email);
   const queryClient = useQueryClient();
 
   // Load user data into states
   async function loadUserData() {
     setDepartment((await getDepartmentById(props.user.departmentId)).data);
-    console.log(props.user.departmentId);
     setSection((await getSectionById(props.user.sectionId)).data);
     setEmploymentType(EmploymentType[props.user.employmentType]);
+
+    if (email.length > 20) {
+      const shorterEmail = email.slice(0, 20) + '...';
+      setEmail(shorterEmail);
+    }
   }
 
   const handleEdit = async () => {
@@ -63,17 +68,19 @@ export default function UserRow(props: {
   }, []);
 
   return (
-    <tr className="">
-      <td className="p-3 pr-5">{formatFirstName(props.user.firstName)}</td>
-      <td className="p-3 pr-5">{props.user.lastName}</td>
-      <td className="p-3 pr-5">{props.user.email}</td>
-      <td className="p-3 pr-5">{employmentType}</td>
-      <td className="p-3 pr-5">{department?.name}</td>
-      <td className="p-3 pr-5">{section?.name}</td>
-      <td className="p-3 pr-5">
-        <EditButton className={'m-2'} onClick={handleEdit} />
+    <>
+      <p className="flex-1">{formatFirstName(props.user.firstName)}</p>
+      <p className="flex-1">{props.user.lastName}</p>
+      <p className="flex-1">{email}</p>
+      <p className="flex-1">{employmentType}</p>
+      <p className="flex-1">{department?.name}</p>
+      <p className="flex-1">{section?.name}</p>
+      <div className="w-[24px] h-[24px]">
+        <EditButton onClick={handleEdit} />
+      </div>
+      <div className="w-[24px] h-[24px]">
         <DeleteButton onClick={handleDeleteProfileClick} />
-      </td>
-    </tr>
+      </div>
+    </>
   );
 }

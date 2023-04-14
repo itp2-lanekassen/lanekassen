@@ -3,7 +3,16 @@ import { User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import UserRow from './UserRow';
-const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon', ''];
+const tableHeaders = [
+  'Fornavn',
+  'Etternavn',
+  'E-post',
+  'Ansattforhold',
+  'Avdeling',
+  'Seksjon',
+  '',
+  ''
+];
 
 export default function UserView() {
   const [matchingUsers, setMatchingUsers] = useState<User[]>();
@@ -16,9 +25,10 @@ export default function UserView() {
   const searchForUsers = (event: any) => {
     const matches: User[] = [];
     users?.forEach((user) => {
-      if (user.firstName.toLowerCase().startsWith(event.target.value.toLowerCase())) {
-        matches.push(user);
-      } else if (user.lastName.toLowerCase().startsWith(event.target.value.toLowerCase())) {
+      if (
+        user.firstName.toLowerCase().startsWith(event.target.value.toLowerCase()) ||
+        user.lastName.toLowerCase().startsWith(event.target.value.toLowerCase())
+      ) {
         matches.push(user);
       }
     });
@@ -43,20 +53,21 @@ export default function UserView() {
           onChange={searchForUsers}
         ></input>
       </div>
-      <table className="ml-10">
-        <tbody>
-          <tr className="border-b-2">
+      <div className="ml-10 mt-7 flex flex-col items-center">
+        <div className="flex flex-col items-center w-full">
+          <div className="grid-cols-users grid col-span-6 w-full place-item-center gap-x-2 gap-y-3">
             {tableHeaders.map((header) => (
-              <th className="p-3 pr-5" key={header}>
+              <p key="" className="flex-1 font-bold mb-2 mr-10">
                 {header}
-              </th>
+              </p>
             ))}
-          </tr>
-          {matchingUsers?.map((user) => (
-            <UserRow key={user.azureId} user={user} setView={setView} />
-          ))}
-        </tbody>
-      </table>
+            <div className="col-span-8 border-b-2 w-full" />
+            {matchingUsers?.map((user) => (
+              <UserRow key={user.azureId} user={user} setView={setView} />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 
