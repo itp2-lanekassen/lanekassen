@@ -8,11 +8,18 @@ import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import { useUserContext } from '@/context/UserContext';
 import { useEffect } from 'react';
+import { DateField } from '../DateField';
+import { FormValues, setMax, setMin } from '../AbsenceForm';
 
 export default function FilterComponents() {
+  const startDate = undefined;
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
   const { fromDate, setFromDate, toDate, setToDate, filter, setFilter } = useCalendarContext();
   const currentUser = useUserContext();
+  const [fieldValues, setFormValues] = React.useState<FormValues>({
+    startDate,
+    endDate: undefined
+  });
 
   const handleChange = (key: keyof UserFilter, value: number[]) => {
     if (key === 'departments' && value.length) {
@@ -37,39 +44,42 @@ export default function FilterComponents() {
     }
   }, [currentUser]);
 
+  //update form values on date picker change
+  const handleInputChange = (
+    date: Date | null,
+    event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement, Event> | undefined,
+    name: string
+  ) => {
+    setFormValues({
+      ...fieldValues,
+      [name]: date
+    });
+  };
+
   return (
     <div className="grid grid-cols-calendar-filters gap-2 py-2">
       {/* TODO: only show weekdays in calendar */}
       <div className="col-start-1 flex flex-col w-10/12 justify-self-center">
-        <label htmlFor="fromDate" className="body-bold text-sm">
-          Fra:
-        </label>
-        <input
-          id="fromDate"
-          type="date"
-          value={moment(fromDate).format('yyyy-MM-DD')}
-          onChange={(e) => setFromDate(moment(e.target.value).toISOString())}
-          className={classNames(
-            'px-2 py-1 rounded-full text-center',
-            'border-1 border-primary focus:outline-none'
-          )}
-        />
+        <DateField
+          handleInputChange={handleInputChange}
+          max={fieldValues.endDate}
+          value={fieldValues.startDate}
+          name="startDate"
+          label="Fra"
+        ></DateField>
       </div>
 
       <div className="col-start-1 row-start-2 w-10/12 justify-self-center">
-        <label htmlFor="toDate" className="body-bold text-sm">
-          Til:
-        </label>
-        <input
-          id="toDate"
-          type="date"
-          value={moment(toDate).format('yyyy-MM-DD')}
+        <DateField
+          handleInputChange={handleInputChange}
+          min={fieldValues.startDate}
+          value={fieldValues.endDate}
+          name="endDate"
+          label="Til"
           onChange={(e) => setToDate(moment(e.target.value).toISOString())}
-          className={classNames(
-            'px-2 py-1 rounded-full text-center',
-            'border-1 border-primary focus:outline-none'
-          )}
-        />
+          className="px-2 py-1 rounded-full text-center
+          border-1 border-primary focus:outline-none"
+        ></DateField>
       </div>
 
       <div className="flex items-end gap-4">

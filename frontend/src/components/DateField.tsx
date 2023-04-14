@@ -52,9 +52,11 @@ export const DateField = (props: {
         name={props.name}
         minDate={min}
         maxDate={max}
-        value={props.value?.toLocaleDateString()}
+        /*value={props.value?.toLocaleDateString()} */
         onChange={handleInputChange}
-        className="modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center bg-primary-contrast"
+        showWeekNumbers
+        dateFormat="MM/dd/yyyy"
+        className="modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center"
         required
       />
     </div>

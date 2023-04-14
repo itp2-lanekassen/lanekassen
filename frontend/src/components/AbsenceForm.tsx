@@ -31,12 +31,12 @@ type ModalProps = {
 export type FormValues = {
   startDate: Date | undefined;
   endDate: Date | undefined;
-  comment: string | undefined;
-  absenceType: number;
+  comment?: string | undefined;
+  absenceType?: number;
 };
 
 //set max on datepicker state based on when the next absence starts
-async function setMax(
+export async function setMax(
   currentUser: any,
   clickedAbsence: Absence | undefined,
   startDate: Date | undefined,
@@ -56,7 +56,7 @@ async function setMax(
 }
 
 //set min on datepicker state based when the previous absence ends
-async function setMin(
+export async function setMin(
   currentUser: any,
   clickedAbsence: Absence | undefined,
   startDate: Date | undefined,
