@@ -27,21 +27,7 @@ const CalendarPage = () => {
       <FilterComponents />
 
       <div className="w-full grid grid-cols-calendar-columns place-items-center gap-0.5">
-        <div className="row-start-1 row-span-3 flex flex-col items-center gap-1 self-start">
-          <button
-            onClick={() => navigate('/fravaersside')}
-            className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white whitespace-nowrap text-center hover:text-secondary-light hover:bg-white border-solid border-2 hover:scale-105"
-          >
-            Min fraværsoversikt
-          </button>
-
-          <button
-            onClick={() => navigate('/profil')}
-            className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white whitespace-nowrap text-center hover:text-secondary-light hover:bg-white border-solid border-2 hover:scale-105"
-          >
-            Min Profil
-          </button>
-        </div>
+        <div className="row-start-1 row-span-3 flex flex-col items-center gap-1 self-start"></div>
 
         <CalendarHeader />
 
