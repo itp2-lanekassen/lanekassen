@@ -222,7 +222,7 @@ export default function FilterComponents() {
           </div>
         </div>
         <button
-          className="border-1 rounded-full border-primary text-center focus:outline-none px-4 h-10 flex items-center text-white bg-primary hover:bg-white hover:text-primary"
+          className="border-1 rounded-full border-primary text-center focus:outline-none px-4 h-11 mt-4 flex items-center text-white bg-primary hover:bg-white hover:text-primary"
           onMouseEnter={() => setShowDescription(true)}
           onMouseLeave={() => setShowDescription(false)}
         >
