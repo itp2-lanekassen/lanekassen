@@ -75,7 +75,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
     setDates(currentUser, setDisableDates);
     setMax(currentUser, formValues.startDate, setNextAbsenceStartDate);
     setMin(currentUser, formValues.startDate, setPreviousAbsenceEndDate);
-  }, [props.absences]);
+  }, [props.absences, formValues.startDate]);
 
   //update form values on date picker change
   const handleInputChange = (
@@ -128,9 +128,9 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   };
 
   return (
-    <div className="md:h-[500px] w-full px-[50px] md:px-0 relative m-auto">
+    <div className="md:h-full w-full px-[50px] md:px-0 relative m-auto">
       <h3 className="md:ml-[25px] md:text-left text-center md:text-2xl text-xl">Legg til fravær</h3>
-      <div className="md:h-[460px] overflow-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
+      <div className="md:h-full overflow-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
         <form className="modal-form md:mx-6" onSubmit={handleSubmit}>
           <div className="m-auto flex flex-col md:flex-row md:gap-[20px] md:justify-evenly">
             <DateField
@@ -141,6 +141,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               value={formValues.startDate}
               label="Fra"
               disableArray={disableDates}
+              title={''}
             ></DateField>
             <DateField
               handleInputChange={handleInputChange}
@@ -150,6 +151,8 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               value={formValues.endDate}
               label="Til"
               disableArray={disableDates}
+              disabled={formValues.startDate === undefined ? true : false}
+              title={'Fyll ut startdato først'}
             ></DateField>
           </div>
           <div className="m-auto flex flex-col md:flex-row md:flex-col md:gap-[20px] md:justify-evenly mt-[10px] md:w-[350px]">
