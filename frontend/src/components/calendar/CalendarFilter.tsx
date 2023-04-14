@@ -15,6 +15,7 @@ export default function FilterComponents() {
   const { fromDate, setFromDate, toDate, setToDate, filter, setFilter } = useCalendarContext();
   const [showDescription, setShowDescription] = useState(false);
   const { absenceTypes } = useGlobalContext();
+  const currentUser = useUserContext();
 
   const handleChange = (key: keyof UserFilter, value: number[]) => {
     if (key === 'departments' && value.length) {
@@ -32,6 +33,12 @@ export default function FilterComponents() {
       [key]: value
     }));
   };
+  // Sets the department to the current user's department if it exists as default
+  useEffect(() => {
+    if (currentUser?.departmentId) {
+      handleChange('departments', [currentUser.departmentId]);
+    }
+  }, [currentUser]);
 
   return (
     <div className="grid grid-cols-calendar-filters gap-2 py-2">
