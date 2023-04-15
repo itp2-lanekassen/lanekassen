@@ -36,10 +36,11 @@ export default function UserSelectedView(props: {
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
-  const [businessAffiliation, setBusinessAffiliation] = useState<string>(
+  const [selectedBusinessAffiliation, setSelectedBusinessAffiliation] = useState<string>(
     props.selectedUser!.businessAffiliation
   );
   const [isAdminChecked, setIsAdminChecked] = useState<boolean>(props.selectedUser!.admin);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   // Set fields where data isn't directly available on load
   async function setUserData() {
@@ -99,7 +100,7 @@ export default function UserSelectedView(props: {
         roles: selectedRoles,
         teams: selectedTeams,
         departmentId: selectedDepartment,
-        businessAffiliation: businessAffiliation
+        businessAffiliation: selectedBusinessAffiliation
       }),
     onSuccess: async () => {
       queryClient.invalidateQueries(['current-user']);
@@ -111,6 +112,22 @@ export default function UserSelectedView(props: {
   const handleAdminCheckbox = () => {
     setIsAdminChecked(!isAdminChecked);
   };
+
+  useEffect(() => {
+    setIsDisabled(
+      selectedDepartment === -1 ||
+        selectedSection === -1 ||
+        selectedSubjectFields.length === 0 ||
+        selectedEmploymentType === -1 ||
+        selectedBusinessAffiliation === ''
+    );
+  }, [
+    selectedDepartment,
+    selectedSection,
+    selectedSubjectFields,
+    selectedEmploymentType,
+    selectedBusinessAffiliation
+  ]);
 
   return (
     <div>
@@ -128,8 +145,8 @@ export default function UserSelectedView(props: {
         <input
           className="w-full rounded-full p-2 bg-white text-primary border-1 border-primary-light"
           type="text"
-          value={businessAffiliation}
-          onChange={(e) => setBusinessAffiliation(e.target.value)}
+          value={selectedBusinessAffiliation}
+          onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
         />
 
         <p className="font-bold"> Admin: </p>
@@ -216,7 +233,7 @@ export default function UserSelectedView(props: {
             <SubmitButton
               buttonText="Oppdater bruker"
               handleClick={userToBeUpdated}
-              disabled={false}
+              disabled={isDisabled}
               disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
             />
           </>
