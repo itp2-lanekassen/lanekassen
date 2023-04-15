@@ -16,6 +16,7 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
   const [teams, setTeams] = useState<string[]>();
   const [subjectFields, setSubjectFields] = useState<string[]>();
   const [employmentType, setEmploymentType] = useState<string>('');
+  const [businessAffiliation, setBusinessAffiliation] = useState<string>('');
   const [roles, setRoles] = useState<string[]>();
 
   const formatName = (name: string) => {
@@ -42,6 +43,7 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
 
     setDepartment((await getDepartmentById(props.user.departmentId)).data);
     setSection((await getSectionById(props.user.sectionId)).data);
+    setBusinessAffiliation(props.user.businessAffiliation);
 
     props.user.teams?.forEach((team) => listTeam.push(team.name));
     setTeams(listTeam);
@@ -77,6 +79,10 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
           isSet ? 'flex' : 'hidden'
         } text-primary subheading-small p-2 flex flex-col gap-1`}
       >
+        <p className="text-sm flex flex-col">
+          <strong className="body-bold text-xs">Virksomhet:</strong>
+          {businessAffiliation}
+        </p>
         <p className="text-sm flex flex-col">
           <strong className="body-bold text-xs">Ansattforhold:</strong>
           {employmentType}
