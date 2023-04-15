@@ -209,7 +209,7 @@ public class UserController : ControllerBase {
     [FromQuery(Name = "subjectFields")] List<int> SubjectFields,
     [FromQuery(Name = "size")] int Size = 20
   ) {
-    IQueryable<User> users = _context.Users;
+    IQueryable<User> users = _context.Users.Include(u => u.SubjectFields).Include(u => u.Roles).Include(u => u.Teams);
 
     if (ExcludeIds.Count > 0) {
       users = users.Where(u => !ExcludeIds.Contains(u.UserId));

@@ -45,6 +45,7 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
 
     props.user.teams?.forEach((team) => listTeam.push(team.name));
     setTeams(listTeam);
+    console.log(props.user);
 
     props.user.subjectFields?.forEach((subjectField) => listSubjectField.push(subjectField.name));
     setSubjectFields(listSubjectField);
