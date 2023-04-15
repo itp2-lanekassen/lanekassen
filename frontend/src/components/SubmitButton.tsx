@@ -29,7 +29,7 @@ export default function SubmitButton({
   disabledTitle,
   children,
   rounded = 'rounded-full',
-  bgColor = 'bg-primary',
+  bgColor = 'bg-primary disabled:bg-grey-darker',
   type = 'button',
   hover = 'hover:text-primary hover:bg-primary-contrast',
   className = ''
