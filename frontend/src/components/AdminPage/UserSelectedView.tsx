@@ -14,14 +14,18 @@ import DropdownMultiSelect from '../DropdownMultiSelect';
 import SubmitButton from '../SubmitButton';
 import UserView from './UserView';
 
-// The component that is displayed when a user is chosen
+/**
+ *
+ * @param props the user to be shown, the setView() function which changes which view is shown
+ * @returns
+ */
 export default function UserSelectedView(props: {
   selectedUser: User | undefined;
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
   const queryClient = useQueryClient();
-  const { departments } = useGlobalContext();
 
+  const { departments } = useGlobalContext();
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
     props.selectedUser!.employmentType
   );
@@ -37,7 +41,8 @@ export default function UserSelectedView(props: {
   );
   const [isAdminChecked, setIsAdminChecked] = useState<boolean>(props.selectedUser!.admin);
 
-  async function loadUserData() {
+  // Set fields where data isn't directly available on load
+  async function setUserData() {
     const listTeam: number[] = [];
     const listSubjectField: number[] = [];
     const listRole: number[] = [];
@@ -55,9 +60,10 @@ export default function UserSelectedView(props: {
   }
 
   useEffect(() => {
-    loadUserData();
-  }, [props.selectedUser]);
+    setUserData();
+  }, []);
 
+  // Get all available roles, teams, sections, and subject fields to set dropdown options
   const { data: roles } = useQuery(
     ['roles', { departmentId: selectedDepartment }],
     async () => (await getRolesByDepartmentId(selectedDepartment)).data
@@ -78,6 +84,7 @@ export default function UserSelectedView(props: {
     async () => (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
   );
 
+  // Update user to have the data that is set in the input fields. On success, return to the list of all users.
   const { mutate: userToBeUpdated } = useMutation({
     mutationFn: () =>
       updateUser(props.selectedUser!.userId, {

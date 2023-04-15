@@ -34,8 +34,8 @@ export default function UserRow(props: {
     }
   }
 
+  // To edit a user, change view to the display of a chosen user's information
   const handleEdit = async () => {
-    console.log('jdhdd');
     props.setView(<UserSelectedView setView={props.setView} selectedUser={props.user} />);
   };
 

@@ -35,10 +35,12 @@ export default function UserView() {
     setMatchingUsers(matches);
   };
 
+  // Set list of matching users again every time users are loaded
   useEffect(() => {
     setMatchingUsers(users);
   }, [users]);
 
+  // Set view when matching users is set, so that the list of users to be displayed isn't empty
   useEffect(() => {
     setView(defaultView);
   }, [matchingUsers]);
