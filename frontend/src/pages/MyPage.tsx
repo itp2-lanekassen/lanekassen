@@ -1,5 +1,5 @@
 import PageLayout from '@/components/PageLayout';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { deleteUser, updateUser } from '../API/UserAPI';
@@ -9,6 +9,13 @@ import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
 import { EmploymentType, Role, SubjectField, Team } from '../types/types';
+import {
+  getRolesByDepartmentId,
+  getSectionsByDepartmentId,
+  getSubjectFieldsByDepartmentId
+} from '../API/DepartmentAPI';
+import { getAllTeams } from '@/API/TeamAPI';
+import ErrorAlert from '@/components/Alert';
 /**
  *
  * @returns component that is the personal profile of the user, where the user can edit their information and delete their account
@@ -16,9 +23,11 @@ import { EmploymentType, Role, SubjectField, Team } from '../types/types';
 export default function MyPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
+  const [errorAlertMessage, setErrorAlertMessage] = useState('');
 
   const currentUser = useUserContext();
-  const { departments, roles, teams, subjectFields, sections } = useGlobalContext();
+  const { departments } = useGlobalContext();
 
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
     currentUser.employmentType
@@ -40,6 +49,23 @@ export default function MyPage() {
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [isDropdownDisabled, setIsDropdownDisabled] = useState(true);
+
+  const { data: roles } = useQuery(
+    ['roles', { departmentId: selectedDepartment }],
+    async () => (await getRolesByDepartmentId(selectedDepartment)).data
+  );
+
+  const { data: teams } = useQuery(['teams'], async () => (await getAllTeams()).data);
+
+  const { data: sections } = useQuery(
+    ['section', { departmentId: selectedDepartment }],
+    async () => (await getSectionsByDepartmentId(selectedDepartment)).data
+  );
+
+  const { data: subjectFields } = useQuery(
+    ['subject-fields', { departmentId: selectedDepartment }],
+    async () => (await getSubjectFieldsByDepartmentId(selectedDepartment)).data
+  );
 
   const { mutate: userToBeUpdated } = useMutation({
     mutationFn: () =>
@@ -83,6 +109,15 @@ export default function MyPage() {
     selectedBusinessAffiliation
   ]);
 
+  useEffect(() => {
+    if (isDisabled) {
+      setErrorAlertMessage('Du må fylle ut virksomhet, avdeling, seksjon og fagområde');
+      setErrorAlertOpen(true);
+    } else {
+      setErrorAlertOpen(false);
+    }
+  }, [isDisabled]);
+
   const handleDeleteProfileClick = () => {
     const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
     if (confirmDelete) {
@@ -91,6 +126,29 @@ export default function MyPage() {
       });
     }
   };
+
+  const handleCancelEdit = () => {
+    setSelectedBusinessAffiliation(currentUser.businessAffiliation);
+    setSelectedDepartment(currentUser.departmentId);
+    setSelectedSection(currentUser.sectionId);
+    setSelectedSubjectFields(
+      currentUser.subjectFields.map((sf: SubjectField) => sf.subjectFieldId)
+    );
+    setSelectedTeams(currentUser.teams.map((t: Team) => t.teamId));
+    setSelectedRoles(currentUser.roles.map((r: Role) => r.roleId));
+    setSelectedEmploymentType(currentUser.employmentType);
+    setIsDropdownDisabled(true);
+  };
+
+  // Fetch data when department is selected
+  useEffect(() => {
+    if (selectedDepartment !== currentUser.departmentId) {
+      setSelectedSection(-1);
+      setSelectedSubjectFields([]);
+      setSelectedTeams([]);
+      setSelectedRoles([]);
+    }
+  }, [selectedDepartment, currentUser.departmentId]);
 
   return (
     <PageLayout title="Profil">
@@ -140,12 +198,13 @@ export default function MyPage() {
 
             <p className="font-bold"> Seksjon: </p>
             <p className="w-full text-primary">
-              {selectedSection && sections.find((item) => item.sectionId === selectedSection)?.name}
+              {selectedSection &&
+                sections?.find((item) => item.sectionId === selectedSection)?.name}
             </p>
             <p className="font-bold"> Fagområde: </p>
             <div className="w-full text-primary">
               {selectedSubjectFields.map((sf) => {
-                const subj = subjectFields.find((item) => item.subjectFieldId === sf);
+                const subj = subjectFields?.find((item) => item.subjectFieldId === sf);
                 return subj ? (
                   <p className="w-full text-primary" key={subj.subjectFieldId}>
                     {subj.name}
@@ -158,7 +217,7 @@ export default function MyPage() {
             <p className="w-full text-primary">
               {selectedTeams
                 .map((t) => {
-                  const teamToBeDisplayed = teams.find((item) => item.teamId === t);
+                  const teamToBeDisplayed = teams?.find((item) => item.teamId === t);
                   return teamToBeDisplayed ? teamToBeDisplayed.name : null;
                 })
                 .filter((t) => t !== null)
@@ -169,7 +228,7 @@ export default function MyPage() {
             <p className="w-full text-primary">
               {selectedRoles
                 .map((r) => {
-                  const roleToBeDisplayed = roles.find((item) => item.roleId === r);
+                  const roleToBeDisplayed = roles?.find((item) => item.roleId === r);
                   return roleToBeDisplayed ? roleToBeDisplayed.name : null;
                 })
                 .filter((r) => r !== null)
@@ -190,6 +249,7 @@ export default function MyPage() {
               }`}
               onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
             />
+
             <p className="font-bold"> Ansattforhold: </p>
             <Dropdown
               className="w-[90%] md:w-[60%]"
@@ -224,7 +284,7 @@ export default function MyPage() {
                 value: s.sectionId
               }))}
               onChange={setSelectedSection}
-              value={selectedSection}
+              value={selectedSection === -1 ? undefined : selectedSection}
               isDisabled={isDropdownDisabled}
             />
 
@@ -270,6 +330,13 @@ export default function MyPage() {
         )}
       </div>
       <div className="flex items-center gap-2 w-full justify-center pt-4">
+        {errorAlertOpen && (
+          <>
+            <ErrorAlert message={errorAlertMessage} />
+          </>
+        )}
+      </div>
+      <div className="flex items-center gap-2 w-full justify-center pt-4">
         {isDropdownDisabled ? (
           <SubmitButton
             buttonText="Rediger bruker"
@@ -281,7 +348,7 @@ export default function MyPage() {
           <>
             <SubmitButton
               buttonText="Avbryt redigering"
-              handleClick={() => setIsDropdownDisabled(true)}
+              handleClick={handleCancelEdit}
               disabled={isDropdownDisabled}
               disabledTitle={'Disabled'}
             />
@@ -289,7 +356,7 @@ export default function MyPage() {
               buttonText="Oppdater bruker"
               handleClick={userToBeUpdated}
               disabled={isDisabled}
-              disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
+              disabledTitle={'Fyll ut virksomhet, avdeling, seksjon og fagområde'}
             />
           </>
         )}
