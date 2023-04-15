@@ -104,17 +104,6 @@ export default function MyPage() {
           hover={'hover:scale-110'}
         />
       </div>
-
-      <div className="absolute top-10 left-10 flex justify-end">
-        <SubmitButton
-          disabled={false}
-          disabledTitle={'Tilbake'}
-          buttonText={'Tilbake til kalender'}
-          handleClick={() => {
-            navigate('/');
-          }}
-        />
-      </div>
       <div className="grid grid-cols-my-page-2 grid-rows-my-page-3 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
         <p className="font-bold"> Navn: </p>
         <p className="w-full text-primary">
