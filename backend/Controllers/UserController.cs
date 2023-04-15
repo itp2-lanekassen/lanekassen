@@ -187,7 +187,7 @@ public class UserController : ControllerBase {
   //get user by id
   [HttpGet("{id}")]
   public async Task<IActionResult> GetUserById(int id) {
-    User? user = await _context.Users.FindAsync(id);
+    User? user = await _context.Users.Include(u => u.SubjectFields).Include(u => u.Roles).Include(u => u.Teams).FirstOrDefaultAsync(u => u.UserId == id);
     return user == null ? NotFound() : Ok(user);
   }
 
@@ -209,7 +209,7 @@ public class UserController : ControllerBase {
     [FromQuery(Name = "subjectFields")] List<int> SubjectFields,
     [FromQuery(Name = "size")] int Size = 20
   ) {
-    IQueryable<User> users = _context.Users;
+    IQueryable<User> users = _context.Users.Include(u => u.SubjectFields).Include(u => u.Roles).Include(u => u.Teams);
 
     if (ExcludeIds.Count > 0) {
       users = users.Where(u => !ExcludeIds.Contains(u.UserId));
