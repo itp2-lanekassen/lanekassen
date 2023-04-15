@@ -143,7 +143,7 @@ export default function UserSelectedView(props: {
 
         <p className="font-bold"> Virksomhet: </p>
         <input
-          className="w-full rounded-full p-2 bg-white text-primary border-1 border-primary-light"
+          className="w-4/5 rounded-full p-2 bg-white text-primary border-1 border-primary-light"
           type="text"
           value={selectedBusinessAffiliation}
           onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
@@ -159,6 +159,7 @@ export default function UserSelectedView(props: {
 
         <p className="font-bold"> Ansattforhold: </p>
         <Dropdown
+          className="w-4/5"
           placeholder="Ansattforhold"
           options={Object.keys(EmploymentType)
             .filter((type) => isNaN(Number(type)))
@@ -170,6 +171,7 @@ export default function UserSelectedView(props: {
 
         <p className="font-bold"> Avdeling: </p>
         <Dropdown
+          className="w-4/5"
           placeholder="Avdeling"
           options={departments.map((d) => ({
             label: d.name,
@@ -182,6 +184,7 @@ export default function UserSelectedView(props: {
 
         <p className="font-bold"> Seksjon: </p>
         <Dropdown
+          className="w-4/5"
           placeholder="Seksjon"
           options={(sections || []).map((s) => ({
             label: s.name,
@@ -194,6 +197,7 @@ export default function UserSelectedView(props: {
 
         <p className="font-bold"> Fagområde: </p>
         <DropdownMultiSelect
+          className="w-4/5"
           placeholder="Fagområde"
           options={(subjectFields || []).map((s) => ({
             label: s.name,
@@ -206,6 +210,7 @@ export default function UserSelectedView(props: {
 
         <p className="font-bold"> Team: </p>
         <DropdownMultiSelect
+          className="w-4/5"
           placeholder="Team"
           options={(teams || []).map((t: Team) => ({
             label: t.name,
@@ -218,6 +223,7 @@ export default function UserSelectedView(props: {
 
         <p className="font-bold"> Rolle: </p>
         <DropdownMultiSelect
+          className="w-4/5"
           placeholder="Rolle"
           options={(roles || []).map((r) => ({
             label: r.name,
