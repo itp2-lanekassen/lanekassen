@@ -8,6 +8,8 @@ import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import { useUserContext } from '@/context/UserContext';
 import { useEffect } from 'react';
+import { DateField } from '../DateField';
+import { FormValues, setMax, setMin } from '../AbsenceForm';
 
 export default function FilterComponents() {
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
@@ -30,46 +32,48 @@ export default function FilterComponents() {
       [key]: value
     }));
   };
-  // Sets the department to the current user's department if it exists as default
-  useEffect(() => {
-    if (currentUser?.departmentId) {
-      handleChange('departments', [currentUser.departmentId]);
+
+  const handleDateChange = (
+    date: Date | null,
+    event: React.SyntheticEvent<any, Event> | undefined,
+    name: string
+  ) => {
+    if (date && name === 'fromDate') {
+      setFromDate(moment(date).toISOString());
+    } else if (date && name === 'toDate') {
+      setToDate(moment(date).toISOString());
     }
-  }, [currentUser]);
+  };
+
+  const minFromDate = moment().subtract(30, 'days').toDate();
 
   return (
     <div className="grid grid-cols-calendar-filters gap-2 py-2">
       {/* TODO: only show weekdays in calendar */}
       <div className="col-start-1 flex flex-col w-10/12 justify-self-center">
-        <label htmlFor="fromDate" className="body-bold text-sm">
+        <label htmlFor="fromDate" className="body-bold text-sm text-primary">
           Fra:
         </label>
-        <input
-          id="fromDate"
-          type="date"
-          value={moment(fromDate).format('yyyy-MM-DD')}
-          onChange={(e) => setFromDate(moment(e.target.value).toISOString())}
-          className={classNames(
-            'px-2 py-1 rounded-full text-center',
-            'border-1 border-primary focus:outline-none'
-          )}
-        />
+        <DateField
+          handleInputChange={handleDateChange}
+          min={minFromDate}
+          value={fromDate ? new Date(fromDate) : undefined}
+          name="fromDate"
+          customClass="h-10"
+        ></DateField>
       </div>
 
       <div className="col-start-1 row-start-2 w-10/12 justify-self-center">
-        <label htmlFor="toDate" className="body-bold text-sm">
+        <label htmlFor="fromDate" className="body-bold text-sm text-primary">
           Til:
         </label>
-        <input
-          id="toDate"
-          type="date"
-          value={moment(toDate).format('yyyy-MM-DD')}
-          onChange={(e) => setToDate(moment(e.target.value).toISOString())}
-          className={classNames(
-            'px-2 py-1 rounded-full text-center',
-            'border-1 border-primary focus:outline-none'
-          )}
-        />
+        <DateField
+          handleInputChange={handleDateChange}
+          min={fromDate ? new Date(fromDate) : undefined}
+          value={toDate ? new Date(toDate) : undefined}
+          name="toDate"
+          customClass="h-10"
+        ></DateField>
       </div>
 
       <div className="flex items-end gap-4">

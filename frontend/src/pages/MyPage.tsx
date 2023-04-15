@@ -115,19 +115,6 @@ export default function MyPage() {
           }}
         />
       </div>
-
-      {currentUser.admin && (
-        <div className="absolute top-18 left-10 flex justify-end">
-          <SubmitButton
-            disabled={false}
-            disabledTitle={'admin'}
-            buttonText={'Til adminsiden'}
-            handleClick={() => {
-              navigate('/admin');
-            }}
-          />
-        </div>
-      )}
       <div className="grid grid-cols-my-page-2 grid-rows-my-page-3 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
         <p className="font-bold"> Navn: </p>
         <p className="w-full text-primary">
