@@ -145,7 +145,6 @@ export default function MyPage() {
     if (selectedDepartment !== currentUser.departmentId) {
       setSelectedSection(-1);
       setSelectedSubjectFields([]);
-      setSelectedTeams([]);
       setSelectedRoles([]);
     }
   }, [selectedDepartment, currentUser.departmentId]);
@@ -213,17 +212,6 @@ export default function MyPage() {
               })}
             </div>
 
-            <p className="font-bold"> Team: </p>
-            <p className="w-full text-primary">
-              {selectedTeams
-                .map((t) => {
-                  const teamToBeDisplayed = teams?.find((item) => item.teamId === t);
-                  return teamToBeDisplayed ? teamToBeDisplayed.name : null;
-                })
-                .filter((t) => t !== null)
-                .join(', ')}
-            </p>
-
             <p className="font-bold"> Roller: </p>
             <p className="w-full text-primary">
               {selectedRoles
@@ -232,6 +220,17 @@ export default function MyPage() {
                   return roleToBeDisplayed ? roleToBeDisplayed.name : null;
                 })
                 .filter((r) => r !== null)
+                .join(', ')}
+            </p>
+
+            <p className="font-bold"> Team: </p>
+            <p className="w-full text-primary">
+              {selectedTeams
+                .map((t) => {
+                  const teamToBeDisplayed = teams?.find((item) => item.teamId === t);
+                  return teamToBeDisplayed ? teamToBeDisplayed.name : null;
+                })
+                .filter((t) => t !== null)
                 .join(', ')}
             </p>
           </>
@@ -301,19 +300,6 @@ export default function MyPage() {
               isDisabled={isDropdownDisabled}
             />
 
-            <p className="font-bold"> Team: </p>
-            <DropdownMultiSelect
-              className="w-[90%] md:w-[60%]"
-              placeholder="Team"
-              options={(teams || []).map((t) => ({
-                label: t.name,
-                value: t.teamId
-              }))}
-              onChange={setSelectedTeams}
-              value={selectedTeams}
-              isDisabled={isDropdownDisabled}
-            />
-
             <p className="font-bold"> Rolle: </p>
             <DropdownMultiSelect
               className="w-[90%] md:w-[60%]"
@@ -324,6 +310,19 @@ export default function MyPage() {
               }))}
               onChange={setSelectedRoles}
               value={selectedRoles}
+              isDisabled={isDropdownDisabled}
+            />
+
+            <p className="font-bold"> Team: </p>
+            <DropdownMultiSelect
+              className="w-[90%] md:w-[60%]"
+              placeholder="Team"
+              options={(teams || []).map((t) => ({
+                label: t.name,
+                value: t.teamId
+              }))}
+              onChange={setSelectedTeams}
+              value={selectedTeams}
               isDisabled={isDropdownDisabled}
             />
           </>
