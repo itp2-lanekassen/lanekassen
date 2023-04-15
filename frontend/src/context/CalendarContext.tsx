@@ -97,7 +97,7 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
   }, [fromDate, toDate]);
 
   const [filter, setFilter] = useState<UserFilter>({
-    departments: [],
+    departments: [currentUser.departmentId],
     sections: [],
     teams: [],
     roles: [],
