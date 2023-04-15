@@ -66,7 +66,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
   if (holiday && !isCurrentUser) return null;
 
   return (
-    <div
+    <button
       className={classNames(
         holiday
           ? 'bg-error-light hover:bg-error text-2xs'
@@ -81,7 +81,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
       onClick={handleCellClick}
     >
       {holiday ? isCurrentUser && holiday.description : absence && absence.type.code}
-    </div>
+    </button>
   );
 };
 
