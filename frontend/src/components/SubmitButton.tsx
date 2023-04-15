@@ -10,6 +10,7 @@ interface SubmitButtonProps {
   rounded?: string;
   bgColor?: string;
   hover?: string;
+  className?: string;
 }
 
 /**
@@ -30,10 +31,11 @@ export default function SubmitButton({
   rounded = 'rounded-full',
   bgColor = 'bg-primary',
   type = 'button',
-  hover = 'hover:text-primary hover:bg-white'
+  hover = 'hover:text-primary hover:bg-primary-contrast',
+  className = ''
 }: SubmitButtonProps) {
   return (
-    <div>
+    <div className={className}>
       <button
         className={`flex ${rounded} text-grey-lightest ${bgColor} p-3 ${hover} border-solid border-2  ${
           disabled ? 'bg-gray-300 border-gray-300 cursor-not-allowed' : ''

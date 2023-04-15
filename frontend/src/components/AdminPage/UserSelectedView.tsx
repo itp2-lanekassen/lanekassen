@@ -1,12 +1,12 @@
 import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId,
-  getTeamsByDepartmentId
+  getSubjectFieldsByDepartmentId
 } from '@/API/DepartmentAPI';
+import { getAllTeams } from '@/API/TeamAPI';
 import { updateUser } from '@/API/UserAPI';
 import { useGlobalContext } from '@/context/GlobalContext';
-import { EmploymentType, User } from '@/types/types';
+import { EmploymentType, Team, User } from '@/types/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import Dropdown from '../Dropdown';
@@ -71,7 +71,7 @@ export default function UserSelectedView(props: {
 
   const { data: teams } = useQuery(
     ['teams', { departmentId: selectedDepartment }],
-    async () => (await getTeamsByDepartmentId(selectedDepartment)).data
+    async () => (await getAllTeams()).data
   );
 
   const { data: sections } = useQuery(
@@ -143,10 +143,10 @@ export default function UserSelectedView(props: {
         <p className="font-bold"> Ansattforhold: </p>
         <Dropdown
           placeholder="Ansattforhold"
-          listOfOptions={Object.keys(EmploymentType)
+          options={Object.keys(EmploymentType)
             .filter((type) => isNaN(Number(type)))
-            .map((type, i) => ({ name: type, id: i }))}
-          handleChange={(e) => setSelectedEmploymentType(e)}
+            .map((type, i) => ({ label: type, value: i }))}
+          onChange={(e) => setSelectedEmploymentType(e)}
           value={selectedEmploymentType}
           isDisabled={false}
         />
@@ -154,11 +154,11 @@ export default function UserSelectedView(props: {
         <p className="font-bold"> Avdeling: </p>
         <Dropdown
           placeholder="Avdeling"
-          listOfOptions={departments.map((d: { name: string; departmentId: number }) => ({
-            name: d.name,
-            id: d.departmentId
+          options={departments.map((d) => ({
+            label: d.name,
+            value: d.departmentId
           }))}
-          handleChange={(e) => setSelectedDepartment(e)}
+          onChange={(e) => setSelectedDepartment(e)}
           value={selectedDepartment}
           isDisabled={false}
         />
@@ -166,11 +166,11 @@ export default function UserSelectedView(props: {
         <p className="font-bold"> Seksjon: </p>
         <Dropdown
           placeholder="Seksjon"
-          listOfOptions={(sections || []).map((s: { name: string; sectionId: number }) => ({
-            name: s.name,
-            id: s.sectionId
+          options={(sections || []).map((s) => ({
+            label: s.name,
+            value: s.sectionId
           }))}
-          handleChange={(e) => setSelectedSection(e)}
+          onChange={(e) => setSelectedSection(e)}
           value={selectedSection}
           isDisabled={false}
         />
@@ -178,13 +178,11 @@ export default function UserSelectedView(props: {
         <p className="font-bold"> Fagområde: </p>
         <DropdownMultiSelect
           placeholder="Fagområde"
-          listOfOptions={(subjectFields || []).map(
-            (s: { name: string; subjectFieldId: number }) => ({
-              name: s.name,
-              id: s.subjectFieldId
-            })
-          )}
-          handleChange={(e) => setSelectedSubjectFields(e)}
+          options={(subjectFields || []).map((s) => ({
+            label: s.name,
+            value: s.subjectFieldId
+          }))}
+          onChange={(e) => setSelectedSubjectFields(e)}
           value={selectedSubjectFields}
           isDisabled={false}
         />
@@ -192,11 +190,11 @@ export default function UserSelectedView(props: {
         <p className="font-bold"> Team: </p>
         <DropdownMultiSelect
           placeholder="Team"
-          listOfOptions={(teams || []).map((t: { name: string; teamId: number }) => ({
-            name: t.name,
-            id: t.teamId
+          options={(teams || []).map((t: Team) => ({
+            label: t.name,
+            value: t.teamId
           }))}
-          handleChange={(e) => setSelectedTeams(e)}
+          onChange={(e) => setSelectedTeams(e)}
           value={selectedTeams}
           isDisabled={false}
         />
@@ -204,11 +202,11 @@ export default function UserSelectedView(props: {
         <p className="font-bold"> Rolle: </p>
         <DropdownMultiSelect
           placeholder="Rolle"
-          listOfOptions={(roles || []).map((r: { name: string; roleId: number }) => ({
-            name: r.name,
-            id: r.roleId
+          options={(roles || []).map((r) => ({
+            label: r.name,
+            value: r.roleId
           }))}
-          handleChange={(e) => setSelectedRoles(e)}
+          onChange={(e) => setSelectedRoles(e)}
           value={selectedRoles}
           isDisabled={false}
         />

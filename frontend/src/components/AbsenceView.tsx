@@ -26,8 +26,8 @@ export const AbsenceView = () => {
 
   return (
     <PageLayout title="Min fraværsoversikt">
-      <div className="relative m-auto w-[800px] h-[550px] p-[25px]">
-        <div className="flex flex-row">
+      <div className="relative m-auto h-full md:w-[750px]">
+        <div className="flex flex-col flex-col-reverse md:flex-row md:gap-0 gap-6">
           <AbsencePeriods
             setAbsences={setAbsences}
             absences={absences}

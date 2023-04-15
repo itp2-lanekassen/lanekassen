@@ -15,7 +15,7 @@ import DepartmentView from '@/components/AdminPage/DepartmentView';
 import RoleView from '@/components/AdminPage/RoleView';
 import UserTab from '@/components/AdminPage/UserView';
 
-const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
+const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagområde', 'Team', 'Rolle'];
 
 export default function AdminPage() {
   const [value, setValue] = useState(0);
@@ -34,14 +34,13 @@ export default function AdminPage() {
       <div className="absolute top-16 left-10 flex justify-end">
         <SubmitButton
           disabled={false}
-          disabledTitle={'minside'}
-          buttonText={'Til min side'}
+          disabledTitle={'Tilbake'}
+          buttonText={'Tilbake til kalender'}
           handleClick={() => {
-            navigate('/profil');
+            navigate('/');
           }}
         />
       </div>
-
       <div className="flex w-11/12">
         <TabContext value={value.toString()}>
           <Tabs
@@ -57,7 +56,7 @@ export default function AdminPage() {
                 key={index}
                 label={label}
                 sx={{
-                  backgroundColor: 'white',
+                  backgroundColor: 'primary-contrast',
                   color: 'black',
                   borderTopLeftRadius: '10px',
                   borderBottomLeftRadius: '10px',
@@ -89,7 +88,7 @@ export default function AdminPage() {
                 {label === 'Fraværstyper' && <AbsenceTypeView />}
                 {label === 'Avdeling' && <DepartmentView />}
                 {label === 'Seksjon' && <SectionView />}
-                {label === 'Fagfelt' && <SubjectFieldView />}
+                {label === 'Fagområde' && <SubjectFieldView />}
                 {label === 'Team' && <TeamView />}
                 {label === 'Rolle' && <RoleView />}
               </TabPanel>

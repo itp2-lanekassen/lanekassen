@@ -25,7 +25,8 @@ const RoleEdit = ({ role, setEdit }: RoleEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['roles']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Rollen eksisterer allerede')
   });
 
   const { mutate: createRole } = useMutation({
@@ -33,7 +34,8 @@ const RoleEdit = ({ role, setEdit }: RoleEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['roles']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Rollen eksisterer allerede')
   });
 
   const handleSave = () => {
@@ -44,7 +46,6 @@ const RoleEdit = ({ role, setEdit }: RoleEditProps) => {
         departments: selectedDepartments
       });
     }
-
     createRole({ name: roleName, departments: selectedDepartments });
   };
 

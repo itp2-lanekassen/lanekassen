@@ -1,63 +1,67 @@
-import Select, { StylesConfig } from 'react-select';
+import ReactSelect from 'react-select';
+import { DropdownProps } from './Dropdown';
 
-export interface DropdownMultiselectProps {
-  handleChange: (value: number[]) => void;
-  value: number[];
-  placeholder: string;
-  listOfOptions: { name: string; id: number }[];
-  className?: string;
-  isExpands?: boolean;
-  isDisabled?: boolean;
+interface DropdownMultiSelectProps<T> extends Omit<DropdownProps<T>, 'value' | 'onChange'> {
+  value: T[];
+  onChange: (val: T[]) => void;
 }
 
-export default function DropdownMultiSelect({
-  handleChange,
-  placeholder,
-  listOfOptions,
+const DropdownMultiSelect = <T extends number | string>({
+  options,
   value,
-  className,
+  onChange,
+  placeholder,
+  className = '',
   isDisabled = false
-}: DropdownMultiselectProps) {
-  const options = listOfOptions.map(({ name, id }) => ({ label: name, value: id }));
-
-  const customStyles: StylesConfig<any, true> = {
-    menu: (base) => ({
-      ...base,
-      width: 'fit-content' + 'px-2'
-    }),
-    menuList: (base) => ({
-      ...base,
-      maxHeight: '500px'
-    })
-  };
-
+}: DropdownMultiSelectProps<T>) => {
   return (
-    <Select
-      className={`text-primary w-80 ${className}`}
-      options={options}
+    <ReactSelect
+      className={className}
       isDisabled={isDisabled}
+      menuPlacement="auto" // auto menu on top code
       placeholder={placeholder}
       isMulti
-      value={value ? options.filter((option) => value.includes(option.value)) : []}
-      onChange={(selectedOptions) => handleChange(selectedOptions.map((o) => o.value))}
+      options={options}
+      value={value !== undefined ? options.filter((option) => value.includes(option.value)) : []}
+      onChange={(selectedOptions) => onChange(selectedOptions.map((o) => o.value))}
       theme={(theme) => ({
         ...theme,
         borderRadius: 20,
         colors: {
           ...theme.colors,
-          primary25: '#F6F0F9',
-          primary: '#590689',
+          primary25: '#F6F0F9', // option highlight color
+          primary: '#590689', // selected color
           danger: '#590689',
           dangerLight: '#D8BCE6',
-          neutral20: '#590689',
-          neutral30: '#590689',
-          neutral50: '#410464',
+          neutral20: '#590689', // border color
+          neutral30: '#590689', // border hover color
           neutral40: '',
           neutral60: '#590689',
-          neutral80: '#410464'
+          neutral80: '#410464' // selected option color
         }
       })}
-      styles={customStyles}
+      styles={{
+        control: (base) => ({
+          ...base,
+          backgroundColor: '#FAFAFA'
+        }),
+        menu: (base) => ({
+          ...base,
+          width: 'fit-content',
+          minWidth: '100%',
+          overflow: 'hidden',
+          color: '#590689'
+        }),
+        menuList: (base) => ({
+          ...base,
+          zIndex: 100,
+          maxHeight: '250px',
+          overflowX: 'hidden',
+          backgroundColor: '#FAFAFA'
+        })
+      }}
     />
   );
-}
+};
+
+export default DropdownMultiSelect;

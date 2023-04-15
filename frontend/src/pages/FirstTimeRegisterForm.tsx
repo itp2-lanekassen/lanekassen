@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId,
-  getTeamsByDepartmentId
+  getSubjectFieldsByDepartmentId
 } from '../API/DepartmentAPI';
 import { getUserByAzureId, postUser } from '../API/UserAPI';
 import Dropdown from '../components/Dropdown';
@@ -15,14 +14,15 @@ import { EmploymentType } from '../types/types';
 import { useNavigate } from 'react-router-dom';
 import { useAzureAdContext } from '../context/AzureAdContext';
 import { SignOutButton } from '../components/SignOutButton';
-import PageLayout from '@/components/PageLayout';
+import { getAllTeams } from '../API/TeamAPI';
+import RegisterPageLayout from '../components/RegisterPageLayout';
 
 export default function FirstTimeRegisterForm() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const azureUser = useAzureAdContext();
-  const { departments, sections } = useGlobalContext();
+  const { departments, sections: allSections } = useGlobalContext();
 
   // Set default values for dropdowns based on Azure AD data
   let defaultDepartment = -1;
@@ -37,7 +37,7 @@ export default function FirstTimeRegisterForm() {
 
   let defaultSection = -1;
   if (azureUser.officeLocation) {
-    const section = sections.find((s) => s.name === azureUser.officeLocation);
+    const section = allSections.find((s) => s.name === azureUser.officeLocation);
     if (section) {
       defaultSection = section.sectionId;
     }
@@ -61,14 +61,10 @@ export default function FirstTimeRegisterForm() {
     selectedDepartment === -1 ? [] : (await getRolesByDepartmentId(selectedDepartment)).data
   );
 
-  const { data: teams } = useQuery(['teams', { departmentId: selectedDepartment }], async () =>
-    selectedDepartment === -1 ? [] : (await getTeamsByDepartmentId(selectedDepartment)).data
-  );
+  const { data: teams } = useQuery(['teams'], async () => (await getAllTeams()).data);
 
-  const { data: sections2 } = useQuery(
-    ['section', { departmentId: selectedDepartment }],
-    async () =>
-      selectedDepartment === -1 ? [] : (await getSectionsByDepartmentId(selectedDepartment)).data
+  const { data: sections } = useQuery(['section', { departmentId: selectedDepartment }], async () =>
+    selectedDepartment === -1 ? [] : (await getSectionsByDepartmentId(selectedDepartment)).data
   );
 
   const { data: subjectFields } = useQuery(
@@ -98,6 +94,9 @@ export default function FirstTimeRegisterForm() {
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
       navigate('/');
+    },
+    onError: (error) => {
+      alert(error);
     }
   });
 
@@ -118,17 +117,17 @@ export default function FirstTimeRegisterForm() {
     selectedBusinessAffiliation
   ]);
 
-  async function checkIfUserIsRegistered() {
-    const user = await getUserByAzureId(azureUser.id);
-    if (user) {
-      navigate('/');
-    }
-  }
-
   // Redirect to home if user is already registered
   useEffect(() => {
+    async function checkIfUserIsRegistered() {
+      const user = await getUserByAzureId(azureUser.id);
+      if (user) {
+        navigate('/');
+      }
+    }
+
     checkIfUserIsRegistered();
-  }, []);
+  }, [azureUser.id, navigate]);
 
   // Fetch data when department is selected
   useEffect(() => {
@@ -141,88 +140,80 @@ export default function FirstTimeRegisterForm() {
   }, [selectedDepartment]);
 
   return (
-    <PageLayout title="Registrering">
-      <div className="absolute top-10 left-10 flex justify-end">
-        <SignOutButton />
-      </div>
-      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mb-4">
+    <RegisterPageLayout title="Registrering">
+      <div className="grid grid-cols-my-page mx-auto max-w-[70vw] sm:max-w-[400px] w-max gap-4 place-items-center mb-4">
         <p className="font-bold"> Navn: </p>
-        <p className="w-full text-primary">
+        <p className="w-full max-w-[350px] md:overflow-visible text-primary">
           {azureUser.givenName} {azureUser.surname}
         </p>
         <p className="font-bold"> E-post: </p>
-        <p className="w-full text-primary">{azureUser.mail}</p>
-        <p className="font-bold"> Virksomhetstilhørighet: </p>
+        <p className="w-full max-w-[350px] md:overflow-visible text-primary overflow-hidden whitespace-wrap text-ellipsis">
+          {azureUser.mail}
+        </p>
+        <p className="font-bold"> Virksomhet: </p>
         <input
           type={'text'}
           value={selectedBusinessAffiliation}
           placeholder="Virksomhetstilhørighet"
-          className="w-full border-1 border-primary-light rounded-full p-2 text-primary"
+          className="w-full max-w-[350px] border-1 border-primary-light rounded-full p-2 text-primary"
           onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
         />
       </div>
-      <div className="grid mx-auto w-max gap-4 place-items-center">
+      <div className="flex flex-col mx-auto w-[70vw] md:w-[50vw] max-w-[350px] gap-4">
         <Dropdown
           placeholder="Ansattforhold"
-          listOfOptions={Object.keys(EmploymentType)
+          options={Object.keys(EmploymentType)
             .filter((type) => isNaN(Number(type)))
-            .map((type, i) => ({ name: type, id: i }))}
-          handleChange={(e) => setSelectedEmploymentType(e)}
+            .map((type, i) => ({ label: type, value: i }))}
+          onChange={setSelectedEmploymentType}
           value={selectedEmploymentType}
-          isDisabled={false}
         />
         <Dropdown
           placeholder="Avdeling"
-          listOfOptions={departments.map((d) => ({ name: d.name, id: d.departmentId }))}
-          handleChange={(e) => setSelectedDepartment(e)}
+          options={departments.map((d) => ({ label: d.name, value: d.departmentId }))}
+          onChange={setSelectedDepartment}
           value={selectedDepartment}
-          isDisabled={false}
         />
         <Dropdown
           placeholder="Seksjon"
-          listOfOptions={(sections2 || []).map((s: { name: string; sectionId: number }) => ({
-            name: s.name,
-            id: s.sectionId
+          options={(sections || []).map((s) => ({
+            label: s.name,
+            value: s.sectionId
           }))}
-          handleChange={(e) => setSelectedSection(e)}
+          onChange={setSelectedSection}
           value={selectedSection}
-          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Fagområde"
-          listOfOptions={(subjectFields || []).map(
-            (s: { name: string; subjectFieldId: number }) => ({
-              name: s.name,
-              id: s.subjectFieldId
-            })
-          )}
-          handleChange={(e) => setSelectedSubjectFields(e)}
+          options={(subjectFields || []).map((s) => ({
+            label: s.name,
+            value: s.subjectFieldId
+          }))}
+          onChange={setSelectedSubjectFields}
           value={selectedSubjectFields}
-          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Team"
-          listOfOptions={(teams || []).map((t: { name: string; teamId: number }) => ({
-            name: t.name,
-            id: t.teamId
+          options={(teams || []).map((t) => ({
+            label: t.name,
+            value: t.teamId
           }))}
-          handleChange={(e) => setSelectedTeams(e)}
+          onChange={setSelectedTeams}
           value={selectedTeams}
-          isDisabled={false}
         />
         <DropdownMultiSelect
           placeholder="Rolle"
-          listOfOptions={(roles || []).map((r: { name: string; roleId: number }) => ({
-            name: r.name,
-            id: r.roleId
+          options={(roles || []).map((r) => ({
+            label: r.name,
+            value: r.roleId
           }))}
-          handleChange={(e) => setSelectedRoles(e)}
+          onChange={setSelectedRoles}
           value={selectedRoles}
-          isDisabled={false}
         />
 
         <SubmitButton
           buttonText="Registrer deg"
+          className="mx-auto"
           handleClick={registerUser}
           disabled={isDisabled}
           disabledTitle={
@@ -230,6 +221,6 @@ export default function FirstTimeRegisterForm() {
           }
         />
       </div>
-    </PageLayout>
+    </RegisterPageLayout>
   );
 }

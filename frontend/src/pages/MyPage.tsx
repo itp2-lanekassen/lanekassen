@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { deleteUser, updateUser } from '../API/UserAPI';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
-import { SignOutButton } from '../components/SignOutButton';
 import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
@@ -61,6 +60,9 @@ export default function MyPage() {
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
       setIsDropdownDisabled(true);
+    },
+    onError: () => {
+      alert('Feil ved oppdatering av bruker');
     }
   });
 
@@ -92,9 +94,6 @@ export default function MyPage() {
 
   return (
     <PageLayout title="Profil">
-      <div className="absolute top-10 right-10 flex justify-end">
-        <SignOutButton />
-      </div>
       <div className="absolute bottom-10 right-10 flex justify-end">
         <SubmitButton
           rounded={'4px rounded'}
@@ -117,7 +116,7 @@ export default function MyPage() {
         />
       </div>
 
-      {currentUser.admin ? (
+      {currentUser.admin && (
         <div className="absolute top-18 left-10 flex justify-end">
           <SubmitButton
             disabled={false}
@@ -128,130 +127,185 @@ export default function MyPage() {
             }}
           />
         </div>
-      ) : (
-        <></>
       )}
-
-      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center">
+      <div className="grid grid-cols-my-page-2 grid-rows-my-page-3 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
         <p className="font-bold"> Navn: </p>
-        <p className=" w-full text-primary">
+        <p className="w-full text-primary">
           {currentUser.firstName} {currentUser.lastName}
         </p>
 
         <p className="font-bold"> E-post: </p>
-        <p className=" w-full text-primary">{currentUser.email}</p>
-        <p className="font-bold"> Virksomhetstilhørighet: </p>
-        <input
-          type={'text'}
-          value={selectedBusinessAffiliation}
-          disabled={isDropdownDisabled}
-          placeholder="Virksomhetstilhørighet"
-          className={`w-full rounded-full p-2 bg-white text-primary ${
-            isDropdownDisabled
-              ? 'disabled: bg-disabled-blue border-0'
-              : 'border-1 border-primary-light'
-          }`}
-          onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
-        />
+        <p className="w-full text-primary overflow-hidden whitespace-wrap text-ellipsis">
+          {currentUser.email}
+        </p>
+        <p className="font-bold"> Virksomhet: </p>
+        {isDropdownDisabled ? (
+          <>
+            <p className="w-full text-primary">{selectedBusinessAffiliation}</p>
+            <p className="font-bold"> Ansattforhold: </p>
+            <p className="w-full text-primary">{EmploymentType[selectedEmploymentType]}</p>
 
-        <p className="font-bold"> Ansattforhold: </p>
-        <Dropdown
-          placeholder="Ansattforhold"
-          listOfOptions={Object.keys(EmploymentType)
-            .filter((type) => isNaN(Number(type)))
-            .map((type, i) => ({ name: type, id: i }))}
-          handleChange={(e) => setSelectedEmploymentType(e)}
-          value={selectedEmploymentType}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Avdeling: </p>
+            <p className="w-full text-primary">
+              {selectedDepartment &&
+                departments.find((item) => item.departmentId === selectedDepartment)?.name}
+            </p>
 
-        <p className="font-bold"> Avdeling: </p>
-        <Dropdown
-          placeholder="Avdeling"
-          listOfOptions={departments.map((d: { name: string; departmentId: number }) => ({
-            name: d.name,
-            id: d.departmentId
-          }))}
-          handleChange={(e) => setSelectedDepartment(e)}
-          value={selectedDepartment}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Seksjon: </p>
+            <p className="w-full text-primary">
+              {selectedSection && sections.find((item) => item.sectionId === selectedSection)?.name}
+            </p>
+            <p className="font-bold"> Fagområde: </p>
+            <div className="w-full text-primary">
+              {selectedSubjectFields.map((sf) => {
+                const subj = subjectFields.find((item) => item.subjectFieldId === sf);
+                return subj ? (
+                  <p className="w-full text-primary" key={subj.subjectFieldId}>
+                    {subj.name}
+                  </p>
+                ) : null;
+              })}
+            </div>
 
-        <p className="font-bold"> Seksjon: </p>
-        <Dropdown
-          placeholder="Seksjon"
-          listOfOptions={(sections || []).map((s: { name: string; sectionId: number }) => ({
-            name: s.name,
-            id: s.sectionId
-          }))}
-          handleChange={(e) => setSelectedSection(e)}
-          value={selectedSection}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Team: </p>
+            <p className="w-full text-primary">
+              {selectedTeams
+                .map((t) => {
+                  const teamToBeDisplayed = teams.find((item) => item.teamId === t);
+                  return teamToBeDisplayed ? teamToBeDisplayed.name : null;
+                })
+                .filter((t) => t !== null)
+                .join(', ')}
+            </p>
 
-        <p className="font-bold"> Fagområde: </p>
-        <DropdownMultiSelect
-          placeholder="Fagområde"
-          listOfOptions={(subjectFields || []).map(
-            (s: { name: string; subjectFieldId: number }) => ({
-              name: s.name,
-              id: s.subjectFieldId
-            })
-          )}
-          handleChange={(e) => setSelectedSubjectFields(e)}
-          value={selectedSubjectFields}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Roller: </p>
+            <p className="w-full text-primary">
+              {selectedRoles
+                .map((r) => {
+                  const roleToBeDisplayed = roles.find((item) => item.roleId === r);
+                  return roleToBeDisplayed ? roleToBeDisplayed.name : null;
+                })
+                .filter((r) => r !== null)
+                .join(', ')}
+            </p>
+          </>
+        ) : (
+          <>
+            <input
+              type={'text'}
+              value={selectedBusinessAffiliation}
+              disabled={isDropdownDisabled}
+              placeholder="Virksomhetstilhørighet"
+              className={`w-[90%] md:w-[60%] rounded-full p-2 bg-primary-contrast text-left text-primary ${
+                isDropdownDisabled
+                  ? 'disabled: bg-disabled-blue border-0'
+                  : 'border-1 border-primary-light'
+              }`}
+              onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
+            />
+            <p className="font-bold"> Ansattforhold: </p>
+            <Dropdown
+              className="w-[90%] md:w-[60%]"
+              placeholder="Ansattforhold"
+              options={Object.keys(EmploymentType)
+                .filter((type) => isNaN(Number(type)))
+                .map((type, i) => ({ label: type, value: i }))}
+              onChange={setSelectedEmploymentType}
+              value={selectedEmploymentType}
+              isDisabled={isDropdownDisabled}
+            />
 
-        <p className="font-bold"> Team: </p>
-        <DropdownMultiSelect
-          placeholder="Team"
-          listOfOptions={(teams || []).map((t: { name: string; teamId: number }) => ({
-            name: t.name,
-            id: t.teamId
-          }))}
-          handleChange={(e) => setSelectedTeams(e)}
-          value={selectedTeams}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Avdeling: </p>
+            <Dropdown
+              className="w-[90%] md:w-[60%]"
+              placeholder="Avdeling"
+              options={departments.map((d) => ({
+                label: d.name,
+                value: d.departmentId
+              }))}
+              onChange={setSelectedDepartment}
+              value={selectedDepartment}
+              isDisabled={isDropdownDisabled}
+            />
 
-        <p className="font-bold"> Rolle: </p>
-        <DropdownMultiSelect
-          placeholder="Rolle"
-          listOfOptions={(roles || []).map((r: { name: string; roleId: number }) => ({
-            name: r.name,
-            id: r.roleId
-          }))}
-          handleChange={(e) => setSelectedRoles(e)}
-          value={selectedRoles}
-          isDisabled={isDropdownDisabled}
-        />
+            <p className="font-bold"> Seksjon: </p>
+            <Dropdown
+              className="w-[90%] md:w-[60%]"
+              placeholder="Seksjon"
+              options={(sections || []).map((s) => ({
+                label: s.name,
+                value: s.sectionId
+              }))}
+              onChange={setSelectedSection}
+              value={selectedSection}
+              isDisabled={isDropdownDisabled}
+            />
 
-        <div className="flex items-center gap-2 col-span-2">
-          {isDropdownDisabled ? (
+            <p className="font-bold"> Fagområde: </p>
+            <DropdownMultiSelect
+              className="w-[90%] md:w-[60%]"
+              placeholder="Fagområde"
+              options={(subjectFields || []).map((s) => ({
+                label: s.name,
+                value: s.subjectFieldId
+              }))}
+              onChange={setSelectedSubjectFields}
+              value={selectedSubjectFields}
+              isDisabled={isDropdownDisabled}
+            />
+
+            <p className="font-bold"> Team: </p>
+            <DropdownMultiSelect
+              className="w-[90%] md:w-[60%]"
+              placeholder="Team"
+              options={(teams || []).map((t) => ({
+                label: t.name,
+                value: t.teamId
+              }))}
+              onChange={setSelectedTeams}
+              value={selectedTeams}
+              isDisabled={isDropdownDisabled}
+            />
+
+            <p className="font-bold"> Rolle: </p>
+            <DropdownMultiSelect
+              className="w-[90%] md:w-[60%]"
+              placeholder="Rolle"
+              options={(roles || []).map((r) => ({
+                label: r.name,
+                value: r.roleId
+              }))}
+              onChange={setSelectedRoles}
+              value={selectedRoles}
+              isDisabled={isDropdownDisabled}
+            />
+          </>
+        )}
+      </div>
+      <div className="flex items-center gap-2 w-full justify-center pt-4">
+        {isDropdownDisabled ? (
+          <SubmitButton
+            buttonText="Rediger bruker"
+            handleClick={() => setIsDropdownDisabled(false)}
+            disabled={!isDropdownDisabled}
+            disabledTitle={'Disabled'}
+          />
+        ) : (
+          <>
             <SubmitButton
-              buttonText="Rediger bruker"
-              handleClick={() => setIsDropdownDisabled(false)}
-              disabled={!isDropdownDisabled}
+              buttonText="Avbryt redigering"
+              handleClick={() => setIsDropdownDisabled(true)}
+              disabled={isDropdownDisabled}
               disabledTitle={'Disabled'}
             />
-          ) : (
-            <>
-              <SubmitButton
-                buttonText="Avbryt redigering"
-                handleClick={() => setIsDropdownDisabled(true)}
-                disabled={isDropdownDisabled}
-                disabledTitle={'Disabled'}
-              />
-              <SubmitButton
-                buttonText="Oppdater bruker"
-                handleClick={userToBeUpdated}
-                disabled={isDisabled}
-                disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
-              />
-            </>
-          )}
-        </div>
+            <SubmitButton
+              buttonText="Oppdater bruker"
+              handleClick={userToBeUpdated}
+              disabled={isDisabled}
+              disabledTitle={'Fyll ut ansattforhold, avdeling, seksjon og fagområde'}
+            />
+          </>
+        )}
       </div>
     </PageLayout>
   );
