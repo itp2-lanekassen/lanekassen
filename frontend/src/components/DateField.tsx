@@ -53,6 +53,7 @@ export const DateField = (props: {
         name={props.name}
         minDate={min}
         maxDate={max}
+        calendarStartDay={1}
         /*value={props.value?.toLocaleDateString()} */
         onChange={handleInputChange}
         showWeekNumbers
