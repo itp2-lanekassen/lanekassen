@@ -46,7 +46,6 @@ const PageLayout = ({ title, children }: PageLayoutProps) => {
       <OutsideClickHandler
         onOutsideClick={() => {
           setSideMenuVisibility('-40vw');
-          console.log('hei');
         }}
       >
         <div
