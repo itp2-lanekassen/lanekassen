@@ -13,6 +13,7 @@ import TeamView from '@/components/AdminPage/TeamView';
 import SubjectFieldView from '@/components/AdminPage/SubjectFieldView';
 import DepartmentView from '@/components/AdminPage/DepartmentView';
 import RoleView from '@/components/AdminPage/RoleView';
+import UserTab from '@/components/AdminPage/UserView';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagområde', 'Team', 'Rolle'];
 
@@ -29,8 +30,8 @@ export default function AdminPage() {
   }, [currentUser.admin, navigate]);
 
   return (
-    <PageLayout title="Adminpanel">
-      <div className="absolute top-10 left-10 flex justify-end">
+    <PageLayout title="Admin">
+      <div className="absolute top-16 left-10 flex justify-end">
         <SubmitButton
           disabled={false}
           disabledTitle={'Tilbake'}
@@ -79,7 +80,11 @@ export default function AdminPage() {
           <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto h-3/5-screen">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
-                {label === 'Brukere' && <div>brukere</div>}
+                {label === 'Brukere' && (
+                  <div>
+                    <UserTab />
+                  </div>
+                )}
                 {label === 'Fraværstyper' && <AbsenceTypeView />}
                 {label === 'Avdeling' && <DepartmentView />}
                 {label === 'Seksjon' && <SectionView />}
