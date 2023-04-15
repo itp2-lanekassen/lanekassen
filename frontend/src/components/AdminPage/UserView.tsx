@@ -3,16 +3,7 @@ import { User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import UserRow from './UserRow';
-const tableHeaders = [
-  'Fornavn',
-  'Etternavn',
-  'E-post',
-  'Ansattforhold',
-  'Avdeling',
-  'Seksjon',
-  '',
-  ''
-];
+const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon', ''];
 
 export default function UserView() {
   const [matchingUsers, setMatchingUsers] = useState<User[]>();
@@ -59,7 +50,7 @@ export default function UserView() {
         <div className="flex flex-col items-center w-full">
           <div className="grid-cols-users grid col-span-6 w-full place-item-center gap-x-2 gap-y-3">
             {tableHeaders.map((header) => (
-              <p key="" className="flex-1 font-bold mb-2 mr-10">
+              <p key={header} className="flex-1 font-bold mb-2 mr-10">
                 {header}
               </p>
             ))}
