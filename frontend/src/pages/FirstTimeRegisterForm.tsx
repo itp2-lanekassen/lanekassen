@@ -13,7 +13,6 @@ import SubmitButton from '../components/SubmitButton';
 import { EmploymentType } from '../types/types';
 import { useNavigate } from 'react-router-dom';
 import { useAzureAdContext } from '../context/AzureAdContext';
-import { SignOutButton } from '../components/SignOutButton';
 import { getAllTeams } from '../API/TeamAPI';
 import RegisterPageLayout from '../components/RegisterPageLayout';
 
