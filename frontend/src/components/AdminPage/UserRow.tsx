@@ -39,7 +39,7 @@ export default function UserRow(props: {
     props.setView(<UserSelectedView setView={props.setView} selectedUser={props.user} />);
   };
 
-  // Format first name to avoid table overflow
+  // Format first name to avoid table overflow. Last name isn't formatted because a user can ony have one last name
   const formatFirstName = (name: string) => {
     return name
       .split(' ')
