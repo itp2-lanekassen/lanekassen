@@ -7,35 +7,40 @@ import * as React from 'react';
 interface ConfirmationBoxProps {
   confirmationText: string;
   isOpen: boolean;
+  onConfirm: (result: boolean) => void;
 }
 
-export default function ConfirmationBox({ isOpen, confirmationText }: ConfirmationBoxProps) {
+export default function ConfirmationBox({
+  isOpen,
+  confirmationText,
+  onConfirm
+}: ConfirmationBoxProps) {
   const [open, setOpen] = React.useState(isOpen);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
+    onConfirm(false);
+  };
+
+  const handleConfirm = () => {
+    setOpen(false);
+    onConfirm(true);
+    return true;
   };
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">${confirmationText}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{confirmationText}</DialogTitle>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose} autoFocus>
-            Agree
+          <Button onClick={handleClose}>Avbryt</Button>
+          <Button onClick={handleConfirm} autoFocus>
+            Ja
           </Button>
         </DialogActions>
       </Dialog>
