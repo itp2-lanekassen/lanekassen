@@ -239,6 +239,13 @@ const AbsenceForm: React.FC<ModalProps> = ({
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50">
       <div className="modal-overlay pointer-events-none" onClick={onClose} />
       <div className="relative w-auto my-6 mx-auto max-w-3xl bg-primary-contrast px-10 pt-10 pb-5 rounded-[40px] border-primary border-2">
+        <button
+          type="button"
+          className="modal-cancel-button absolute top-5 right-5 text-primary"
+          onClick={onClose}
+        >
+          <CloseIcon />
+        </button>
         <h2 className="modal-title text-center ">
           {' '}
           {user.firstName} {user.lastName}{' '}
@@ -302,13 +309,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
             )}
           </div>
         </form>
-        <button
-          type="button"
-          className="modal-cancel-button absolute top-5 right-5 text-primary"
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </button>
       </div>
     </div>
   );
