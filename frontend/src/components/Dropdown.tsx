@@ -1,9 +1,9 @@
 import ReactSelect from 'react-select';
 
 export interface DropdownProps<T> {
-  options: { label: string; value: T }[];
+  options: { label: string; value?: T }[];
   value?: T;
-  onChange: (value: T) => void;
+  onChange: (value?: T) => void;
   placeholder: string;
   className?: string;
   isDisabled?: boolean;
@@ -25,7 +25,7 @@ const Dropdown = <T extends number | string>({
       placeholder={placeholder}
       options={options}
       value={value !== undefined && options.find((option) => option.value === value)}
-      onChange={(option) => option && onChange(option.value)}
+      onChange={(option) => option && onChange(option?.value)}
       theme={(theme) => ({
         ...theme,
         borderRadius: 20,
