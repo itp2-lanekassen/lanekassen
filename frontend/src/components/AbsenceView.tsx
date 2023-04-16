@@ -13,32 +13,29 @@ import PageLayout from './PageLayout';
 export const AbsenceView = () => {
   const navigate = useNavigate();
 
-  const [absence, setAbsence] = useState<Absence>();
+  const [selectedAbsence, setAbsence] = useState<Absence | null>(null);
+  const [absences, setAbsences] = useState<Absence[]>([]);
 
   //Show AddAbsenceView if no absence has been seleced, show EditAbsenceView if an absence has been selected
   let view;
-  if (!absence) {
-    view = <AddAbsenceView></AddAbsenceView>;
+  if (!selectedAbsence) {
+    view = <AddAbsenceView absences={absences}></AddAbsenceView>;
   } else {
-    view = <EditAbsenceView absence={absence} setAbsence={setAbsence}></EditAbsenceView>;
+    view = <EditAbsenceView absence={selectedAbsence} setAbsence={setAbsence}></EditAbsenceView>;
   }
 
   return (
-    <PageLayout title="Din egen fraværsoversikt">
-      <div className="relative m-auto w-[800px] h-[550px] p-[25px]">
-        <div className="flex flex-row">
-          <AbsencePeriods selectedAbsence={absence} setAbsence={setAbsence}></AbsencePeriods>
+    <PageLayout title="Mine fravær">
+      <div className="relative m-auto h-full md:w-[750px]">
+        <div className="flex flex-col flex-col-reverse md:flex-row md:gap-0 gap-6">
+          <AbsencePeriods
+            setAbsences={setAbsences}
+            absences={absences}
+            selectedAbsence={selectedAbsence ? selectedAbsence : null}
+            setAbsence={setAbsence}
+          ></AbsencePeriods>
           {view}
         </div>
-      </div>
-      <div className="absolute top-10 left-10 flex justify-end">
-        <SubmitButton
-          disabledTitle={'Tilbake'}
-          buttonText={'Tilbake til kalender'}
-          handleClick={() => {
-            navigate('/');
-          }}
-        />
       </div>
     </PageLayout>
   );

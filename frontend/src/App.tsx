@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { AbsenceView } from './components/AbsenceView';
 import AzureAdContextProvider from './context/AzureAdContext';
-import FilterContextProvider from './context/FilterContext';
+import CalendarContextProvider from './context/CalendarContext';
 import GlobalContextProvider from './context/GlobalContext';
 import ModalContextProvider from './context/ModalContext';
 import UserContextProvider from './context/UserContext';
@@ -16,15 +16,13 @@ import PageNotFound from './pages/PageNotFound';
 
 const ContextWrapper = ({ children }: { children?: ReactNode }) => (
   <UserContextProvider>
-    <ModalContextProvider>
-      <FilterContextProvider>{children}</FilterContextProvider>
-    </ModalContextProvider>
+    <ModalContextProvider>{children}</ModalContextProvider>
   </UserContextProvider>
 );
 
 function App() {
   return (
-    <>
+    <div className="bg-primary-contrast">
       <UnauthenticatedTemplate>
         <LoginPage />
       </UnauthenticatedTemplate>
@@ -38,7 +36,9 @@ function App() {
                 path="/"
                 element={
                   <ContextWrapper>
-                    <CalendarPage />
+                    <CalendarContextProvider>
+                      <CalendarPage />
+                    </CalendarContextProvider>
                   </ContextWrapper>
                 }
               />
@@ -72,7 +72,7 @@ function App() {
           </GlobalContextProvider>
         </AzureAdContextProvider>
       </AuthenticatedTemplate>
-    </>
+    </div>
   );
 }
 

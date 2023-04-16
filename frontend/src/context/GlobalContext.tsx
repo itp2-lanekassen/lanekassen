@@ -1,19 +1,18 @@
-import { getAllAbsenceTypes } from '../API/AbsenceTypeAPI';
-import { getAllDepartments } from '../API/DepartmentAPI';
-import { getAllRoles } from '../API/RoleAPI';
-import { getAllSections } from '../API/SectionAPI';
-import { getAllSubjectFields } from '../API/SubjectFieldAPI';
-import { getAllTeams } from '../API/TeamAPI';
-import { AbsenceType, Department, Role, Section, SubjectField, Team } from '../types/types';
-import { useQuery } from '@tanstack/react-query';
 import { createContext, ReactNode, useContext } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { AbsenceType, Department, Role, Section, SubjectField, Team } from '@/types/types';
+import { getAllAbsenceTypes } from '@/API/AbsenceTypeAPI';
+import { getAllDepartments } from '@/API/DepartmentAPI';
+import { getAllRoles } from '@/API/RoleAPI';
+import { getAllSections } from '@/API/SectionAPI';
+import { getAllSubjectFields } from '@/API/SubjectFieldAPI';
+import { getAllTeams } from '@/API/TeamAPI';
 
 interface GlobalContextProps {
   children?: ReactNode;
 }
 
 interface GlobalContextType {
-  map(arg0: (department: any) => JSX.Element): ReactNode;
   absenceTypes: AbsenceType[];
   roles: Role[];
   teams: Team[];
@@ -49,7 +48,7 @@ const GlobalContextProvider = ({ children }: GlobalContextProps) => {
   if (teams.isLoading) return <div>Laster team...</div>;
   if (sections.isLoading) return <div>Laster seksjoner...</div>;
   if (departments.isLoading) return <div>Laster avdelinger...</div>;
-  if (subjectFields.isLoading) return <div>Laster fagfelt...</div>;
+  if (subjectFields.isLoading) return <div>Laster fagområde...</div>;
 
   if (
     absenceTypes.isError ||

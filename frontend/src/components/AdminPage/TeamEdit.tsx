@@ -1,4 +1,3 @@
-import { useGlobalContext } from '@/context/GlobalContext';
 import { Team, TeamDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -13,19 +12,15 @@ interface TeamEditProps {
 const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
   const queryClient = useQueryClient();
 
-  const { departments } = useGlobalContext();
-
   const [teamName, setTeamName] = useState(team?.name || '');
-  const [selectedDepartments, setSelectedDepartments] = useState(
-    team?.departments?.map((d) => d.departmentId) || []
-  );
 
   const { mutate: updateExistingsTeam } = useMutation({
     mutationFn: ({ id, ...updatedTeam }: { id: number } & TeamDTO) => updateTeam(id, updatedTeam),
     onSuccess: () => {
       queryClient.invalidateQueries(['teams']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Teamet eksisterer allerede')
   });
 
   const { mutate: createTeam } = useMutation({
@@ -33,19 +28,19 @@ const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['teams']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Teamet eksisterer allerede')
   });
 
   const handleSave = () => {
     if (team) {
       return updateExistingsTeam({
         id: team.teamId,
-        name: teamName,
-        departments: selectedDepartments
+        name: teamName
       });
     }
 
-    createTeam({ name: teamName, departments: selectedDepartments });
+    createTeam({ name: teamName });
   };
 
   return (
@@ -57,19 +52,12 @@ const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
         placeholder="Team navn"
         className="rounded-full w-2/5 text-primary-light border-primary-light outline-primary-light border-1 px-3 py-1.5"
       />
-      <DropdownMultiSelect
-        placeholder="Velg Avdelinger"
-        // TODO: shouldn't need important
-        className="!w-2/5"
-        value={selectedDepartments}
-        listOfOptions={departments.map((d) => ({ id: d.departmentId, name: d.name }))}
-        handleChange={setSelectedDepartments}
-      />
+
       <div className="flex gap-4">
         <button
           className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light disabled:cursor-not-allowed"
           onClick={handleSave}
-          disabled={!(teamName.length && selectedDepartments.length)}
+          disabled={!(teamName.length > 0)}
         >
           {team ? 'Lagre' : 'Legg til'}
         </button>

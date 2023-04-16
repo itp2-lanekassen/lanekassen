@@ -54,7 +54,12 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
             <div>{department.name}</div>
             <div>({department.abbreviation})</div>
             <EditButton onClick={() => setEdit(true, department)} />
-            <DeleteButton onClick={() => deleteExistingDepartment(department.departmentId)} />
+            <DeleteButton
+              onClick={() => {
+                const confirmDelete = confirm('Er du sikker på at du vil slette denne avdelingen?');
+                if (confirmDelete) deleteExistingDepartment(department.departmentId);
+              }}
+            />
           </Fragment>
         ))}
       </div>

@@ -19,14 +19,14 @@ import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
 //set max on datepicker state based on when the next absence starts
 async function setMax(currentUser: any, clickedAbsence: Absence, setNextAbsenceStartDate: any) {
   setNextAbsenceStartDate(
-    await getDatePickerMaxForAbsence(currentUser.userId, clickedAbsence.endDate)
+    await getDatePickerMaxForAbsence(currentUser.userId, new Date(clickedAbsence.endDate))
   );
 }
 
 //set min on datepicker state based when the previous absence ends
 async function setMin(currentUser: any, clickedAbsence: Absence, setPreviousAbsenceEndDate: any) {
   setPreviousAbsenceEndDate(
-    await getDatePickerMinForAbsence(currentUser.userId, clickedAbsence.startDate)
+    await getDatePickerMinForAbsence(currentUser.userId, new Date(clickedAbsence.startDate))
   );
 }
 
@@ -38,19 +38,20 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
 
   const currentUser = useUserContext();
 
-  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<string>();
-  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<string>();
+  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>(new Date());
+  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>(new Date());
 
   //initialize mutation for updating an absence
   const { mutate: editAbsence } = useMutation({
     mutationFn: (absence: Absence) => updateAbsence(absence),
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }])
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
+    onError: () => alert('Fravær kunne ikke oppdateres')
   });
 
   //initialize form values with current values for the absence selected for editing
   const [formValues, setFormValues] = React.useState<FormValues>({
-    startDate: moment(props.absence.startDate).format('YYYY-MM-DD'),
-    endDate: moment(props.absence.endDate).format('YYYY-MM-DD'),
+    startDate: new Date(moment(props.absence.startDate).format('YYYY-MM-DD')),
+    endDate: new Date(moment(props.absence.endDate).format('YYYY-MM-DD')),
     comment: props.absence.comment,
     absenceType: props.absence.absenceTypeId
   });
@@ -58,8 +59,8 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
   //update form values when another absence is selected
   useEffect(() => {
     setFormValues({
-      startDate: moment(props.absence.startDate).format('YYYY-MM-DD'),
-      endDate: moment(props.absence.endDate).format('YYYY-MM-DD'),
+      startDate: new Date(moment(props.absence.startDate).format('YYYY-MM-DD')),
+      endDate: new Date(moment(props.absence.endDate).format('YYYY-MM-DD')),
       comment: props.absence.comment,
       absenceType: props.absence.absenceTypeId
     });
@@ -69,8 +70,20 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
     setMin(currentUser, props.absence, setPreviousAbsenceEndDate);
   }, [props.absence]);
 
-  //update form values on input change
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //update form values on date picker change
+  const handleInputChange = (
+    date: Date | null,
+    event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement, Event> | undefined,
+    name: string
+  ) => {
+    setFormValues({
+      ...formValues,
+      [name]: date
+    });
+  };
+
+  //update form values on comment change
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormValues({
       ...formValues,
@@ -101,8 +114,8 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
     }
     editAbsence({
       absenceId: props.absence.absenceId,
-      startDate: moment(formValues.startDate).toISOString(),
-      endDate: moment(formValues.endDate).toISOString(),
+      startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
+      endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
       absenceTypeId: formValues.absenceType,
       type: updatedAbsenceType,
       userId: currentUser.userId,
@@ -110,18 +123,16 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       isApproved: false,
       comment: updatedComment
     });
-    //Alert user of edit success
-    alert('Du har redigert fraværet!');
     //redirect to AddAbsenceView
     props.setAbsence(null);
   };
 
   return (
-    <div className="h-[500px] w-[400px] relative">
-      <h3 className="ml-[25px]">Rediger fravær</h3>
-      <div className="h-[460px] overflow-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
-        <form className="modal-form" onSubmit={handleSubmit}>
-          <div className="m-auto flex flex-row justify-evenly w-[400px]">
+    <div className="md:h-full w-full px-[50px] md:px-0 relative m-auto">
+      <h3 className="md:ml-[25px] md:text-left text-center md:text-2xl text-xl">Rediger fravær</h3>
+      <div className="md:h-full overflow-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded">
+        <form className="modal-form md:mx-6" onSubmit={handleSubmit}>
+          <div className="m-auto flex flex-col md:flex-row md:gap-[20px] md:justify-evenly">
             <DateField
               handleInputChange={handleInputChange}
               name="startDate"
@@ -129,32 +140,30 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
               max={formValues.endDate}
               value={formValues.startDate}
               label="Fra"
-              placeholder={new Date(props.absence.startDate).toLocaleDateString()}
+              title=""
             ></DateField>
             <DateField
               handleInputChange={handleInputChange}
               name="endDate"
-              min={new Date(
-                moment(formValues.startDate).add(0, 'days').toISOString().split('T')[0]
-              ).toLocaleDateString('fr-ca')}
+              min={formValues.startDate}
               max={nextAbsenceStartDate}
               value={formValues.endDate}
               label="Til"
-              placeholder={new Date(props.absence.endDate).toLocaleDateString()}
+              title=""
             ></DateField>
           </div>
-          <div className="m-auto flex flex-col justify-evenly mt-[10px] w-[300px]">
+          <div className="m-auto flex flex-col md:flex-row md:flex-col md:gap-[20px] md:justify-evenly mt-[10px] md:w-[350px]">
             <AbsenceRadioField
               formValues={formValues}
               handleRadioChange={handleRadioChange}
             ></AbsenceRadioField>
             <CommentField
-              handleInputChange={handleInputChange}
+              handleInputChange={handleTextAreaChange}
               placeholder={props.absence.comment}
               formValues={formValues}
             ></CommentField>
           </div>
-          <div className="m-auto w-[300px] flex justify-center gap-[20px]">
+          <div className="m-auto flex justify-center gap-[20px]">
             <SubmitButton
               disabledTitle={'Fyll ut alle feltene'}
               disabled={false}

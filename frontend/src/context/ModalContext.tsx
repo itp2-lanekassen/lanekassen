@@ -18,7 +18,8 @@ export const useModalContext = () => {
 
 const ModalContextProvider = ({ children }: { children?: ReactNode }) => {
   const [showAbsenceForm, setShowAbsenceForm] = useState(false);
-  const [date, setDate] = useState<string>();
+
+  const [date, setDate] = useState<Date>();
   const [user, setUser] = useState({} as User);
   const [type, setType] = useState<string>();
   const [clickedAbsence, setClickedAbsence] = useState<Absence>();
@@ -30,7 +31,11 @@ const ModalContextProvider = ({ children }: { children?: ReactNode }) => {
     absence?: Absence
   ) => {
     setUser(clickedUser);
-    setDate(clickedDate);
+    if (clickedDate) {
+      setDate(new Date(clickedDate));
+    } else {
+      setDate(undefined);
+    }
     setType(formType);
     setClickedAbsence(absence);
     setShowAbsenceForm(true);

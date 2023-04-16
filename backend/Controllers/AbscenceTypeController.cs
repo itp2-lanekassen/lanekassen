@@ -23,6 +23,11 @@ public class AbsenceTypeController : ControllerBase {
       return BadRequest(ModelState);
     }
 
+    // Check if absence type already exists
+    if (await _context.AbsenceTypes.AnyAsync(at => at.Code == absenceType.Code || at.Name == absenceType.Name || at.ColorCode == absenceType.ColorCode)) {
+      return BadRequest("Absence type already exists");
+    }
+
     AbsenceType? newAbsenceType = new() {
       Name = absenceType.Name,
       Code = absenceType.Code,
@@ -55,6 +60,11 @@ public class AbsenceTypeController : ControllerBase {
     AbsenceType? existingAbsenceType = await _context.AbsenceTypes.FindAsync(id);
     if (existingAbsenceType == null) {
       return BadRequest("Invalid absence type id");
+    }
+
+    // Check if absence type already exists
+    if (await _context.AbsenceTypes.AnyAsync(at => at.AbsenceTypeId != id && (at.Code == absenceType.Code || at.Name == absenceType.Name || at.ColorCode == absenceType.ColorCode))) {
+      return BadRequest("Absence type already exists");
     }
 
     existingAbsenceType.Name = absenceType.Name;

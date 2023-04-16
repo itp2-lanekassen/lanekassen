@@ -22,35 +22,13 @@ public class ApiDbContext : DbContext {
 
     SubjectField subjectField1 = new() { SubjectFieldId = 1, Name = "Virksomhetsarkitektur og Prosjektledelse", DepartmentId = department1.DepartmentId };
 
-    Section section1 = new() { SectionId = 1, Name = "Trondheim" };
+    Section section1 = new() { SectionId = 1, Name = "Trondheim", DepartmentId = department1.DepartmentId };
 
     Team team1 = new() { TeamId = 1, Name = "Rubik" };
 
     Role role1 = new() { RoleId = 1, Name = "Arkitekt" };
 
     _ = modelBuilder.Entity<Department>(e => {
-      _ = e
-        .HasMany(department => department.Sections)
-        .WithMany(section => section.Departments)
-        .UsingEntity(j => j.HasData(
-            new { SectionsSectionId = section1.SectionId, DepartmentsDepartmentId = department1.DepartmentId },
-            new { SectionsSectionId = 2, DepartmentsDepartmentId = department1.DepartmentId },
-            new { SectionsSectionId = 3, DepartmentsDepartmentId = department1.DepartmentId }
-          ));
-      _ = e
-        .HasMany(department => department.Teams)
-        .WithMany(team => team.Departments)
-        .UsingEntity(j => j.HasData(
-          new { TeamsTeamId = team1.TeamId, DepartmentsDepartmentId = department1.DepartmentId },
-          new { TeamsTeamId = 2, DepartmentsDepartmentId = department1.DepartmentId },
-          new { TeamsTeamId = 3, DepartmentsDepartmentId = department1.DepartmentId },
-          new { TeamsTeamId = 4, DepartmentsDepartmentId = department1.DepartmentId },
-          new { TeamsTeamId = 5, DepartmentsDepartmentId = department1.DepartmentId },
-          new { TeamsTeamId = 6, DepartmentsDepartmentId = department1.DepartmentId },
-          new { TeamsTeamId = 7, DepartmentsDepartmentId = department1.DepartmentId },
-          new { TeamsTeamId = 8, DepartmentsDepartmentId = department1.DepartmentId }
-        ));
-
       _ = e
         .HasMany(department => department.Roles)
         .WithMany(role => role.Departments)
@@ -80,8 +58,8 @@ public class ApiDbContext : DbContext {
 
     _ = modelBuilder.Entity<Section>().HasData(
       section1,
-      new() { SectionId = 2, Name = "Oslo" },
-      new() { SectionId = 3, Name = "Hjemmekollega" }
+      new() { SectionId = 2, Name = "Oslo", DepartmentId = department1.DepartmentId },
+      new() { SectionId = 3, Name = "Hjemmekollega", DepartmentId = department1.DepartmentId }
     );
 
 
@@ -161,8 +139,8 @@ public class ApiDbContext : DbContext {
     );
 
     _ = modelBuilder.Entity<AbsenceType>().HasData(
-      new AbsenceType { AbsenceTypeId = 1, Name = "Tilgjengelig fravær", Code = "T", ColorCode = "#00b500" },
-      new AbsenceType { AbsenceTypeId = 2, Name = "Utilgjengelig fravær", Code = "F", ColorCode = "#d90404" },
+      new AbsenceType { AbsenceTypeId = 1, Name = "Tilgjengelig", Code = "T", ColorCode = "#00b500" },
+      new AbsenceType { AbsenceTypeId = 2, Name = "Utilgjengelig", Code = "F", ColorCode = "#d90404" },
       new AbsenceType { AbsenceTypeId = 3, Name = "Permisjon/Sykmelding", Code = "P/S", ColorCode = "#eb9900" }
     );
 
