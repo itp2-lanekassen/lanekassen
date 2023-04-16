@@ -61,17 +61,17 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
 
   return (
     <div className="col-start-1 w-full font-header rounded-xl overflow-hidden">
-      <div
+      <button
         className={`${
           props.isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
-        } flex justify-between items-center text-grey-lightest px-2 cursor-pointer`}
+        } flex justify-between items-center text-grey-lightest px-2 cursor-pointer w-full`}
         onClick={() => expandCollapse()}
       >
         <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
           {formatName(`${props.user.firstName} ${props.user.lastName}`)}
         </span>
         <ExpandMoreIcon className={isSet ? 'rotate-180' : 'rotate-0'} />
-      </div>
+      </button>
 
       <div
         className={`${props.isCurrentUser ? 'bg-card-two-light' : 'bg-primary-lighter'} ${
@@ -107,10 +107,12 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
           {roles?.join(', ')}
         </p>
         <div className={`${props.isCurrentUser || currentUser.admin ? 'flex' : 'hidden'}`}>
-          <EditOutlinedIcon
-            className="ml-auto cursor-pointer hover:text-secondary-light"
+          <button
+            className="ml-auto cursor-pointer"
             onClick={() => console.log('Implement edit user here')}
-          />
+          >
+            <EditOutlinedIcon className="hover:text-secondary-light" />
+          </button>
         </div>
       </div>
     </div>
