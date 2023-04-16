@@ -40,7 +40,7 @@ export default function UserView() {
     <div>
       <div className="flex justify-center">
         <input
-          className="flex modal-input w-4/12 border-2 rounded-[20px] p-2 border-primary bg-primary-contrast"
+          className="mt-3 flex modal-input w-4/12 border-2 rounded-[20px] p-2 border-primary bg-primary-contrast"
           type="text"
           placeholder="Søk"
           onChange={searchForUsers}
@@ -50,7 +50,7 @@ export default function UserView() {
         <div className="flex flex-col items-center w-full">
           <div className="grid-cols-users grid col-span-6 w-full place-item-center text-center gap-x-2 gap-y-3">
             {tableHeaders.map((header) => (
-              <p key={header} className="flex-1 font-bold mb-2 mr-10">
+              <p key={header} className="ml-4 flex-1 font-bold mb-2 mr-10">
                 {header}
               </p>
             ))}

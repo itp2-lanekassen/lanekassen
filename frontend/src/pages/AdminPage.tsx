@@ -14,6 +14,7 @@ import SubjectFieldView from '@/components/AdminPage/SubjectFieldView';
 import DepartmentView from '@/components/AdminPage/DepartmentView';
 import RoleView from '@/components/AdminPage/RoleView';
 import UserTab from '@/components/AdminPage/UserView';
+import Dropdown from '../components/Dropdown';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagområde', 'Team', 'Rolle'];
 
@@ -28,6 +29,16 @@ export default function AdminPage() {
       navigate('/');
     }
   }, [currentUser.admin, navigate]);
+
+  //options for dropdown
+  const dropdownOptions = tabLabels.map((label, index) => ({
+    label,
+    value: index
+  }));
+
+  const handleDropdownChange = (newValue: number) => {
+    setValue(newValue);
+  };
 
   return (
     <PageLayout title="Admin">
@@ -68,44 +79,16 @@ export default function AdminPage() {
               ))}
             </Tabs>
           </div>
-          <div className="block md:hidden">
-            <Tabs
-              value={value}
-              onChange={(event, newValue) => setValue(newValue)}
-              orientation="horizontal"
-              variant="scrollable"
-              aria-label="My tabs"
-              TabIndicatorProps={{ style: { backgroundColor: '#590689' } }} // primary-light
-              sx={{
-                display: 'flex',
-                flexWrap: 'wrap'
-              }}
-            >
-              {tabLabels.map((label, index) => (
-                <Tab
-                  key={index}
-                  label={label}
-                  sx={{
-                    backgroundColor: 'primary-contrast',
-                    color: 'black',
-                    borderTopLeftRadius: '10px',
-                    borderBottomLeftRadius: '10px',
-                    '&:hover': {
-                      backgroundColor: '#F6F0F9', // primary-lighter
-                      color: '#410464', // primary
-                      borderTopLeftRadius: '10px',
-                      borderBottomLeftRadius: '10px'
-                    },
-                    '&.Mui-selected': {
-                      backgroundColor: '#590689', // primary-light
-                      color: '#FAFAFA', // grey-lightest
-                      borderTopLeftRadius: '10px',
-                      borderBottomLeftRadius: '10px'
-                    }
-                  }}
-                />
-              ))}
-            </Tabs>
+          <div className="block md:hidden  mb-5 flex justify-center">
+            <div className="w-4/5">
+              <Dropdown
+                options={dropdownOptions}
+                value={value}
+                onChange={handleDropdownChange}
+                placeholder="Velg en side"
+                className="content-center"
+              />
+            </div>
           </div>{' '}
           <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto h-3/5-screen">
             {tabLabels.map((label, index) => (
