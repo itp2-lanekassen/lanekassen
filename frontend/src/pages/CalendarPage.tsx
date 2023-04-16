@@ -23,7 +23,7 @@ const CalendarPage = () => {
   if (queryResult.isError) return <div>Noe gikk galt</div>;
 
   return (
-    <PageLayout title="Fraværsoversikt">
+    <PageLayout title="Kalender">
       <FilterComponents />
 
       <div className="w-full grid grid-cols-calendar-columns place-items-center gap-0.5">
