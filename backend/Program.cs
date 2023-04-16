@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // env variables
-string root = Directory.GetCurrentDirectory();
-string dotenv = Path.Combine(root, ".env");
-DotEnv.Load(dotenv);
+string rootPath = Directory.GetCurrentDirectory();
+string environmentVariablesFile = Path.Combine(rootPath, ".env");
+SetEnvVar.SetVariables(environmentVariablesFile);
 
 string host = Environment.GetEnvironmentVariable("LANEKASSEN_DB_HOST")!;
 string username = Environment.GetEnvironmentVariable("LANEKASSEN_DB_USERNAME")!;
