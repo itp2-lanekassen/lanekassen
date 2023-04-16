@@ -6,3 +6,4 @@ This software is developed for the Norwegian State Educational Loan Fund (Lånek
 
 Installation guides for the frontend and backend can be found at [frontend/README.md](frontend/README.md) and [backend/README.md](backend/README.md) respectively.
 
+The software is licensed under the GNU General Public License, version 3 (GPLv3).
