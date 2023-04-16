@@ -40,15 +40,15 @@ export default function UserView() {
     <div>
       <div className="flex justify-center">
         <input
-          className="flex modal-input w-4/12 border-2 rounded-[20px] p-2 border-primary"
+          className="flex modal-input w-4/12 border-2 rounded-[20px] p-2 border-primary bg-primary-contrast"
           type="text"
           placeholder="Søk"
           onChange={searchForUsers}
         ></input>
       </div>
-      <div className="ml-10 mt-7 flex flex-col items-center">
+      <div className=" mt-5 flex flex-col items-center">
         <div className="flex flex-col items-center w-full">
-          <div className="grid-cols-users grid col-span-6 w-full place-item-center gap-x-2 gap-y-3">
+          <div className="grid-cols-users grid col-span-6 w-full place-item-center text-center gap-x-2 gap-y-3">
             {tableHeaders.map((header) => (
               <p key={header} className="flex-1 font-bold mb-2 mr-10">
                 {header}
