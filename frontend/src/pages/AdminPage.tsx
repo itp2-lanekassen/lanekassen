@@ -31,42 +31,82 @@ export default function AdminPage() {
 
   return (
     <PageLayout title="Admin">
-      <div className="flex w-11/12 mt-5">
+      <div className="flex flex-col md:flex-row w-11/12 mt-5">
         <TabContext value={value.toString()}>
-          <Tabs
-            value={value}
-            onChange={(event, newValue) => setValue(newValue)}
-            orientation="vertical"
-            variant="scrollable"
-            aria-label="My tabs"
-            TabIndicatorProps={{ style: { backgroundColor: '#590689' } }} // primary-light
-          >
-            {tabLabels.map((label, index) => (
-              <Tab
-                key={index}
-                label={label}
-                sx={{
-                  backgroundColor: 'primary-contrast',
-                  color: 'black',
-                  borderTopLeftRadius: '10px',
-                  borderBottomLeftRadius: '10px',
-                  '&:hover': {
-                    backgroundColor: '#F6F0F9', // primary-lighter
-                    color: '#410464', // primary
+          <div className="hidden md:block">
+            <Tabs
+              value={value}
+              onChange={(event, newValue) => setValue(newValue)}
+              orientation="vertical"
+              variant="scrollable"
+              aria-label="My tabs"
+              TabIndicatorProps={{ style: { backgroundColor: '#590689' } }} // primary-light
+            >
+              {tabLabels.map((label, index) => (
+                <Tab
+                  key={index}
+                  label={label}
+                  sx={{
+                    backgroundColor: 'primary-contrast',
+                    color: 'black',
                     borderTopLeftRadius: '10px',
-                    borderBottomLeftRadius: '10px'
-                  },
-                  '&.Mui-selected': {
-                    backgroundColor: '#590689', // primary-light
-                    color: '#FAFAFA', // grey-lightest
+                    borderBottomLeftRadius: '10px',
+                    '&:hover': {
+                      backgroundColor: '#F6F0F9', // primary-lighter
+                      color: '#410464', // primary
+                      borderTopLeftRadius: '10px',
+                      borderBottomLeftRadius: '10px'
+                    },
+                    '&.Mui-selected': {
+                      backgroundColor: '#590689', // primary-light
+                      color: '#FAFAFA', // grey-lightest
+                      borderTopLeftRadius: '10px',
+                      borderBottomLeftRadius: '10px'
+                    }
+                  }}
+                />
+              ))}
+            </Tabs>
+          </div>
+          <div className="block md:hidden">
+            <Tabs
+              value={value}
+              onChange={(event, newValue) => setValue(newValue)}
+              orientation="horizontal"
+              variant="scrollable"
+              aria-label="My tabs"
+              TabIndicatorProps={{ style: { backgroundColor: '#590689' } }} // primary-light
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap'
+              }}
+            >
+              {tabLabels.map((label, index) => (
+                <Tab
+                  key={index}
+                  label={label}
+                  sx={{
+                    backgroundColor: 'primary-contrast',
+                    color: 'black',
                     borderTopLeftRadius: '10px',
-                    borderBottomLeftRadius: '10px'
-                  }
-                }}
-              />
-            ))}
-          </Tabs>
-
+                    borderBottomLeftRadius: '10px',
+                    '&:hover': {
+                      backgroundColor: '#F6F0F9', // primary-lighter
+                      color: '#410464', // primary
+                      borderTopLeftRadius: '10px',
+                      borderBottomLeftRadius: '10px'
+                    },
+                    '&.Mui-selected': {
+                      backgroundColor: '#590689', // primary-light
+                      color: '#FAFAFA', // grey-lightest
+                      borderTopLeftRadius: '10px',
+                      borderBottomLeftRadius: '10px'
+                    }
+                  }}
+                />
+              ))}
+            </Tabs>
+          </div>{' '}
           <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto h-3/5-screen">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
