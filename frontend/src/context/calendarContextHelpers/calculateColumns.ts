@@ -36,10 +36,7 @@ export default function calculateColumns(fromDate: string, toDate: string) {
       // push the date in locale format (DD.MM or MM/DD) to the current week
       cols.days.push({
         value: currentDay.toISOString(),
-        display: currentDay.toDate().toLocaleDateString(undefined, {
-          month: 'numeric',
-          day: 'numeric'
-        }),
+        display: currentDay.format('D'),
         week: Number(currentDay.format('W'))
       });
     }

@@ -31,7 +31,7 @@ export default function FilterComponents() {
   const handleChange = (key: keyof UserFilter, value?: number[]) => {
     if (key === 'departments') {
       return setFilter({
-        departments: value || [],
+        departments: value && value[0] !== -1 ? value : [],
         sections: [],
         subjectFields: [],
         roles: [],
@@ -83,7 +83,7 @@ export default function FilterComponents() {
         <Dropdown
           placeholder="Avdeling"
           options={[
-            { label: 'Alle avdelinger', value: undefined },
+            { label: 'Alle avdelinger', value: -1 },
             ...departments.map((d) => ({ label: d.name, value: d.departmentId }))
           ]}
           onChange={(val) => handleChange('departments', val ? [val] : undefined)}
