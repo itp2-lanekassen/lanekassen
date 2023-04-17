@@ -94,7 +94,7 @@ const PageLayout = ({ title, children }: PageLayoutProps) => {
       >
         <div
           style={{ right: sideMenuVisibility }}
-          className={`bg-primary flex flex-col items-center gap-[2vh] h-full pt-[15vh] text-xs sm:hidden fixed top-0 w-[40vw] duration-300 z-10 overflow-hidden`}
+          className={`bg-primary flex flex-col items-center gap-[2vh] h-full pt-[15vh] text-xs sm:hidden fixed top-0 w-[40vw] duration-300 z-50 overflow-hidden`}
         >
           <button
             onClick={() => toggleSideMenu()}
