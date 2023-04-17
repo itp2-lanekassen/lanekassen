@@ -121,7 +121,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       type: updatedAbsenceType,
       userId: currentUser.userId,
       user: currentUser,
-      isApproved: isApproved,
+      isApproved: currentUser.admin ? isApproved : false,
       comment: updatedComment
     });
     //redirect to AddAbsenceView

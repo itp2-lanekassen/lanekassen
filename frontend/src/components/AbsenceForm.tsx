@@ -199,7 +199,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
         startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
         endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
         comment: formValues.comment,
-        isApproved,
+        isApproved: currentUser.admin ? isApproved : false,
         absenceTypeId: formValues.absenceType,
         userId: user.userId
       });
@@ -226,7 +226,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
           type: updatedAbsenceType,
           userId: user.userId,
           user: user,
-          isApproved,
+          isApproved: currentUser.admin ? isApproved : false,
           comment: updatedComment
         });
       }
