@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useNavigate } from 'react-router-dom';
+import m from 'moment';
 import { useUserContext } from '@/context/UserContext';
 import { useCalendarContext } from '@/context/CalendarContext';
 import PageLayout from '@/components/PageLayout';
@@ -9,11 +9,9 @@ import CalendarHeader from '@/components/calendar/CalendarHeader';
 import FilterComponents from '@/components/calendar/CalendarFilter';
 
 const CalendarPage = () => {
-  const navigate = useNavigate();
-
   const currentUser = useUserContext();
 
-  const { queryResult } = useCalendarContext();
+  const { queryResult, setDates } = useCalendarContext();
 
   const { ref } = useInView({
     rootMargin: '20%',
@@ -26,8 +24,17 @@ const CalendarPage = () => {
     <PageLayout title="Kalender">
       <FilterComponents />
 
-      <div className="w-full grid grid-cols-calendar-columns place-items-center gap-0.5">
-        <div className="row-start-1 row-span-3 flex flex-col items-center gap-1 self-start"></div>
+      <div className="w-full grid grid-cols-calendar-columns place-items-center gap-0.5 overflow-x-auto">
+        <div className="row-start-1 row-span-3 w-full">
+          <button
+            onClick={() =>
+              setDates((dates) => ({ ...dates, from: m().startOf('isoWeek').toISOString() }))
+            }
+            className="rounded-full w-full bg-primary-light px-3 py-1 text-sm text-white whitespace-nowrap text-center hover:text-primary-light hover:bg-white border-solid border-1"
+          >
+            Denne uken
+          </button>
+        </div>
 
         <CalendarHeader />
 

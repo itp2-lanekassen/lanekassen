@@ -1,25 +1,37 @@
 import moment from 'moment';
-import classNames from 'classnames';
 import CloseIcon from '@mui/icons-material/Close';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { UserFilter } from '@/types/types';
 import Dropdown from '../Dropdown';
-import DropdownMultiSelect from '../DropdownMultiSelect';
-import { useUserContext } from '@/context/UserContext';
-import { useEffect } from 'react';
+import { startTransition } from 'react';
+import CustomMultiDropdown from './CustomMultiDropdown';
 import { DateField } from '../DateField';
-import { FormValues, setMax, setMin } from '../AbsenceForm';
+
+interface CalendarFilterItemProps {
+  name?: string;
+  onClick: () => void;
+}
+
+const CalendarFilterItem = ({ name, onClick }: CalendarFilterItemProps) => {
+  return (
+    <div className="rounded-full bg-primary-light text-white py-1 px-2 flex justify-center items-center gap-1">
+      <p className="max-w-[150px] whitespace-nowrap overflow-hidden overflow-ellipsis">{name}</p>
+      <button className="text-sm hover:bg-primary rounded-full" onClick={onClick}>
+        <CloseIcon />
+      </button>
+    </div>
+  );
+};
 
 export default function FilterComponents() {
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
-  const { fromDate, setFromDate, toDate, setToDate, filter, setFilter } = useCalendarContext();
-  const currentUser = useUserContext();
+  const { dates, setDates, filter, setFilter } = useCalendarContext();
 
-  const handleChange = (key: keyof UserFilter, value: number[]) => {
-    if (key === 'departments' && value.length) {
+  const handleChange = (key: keyof UserFilter, value?: number[]) => {
+    if (key === 'departments') {
       return setFilter({
-        departments: value,
+        departments: value && value[0] !== -1 ? value : [],
         sections: [],
         subjectFields: [],
         roles: [],
@@ -27,22 +39,12 @@ export default function FilterComponents() {
       });
     }
 
-    setFilter((oldFilter) => ({
-      ...oldFilter,
-      [key]: value
-    }));
-  };
-
-  const handleDateChange = (
-    date: Date | null,
-    event: React.SyntheticEvent<any, Event> | undefined,
-    name: string
-  ) => {
-    if (date && name === 'fromDate') {
-      setFromDate(moment(date).toISOString());
-    } else if (date && name === 'toDate') {
-      setToDate(moment(date).toISOString());
-    }
+    startTransition(() => {
+      setFilter((oldFilter) => ({
+        ...oldFilter,
+        [key]: value
+      }));
+    });
   };
 
   const minFromDate = moment().subtract(30, 'days').toDate();
@@ -55,59 +57,64 @@ export default function FilterComponents() {
           Fra:
         </label>
         <DateField
-          handleInputChange={handleDateChange}
+          handleInputChange={(date) =>
+            setDates((d) => ({ ...d, from: moment(date).toISOString() }))
+          }
           min={minFromDate}
-          value={fromDate ? new Date(fromDate) : undefined}
+          value={new Date(dates.from)}
           name="fromDate"
           customClass="h-10"
-        ></DateField>
+        />
       </div>
 
-      <div className="col-start-1 row-start-2 w-10/12 justify-self-center">
-        <label htmlFor="fromDate" className="body-bold text-sm text-primary">
+      <div className="col-start-1 flex flex-col row-start-2 w-10/12 justify-self-center">
+        <label htmlFor="toDate" className="body-bold text-sm">
           Til:
         </label>
         <DateField
-          handleInputChange={handleDateChange}
-          min={fromDate ? new Date(fromDate) : undefined}
-          value={toDate ? new Date(toDate) : undefined}
+          handleInputChange={(date) => setDates((d) => ({ ...d, to: moment(date).toISOString() }))}
+          value={new Date(dates.to)}
           name="toDate"
           customClass="h-10"
-        ></DateField>
+        />
       </div>
 
-      <div className="flex items-end gap-4">
+      <div className="flex gap-2 self-end">
         <Dropdown
           placeholder="Avdeling"
-          options={departments.map((d) => ({ label: d.name, value: d.departmentId }))}
-          onChange={(val) => handleChange('departments', [val])}
+          options={[
+            { label: 'Alle avdelinger', value: -1 },
+            ...departments.map((d) => ({ label: d.name, value: d.departmentId }))
+          ]}
+          onChange={(val) => handleChange('departments', val ? [val] : undefined)}
           value={filter.departments[0]}
           isDisabled={false}
         />
-        <DropdownMultiSelect
+
+        <CustomMultiDropdown
           placeholder="Seksjon"
-          options={(sections || []).map((s) => ({ label: s.name, value: s.sectionId }))}
+          options={sections.map((s) => ({ label: s.name, value: s.sectionId }))}
           onChange={(val) => handleChange('sections', val)}
           value={filter.sections}
         />
-        <DropdownMultiSelect
+        <CustomMultiDropdown
           placeholder="Fagområde"
-          options={(subjectFields || []).map((s) => ({
+          options={subjectFields.map((s) => ({
             label: s.name,
             value: s.subjectFieldId
           }))}
           onChange={(val) => handleChange('subjectFields', val)}
           value={filter.subjectFields}
         />
-        <DropdownMultiSelect
+        <CustomMultiDropdown
           placeholder="Team"
-          options={(teams || []).map((t) => ({ label: t.name, value: t.teamId }))}
+          options={teams.map((t) => ({ label: t.name, value: t.teamId }))}
           onChange={(val) => handleChange('teams', val)}
           value={filter.teams}
         />
-        <DropdownMultiSelect
+        <CustomMultiDropdown
           placeholder="Rolle"
-          options={(roles || []).map((r) => ({ label: r.name, value: r.roleId }))}
+          options={roles.map((r) => ({ label: r.name, value: r.roleId }))}
           onChange={(val) => handleChange('roles', val)}
           value={filter.roles}
         />
@@ -127,108 +134,58 @@ export default function FilterComponents() {
         </button>
       </div>
 
-      <div className="flex gap-2 w-full">
-        {filter.departments.length > 0 && filter.departments[0] !== -1 && (
-          <div className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2">
-            <p className="my-1 ">
-              {departments.find((d) => d.departmentId === filter.departments[0])?.name}
-            </p>
-            <button
-              className="text-primary-contrast text-sm hover:underline focus:outline-none"
-              onClick={() => handleChange('departments', [])}
-            >
-              <CloseIcon />
-            </button>
-          </div>
-        )}
+      <div className="flex gap-2 self-end flex-wrap">
+        {filter.sections.map((sectionId) => (
+          <CalendarFilterItem
+            key={sectionId}
+            name={sections.find((s) => s.sectionId === sectionId)?.name}
+            onClick={() =>
+              handleChange(
+                'sections',
+                filter.sections.filter((s) => s !== sectionId)
+              )
+            }
+          />
+        ))}
 
-        <div className="flex flex-wrap space-x-2">
-          {filter.sections.map((sectionId) => (
-            <div
-              key={sectionId}
-              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
-            >
-              <p className="my-1">{sections?.find((s) => s.sectionId === sectionId)?.name}</p>
-              <button
-                className="text-primary-contrast text-sm hover:underline focus:outline-none"
-                onClick={() =>
-                  handleChange(
-                    'sections',
-                    filter.sections.filter((s) => s !== sectionId)
-                  )
-                }
-              >
-                <CloseIcon />
-              </button>
-            </div>
-          ))}
-        </div>
+        {filter.subjectFields.map((sf) => (
+          <CalendarFilterItem
+            key={sf}
+            name={subjectFields.find((s) => s.subjectFieldId === sf)?.name}
+            onClick={() =>
+              handleChange(
+                'subjectFields',
+                filter.subjectFields.filter((f) => f !== sf)
+              )
+            }
+          />
+        ))}
 
-        <div className="flex flex-wrap space-x-2">
-          {filter.subjectFields.map((sf) => (
-            <div
-              key={sf}
-              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
-            >
-              <p className="my-1">{subjectFields?.find((s) => s.subjectFieldId === sf)?.name}</p>
-              <button
-                className="text-primary-contrast text-sm hover:underline focus:outline-none"
-                onClick={() =>
-                  handleChange(
-                    'subjectFields',
-                    filter.subjectFields.filter((f) => f !== sf)
-                  )
-                }
-              >
-                <CloseIcon />
-              </button>
-            </div>
-          ))}
-        </div>
+        {filter.teams.map((t) => (
+          <CalendarFilterItem
+            key={t}
+            name={teams.find((tm) => tm.teamId === t)?.name}
+            onClick={() =>
+              handleChange(
+                'teams',
+                filter.teams.filter((f) => f !== t)
+              )
+            }
+          />
+        ))}
 
-        <div className="flex flex-wrap space-x-2">
-          {filter.teams.map((t) => (
-            <div
-              key={t}
-              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
-            >
-              <p className="my-1">{teams?.find((tm) => tm.teamId === t)?.name}</p>
-              <button
-                className="text-primary-contrast text-sm hover:underline focus:outline-none"
-                onClick={() =>
-                  handleChange(
-                    'teams',
-                    filter.teams.filter((f) => f !== t)
-                  )
-                }
-              >
-                <CloseIcon />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex flex-wrap space-x-2">
-          {filter.roles.map((r) => (
-            <div
-              key={r}
-              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
-            >
-              <p className="my-1 mr2 ">{roles?.find((rl) => rl.roleId === r)?.name}</p>
-              <button
-                className="text-primary-contrast hover:underline focus:outline-none"
-                onClick={() =>
-                  handleChange(
-                    'roles',
-                    filter.roles.filter((f) => f !== r)
-                  )
-                }
-              >
-                <CloseIcon />
-              </button>
-            </div>
-          ))}
-        </div>
+        {filter.roles.map((r) => (
+          <CalendarFilterItem
+            key={r}
+            name={roles.find((rl) => rl.roleId === r)?.name}
+            onClick={() =>
+              handleChange(
+                'roles',
+                filter.roles.filter((f) => f !== r)
+              )
+            }
+          />
+        ))}
       </div>
     </div>
   );

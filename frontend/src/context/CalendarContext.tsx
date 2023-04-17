@@ -7,20 +7,25 @@ import {
   useState,
   SetStateAction,
   Dispatch,
-  useEffect
+  useEffect,
+  startTransition
 } from 'react';
 import { filterUsers } from '@/API/UserAPI';
 import { Holiday, PageResponse, User, UserFilter } from '@/types/types';
-import { useUserContext } from './UserContext';
 import { getHolidaysByYear } from '@/API/HolidaysAPI';
+import { useUserContext } from './UserContext';
+import calculateColumns, { Columns } from './calendarContextHelpers/calculateColumns';
+import useViewport from './calendarContextHelpers/useViewport';
+import getNumberOfWeeks from './calendarContextHelpers/getNumberOfWeeks';
 
-type Columns = Record<string, { display: string; value: string }[]>;
+interface Dates {
+  from: string;
+  to: string;
+}
 
 interface CalendarContextType {
-  fromDate: string;
-  setFromDate: Dispatch<SetStateAction<string>>;
-  toDate: string;
-  setToDate: Dispatch<SetStateAction<string>>;
+  dates: Dates;
+  setDates: Dispatch<SetStateAction<Dates>>;
   queryResult: UseInfiniteQueryResult<PageResponse<User>, unknown>;
   columns: Columns;
   holidays?: Holiday[];
@@ -41,60 +46,55 @@ export const useCalendarContext = () => {
 const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
   const currentUser = useUserContext();
 
-  const [fromDate, setFromDate] = useState(m().startOf('isoWeek').toISOString());
-  const [toDate, setToDate] = useState(m().add(3, 'w').endOf('isoWeek').toISOString());
+  const [numberOfWeeks, setNumberOfWeeks] = useState(getNumberOfWeeks(window.innerWidth));
+
+  useViewport({
+    onWidthChange: (w) => setNumberOfWeeks(getNumberOfWeeks(w))
+  });
+
+  const [dates, setDates] = useState({
+    from: m().startOf('isoWeek').toISOString(),
+    to: m().startOf('isoWeek').add(numberOfWeeks, 'w').subtract(1, 'd').toISOString()
+  });
+
+  useEffect(() => {
+    startTransition(() => {
+      setDates((d) => ({
+        ...d,
+        to: m(d.from).add(numberOfWeeks, 'w').subtract(1, 'd').toISOString()
+      }));
+    });
+  }, [numberOfWeeks]);
 
   const { data: holidays } = useQuery(
-    ['holidays', { year: m(fromDate).year() }],
-    async () => (await getHolidaysByYear(m(fromDate).year())).data.data
+    ['holidays', { year: m(dates.from).year() }],
+    async () => (await getHolidaysByYear(m(dates.from).year())).data.data
   );
 
-  const [columns, setColumns] = useState<Columns>({});
+  const [columns, setColumns] = useState<Columns>({ weeks: {}, months: {}, days: [] });
 
   useEffect(() => {
     // Set toDate when fromDate is after and vice-versa
     // return when we need to update to prevent early rerender
-    if (m(fromDate).isSameOrAfter(m(toDate))) {
-      return setToDate(m(fromDate).add(4, 'w').subtract(1, 'd').toISOString());
+    if (m(dates.from).isSameOrAfter(m(dates.to))) {
+      return setDates((d) => ({
+        ...d,
+        to: m(d.from).add(numberOfWeeks, 'w').subtract(1, 'd').toISOString()
+      }));
     }
 
-    if (m(toDate).isSameOrBefore(m(fromDate))) {
-      return setFromDate(m(toDate).subtract(4, 'w').add(1, 'd').toISOString());
+    if (m(dates.to).isSameOrBefore(m(dates.from))) {
+      return setDates((d) => ({
+        ...d,
+        from: m(dates.to).subtract(numberOfWeeks, 'w').add(1, 'd').toISOString()
+      }));
     }
 
-    // ## Calculate calendar columns
-
-    // make copies of current from and to date
-    const currentDay = m(fromDate);
-    const lastDay = m(toDate);
-
-    // columns is an object where key is 'Uke xx' and value is an array of days
-    const cols: Columns = {};
-
-    while (currentDay.isSameOrBefore(lastDay)) {
-      // Format date to isoWeek with the text 'Uke' in front
-      const key = currentDay.format('[Uke] WW');
-
-      // only include weekdays
-      if (!currentDay.format('ddd').match(/Sat|Sun/)) {
-        if (!cols[key]) cols[key] = [];
-
-        // push the date in locale format (DD.MM or MM/DD) to the current week
-        cols[key].push({
-          display: currentDay.toDate().toLocaleDateString(undefined, {
-            month: 'numeric',
-            day: 'numeric'
-          }),
-          value: currentDay.toISOString()
-        });
-      }
-
-      // advance day by one
-      currentDay.add(1, 'd');
-    }
-
-    setColumns(cols);
-  }, [fromDate, toDate]);
+    startTransition(() => {
+      // ## Calculate calendar columns
+      setColumns(calculateColumns(dates.from, dates.to));
+    });
+  }, [dates, numberOfWeeks]);
 
   const [filter, setFilter] = useState<UserFilter>({
     departments: [currentUser.departmentId],
@@ -126,10 +126,8 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
   return (
     <CalendarContext.Provider
       value={{
-        fromDate,
-        setFromDate,
-        toDate,
-        setToDate,
+        dates,
+        setDates,
         queryResult,
         columns,
         holidays,

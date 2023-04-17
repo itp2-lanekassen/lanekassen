@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
-import { Fragment } from 'react';
 import { getAbsencesByUserId } from '@/API/AbsenceAPI';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { User } from '@/types/types';
@@ -13,10 +12,10 @@ interface CalendarRowProps {
 }
 
 const CalendarRow = ({ user, isCurrentUser = false }: CalendarRowProps) => {
-  const { fromDate, toDate, columns } = useCalendarContext();
+  const { dates, columns } = useCalendarContext();
   const { data: absences } = useQuery(
-    ['absences', { userId: user.userId, fromDate, toDate }],
-    async () => (await getAbsencesByUserId(user.userId, fromDate, toDate)).data
+    ['absences', { userId: user.userId, dates }],
+    async () => (await getAbsencesByUserId(user.userId, dates.from, dates.to)).data
   );
 
   const absenceOnDate = (date: string) => {
@@ -29,20 +28,16 @@ const CalendarRow = ({ user, isCurrentUser = false }: CalendarRowProps) => {
     <>
       <UserDropdown user={user} isCurrentUser={isCurrentUser} />
 
-      {Object.entries(columns).map(([week, days], idx) => (
-        <Fragment key={`${user.userId}-${week}`}>
-          {days.map((date) => (
-            <CalendarCell
-              key={`${user.userId}-${date.value}`}
-              user={user}
-              date={date.value}
-              absence={absenceOnDate(date.value)}
-              isCurrentUser={isCurrentUser}
-              defaultColor={idx % 2 ? 'bg-card-two' : 'bg-card-one'}
-              hoverColor={idx % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark'}
-            />
-          ))}
-        </Fragment>
+      {columns.days.map((date) => (
+        <CalendarCell
+          key={`${user.userId}-${date.value}`}
+          user={user}
+          date={date.value}
+          absence={absenceOnDate(date.value)}
+          isCurrentUser={isCurrentUser}
+          defaultColor={date.week % 2 ? 'bg-card-two' : 'bg-card-one'}
+          hoverColor={date.week % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark'}
+        />
       ))}
     </>
   );

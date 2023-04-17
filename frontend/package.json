@@ -21,7 +21,6 @@
     "@azure/msal-react": "^1.5.3",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@esbuild/darwin-arm64": "^0.17.12",
     "@material-tailwind/react": "^1.4.2",
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.123",
