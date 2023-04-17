@@ -36,8 +36,8 @@ export default function AbsenceTypeRow(props: {
   return (
     <>
       <p className="flex-1 text-center">{props.absenceType.name}</p>
-      <p className="flex-1 text-center">{props.absenceType.code}</p>
-      <p className="flex-1 text-center">{props.absenceType.colorCode}</p>
+      <p className="flex-1 text-center hidden md:block">{props.absenceType.code}</p>
+      <p className="flex-1 text-center hidden md:block">{props.absenceType.colorCode}</p>
       <CalendarCellDisplay code={props.absenceType.code} colorCode={props.absenceType.colorCode} />
       <EditButton onClick={handleEdit} />
       <DeleteButton onClick={handleDelete} />

@@ -79,8 +79,11 @@ export default function AdminPage() {
               ))}
             </Tabs>
           </div>
-          <div className="block md:hidden  mb-5 flex justify-center">
+          <div className="block md:hidden mb-5 flex justify-center">
             <div className="w-4/5">
+              <label htmlFor="fromDate" className="body-bold text-sm text-primary">
+                Velg en fane:
+              </label>
               <Dropdown
                 options={dropdownOptions}
                 value={value}
