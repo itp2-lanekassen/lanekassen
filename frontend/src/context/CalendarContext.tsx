@@ -26,6 +26,7 @@ interface Dates {
 interface CalendarContextType {
   dates: Dates;
   setDates: Dispatch<SetStateAction<Dates>>;
+  updateFromDate: (date: string) => void;
   queryResult: UseInfiniteQueryResult<PageResponse<User>, unknown>;
   columns: Columns;
   holidays?: Holiday[];
@@ -57,6 +58,15 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
     to: m().startOf('isoWeek').add(numberOfWeeks, 'w').subtract(1, 'd').toISOString()
   });
 
+  const updateFromDate = (newDate: string) => {
+    const daysDiff = Math.abs(m(dates.from).diff(m(dates.to), 'd'));
+
+    setDates({
+      from: newDate,
+      to: m(newDate).add(daysDiff, 'd').toISOString()
+    });
+  };
+
   useEffect(() => {
     startTransition(() => {
       setDates((d) => ({
@@ -74,27 +84,11 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
   const [columns, setColumns] = useState<Columns>({ weeks: {}, months: {}, days: [] });
 
   useEffect(() => {
-    // Set toDate when fromDate is after and vice-versa
-    // return when we need to update to prevent early rerender
-    if (m(dates.from).isSameOrAfter(m(dates.to))) {
-      return setDates((d) => ({
-        ...d,
-        to: m(d.from).add(numberOfWeeks, 'w').subtract(1, 'd').toISOString()
-      }));
-    }
-
-    if (m(dates.to).isSameOrBefore(m(dates.from))) {
-      return setDates((d) => ({
-        ...d,
-        from: m(dates.to).subtract(numberOfWeeks, 'w').add(1, 'd').toISOString()
-      }));
-    }
-
     startTransition(() => {
       // ## Calculate calendar columns
       setColumns(calculateColumns(dates.from, dates.to));
     });
-  }, [dates, numberOfWeeks]);
+  }, [dates]);
 
   const [filter, setFilter] = useState<UserFilter>({
     departments: [currentUser.departmentId],
@@ -128,6 +122,7 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
       value={{
         dates,
         setDates,
+        updateFromDate,
         queryResult,
         columns,
         holidays,

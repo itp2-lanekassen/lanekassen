@@ -72,7 +72,7 @@ const CustomMultiDropdown = <T extends number | string>({
         className={classNames(
           open ? 'block' : 'hidden',
           'absolute bg-grey-lightest z-50 mt-2 overflow-hidden',
-          'rounded-2xl border-primary-light drop-shadow-2xl',
+          'rounded-2xl drop-shadow-2xl',
           'w-full min-w-max'
         )}
       >

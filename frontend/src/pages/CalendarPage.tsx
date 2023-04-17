@@ -11,7 +11,7 @@ import FilterComponents from '@/components/calendar/CalendarFilter';
 const CalendarPage = () => {
   const currentUser = useUserContext();
 
-  const { queryResult, setDates } = useCalendarContext();
+  const { queryResult, updateFromDate } = useCalendarContext();
 
   const { ref } = useInView({
     rootMargin: '20%',
@@ -27,9 +27,7 @@ const CalendarPage = () => {
       <div className="w-full grid grid-cols-calendar-columns place-items-center gap-0.5 overflow-x-auto">
         <div className="row-start-1 row-span-3 w-full">
           <button
-            onClick={() =>
-              setDates((dates) => ({ ...dates, from: m().startOf('isoWeek').toISOString() }))
-            }
+            onClick={() => updateFromDate(m().startOf('isoWeek').toISOString())}
             className="rounded-full w-full bg-primary-light px-3 py-1 text-sm text-white whitespace-nowrap text-center hover:text-primary-light hover:bg-white border-solid border-1"
           >
             Denne uken
