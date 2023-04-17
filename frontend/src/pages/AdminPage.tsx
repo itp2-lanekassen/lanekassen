@@ -4,7 +4,6 @@ import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SubmitButton from '../components/SubmitButton';
 import { useUserContext } from '../context/UserContext';
 import PageLayout from '@/components/PageLayout';
 import SectionView from '@/components/AdminPage/SectionView';
@@ -42,7 +41,7 @@ export default function AdminPage() {
 
   return (
     <PageLayout title="Admin">
-      <div className="flex flex-col md:flex-row w-11/12 mt-5">
+      <div className="flex flex-col justify-center md:flex-row md:w-11/12 mt-5 pr-1 pl-1">
         <TabContext value={value.toString()}>
           <div className="hidden md:block">
             <Tabs
@@ -92,8 +91,8 @@ export default function AdminPage() {
                 className="content-center"
               />
             </div>
-          </div>{' '}
-          <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto h-3/5-screen">
+          </div>
+          <div className="w-full border-1 border-primary-light rounded-r-xl rounded-l-xl md:rounded-l-none overflow-y-auto h-3/5-screen">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
                 {label === 'Brukere' && (
