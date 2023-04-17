@@ -30,6 +30,7 @@ module.exports = {
         sections: 'repeat(2, 1fr) repeat(2, min-content)',
         teams: 'repeat(1, 1fr) repeat(1, min-content)',
         'absence-types': 'repeat(4, 1fr) repeat(2, min-content)',
+        'absence-types-small': 'repeat(2, 1fr) repeat(2, min-content)',
         users: 'repeat(2, min-content) repeat(4, 1fr) repeat(1, min-content)'
       },
       screens: {
@@ -124,30 +125,6 @@ module.exports = {
     fontFamily: {
       sans: ['Roboto', ...defaultTheme.fontFamily.sans],
       header: ['Rubik', ...defaultTheme.fontFamily.sans]
-    }
-  },
-  extend: {
-    scale: {
-      115: '1.15'
-    },
-    gridTemplateColumns: {
-      calendar: '15% repeat(20, 1fr)',
-      'my-page': 'max-content auto',
-      sections: 'repeat(2, 1fr) repeat(2, min-content)',
-      'absence-types': 'repeat(4, 1fr) repeat(2, min-content)',
-      'absence-types-small': 'repeat(2, 1fr) repeat(2, min-content)'
-    },
-    gridColumn: {
-      'span-20': 'span 20  / span 20'
-    },
-    screens: {
-      mobile: '320px',
-      tablet: '481px'
-    },
-    height: {
-      '1/5-screen': '20vh',
-      '1/4-screen': '25vh',
-      '3/5-screen': '60vh'
     }
   },
   colors: {
