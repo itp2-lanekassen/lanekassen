@@ -3,7 +3,9 @@ import { User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import UserRow from './UserRow';
+
 const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon', ''];
+const tableHeadersSmall = ['Fornavn', 'Etternavn', 'Avdeling', ''];
 
 export default function UserView() {
   const [matchingUsers, setMatchingUsers] = useState<User[]>();
@@ -48,13 +50,18 @@ export default function UserView() {
       </div>
       <div className=" mt-5 flex flex-col items-center">
         <div className="flex flex-col items-center w-full">
-          <div className="grid-cols-users grid col-span-6 w-full place-item-center text-center gap-x-2 gap-y-3">
-            {tableHeaders.map((header) => (
-              <p key={header} className="ml-4 flex-1 font-bold mb-2 mr-10">
+          <div className="grid-cols-users-small md:grid-cols-users grid col-span-3 md:col-span-6 w-full place-item-center text-center gap-x-2 gap-y-3">
+            {tableHeadersSmall.map((header) => (
+              <p key={header} className={`ml-4 flex-1 font-bold mb-2 mr-10 md:hidden`}>
                 {header}
               </p>
             ))}
-            <div className="col-span-8 border-b-2 w-full" />
+            {tableHeaders.map((header) => (
+              <p key={header} className={`ml-4 flex-1 font-bold mb-2 mr-10 hidden md:block`}>
+                {header}
+              </p>
+            ))}
+            <div className="col-span-5 md:col-span-8 border-b-2 w-full" />
             {matchingUsers?.map((user) => (
               <UserRow key={user.azureId} user={user} setView={setView} />
             ))}

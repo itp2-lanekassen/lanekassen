@@ -31,7 +31,8 @@ module.exports = {
         teams: 'repeat(1, 1fr) repeat(1, min-content)',
         'absence-types': 'repeat(4, 1fr) repeat(2, min-content)',
         'absence-types-small': 'repeat(2, 1fr) repeat(2, min-content)',
-        users: 'repeat(2, min-content) repeat(4, 1fr) repeat(1, min-content)'
+        'users': 'repeat(2, min-content) repeat(4, 1fr) repeat(1, min-content)',
+        'users-small': 'repeat(2, min-content) repeat(1, 1fr) repeat(1, min-content)'
       },
       screens: {
         mobile: '400px',
