@@ -1,11 +1,12 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteAbsenceType } from '@/API/AbsenceTypeAPI';
-import { Button } from '@mui/material';
-import { CalendarCellDisplay } from './CalendarCellDisplay';
 import { AbsenceType } from '@/types/types';
-import UpdateAbsenceTypeComponent from './UpdateAbsencetypeComponent';
-import EditButton from './EditButton';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import ConfirmationBox from '../ConfirmationBox';
+import { CalendarCellDisplay } from './CalendarCellDisplay';
 import DeleteButton from './DeleteButton';
+import EditButton from './EditButton';
+import UpdateAbsenceTypeComponent from './UpdateAbsencetypeComponent';
 
 export default function AbsenceTypeRow(props: {
   absenceType: AbsenceType;
@@ -21,10 +22,7 @@ export default function AbsenceTypeRow(props: {
   });
 
   const handleDelete = async () => {
-    const confirmDelete = window.confirm('Er du sikker på at du vil slette denne fraværstypen?');
-    if (confirmDelete) {
-      deleteAbsenceTypeFromDatabase(props.absenceType.absenceTypeId);
-    }
+    deleteAbsenceTypeFromDatabase(props.absenceType.absenceTypeId);
   };
 
   const handleEdit = async () => {
@@ -33,14 +31,31 @@ export default function AbsenceTypeRow(props: {
     );
   };
 
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const handleDeleteClick = (result: boolean) => {
+    if (result) {
+      handleDelete();
+    }
+    setOpenDialog(false);
+  };
+
   return (
     <>
+      {openDialog && (
+        <div className="flex justify-between items-center">
+          <ConfirmationBox
+            confirmationText="Er du sikker på at du vil slette fraværstypen?"
+            isOpen={openDialog}
+            onConfirm={handleDeleteClick}
+          />
+        </div>
+      )}
       <p className="flex-1 text-center">{props.absenceType.name}</p>
       <p className="flex-1 text-center">{props.absenceType.code}</p>
       <p className="flex-1 text-center">{props.absenceType.colorCode}</p>
       <CalendarCellDisplay code={props.absenceType.code} colorCode={props.absenceType.colorCode} />
       <EditButton onClick={handleEdit} />
-      <DeleteButton onClick={handleDelete} />
+      <DeleteButton onClick={() => setOpenDialog(true)} />
     </>
   );
 }

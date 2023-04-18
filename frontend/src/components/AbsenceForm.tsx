@@ -186,6 +186,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
     });
   };
 
+  //TODO: Why is this function needed? Why not use deleteAbsenceMutation directly?
   const handleDeleteAbsence = async () => {
     if (absenceId) {
       deleteAbsenceMutation(absenceId);
@@ -237,6 +238,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
     onClose();
   };
 
+  // Function to open ConfirmationBox. Takes the result from it as a parameter
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const handleDeleteClick = (result: boolean) => {
     if (result) {
@@ -252,7 +254,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
         <h2 className="modal-title text-center ">
           {user.firstName} {user.lastName}
         </h2>
-
+        {/* Dialog box. Opens when OpenDialog = true */}
         {openDialog && (
           <div className="flex justify-between items-center">
             <ConfirmationBox
@@ -314,6 +316,15 @@ const AbsenceForm: React.FC<ModalProps> = ({
               <DeleteOutlineIcon
                 onClick={() => setOpenDialog(true)}
                 className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
+                sx={{
+                  color: '#410464',
+                  height: '30px',
+                  mr: '10px',
+                  '&:hover': {
+                    color: '#26023B',
+                    scale: '1.1'
+                  }
+                }}
               ></DeleteOutlineIcon>
             )}
           </div>

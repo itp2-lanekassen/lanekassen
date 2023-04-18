@@ -1,13 +1,15 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useState } from 'react';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { deleteAbsence } from '../API/AbsenceAPI';
-import { Absence } from '../types/types';
-import { darken } from '@mui/material/styles';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useUserContext } from '@/context/UserContext';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { darken } from '@mui/material/styles';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { deleteAbsence } from '../API/AbsenceAPI';
+import { Absence } from '../types/types';
+import ConfirmationBox from './ConfirmationBox';
+
 /**
  * Renders a component that shows a users absence instance
  */
@@ -53,6 +55,14 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
     onError: () => alert('Fraværet kunne ikke slettes.')
   });
+
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const handleDeleteClick = (result: boolean) => {
+    if (result && props.absence) {
+      deleteExistingAbsence(props.absence.absenceId);
+    }
+    setOpenDialog(false);
+  };
 
   return (
     <div className="md:w-[300px] w-full px-[50px] md:px-0 md:mx-6 min-h-[fit-content] text-grey-lightest font-Rubik ">
@@ -101,21 +111,27 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
             }}
           ></EditOutlinedIcon>
           <DeleteOutlineIcon
-            onClick={() => {
-              const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
-              if (confirmDelete) {
-                deleteExistingAbsence(props.absence.absenceId);
-              }
-            }}
+            onClick={() => setOpenDialog(true)}
+            className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
             sx={{
               color: '#410464',
               height: '30px',
               mr: '10px',
               '&:hover': {
-                color: '#26023B'
+                color: '#26023B',
+                scale: '1.1'
               }
             }}
           ></DeleteOutlineIcon>
+          {openDialog && (
+            <div className="flex justify-between items-center">
+              <ConfirmationBox
+                confirmationText="Er du sikker på at du vil slette fraværet?"
+                isOpen={openDialog}
+                onConfirm={handleDeleteClick}
+              />
+            </div>
+          )}
         </div>
       </section>
     </div>
