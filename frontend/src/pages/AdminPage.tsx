@@ -2,9 +2,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../context/UserContext';
+import { useState } from 'react';
 import PageLayout from '@/components/PageLayout';
 import SectionView from '@/components/AdminPage/SectionView';
 import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
@@ -19,15 +17,6 @@ const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagområd
 
 export default function AdminPage() {
   const [value, setValue] = useState(0);
-  const navigate = useNavigate();
-  const currentUser = useUserContext();
-
-  // midlertidig løsning for å beskytte siden mot ikke admins
-  useEffect(() => {
-    if (!currentUser.admin) {
-      navigate('/');
-    }
-  }, [currentUser.admin, navigate]);
 
   //options for dropdown
   const dropdownOptions = tabLabels.map((label, index) => ({

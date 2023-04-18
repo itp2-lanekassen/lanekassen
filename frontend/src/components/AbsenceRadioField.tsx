@@ -18,7 +18,7 @@ export const AbsenceRadioField = (props: {
         {absenceTypes.map((type) => (
           <label
             key={type.absenceTypeId}
-            className="w-100 inline-flex justify-start items-center md:heading-2xs text-xs"
+            className="w-100 inline-flex justify-start items-center md:heading-2xs text-xs pt-1"
           >
             <input
               type="radio"

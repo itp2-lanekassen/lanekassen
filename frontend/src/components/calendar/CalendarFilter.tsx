@@ -1,25 +1,43 @@
 import moment from 'moment';
-import classNames from 'classnames';
 import CloseIcon from '@mui/icons-material/Close';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { UserFilter } from '@/types/types';
 import Dropdown from '../Dropdown';
-import DropdownMultiSelect from '../DropdownMultiSelect';
-import { useUserContext } from '@/context/UserContext';
-import { useEffect } from 'react';
+import { startTransition, useState, useEffect } from 'react';
+import CustomMultiDropdown from './CustomMultiDropdown';
 import { DateField } from '../DateField';
-import { FormValues, setMax, setMin } from '../AbsenceForm';
+import classNames from 'classnames';
+import DropdownMultiSelect from '../DropdownMultiSelect';
+
+import { SingleCalendarCellDisplay } from '../SingleCalendarCellDisplay';
+import { useUserContext } from '@/context/UserContext';
+
+interface CalendarFilterItemProps {
+  name?: string;
+  onClick: () => void;
+}
+
+const CalendarFilterItem = ({ name, onClick }: CalendarFilterItemProps) => {
+  return (
+    <div className="rounded-full bg-primary-light text-white py-1 px-2 flex justify-center items-center gap-1">
+      <p className="max-w-[150px] whitespace-nowrap overflow-hidden overflow-ellipsis">{name}</p>
+      <button className="text-sm hover:bg-primary rounded-full" onClick={onClick}>
+        <CloseIcon />
+      </button>
+    </div>
+  );
+};
 
 export default function FilterComponents() {
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
-  const { fromDate, setFromDate, toDate, setToDate, filter, setFilter } = useCalendarContext();
-  const currentUser = useUserContext();
-
-  const handleChange = (key: keyof UserFilter, value: number[]) => {
-    if (key === 'departments' && value.length) {
+  const { dates, setDates, filter, setFilter } = useCalendarContext();
+  const { absenceTypes } = useGlobalContext();
+  const [showDescription, setShowDescription] = useState(false);
+  const handleChange = (key: keyof UserFilter, value?: number[]) => {
+    if (key === 'departments') {
       return setFilter({
-        departments: value,
+        departments: value && value[0] !== -1 ? value : [],
         sections: [],
         subjectFields: [],
         roles: [],
@@ -27,22 +45,12 @@ export default function FilterComponents() {
       });
     }
 
-    setFilter((oldFilter) => ({
-      ...oldFilter,
-      [key]: value
-    }));
-  };
-
-  const handleDateChange = (
-    date: Date | null,
-    event: React.SyntheticEvent<any, Event> | undefined,
-    name: string
-  ) => {
-    if (date && name === 'fromDate') {
-      setFromDate(moment(date).toISOString());
-    } else if (date && name === 'toDate') {
-      setToDate(moment(date).toISOString());
-    }
+    startTransition(() => {
+      setFilter((oldFilter) => ({
+        ...oldFilter,
+        [key]: value
+      }));
+    });
   };
 
   const minFromDate = moment().subtract(30, 'days').toDate();
@@ -55,59 +63,64 @@ export default function FilterComponents() {
           Fra:
         </label>
         <DateField
-          handleInputChange={handleDateChange}
+          handleInputChange={(date) =>
+            setDates((d) => ({ ...d, from: moment(date).toISOString() }))
+          }
           min={minFromDate}
-          value={fromDate ? new Date(fromDate) : undefined}
+          value={new Date(dates.from)}
           name="fromDate"
           customClass="h-10"
-        ></DateField>
+        />
       </div>
 
-      <div className="col-start-1 row-start-2 w-10/12 justify-self-center">
-        <label htmlFor="fromDate" className="body-bold text-sm text-primary">
+      <div className="col-start-1 flex flex-col row-start-2 w-10/12 justify-self-center">
+        <label htmlFor="toDate" className="body-bold text-sm">
           Til:
         </label>
         <DateField
-          handleInputChange={handleDateChange}
-          min={fromDate ? new Date(fromDate) : undefined}
-          value={toDate ? new Date(toDate) : undefined}
+          handleInputChange={(date) => setDates((d) => ({ ...d, to: moment(date).toISOString() }))}
+          value={new Date(dates.to)}
           name="toDate"
           customClass="h-10"
-        ></DateField>
+        />
       </div>
 
-      <div className="flex items-end gap-4">
+      <div className="flex gap-2 self-end">
         <Dropdown
           placeholder="Avdeling"
-          options={departments.map((d) => ({ label: d.name, value: d.departmentId }))}
-          onChange={(val) => handleChange('departments', [val])}
+          options={[
+            { label: 'Alle avdelinger', value: -1 },
+            ...departments.map((d) => ({ label: d.name, value: d.departmentId }))
+          ]}
+          onChange={(val) => handleChange('departments', val ? [val] : undefined)}
           value={filter.departments[0]}
           isDisabled={false}
         />
-        <DropdownMultiSelect
+
+        <CustomMultiDropdown
           placeholder="Seksjon"
-          options={(sections || []).map((s) => ({ label: s.name, value: s.sectionId }))}
+          options={sections.map((s) => ({ label: s.name, value: s.sectionId }))}
           onChange={(val) => handleChange('sections', val)}
           value={filter.sections}
         />
-        <DropdownMultiSelect
+        <CustomMultiDropdown
           placeholder="Fagområde"
-          options={(subjectFields || []).map((s) => ({
+          options={subjectFields.map((s) => ({
             label: s.name,
             value: s.subjectFieldId
           }))}
           onChange={(val) => handleChange('subjectFields', val)}
           value={filter.subjectFields}
         />
-        <DropdownMultiSelect
+        <CustomMultiDropdown
           placeholder="Team"
-          options={(teams || []).map((t) => ({ label: t.name, value: t.teamId }))}
+          options={teams.map((t) => ({ label: t.name, value: t.teamId }))}
           onChange={(val) => handleChange('teams', val)}
           value={filter.teams}
         />
-        <DropdownMultiSelect
+        <CustomMultiDropdown
           placeholder="Rolle"
-          options={(roles || []).map((r) => ({ label: r.name, value: r.roleId }))}
+          options={roles.map((r) => ({ label: r.name, value: r.roleId }))}
           onChange={(val) => handleChange('roles', val)}
           value={filter.roles}
         />
@@ -128,106 +141,92 @@ export default function FilterComponents() {
       </div>
 
       <div className="flex gap-2 w-full">
-        {filter.departments.length > 0 && filter.departments[0] !== -1 && (
-          <div className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2">
-            <p className="my-1 ">
-              {departments.find((d) => d.departmentId === filter.departments[0])?.name}
-            </p>
-            <button
-              className="text-primary-contrast text-sm hover:underline focus:outline-none"
-              onClick={() => handleChange('departments', [])}
-            >
-              <CloseIcon />
-            </button>
-          </div>
-        )}
-
-        <div className="flex flex-wrap space-x-2">
+        <div className="flex gap-2 self-end flex-wrap">
           {filter.sections.map((sectionId) => (
-            <div
+            <CalendarFilterItem
               key={sectionId}
-              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
-            >
-              <p className="my-1">{sections?.find((s) => s.sectionId === sectionId)?.name}</p>
-              <button
-                className="text-primary-contrast text-sm hover:underline focus:outline-none"
-                onClick={() =>
-                  handleChange(
-                    'sections',
-                    filter.sections.filter((s) => s !== sectionId)
-                  )
-                }
-              >
-                <CloseIcon />
-              </button>
-            </div>
+              name={sections.find((s) => s.sectionId === sectionId)?.name}
+              onClick={() =>
+                handleChange(
+                  'sections',
+                  filter.sections.filter((s) => s !== sectionId)
+                )
+              }
+            />
           ))}
-        </div>
 
-        <div className="flex flex-wrap space-x-2">
           {filter.subjectFields.map((sf) => (
-            <div
+            <CalendarFilterItem
               key={sf}
-              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
-            >
-              <p className="my-1">{subjectFields?.find((s) => s.subjectFieldId === sf)?.name}</p>
-              <button
-                className="text-primary-contrast text-sm hover:underline focus:outline-none"
-                onClick={() =>
-                  handleChange(
-                    'subjectFields',
-                    filter.subjectFields.filter((f) => f !== sf)
-                  )
-                }
-              >
-                <CloseIcon />
-              </button>
-            </div>
+              name={subjectFields.find((s) => s.subjectFieldId === sf)?.name}
+              onClick={() =>
+                handleChange(
+                  'subjectFields',
+                  filter.subjectFields.filter((f) => f !== sf)
+                )
+              }
+            />
           ))}
-        </div>
 
-        <div className="flex flex-wrap space-x-2">
           {filter.teams.map((t) => (
-            <div
+            <CalendarFilterItem
               key={t}
-              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
-            >
-              <p className="my-1">{teams?.find((tm) => tm.teamId === t)?.name}</p>
-              <button
-                className="text-primary-contrast text-sm hover:underline focus:outline-none"
-                onClick={() =>
-                  handleChange(
-                    'teams',
-                    filter.teams.filter((f) => f !== t)
-                  )
-                }
-              >
-                <CloseIcon />
-              </button>
-            </div>
+              name={teams.find((tm) => tm.teamId === t)?.name}
+              onClick={() =>
+                handleChange(
+                  'teams',
+                  filter.teams.filter((f) => f !== t)
+                )
+              }
+            />
+          ))}
+
+          {filter.roles.map((r) => (
+            <CalendarFilterItem
+              key={r}
+              name={roles.find((rl) => rl.roleId === r)?.name}
+              onClick={() =>
+                handleChange(
+                  'roles',
+                  filter.roles.filter((f) => f !== r)
+                )
+              }
+            />
           ))}
         </div>
-
-        <div className="flex flex-wrap space-x-2">
-          {filter.roles.map((r) => (
+        <div className="flex ml-auto">
+          <button
+            className="border-1 rounded-full border-primary text-center focus:outline-none px-4 h-11 mt-4 flex items-center text-primary-contrast bg-primary hover:bg-white hover:text-primary"
+            onMouseEnter={() => setShowDescription(true)}
+            onMouseLeave={() => setShowDescription(false)}
+          >
+            ?
+          </button>
+          {showDescription && (
             <div
-              key={r}
-              className="rounded-[20px] bg-primary text-primary-contrast px-2 flex justify-center items-center space-x-2"
+              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-card-one z-50 px-4 py-2 rounded-lg text-primary border-primary border-2"
+              onMouseEnter={() => setShowDescription(true)}
+              onMouseLeave={() => setShowDescription(false)}
             >
-              <p className="my-1 mr2 ">{roles?.find((rl) => rl.roleId === r)?.name}</p>
-              <button
-                className="text-primary-contrast hover:underline focus:outline-none"
-                onClick={() =>
-                  handleChange(
-                    'roles',
-                    filter.roles.filter((f) => f !== r)
-                  )
-                }
-              >
-                <CloseIcon />
-              </button>
+              <h2 className="text-xl mb-6 text-primary">Forklaring av farger og koder</h2>
+              <div className="flex flex-col">
+                {absenceTypes.map((type) => (
+                  <div
+                    key={type.absenceTypeId}
+                    className="w-100 inline-flex justify-start items-center md:heading-2xs text-xs"
+                  >
+                    <div className="mb-2 pr-2">
+                      <SingleCalendarCellDisplay code={type.code} colorCode={type.colorCode} />
+                    </div>
+                    <span className="overflow-hidden text-ellipsis text-primary whitespace-nowrap pb-1">
+                      {type.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p>Skravert rute betyr at fraværet ikke er godkjent enda</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
