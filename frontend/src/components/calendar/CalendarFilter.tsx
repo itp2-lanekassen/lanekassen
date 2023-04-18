@@ -79,8 +79,10 @@ export default function FilterComponents() {
   };
 
   return (
-    <div className="grid gap-2 py-2">
-      <div className="flex gap-2 items-center self-end lg:w-11/12 lg:mx-auto">
+    <div className="grid gap-2 py-2 w-11/12 mx-auto">
+      <FilterDescription className="mb-2" />
+
+      <div className="flex gap-2 items-center">
         <button
           className={classNames(
             'text-primary-contrast bg-primary-light hover:text-primary-light hover:bg-primary-contrast',
@@ -93,7 +95,6 @@ export default function FilterComponents() {
           <Tune fontSize="inherit" />
           &nbsp;Filtrer
         </button>
-        <FilterDescription className="ml-auto order-last" />
         <div
           className={classNames(
             open ? 'flex' : 'hidden',
@@ -190,79 +191,78 @@ export default function FilterComponents() {
         </div>
       </div>
 
-      {Object.entries(filter).some(([key, val]) => key !== 'departments' && val.length) && (
-        <div className="flex gap-2 self-end flex-wrap outline outline-1 outline-primary-light rounded-xl p-3 lg:p-0 relative w-11/12 mx-auto lg:outline-0">
-          <span className="absolute top-0 text-xs font-bold px-1 -translate-y-1/2 text-primary-light bg-grey-lightest lg:hidden">
-            Filtrert på
-          </span>
+      <div className="flex gap-2 self-end flex-wrap outline outline-1 outline-primary-light rounded-xl p-3 lg:p-0 relative w-full mx-auto lg:outline-0">
+        <span className="absolute top-0 text-xs font-bold px-1 -translate-y-1/2 text-primary-light bg-grey-lightest lg:hidden">
+          Filtrert på
+        </span>
 
+        <CalendarFilterItem
+          className="lg:hidden"
+          hideButton
+          // TODO: locale overridden in calculateColumns. use date-fns instead?
+          name={moment(dates.from).format('D.M.YY') + ' - ' + moment(dates.to).format('D.M.YY')}
+        />
+
+        {filter.departments.length > 0 && (
           <CalendarFilterItem
-            className="lg:"
-            hideButton
-            name={moment(dates.from).format('l') + ' - ' + moment(dates.to).format('l')}
+            className="lg:hidden"
+            name={departments.find((d) => d.departmentId === filter.departments[0])?.name}
+            onClick={() => handleChange('departments', [-1])}
           />
+        )}
 
-          {filter.departments.length > 0 && (
-            <CalendarFilterItem
-              className="lg:hidden"
-              name={departments.find((d) => d.departmentId === filter.departments[0])?.name}
-              onClick={() => handleChange('departments', [-1])}
-            />
-          )}
+        {filter.sections.map((sectionId) => (
+          <CalendarFilterItem
+            key={sectionId}
+            name={sections.find((s) => s.sectionId === sectionId)?.name}
+            onClick={() =>
+              handleChange(
+                'sections',
+                filter.sections.filter((s) => s !== sectionId)
+              )
+            }
+          />
+        ))}
 
-          {filter.sections.map((sectionId) => (
-            <CalendarFilterItem
-              key={sectionId}
-              name={sections.find((s) => s.sectionId === sectionId)?.name}
-              onClick={() =>
-                handleChange(
-                  'sections',
-                  filter.sections.filter((s) => s !== sectionId)
-                )
-              }
-            />
-          ))}
+        {filter.subjectFields.map((sf) => (
+          <CalendarFilterItem
+            key={sf}
+            name={subjectFields.find((s) => s.subjectFieldId === sf)?.name}
+            onClick={() =>
+              handleChange(
+                'subjectFields',
+                filter.subjectFields.filter((f) => f !== sf)
+              )
+            }
+          />
+        ))}
 
-          {filter.subjectFields.map((sf) => (
-            <CalendarFilterItem
-              key={sf}
-              name={subjectFields.find((s) => s.subjectFieldId === sf)?.name}
-              onClick={() =>
-                handleChange(
-                  'subjectFields',
-                  filter.subjectFields.filter((f) => f !== sf)
-                )
-              }
-            />
-          ))}
+        {filter.teams.map((t) => (
+          <CalendarFilterItem
+            key={t}
+            name={teams.find((tm) => tm.teamId === t)?.name}
+            onClick={() =>
+              handleChange(
+                'teams',
+                filter.teams.filter((f) => f !== t)
+              )
+            }
+          />
+        ))}
 
-          {filter.teams.map((t) => (
-            <CalendarFilterItem
-              key={t}
-              name={teams.find((tm) => tm.teamId === t)?.name}
-              onClick={() =>
-                handleChange(
-                  'teams',
-                  filter.teams.filter((f) => f !== t)
-                )
-              }
-            />
-          ))}
-
-          {filter.roles.map((r) => (
-            <CalendarFilterItem
-              key={r}
-              name={roles.find((rl) => rl.roleId === r)?.name}
-              onClick={() =>
-                handleChange(
-                  'roles',
-                  filter.roles.filter((f) => f !== r)
-                )
-              }
-            />
-          ))}
-        </div>
-      )}
+        {filter.roles.map((r) => (
+          <CalendarFilterItem
+            key={r}
+            name={roles.find((rl) => rl.roleId === r)?.name}
+            onClick={() =>
+              handleChange(
+                'roles',
+                filter.roles.filter((f) => f !== r)
+              )
+            }
+          />
+        ))}
+      </div>
     </div>
   );
 }
