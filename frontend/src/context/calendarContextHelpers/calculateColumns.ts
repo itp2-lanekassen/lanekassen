@@ -20,8 +20,8 @@ export default function calculateColumns(fromDate: string, toDate: string) {
   };
 
   while (currentDay.isSameOrBefore(lastDay)) {
-    // only include weekdays
-    if (!currentDay.format('ddd').match(/Sat|Sun/)) {
+    // exclude saturdays and sundays
+    if (!currentDay.format('d').match(/6|0/)) {
       // add the name of the month and increment its count to determine colSpan
       const month = currentDay.format('MMMM');
       if (!cols.months[month]) cols.months[month] = 0;
