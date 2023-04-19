@@ -1,17 +1,20 @@
+import m from 'moment';
 import { Fragment } from 'react';
 import { useInView } from 'react-intersection-observer';
-import m from 'moment';
-import { useUserContext } from '@/context/UserContext';
-import { useCalendarContext } from '@/context/CalendarContext';
-import PageLayout from '@/components/PageLayout';
-import CalendarRow from '@/components/calendar/CalendarRow';
-import CalendarHeader from '@/components/calendar/CalendarHeader';
 import FilterComponents from '@/components/calendar/CalendarFilter';
+import CalendarHeader from '@/components/calendar/CalendarHeader';
+import CalendarRow from '@/components/calendar/CalendarRow';
+import PageLayout from '@/components/PageLayout';
+import { useCalendarContext } from '@/context/CalendarContext';
+import { useModalContext } from '@/context/ModalContext';
+import { useUserContext } from '@/context/UserContext';
 
 const CalendarPage = () => {
   const currentUser = useUserContext();
 
   const { queryResult, updateFromDate } = useCalendarContext();
+
+  const { openAbsenceForm } = useModalContext();
 
   const { ref } = useInView({
     rootMargin: '20%',
@@ -25,15 +28,20 @@ const CalendarPage = () => {
       <FilterComponents />
 
       <div className="w-full grid grid-cols-calendar-columns place-items-center gap-0.5 overflow-x-auto">
-        <div className="row-start-1 row-span-3 w-full">
+        <div className="row-start-1 row-span-3 flex flex-col gap-1 w-11/12 self-start pt-1">
+          <button
+            onClick={() => openAbsenceForm(currentUser, m().format('yyyy-MM-DD'))}
+            className="rounded-full w-11/12 bg-primary-light px-3 py-1 text-sm text-grey-lightest whitespace-nowrap text-center hover:text-primary-light hover:bg-grey-lightest border-solid border-1 mx-auto"
+          >
+            Legg til fravær
+          </button>
           <button
             onClick={() => updateFromDate(m().startOf('isoWeek').toISOString())}
-            className="rounded-full w-full bg-primary-light px-3 py-1 text-sm text-white whitespace-nowrap text-center hover:text-primary-light hover:bg-white border-solid border-1"
+            className="rounded-full w-11/12 bg-primary-light px-3 py-1 text-sm text-grey-lightest whitespace-nowrap text-center hover:text-primary-light hover:bg-grey-lightest border-solid border-1 mx-auto"
           >
             Denne uken
           </button>
         </div>
-
         <CalendarHeader />
 
         <CalendarRow user={currentUser} isCurrentUser={true} />
