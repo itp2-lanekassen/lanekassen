@@ -106,14 +106,6 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
           <strong className="body-bold text-xs">Rolle:</strong>
           {roles?.join(', ')}
         </p>
-        <div className={`${props.isCurrentUser || currentUser.admin ? 'flex' : 'hidden'}`}>
-          <button
-            className="ml-auto cursor-pointer"
-            onClick={() => console.log('Implement edit user here')}
-          >
-            <EditOutlinedIcon className="hover:text-secondary-light" />
-          </button>
-        </div>
       </div>
     </div>
   );
