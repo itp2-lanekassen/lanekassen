@@ -40,6 +40,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
 
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>(new Date());
   const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>(new Date());
+  const [isApproved, setIsApproved] = React.useState<boolean>(props.absence.isApproved);
 
   //initialize mutation for updating an absence
   const { mutate: editAbsence } = useMutation({
@@ -120,11 +121,15 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       type: updatedAbsenceType,
       userId: currentUser.userId,
       user: currentUser,
-      isApproved: false,
+      isApproved: currentUser.admin ? isApproved : false,
       comment: updatedComment
     });
     //redirect to AddAbsenceView
     props.setAbsence(null);
+  };
+
+  const handleIsApprovedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsApproved(e.target.checked);
   };
 
   return (
@@ -162,8 +167,21 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
               placeholder={props.absence.comment}
               formValues={formValues}
             ></CommentField>
+            {currentUser.admin && (
+              <div className="flex items-center heading-xs space-x-5">
+                <p>Godkjenn fravær</p>
+                <input
+                  type="checkbox"
+                  id="isApproved"
+                  checked={isApproved}
+                  onChange={handleIsApprovedChange}
+                  // eslint-disable-next-line react/no-unknown-property
+                  className="space-x-5 h-5 w-5 accent-primary "
+                />
+              </div>
+            )}
           </div>
-          <div className="m-auto flex justify-center gap-[20px]">
+          <div className="m-auto flex justify-center gap-[20px] mt-2">
             <SubmitButton
               disabledTitle={'Fyll ut alle feltene'}
               disabled={false}

@@ -85,6 +85,15 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
         <p className="mx-[20px] text-[18px]">
           Fraværstype <strong className="body-bold text-[12px]">{props.absence.type.name}</strong>
         </p>
+        {props.absence.isApproved ? (
+          <p className="mx-[20px] text-[18px]">
+            <strong className="body-bold text-[12px]">Godkjent fravær</strong>
+          </p>
+        ) : (
+          <p className="mx-[20px] text-[18px]">
+            <strong className="body-bold text-[12px]">Ikke godkjent</strong>
+          </p>
+        )}
         {notice}
         <div className="flex flex-row float-right">
           <button

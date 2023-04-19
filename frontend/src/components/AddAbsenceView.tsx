@@ -54,6 +54,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
   const [disableDates, setDisableDates] = React.useState<Date[]>();
+  const [isApproved, setIsApproved] = React.useState<boolean>(false);
 
   //initialize postAbsence mutation
   const { mutate: addAbsence } = useMutation({
@@ -113,7 +114,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
       startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
       endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
       comment: formValues.comment,
-      isApproved: false,
+      isApproved: isApproved,
       absenceTypeId: formValues.absenceType,
       userId: currentUser.userId
     });
@@ -125,6 +126,10 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
       comment: '',
       absenceType: absenceTypes[0].absenceTypeId
     });
+  };
+
+  const handleIsApprovedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsApproved(e.target.checked);
   };
 
   return (
@@ -164,8 +169,21 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               formValues={formValues}
               handleInputChange={handleTextAreaChange}
             ></CommentField>
+            {currentUser.admin && (
+              <div className="flex items-center heading-xs space-x-5">
+                <p>Godkjenn fravær</p>
+                <input
+                  type="checkbox"
+                  id="isApproved"
+                  checked={isApproved}
+                  onChange={handleIsApprovedChange}
+                  // eslint-disable-next-line react/no-unknown-property
+                  className="space-x-5 h-5 w-5 accent-primary "
+                />
+              </div>
+            )}
           </div>
-          <div className="m-auto flex justify-center gap-[20px]">
+          <div className="m-auto flex justify-center gap-[20px] mt-2">
             <SubmitButton
               disabledTitle={'Fyll ut alle feltene'}
               disabled={false}
