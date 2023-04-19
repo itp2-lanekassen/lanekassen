@@ -1,11 +1,6 @@
 import { ReactNode, useState } from 'react';
 import ellipse from '../assets/ellipse.png';
-import PersonIcon from '@mui/icons-material/Person';
-import EditCalendarIcon from '@mui/icons-material/EditCalendar';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { SignOutButton } from '../components/SignOutButton';
-import { useUserContext } from '../context/UserContext';
-import { useNavigate } from 'react-router';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useMsal } from '@azure/msal-react';
@@ -64,4 +59,3 @@ const RegisterPageLayout = ({ title, children }: PageLayoutProps) => {
 };
 
 export default RegisterPageLayout;
-//            onclick={() => {navigate('/admin');}}

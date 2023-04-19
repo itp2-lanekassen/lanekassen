@@ -26,7 +26,7 @@ const SubjectFieldList = ({ setEdit }: SubjectFieldListProps) => {
   const { mutate: deleteExistingSubjectField } = useMutation({
     mutationFn: deleteSubjectField,
     onSuccess: () => queryClient.invalidateQueries(['subjectField']),
-    onError: (error: Error) => {
+    onError: () => {
       setErrorAlertMessage('Et fagområde kan ikke være i bruk før den slettes!');
       setErrorAlertOpen(true);
     }

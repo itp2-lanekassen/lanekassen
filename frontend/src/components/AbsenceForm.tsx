@@ -150,7 +150,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
   //update form values on date picker change
   const handleInputChange = (
     date: Date | null,
-    event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement, Event> | undefined,
+    event: React.SyntheticEvent | undefined,
     name: string
   ) => {
     setFormValues({

@@ -39,7 +39,7 @@ async function setMin(
 }
 
 interface EditAbsenceViewProps {
-  setAbsence: React.Dispatch<React.SetStateAction<Absence | null>>;
+  setAbsence: React.Dispatch<React.SetStateAction<Absence | undefined>>;
   absence: Absence;
 }
 
@@ -87,7 +87,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
   //update form values on date picker change
   const handleInputChange = (
     date: Date | null,
-    event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement, Event> | undefined,
+    event: React.SyntheticEvent | undefined,
     name: string
   ) => {
     setFormValues({
@@ -138,7 +138,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
       comment: updatedComment
     });
     //redirect to AddAbsenceView
-    props.setAbsence(null);
+    props.setAbsence(undefined);
   };
 
   const handleIsApprovedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -203,7 +203,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
             <SubmitButton
               disabled={false}
               buttonText={'Avbryt'}
-              handleClick={() => props.setAbsence(null)}
+              handleClick={() => props.setAbsence(undefined)}
             ></SubmitButton>
           </div>
         </form>

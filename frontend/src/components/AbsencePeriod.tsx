@@ -11,7 +11,7 @@ import { useUserContext } from '@/context/UserContext';
  * Renders a component that shows a users absence instance
  */
 export const AbsencePeriod = (props: {
-  setAbsence: Dispatch<SetStateAction<Absence | null>>;
+  setAbsence: Dispatch<SetStateAction<Absence | undefined>>;
   absence: Absence;
 }) => {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);

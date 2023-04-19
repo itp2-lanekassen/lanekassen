@@ -26,7 +26,7 @@ const TeamList = ({ setEdit }: TeamListProps) => {
   const { mutate: deleteExistingTeam } = useMutation({
     mutationFn: deleteTeam,
     onSuccess: () => queryClient.invalidateQueries(['teams']),
-    onError: (error: Error) => {
+    onError: () => {
       setErrorAlertMessage('Et team kan ikke være i bruk før den slettes!');
       setErrorAlertOpen(true);
     }
