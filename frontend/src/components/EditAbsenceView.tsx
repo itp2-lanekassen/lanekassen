@@ -169,7 +169,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
             ></CommentField>
             {currentUser.admin && (
               <div className="flex items-center heading-xs space-x-5">
-                <p>Godkjenn fravær</p>
+                <p onClick={() => setIsApproved(!isApproved)}>Godkjenn fravær</p>
                 <input
                   type="checkbox"
                   id="isApproved"

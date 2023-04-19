@@ -151,7 +151,9 @@ export default function UserSelectedView(props: {
           onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
         />
 
-        <p className="font-bold"> Admin: </p>
+        <p className="font-bold" onClick={() => setIsAdminChecked(!isAdminChecked)}>
+          Admin:
+        </p>
         <input
           className="flex w-5"
           type="checkbox"
