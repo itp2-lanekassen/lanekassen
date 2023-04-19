@@ -27,9 +27,9 @@ export const AbsenceView = () => {
           <AbsencePeriods
             setAbsences={setAbsences}
             absences={absences}
-            selectedAbsence={selectedAbsence ? selectedAbsence : null}
+            selectedAbsence={selectedAbsence}
             setAbsence={setAbsence}
-          ></AbsencePeriods>
+          />
           {view}
         </div>
       </div>
