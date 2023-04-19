@@ -1,7 +1,7 @@
 import { getAllUsers } from '@/API/UserAPI';
 import { User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import UserRow from './UserRow';
 
 const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon', ''];
@@ -14,7 +14,7 @@ export default function UserView() {
 
   // Add matching users to new list to avoid having to load data again
   // when the query changes
-  const searchForUsers = (event: any) => {
+  const searchForUsers = (event: ChangeEvent<HTMLInputElement>) => {
     const matches: User[] = [];
     users?.forEach((user) => {
       if (
