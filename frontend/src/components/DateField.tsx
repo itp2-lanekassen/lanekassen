@@ -1,5 +1,3 @@
-import { addDays, addWeeks, startOfMonth } from 'date-fns';
-import { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -30,58 +28,6 @@ export const DateField = (props: {
   ) => {
     props.handleInputChange(date, e, props.name);
   };
-  //set max to null if it is undefined
-  let max = null;
-  if (props.max) {
-    max = props.max;
-  }
-
-  //set min to null if it is undefined
-  let min = null;
-  if (props.min) {
-    min = props.min;
-  }
-  const datePickerRef = useRef<DatePicker>(null);
-
-  const onMonthChange = (date: Date) => {
-    const firstDayOfMonth = startOfMonth(date);
-    props.handleInputChange(firstDayOfMonth, undefined, props.name);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log('handleKeyDown', props.name, e.key);
-    switch (e.key) {
-      case 'ArrowLeft':
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        datePickerRef.current?.setSelected(addDays(props.value!, -1));
-        break;
-
-      case 'ArrowRight':
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        datePickerRef.current?.setSelected(addDays(props.value!, +1));
-        break;
-
-      case 'ArrowDown':
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        datePickerRef.current?.setSelected(addWeeks(props.value!, +1));
-        break;
-
-      case 'ArrowUp':
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        datePickerRef.current?.setSelected(addWeeks(props.value!, -1));
-        break;
-
-      case 'Enter':
-        props.handleInputChange(props.value!, e, props.name);
-        e.preventDefault();
-        e.stopPropagation();
-        break;
-    }
-  };
 
   return (
     <div className="modal-field">
@@ -94,9 +40,8 @@ export const DateField = (props: {
         id="datePicker"
         excludeDates={props.disableArray}
         name={props.name}
-        minDate={min}
-        maxDate={max}
-        calendarStartDay={1}
+        minDate={props.min}
+        maxDate={props.max}
         onChange={handleInputChange}
         showWeekNumbers
         dateFormat="dd/MM/yyyy"
@@ -106,11 +51,8 @@ export const DateField = (props: {
         required
         disabled={props.disabled}
         title={props.disabled === false ? props.title : props.title}
-        onKeyDown={handleKeyDown}
         weekLabel="Uke"
         startOpen={false}
-        ref={datePickerRef}
-        onMonthChange={onMonthChange}
       />
     </div>
   );
