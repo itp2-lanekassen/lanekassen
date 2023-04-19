@@ -145,7 +145,7 @@ export default function UserSelectedView(props: {
 
         <p className="font-bold"> Virksomhet: </p>
         <input
-          className="w-80 rounded-full p-2 bg-white text-primary border-1 border-primary-light"
+          className="w-80 rounded-full p-2 bg-primary-contrast text-primary border-1 border-primary-light"
           type="text"
           value={selectedBusinessAffiliation}
           onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
