@@ -7,6 +7,7 @@ import SubmitButton from '../SubmitButton';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 import ErrorAlert from '../Alert';
+import ConfirmationBox from '../ConfirmationBox';
 
 interface SubjectFieldListProps {
   setEdit: (val: boolean, subjectField?: SubjectField) => void;
@@ -31,6 +32,15 @@ const SubjectFieldList = ({ setEdit }: SubjectFieldListProps) => {
       setErrorAlertOpen(true);
     }
   });
+  const [subjectId, setSubjectId] = useState<number>(0);
+
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const handleDeleteClick = (result: boolean) => {
+    if (result) {
+      deleteExistingSubjectField(subjectId);
+    }
+    setOpenDialog(false);
+  };
 
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
@@ -57,10 +67,19 @@ const SubjectFieldList = ({ setEdit }: SubjectFieldListProps) => {
             <EditButton onClick={() => setEdit(true, subjectField)} />
             <DeleteButton
               onClick={() => {
-                const confirmDelete = confirm('Er du sikker på at du vil slette dette fagområdet?');
-                if (confirmDelete) deleteExistingSubjectField(subjectField.subjectFieldId);
+                setSubjectId(subjectField.subjectFieldId);
+                setOpenDialog(true);
               }}
             />
+            {openDialog && (
+              <div className="flex justify-between items-center">
+                <ConfirmationBox
+                  confirmationText="Er du sikker på at du vil slette fagområdet?"
+                  isOpen={openDialog}
+                  onConfirm={handleDeleteClick}
+                />
+              </div>
+            )}
           </Fragment>
         ))}
       </div>
