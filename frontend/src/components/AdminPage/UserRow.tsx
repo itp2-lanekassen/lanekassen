@@ -19,20 +19,8 @@ export default function UserRow(props: {
   const [department, setDepartment] = useState<Department>();
   const [section, setSection] = useState<Section>();
   const [employmentType, setEmploymentType] = useState<string>('');
-  const [email, setEmail] = useState<string>(props.user!.email);
+  const [email, setEmail] = useState<string>(props.user.email);
   const queryClient = useQueryClient();
-
-  // Load user data into states
-  async function loadUserData() {
-    setDepartment((await getDepartmentById(props.user.departmentId)).data);
-    setSection((await getSectionById(props.user.sectionId)).data);
-    setEmploymentType(EmploymentType[props.user.employmentType]);
-
-    if (email.length > 20) {
-      const shorterEmail = email.slice(0, 20) + '...';
-      setEmail(shorterEmail);
-    }
-  }
 
   // To edit a user, change view to the display of a chosen user's information
   const handleEdit = async () => {
@@ -57,15 +45,27 @@ export default function UserRow(props: {
   const handleDeleteProfileClick = () => {
     const confirmDelete = confirm('Er du sikker på at du vil slette denne profilen?');
     if (confirmDelete) {
-      deleteUser(props.user!.userId).then(async () => {
+      deleteUser(props.user.userId).then(async () => {
         queryClient.invalidateQueries(['users']);
       });
     }
   };
 
   useEffect(() => {
+    // Load user data into states
+    async function loadUserData() {
+      setDepartment((await getDepartmentById(props.user.departmentId)).data);
+      setSection((await getSectionById(props.user.sectionId)).data);
+      setEmploymentType(EmploymentType[props.user.employmentType]);
+
+      if (email.length > 20) {
+        const shorterEmail = email.slice(0, 20) + '...';
+        setEmail(shorterEmail);
+      }
+    }
+
     loadUserData();
-  }, []);
+  }, [props.user, email]);
 
   return (
     <>
