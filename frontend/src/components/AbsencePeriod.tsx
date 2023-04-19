@@ -1,22 +1,23 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { deleteAbsence } from '../API/AbsenceAPI';
 import { Absence } from '../types/types';
 import { darken } from '@mui/material/styles';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useGlobalContext } from '@/context/GlobalContext';
 import { useUserContext } from '@/context/UserContext';
 /**
  * Renders a component that shows a users absence instance
  */
-export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
+export const AbsencePeriod = (props: {
+  setAbsence: Dispatch<SetStateAction<Absence | null>>;
+  absence: Absence;
+}) => {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
   const [hover, setHover] = useState(false);
   const queryClient = useQueryClient();
-  const { absenceTypes } = useGlobalContext();
   const currentUser = useUserContext();
 
   //Expand/collapse component to show more/less information on click
@@ -100,6 +101,7 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
             className="mr-[10px]"
             onClick={() => {
               props.setAbsence(props.absence);
+              window.scrollTo(9999, 9999);
             }}
           >
             <EditOutlinedIcon
