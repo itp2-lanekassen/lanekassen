@@ -1,14 +1,10 @@
 import { useState } from 'react';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Department, EmploymentType, Section, User } from '@/types/types';
 import { getDepartmentById } from '@/API/DepartmentAPI';
 import { getSectionById } from '@/API/SectionAPI';
-import { useUserContext } from '@/context/UserContext';
 
 export default function UserDropdown(props: { user: User; isCurrentUser: boolean }) {
-  const currentUser = useUserContext();
-
   const [isSet, setIsSet] = useState<boolean>(false);
 
   const [department, setDepartment] = useState<Department>();
