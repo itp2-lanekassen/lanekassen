@@ -1,5 +1,5 @@
 import { addDays, addWeeks, startOfMonth } from 'date-fns';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -43,47 +43,45 @@ export const DateField = (props: {
   }
   const datePickerRef = useRef<DatePicker>(null);
 
-  const [tempDate, setTempDate] = useState<Date | null>(props.value || null);
-
   const onMonthChange = (date: Date) => {
     const firstDayOfMonth = startOfMonth(date);
     props.handleInputChange(firstDayOfMonth, undefined, props.name);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log('handleKeyDown', tempDate, e.key);
+    console.log('handleKeyDown', props.name, e.key);
     switch (e.key) {
       case 'ArrowLeft':
-        setTempDate(addDays(tempDate || props.value!, -1));
-        datePickerRef.current?.setSelected(addDays(tempDate || props.value!, -1));
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        datePickerRef.current?.setSelected(addDays(props.value!, -1));
         break;
 
       case 'ArrowRight':
-        setTempDate(addDays(tempDate || props.value!, +1));
-        datePickerRef.current?.setSelected(addDays(tempDate || props.value!, +1));
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        datePickerRef.current?.setSelected(addDays(props.value!, +1));
         break;
 
       case 'ArrowDown':
-        setTempDate(addWeeks(tempDate || props.value!, +1));
-        datePickerRef.current?.setSelected(addWeeks(tempDate || props.value!, +1));
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        datePickerRef.current?.setSelected(addWeeks(props.value!, +1));
         break;
 
       case 'ArrowUp':
-        setTempDate(addWeeks(tempDate || props.value!, -1));
-        datePickerRef.current?.setSelected(addWeeks(tempDate || props.value!, -1));
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        datePickerRef.current?.setSelected(addWeeks(props.value!, -1));
         break;
 
       case 'Enter':
-        props.handleInputChange(tempDate, e, props.name);
+        props.handleInputChange(props.value!, e, props.name);
         e.preventDefault();
         e.stopPropagation();
         break;
     }
   };
-
-  useEffect(() => {
-    setTempDate(props.value || null);
-  }, [props.value]);
 
   return (
     <div className="modal-field">
@@ -91,7 +89,7 @@ export const DateField = (props: {
         {props.label}
       </label>
       <DatePicker
-        selected={tempDate}
+        selected={props.value}
         autoComplete="off"
         id="datePicker"
         excludeDates={props.disableArray}
