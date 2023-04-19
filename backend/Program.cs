@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // env variables
-string root = Directory.GetCurrentDirectory();
-string dotenv = Path.Combine(root, ".env");
-DotEnv.Load(dotenv);
+string rootPath = Directory.GetCurrentDirectory();
+string environmentVariablesFile = Path.Combine(rootPath, ".env");
+SetEnvVar.SetVariables(environmentVariablesFile);
 
 string host = Environment.GetEnvironmentVariable("LANEKASSEN_DB_HOST")!;
 string username = Environment.GetEnvironmentVariable("LANEKASSEN_DB_USERNAME")!;
@@ -45,12 +45,14 @@ builder.Services.AddDbContext<ApiDbContext>(
 
 // Add CORS
 builder.Services.AddCors(options => {
-  options.AddPolicy("AllowAnyOrigin",
-    builder => builder
-      .SetIsOriginAllowed(_ => true)
-      .AllowAnyHeader()
-      .AllowAnyMethod()
-      .AllowCredentials());
+  options.AddPolicy("AllowLocalhost",
+      builder => {
+        _ = builder
+          .WithOrigins("http://localhost:3000")
+          .AllowAnyHeader()
+          .AllowAnyMethod()
+          .AllowCredentials();
+      });
 });
 
 
@@ -65,7 +67,7 @@ if (app.Environment.IsDevelopment()) {
 app.UseHttpsRedirection();
 
 // Use CORS middleware
-app.UseCors("AllowAnyOrigin");
+app.UseCors("AllowLocalhost");
 
 app.UseAuthorization();
 

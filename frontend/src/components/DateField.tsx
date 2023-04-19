@@ -1,17 +1,16 @@
-import { FormValues } from './AbsenceForm';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
 
 /**
  * Renders a date field necessary for posting and editing absence
  */
 export const DateField = (props: {
   name: string;
-  label: string;
+  label?: string;
   max?: Date | undefined;
   min?: Date | undefined;
   value: Date | undefined;
+  customClass?: string;
   handleInputChange: (
     date: Date | null,
     event: React.SyntheticEvent<any, Event> | undefined,
@@ -19,6 +18,8 @@ export const DateField = (props: {
   ) => void;
   placeholder?: string;
   disableArray?: Date[];
+  disabled?: boolean;
+  title?: string;
 }) => {
   //update form values on input change
   const handleInputChange = (
@@ -41,7 +42,7 @@ export const DateField = (props: {
 
   return (
     <div className="modal-field">
-      <label htmlFor={props.name} className="block heading-xs">
+      <label htmlFor={props.name} className="block md:heading-xs base ">
         {props.label}
       </label>
       <DatePicker
@@ -52,10 +53,17 @@ export const DateField = (props: {
         name={props.name}
         minDate={min}
         maxDate={max}
-        value={props.value?.toLocaleDateString()}
+        calendarStartDay={1}
+        /*value={props.value?.toLocaleDateString()} */
         onChange={handleInputChange}
-        className="modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center"
+        showWeekNumbers
+        dateFormat="MM/dd/yyyy"
+        className={`modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center bg-primary-contrast disabled:bg-primary-contrast-lighter disabled:cursor-not-allowed disabled:opacity-50 disabled:text-primary-contrast-lighter ${
+          props.customClass ? props.customClass : ''
+        }`}
         required
+        disabled={props.disabled}
+        title={props.disabled === false ? props.title : props.title}
       />
     </div>
   );

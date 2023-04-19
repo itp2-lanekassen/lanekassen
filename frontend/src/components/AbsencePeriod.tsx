@@ -4,12 +4,20 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { deleteAbsence } from '../API/AbsenceAPI';
 import { Absence } from '../types/types';
+import { darken } from '@mui/material/styles';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useGlobalContext } from '@/context/GlobalContext';
+import { useUserContext } from '@/context/UserContext';
 /**
  * Renders a component that shows a users absence instance
  */
 export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
+  const [hover, setHover] = useState(false);
+  const queryClient = useQueryClient();
+  const { absenceTypes } = useGlobalContext();
+  const currentUser = useUserContext();
 
   //Expand/collapse component to show more/less information on click
   const expandCollapse = () => {
@@ -40,23 +48,36 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
     );
   }
 
+  const { mutate: deleteExistingAbsence } = useMutation({
+    mutationFn: deleteAbsence,
+    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
+    onError: () => alert('Fraværet kunne ikke slettes.')
+  });
+
   return (
-    <div className="w-[300px]  min-h-[fit-content] text-grey-lightest font-Rubik ">
-      <div
-        style={{ borderRadius: expandStatus[1] }}
+    <div className="md:w-[300px] w-full px-[50px] md:px-0 md:mx-6 min-h-[fit-content] text-grey-lightest font-Rubik ">
+      <button
+        style={{
+          borderRadius: expandStatus[1],
+          backgroundColor: hover
+            ? darken(props.absence.type.colorCode, 0.2)
+            : props.absence.type.colorCode
+        }}
         onClick={() => expandCollapse()}
-        className="flex flex-row justify-between bg-primary hover:bg-primary-dark leading-[30px] body-tight"
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        className="flex flex-row justify-between leading-[30px] w-full body-tight"
       >
         <p className="ml-[20px]">{absencePeriod}</p>
         <ExpandMoreIcon
           sx={{
-            color: 'white',
+            color: 'primary-contrast',
             height: '30px',
             mr: '10px',
             transform: arrowRotation
           }}
         ></ExpandMoreIcon>
-      </div>
+      </button>
       <section
         style={{ display: expandStatus[0] }}
         className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter rounded-b-[20px] overflow-hidden"
@@ -64,37 +85,54 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
         <p className="mx-[20px] text-[18px]">
           Fraværstype <strong className="body-bold text-[12px]">{props.absence.type.name}</strong>
         </p>
+        {props.absence.isApproved ? (
+          <p className="mx-[20px] text-[18px]">
+            <strong className="body-bold text-[12px]">Godkjent fravær</strong>
+          </p>
+        ) : (
+          <p className="mx-[20px] text-[18px]">
+            <strong className="body-bold text-[12px]">Ikke godkjent</strong>
+          </p>
+        )}
         {notice}
         <div className="flex flex-row float-right">
-          <EditOutlinedIcon
+          <button
+            className="mr-[10px]"
             onClick={() => {
               props.setAbsence(props.absence);
             }}
-            sx={{
-              color: '#410464',
-              height: '30px',
-              mr: '10px',
-              '&:hover': {
-                color: '#26023B'
-              }
-            }}
-          ></EditOutlinedIcon>
-          <DeleteOutlineIcon
+          >
+            <EditOutlinedIcon
+              sx={{
+                color: '#410464',
+                height: '30px',
+                width: '30px',
+                '&:hover': {
+                  color: '#26023B'
+                }
+              }}
+            ></EditOutlinedIcon>
+          </button>
+          <button
             onClick={() => {
               const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
               if (confirmDelete) {
-                deleteAbsence(props.absence.absenceId);
+                deleteExistingAbsence(props.absence.absenceId);
               }
             }}
-            sx={{
-              color: '#410464',
-              height: '30px',
-              mr: '10px',
-              '&:hover': {
-                color: '#26023B'
-              }
-            }}
-          ></DeleteOutlineIcon>
+            className="mr-[10px]"
+          >
+            <DeleteOutlineIcon
+              sx={{
+                color: '#410464',
+                height: '30px',
+                width: '30px',
+                '&:hover': {
+                  color: '#26023B'
+                }
+              }}
+            ></DeleteOutlineIcon>
+          </button>
         </div>
       </section>
     </div>

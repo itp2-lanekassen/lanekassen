@@ -4,18 +4,17 @@ import { useEffect, useState } from 'react';
 import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId,
-  getTeamsByDepartmentId
+  getSubjectFieldsByDepartmentId
 } from '../API/DepartmentAPI';
-import { getUserByAzureId, postUser } from '../API/UserAPI';
+import { postUser } from '../API/UserAPI';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
 import { EmploymentType } from '../types/types';
 import { useNavigate } from 'react-router-dom';
 import { useAzureAdContext } from '../context/AzureAdContext';
-import { SignOutButton } from '../components/SignOutButton';
-import PageLayout from '@/components/PageLayout';
+import { getAllTeams } from '../API/TeamAPI';
+import RegisterPageLayout from '../components/RegisterPageLayout';
 
 export default function FirstTimeRegisterForm() {
   const navigate = useNavigate();
@@ -61,9 +60,7 @@ export default function FirstTimeRegisterForm() {
     selectedDepartment === -1 ? [] : (await getRolesByDepartmentId(selectedDepartment)).data
   );
 
-  const { data: teams } = useQuery(['teams', { departmentId: selectedDepartment }], async () =>
-    selectedDepartment === -1 ? [] : (await getTeamsByDepartmentId(selectedDepartment)).data
-  );
+  const { data: teams } = useQuery(['teams'], async () => (await getAllTeams()).data);
 
   const { data: sections } = useQuery(['section', { departmentId: selectedDepartment }], async () =>
     selectedDepartment === -1 ? [] : (await getSectionsByDepartmentId(selectedDepartment)).data
@@ -96,6 +93,9 @@ export default function FirstTimeRegisterForm() {
     onSuccess: () => {
       queryClient.invalidateQueries(['current-user']);
       navigate('/');
+    },
+    onError: (error) => {
+      alert(error);
     }
   });
 
@@ -116,18 +116,6 @@ export default function FirstTimeRegisterForm() {
     selectedBusinessAffiliation
   ]);
 
-  // Redirect to home if user is already registered
-  useEffect(() => {
-    async function checkIfUserIsRegistered() {
-      const user = await getUserByAzureId(azureUser.id);
-      if (user) {
-        navigate('/');
-      }
-    }
-
-    checkIfUserIsRegistered();
-  }, [azureUser.id, navigate]);
-
   // Fetch data when department is selected
   useEffect(() => {
     if (selectedDepartment !== -1) {
@@ -139,27 +127,26 @@ export default function FirstTimeRegisterForm() {
   }, [selectedDepartment]);
 
   return (
-    <PageLayout title="Registrering">
-      <div className="absolute top-10 left-10 flex justify-end">
-        <SignOutButton />
-      </div>
-      <div className="grid grid-cols-my-page mx-auto w-max gap-4 place-items-center mb-4">
+    <RegisterPageLayout title="Registrering">
+      <div className="grid grid-cols-my-page mx-auto max-w-[70vw] sm:max-w-[400px] w-max gap-4 place-items-center mb-4">
         <p className="font-bold"> Navn: </p>
-        <p className="w-full text-primary">
+        <p className="w-full max-w-[350px] md:overflow-visible text-primary">
           {azureUser.givenName} {azureUser.surname}
         </p>
         <p className="font-bold"> E-post: </p>
-        <p className="w-full text-primary">{azureUser.mail}</p>
-        <p className="font-bold"> Virksomhetstilhørighet: </p>
+        <p className="w-full max-w-[350px] md:overflow-visible text-primary overflow-hidden whitespace-wrap text-ellipsis">
+          {azureUser.mail}
+        </p>
+        <p className="font-bold"> Virksomhet: </p>
         <input
           type={'text'}
           value={selectedBusinessAffiliation}
           placeholder="Virksomhetstilhørighet"
-          className="w-full border-1 border-primary-light rounded-full p-2 text-primary"
+          className="w-full max-w-[350px] border-1 border-primary-light rounded-full p-2 text-primary"
           onChange={(e) => setSelectedBusinessAffiliation(e.target.value)}
         />
       </div>
-      <div className="flex flex-col mx-auto w-1/4 gap-4">
+      <div className="flex flex-col mx-auto w-[70vw] md:w-[50vw] max-w-[350px] gap-4">
         <Dropdown
           placeholder="Ansattforhold"
           options={Object.keys(EmploymentType)
@@ -221,6 +208,6 @@ export default function FirstTimeRegisterForm() {
           }
         />
       </div>
-    </PageLayout>
+    </RegisterPageLayout>
   );
 }

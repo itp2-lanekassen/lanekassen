@@ -16,12 +16,10 @@ export interface Team {
   teamId: number;
   name: string;
   users?: User[];
-  departments?: Department[];
 }
 
 export interface TeamDTO {
   name: string;
-  departments: number[];
 }
 
 export interface SubjectField {
@@ -32,6 +30,19 @@ export interface SubjectField {
 }
 
 export interface SubjectFieldDTO {
+  name: string;
+  departmentId: number;
+}
+
+export interface Section {
+  sectionId: number;
+  name: string;
+  users?: User[];
+  departmentId: number;
+  department?: Department;
+}
+
+export interface SectionDTO {
   name: string;
   departmentId: number;
 }
@@ -71,18 +82,6 @@ export interface NewDepartment {
   abbreviation: string;
   subjectFields?: SubjectField[];
   sections?: Section[];
-}
-
-export interface Section {
-  sectionId: number;
-  name: string;
-  users?: User[];
-  departments?: Department[];
-}
-
-export interface SectionDTO {
-  name: string;
-  departments: number[];
 }
 
 export interface AbsenceType {
@@ -129,6 +128,14 @@ export interface PageResponse<T> {
   size: number;
   totalPages: number;
   data: T[];
+}
+
+export interface UserFilter {
+  departments: number[];
+  sections: number[];
+  teams: number[];
+  roles: number[];
+  subjectFields: number[];
 }
 
 export interface NewUser {

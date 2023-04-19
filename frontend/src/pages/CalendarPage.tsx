@@ -1,124 +1,64 @@
-import { Fragment, useEffect, useState } from 'react';
 import m from 'moment';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { filterUsers } from '../API/UserAPI';
-import { useUserContext } from '../context/UserContext';
-import CalendarRow from '../components/CalendarRow';
-import CalendarHeader from '../components/CalendarHeader';
-import { useFilterContext } from '../context/FilterContext';
-import FilterComponents from '../components/CalendarFilter';
+import { Fragment } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useNavigate } from 'react-router-dom';
-import PageLayout from '../components/PageLayout';
-
-export type Column = Record<string, { display: string; value: string }[]>;
+import FilterComponents from '@/components/calendar/CalendarFilter';
+import CalendarHeader from '@/components/calendar/CalendarHeader';
+import CalendarRow from '@/components/calendar/CalendarRow';
+import PageLayout from '@/components/PageLayout';
+import { useCalendarContext } from '@/context/CalendarContext';
+import { useModalContext } from '@/context/ModalContext';
+import { useUserContext } from '@/context/UserContext';
 
 const CalendarPage = () => {
-  const navigate = useNavigate();
-
   const currentUser = useUserContext();
 
-  const { fromDate, departments, sections, teams, roles, subjectFields } = useFilterContext();
+  const { queryResult, updateFromDate } = useCalendarContext();
 
-  const { hasNextPage, data, isLoading, isError, fetchNextPage } = useInfiniteQuery(
-    ['users', { departments, sections, teams, roles, subjectFields }],
-    async ({ pageParam = 1 }) =>
-      (
-        await filterUsers({
-          page: pageParam,
-          excludeIds: [currentUser.userId],
-          departments,
-          sections,
-          teams,
-          roles,
-          subjectFields
-        })
-      ).data,
-    {
-      getNextPageParam: (lastPage) => {
-        if (lastPage.page >= lastPage.totalPages) return undefined;
-
-        return lastPage.page + 1;
-      }
-    }
-  );
+  const { openAbsenceForm } = useModalContext();
 
   const { ref } = useInView({
-    rootMargin: '15%',
-    onChange: (inView) => inView && fetchNextPage()
+    rootMargin: '20%',
+    onChange: (inView) => inView && queryResult.fetchNextPage()
   });
 
-  const [calendarColumns, setCalendarColumns] = useState<Column>({});
-
-  useEffect(() => {
-    const currentDay = m(fromDate);
-    const toDate = m(fromDate).add(3, 'w').endOf('isoWeek');
-
-    const columns: Column = {};
-
-    while (currentDay.isBefore(toDate)) {
-      const key = `Uke ${String(currentDay.isoWeek())}`;
-
-      if (!columns[key]) columns[key] = [];
-
-      if (!currentDay.format('ddd').match(/Sat|Sun/)) {
-        columns[key].push({
-          display: currentDay.format('DD.MM'),
-          value: currentDay.toISOString()
-        });
-      }
-
-      currentDay.add(1, 'd');
-    }
-
-    setCalendarColumns(columns);
-  }, [fromDate]);
-
-  if (isError) return <div>Noe gikk galt</div>;
+  if (queryResult.isError) return <div>Noe gikk galt</div>;
 
   return (
-    <PageLayout title="Fraværsoversikt">
-      <div>
-        <FilterComponents />
-      </div>
-      <div className="grid grid-cols-calendar place-content-center place-items-center gap-0.5">
-        <div className="row-start-1 row-span-3 flex flex-col items-center gap-1 self-start">
+    <PageLayout title="Kalender">
+      <FilterComponents />
+
+      <div className="w-full grid grid-cols-calendar-columns place-items-center gap-0.5 overflow-x-auto">
+        <div className="row-start-1 row-span-3 flex flex-col gap-1 w-11/12 self-start pt-1">
           <button
-            onClick={() => navigate('/fravaersside')}
-            className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white whitespace-nowrap text-center hover:text-secondary-light hover:bg-white border-solid border-2 hover:scale-105"
+            onClick={() => openAbsenceForm(currentUser, m().format('yyyy-MM-DD'))}
+            className="rounded-full w-11/12 bg-primary-light px-3 py-1 text-sm text-grey-lightest whitespace-nowrap text-center hover:text-primary-light hover:bg-grey-lightest border-solid border-1 mx-auto"
           >
-            Min fraværsoversikt
+            Legg til fravær
           </button>
           <button
-            onClick={() => navigate('/profil')}
-            className="rounded-full bg-secondary-light px-3 py-1 text-sm text-white whitespace-nowrap text-center hover:text-secondary-light hover:bg-white border-solid border-2 hover:scale-105"
+            onClick={() => updateFromDate(m().startOf('isoWeek').toISOString())}
+            className="rounded-full w-11/12 bg-primary-light px-3 py-1 text-sm text-grey-lightest whitespace-nowrap text-center hover:text-primary-light hover:bg-grey-lightest border-solid border-1 mx-auto"
           >
-            Min Profil
+            Denne uken
           </button>
         </div>
+        <CalendarHeader />
 
-        <CalendarHeader columns={calendarColumns} />
+        <CalendarRow user={currentUser} isCurrentUser={true} />
 
-        <CalendarRow user={currentUser} isCurrentUser={true} columns={calendarColumns} />
-
-        {(data?.pages || []).map((currentPage, i) => (
+        {(queryResult.data?.pages || []).map((currentPage, i) => (
           <Fragment key={i}>
             {currentPage.data.map((user) => (
-              <CalendarRow key={user.userId} user={user} columns={calendarColumns} />
+              <CalendarRow key={user.userId} user={user} />
             ))}
           </Fragment>
         ))}
+      </div>
+      <div className="text-primary flex justify-center mt-3">
+        {(queryResult.isInitialLoading || queryResult.isFetchingNextPage) && <div>Laster...</div>}
 
-        {hasNextPage && (
-          <div className="col-span-full text-primary mt-3">
-            {isLoading ? (
-              <div>laster...</div>
-            ) : (
-              <button ref={ref} onClick={() => fetchNextPage()}>
-                Hent mer data
-              </button>
-            )}
-          </div>
+        {queryResult.hasNextPage && !queryResult.isFetchingNextPage && (
+          <div ref={ref}>Hent mer data</div>
         )}
       </div>
     </PageLayout>

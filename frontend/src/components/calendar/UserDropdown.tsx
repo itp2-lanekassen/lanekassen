@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Department, EmploymentType, Section, User } from '../types/types';
-import { getDepartmentById } from '../API/DepartmentAPI';
-import { getSectionById } from '../API/SectionAPI';
-import { useUserContext } from '../context/UserContext';
+import { Department, EmploymentType, Section, User } from '@/types/types';
+import { getDepartmentById } from '@/API/DepartmentAPI';
+import { getSectionById } from '@/API/SectionAPI';
+import { useUserContext } from '@/context/UserContext';
 
 export default function UserDropdown(props: { user: User; isCurrentUser: boolean }) {
   const currentUser = useUserContext();
@@ -16,6 +16,7 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
   const [teams, setTeams] = useState<string[]>();
   const [subjectFields, setSubjectFields] = useState<string[]>();
   const [employmentType, setEmploymentType] = useState<string>('');
+  const [businessAffiliation, setBusinessAffiliation] = useState<string>('');
   const [roles, setRoles] = useState<string[]>();
 
   const formatName = (name: string) => {
@@ -42,6 +43,7 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
 
     setDepartment((await getDepartmentById(props.user.departmentId)).data);
     setSection((await getSectionById(props.user.sectionId)).data);
+    setBusinessAffiliation(props.user.businessAffiliation);
 
     props.user.teams?.forEach((team) => listTeam.push(team.name));
     setTeams(listTeam);
@@ -58,24 +60,28 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
   };
 
   return (
-    <div className="w-full font-header rounded-xl overflow-hidden">
-      <div
+    <div className="col-start-1 w-full font-header rounded-xl overflow-hidden">
+      <button
         className={`${
           props.isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
-        } flex justify-between items-center text-grey-lightest px-2 cursor-pointer`}
+        } flex justify-between items-center text-grey-lightest px-2 cursor-pointer w-full`}
         onClick={() => expandCollapse()}
       >
         <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
           {formatName(`${props.user.firstName} ${props.user.lastName}`)}
         </span>
         <ExpandMoreIcon className={isSet ? 'rotate-180' : 'rotate-0'} />
-      </div>
+      </button>
 
       <div
         className={`${props.isCurrentUser ? 'bg-card-two-light' : 'bg-primary-lighter'} ${
           isSet ? 'flex' : 'hidden'
         } text-primary subheading-small p-2 flex flex-col gap-1`}
       >
+        <p className="text-sm flex flex-col">
+          <strong className="body-bold text-xs">Virksomhet:</strong>
+          {businessAffiliation}
+        </p>
         <p className="text-sm flex flex-col">
           <strong className="body-bold text-xs">Ansattforhold:</strong>
           {employmentType}
@@ -101,10 +107,12 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
           {roles?.join(', ')}
         </p>
         <div className={`${props.isCurrentUser || currentUser.admin ? 'flex' : 'hidden'}`}>
-          <EditOutlinedIcon
-            className="ml-auto cursor-pointer hover:text-secondary-light"
+          <button
+            className="ml-auto cursor-pointer"
             onClick={() => console.log('Implement edit user here')}
-          />
+          >
+            <EditOutlinedIcon className="hover:text-secondary-light" />
+          </button>
         </div>
       </div>
     </div>

@@ -25,7 +25,7 @@ const Dropdown = <T extends number | string>({
       placeholder={placeholder}
       options={options}
       value={value !== undefined && options.find((option) => option.value === value)}
-      onChange={(option) => option && onChange(option.value)}
+      onChange={(option) => option && onChange(option?.value)}
       theme={(theme) => ({
         ...theme,
         borderRadius: 20,
@@ -43,6 +43,10 @@ const Dropdown = <T extends number | string>({
         }
       })}
       styles={{
+        control: (base) => ({
+          ...base,
+          backgroundColor: '#FAFAFA'
+        }),
         menu: (base) => ({
           ...base,
           width: 'fit-content',
@@ -54,7 +58,8 @@ const Dropdown = <T extends number | string>({
           ...base,
           zIndex: 100,
           maxHeight: '250px',
-          overflowX: 'hidden'
+          overflowX: 'hidden',
+          backgroundColor: '#FAFAFA'
         })
       }}
     />

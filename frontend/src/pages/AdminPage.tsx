@@ -2,10 +2,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import SubmitButton from '../components/SubmitButton';
-import { useUserContext } from '../context/UserContext';
+import { useState } from 'react';
 import PageLayout from '@/components/PageLayout';
 import SectionView from '@/components/AdminPage/SectionView';
 import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
@@ -13,35 +10,16 @@ import TeamView from '@/components/AdminPage/TeamView';
 import SubjectFieldView from '@/components/AdminPage/SubjectFieldView';
 import DepartmentView from '@/components/AdminPage/DepartmentView';
 import RoleView from '@/components/AdminPage/RoleView';
+import UserTab from '@/components/AdminPage/UserView';
 
-const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagfelt', 'Team', 'Rolle'];
+const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagområde', 'Team', 'Rolle'];
 
 export default function AdminPage() {
   const [value, setValue] = useState(0);
-  const navigate = useNavigate();
-  const currentUser = useUserContext();
-
-  // midlertidig løsning for å beskytte siden mot ikke admins
-  useEffect(() => {
-    if (!currentUser.admin) {
-      navigate('/');
-    }
-  }, [currentUser.admin, navigate]);
 
   return (
-    <PageLayout title="Adminpanel">
-      <div className="absolute top-16 left-10 flex justify-end">
-        <SubmitButton
-          disabled={false}
-          disabledTitle={'minside'}
-          buttonText={'Til min side'}
-          handleClick={() => {
-            navigate('/profil');
-          }}
-        />
-      </div>
-
-      <div className="flex w-11/12">
+    <PageLayout title="Admin">
+      <div className="flex w-11/12 mt-5">
         <TabContext value={value.toString()}>
           <Tabs
             value={value}
@@ -56,7 +34,7 @@ export default function AdminPage() {
                 key={index}
                 label={label}
                 sx={{
-                  backgroundColor: 'white',
+                  backgroundColor: 'primary-contrast',
                   color: 'black',
                   borderTopLeftRadius: '10px',
                   borderBottomLeftRadius: '10px',
@@ -80,11 +58,15 @@ export default function AdminPage() {
           <div className="w-full border-1 border-primary-light rounded-r-xl overflow-y-auto h-3/5-screen">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
-                {label === 'Brukere' && <div>brukere</div>}
+                {label === 'Brukere' && (
+                  <div>
+                    <UserTab />
+                  </div>
+                )}
                 {label === 'Fraværstyper' && <AbsenceTypeView />}
                 {label === 'Avdeling' && <DepartmentView />}
                 {label === 'Seksjon' && <SectionView />}
-                {label === 'Fagfelt' && <SubjectFieldView />}
+                {label === 'Fagområde' && <SubjectFieldView />}
                 {label === 'Team' && <TeamView />}
                 {label === 'Rolle' && <RoleView />}
               </TabPanel>

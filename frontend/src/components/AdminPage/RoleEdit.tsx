@@ -25,7 +25,8 @@ const RoleEdit = ({ role, setEdit }: RoleEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['roles']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Rollen eksisterer allerede')
   });
 
   const { mutate: createRole } = useMutation({
@@ -33,7 +34,8 @@ const RoleEdit = ({ role, setEdit }: RoleEditProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['roles']);
       setEdit(false);
-    }
+    },
+    onError: () => alert('Rollen eksisterer allerede')
   });
 
   const handleSave = () => {
@@ -44,7 +46,6 @@ const RoleEdit = ({ role, setEdit }: RoleEditProps) => {
         departments: selectedDepartments
       });
     }
-
     createRole({ name: roleName, departments: selectedDepartments });
   };
 
@@ -59,11 +60,10 @@ const RoleEdit = ({ role, setEdit }: RoleEditProps) => {
       />
       <DropdownMultiSelect
         placeholder="Velg Avdelinger"
-        // TODO: shouldn't need important
-        className="!w-2/5"
+        className="w-2/5"
         value={selectedDepartments}
-        listOfOptions={departments.map((d) => ({ id: d.departmentId, name: d.name }))}
-        handleChange={setSelectedDepartments}
+        options={departments.map((d) => ({ value: d.departmentId, label: d.name }))}
+        onChange={setSelectedDepartments}
       />
       <div className="flex gap-4">
         <button

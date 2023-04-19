@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { AbsenceView } from './components/AbsenceView';
 import AzureAdContextProvider from './context/AzureAdContext';
-import FilterContextProvider from './context/FilterContext';
+import CalendarContextProvider from './context/CalendarContext';
 import GlobalContextProvider from './context/GlobalContext';
 import ModalContextProvider from './context/ModalContext';
 import UserContextProvider from './context/UserContext';
@@ -16,63 +16,40 @@ import PageNotFound from './pages/PageNotFound';
 
 const ContextWrapper = ({ children }: { children?: ReactNode }) => (
   <UserContextProvider>
-    <ModalContextProvider>
-      <FilterContextProvider>{children}</FilterContextProvider>
-    </ModalContextProvider>
+    <ModalContextProvider>{children}</ModalContextProvider>
   </UserContextProvider>
 );
 
 function App() {
   return (
-    <>
+    <div className="bg-primary-contrast">
       <UnauthenticatedTemplate>
         <LoginPage />
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>
         <AzureAdContextProvider>
           <GlobalContextProvider>
-            <Routes>
-              <Route path="/registrer-bruker" element={<FirstTimeRegisterForm />} />
-              {/* Denne burde beskyttes slik at man ikke kan navigere hit hvis man har bruker */}
-              <Route
-                path="/"
-                element={
-                  <ContextWrapper>
-                    <CalendarPage />
-                  </ContextWrapper>
-                }
-              />
-              <Route
-                path="/profil"
-                element={
-                  <ContextWrapper>
-                    <MyPage />
-                  </ContextWrapper>
-                }
-              />
-              <Route
-                path="/fravaersside"
-                element={
-                  <ContextWrapper>
-                    <AbsenceView />
-                  </ContextWrapper>
-                }
-              />
-              <Route
-                path="/admin"
-                element={
-                  <ContextWrapper>
-                    <AdminPage />
-                  </ContextWrapper>
-                  /* Må være protected fra ikke-admins */
-                }
-              />
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
+            <ContextWrapper>
+              <Routes>
+                <Route path="/registrer-bruker" element={<FirstTimeRegisterForm />} />
+                <Route
+                  path="/"
+                  element={
+                    <CalendarContextProvider>
+                      <CalendarPage />
+                    </CalendarContextProvider>
+                  }
+                />
+                <Route path="/profil" element={<MyPage />} />
+                <Route path="/fravaersside" element={<AbsenceView />} />
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </ContextWrapper>
           </GlobalContextProvider>
         </AzureAdContextProvider>
       </AuthenticatedTemplate>
-    </>
+    </div>
   );
 }
 
