@@ -3,16 +3,12 @@ import { useState } from 'react';
 import { AbsencePeriods } from './AbsencePeriods';
 import { EditAbsenceView } from './EditAbsenceView';
 import { AddAbsenceView } from './AddAbsenceView';
-import SubmitButton from './SubmitButton';
-import { useNavigate } from 'react-router-dom';
 import PageLayout from './PageLayout';
 
 /**
  * Renders a view that shows a users absence and lets a user edit, delete and add new absences
  */
 export const AbsenceView = () => {
-  const navigate = useNavigate();
-
   const [selectedAbsence, setAbsence] = useState<Absence | null>(null);
   const [absences, setAbsences] = useState<Absence[]>([]);
 
@@ -27,7 +23,7 @@ export const AbsenceView = () => {
   return (
     <PageLayout title="Mine fravær">
       <div className="relative m-auto h-full md:w-[750px]">
-        <div className="flex flex-col flex-col md:flex-row md:gap-0 gap-6">
+        <div className="flex flex-col md:flex-row md:gap-0 gap-6">
           <AbsencePeriods
             setAbsences={setAbsences}
             absences={absences}
