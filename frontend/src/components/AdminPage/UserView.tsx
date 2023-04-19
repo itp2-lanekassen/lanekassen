@@ -10,7 +10,6 @@ const tableHeadersSmall = ['Fornavn', 'Etternavn', 'Avdeling', ''];
 export default function UserView() {
   const [matchingUsers, setMatchingUsers] = useState<User[]>();
   const [view, setView] = useState<JSX.Element>(<></>);
-
   const { data: users } = useQuery(['users'], async () => (await getAllUsers()).data);
 
   // Add matching users to new list to avoid having to load data again
