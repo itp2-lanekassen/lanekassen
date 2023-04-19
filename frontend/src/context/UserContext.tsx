@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { createContext, FC, ReactNode, useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { getUserByAzureId } from '../API/UserAPI';
 import { User } from '../types/types';
 import { useAzureAdContext } from './AzureAdContext';
+import PageNotFound from '@/pages/PageNotFound';
 
 interface UserContextProps {
   children?: ReactNode;
@@ -20,6 +21,7 @@ export const useUserContext = (): User => {
 };
 
 const UserContextProvider: FC<UserContextProps> = ({ children }) => {
+  const location = useLocation();
   const azureUser = useAzureAdContext();
   const {
     isLoading,
@@ -32,6 +34,15 @@ const UserContextProvider: FC<UserContextProps> = ({ children }) => {
   if (isLoading) return <div>Laster bruker...</div>;
   if (isError) {
     return <Navigate to="/registrer-bruker" />;
+  }
+  if (location.pathname === '/registrer-bruker' && currentUser) {
+    return <Navigate to="/" />;
+  }
+  if (location.pathname !== '/registrer-bruker' && !currentUser) {
+    return <Navigate to="/registrer-bruker" />;
+  }
+  if (location.pathname === '/admin' && !currentUser.admin) {
+    return <PageNotFound />;
   }
 
   return <UserContext.Provider value={currentUser}>{children}</UserContext.Provider>;

@@ -20,10 +20,12 @@ export default function AbsenceTypeView() {
   const defaultView = (
     <div className="w-full flex flex-col items-center">
       <div className="flex flex-col items-center w-full ">
-        <div className="grid-cols-absence-types grid col-span-6 w-full place-item-center gap-x-2 gap-y-3">
+        <div className="grid-cols-absence-types-small md:grid-cols-absence-types grid col-span-4 w-full place-item-center gap-x-2 gap-y-3 md:col-span-6">
           <p className="flex-1 text-center font-bold mb-2 border-b-2">Beskrivelse</p>
-          <p className="flex-1 text-center font-bold mb-2 border-b-2">Forkortelse</p>
-          <p className="flex-1 text-center font-bold mb-2 border-b-2">Farge</p>
+          <p className="flex-1 text-center font-bold mb-2 border-b-2 hidden md:block">
+            Forkortelse
+          </p>
+          <p className="flex-1 text-center font-bold mb-2 border-b-2 hidden md:block ">Farge</p>
           <p className="flex-1 text-center font-bold mb-2 border-b-2 whitespace-nowrap">
             Visning (Godkjent / Ikke-godkjent)
           </p>

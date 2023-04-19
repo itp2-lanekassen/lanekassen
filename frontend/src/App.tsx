@@ -29,46 +29,23 @@ function App() {
       <AuthenticatedTemplate>
         <AzureAdContextProvider>
           <GlobalContextProvider>
-            <Routes>
-              <Route path="/registrer-bruker" element={<FirstTimeRegisterForm />} />
-              {/* Denne burde beskyttes slik at man ikke kan navigere hit hvis man har bruker */}
-              <Route
-                path="/"
-                element={
-                  <ContextWrapper>
+            <ContextWrapper>
+              <Routes>
+                <Route path="/registrer-bruker" element={<FirstTimeRegisterForm />} />
+                <Route
+                  path="/"
+                  element={
                     <CalendarContextProvider>
                       <CalendarPage />
                     </CalendarContextProvider>
-                  </ContextWrapper>
-                }
-              />
-              <Route
-                path="/profil"
-                element={
-                  <ContextWrapper>
-                    <MyPage />
-                  </ContextWrapper>
-                }
-              />
-              <Route
-                path="/fravaersside"
-                element={
-                  <ContextWrapper>
-                    <AbsenceView />
-                  </ContextWrapper>
-                }
-              />
-              <Route
-                path="/admin"
-                element={
-                  <ContextWrapper>
-                    <AdminPage />
-                  </ContextWrapper>
-                  /* Må være protected fra ikke-admins */
-                }
-              />
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
+                  }
+                />
+                <Route path="/profil" element={<MyPage />} />
+                <Route path="/fravaersside" element={<AbsenceView />} />
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </ContextWrapper>
           </GlobalContextProvider>
         </AzureAdContextProvider>
       </AuthenticatedTemplate>

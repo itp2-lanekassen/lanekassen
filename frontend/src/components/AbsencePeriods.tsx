@@ -4,14 +4,15 @@ import { getAbsencesByUserId } from '../API/AbsenceAPI';
 import { useUserContext } from '../context/UserContext';
 import moment from 'moment';
 import { useQuery } from '@tanstack/react-query';
+import { Dispatch, SetStateAction } from 'react';
 
 /**
  * Renders a scroll window that shows all absence periods for a user
  */
 export const AbsencePeriods = (props: {
-  setAbsence: any;
+  setAbsence: Dispatch<SetStateAction<Absence | null>>;
   selectedAbsence: Absence | null;
-  setAbsences: any;
+  setAbsences: Dispatch<SetStateAction<Absence[]>>;
   absences: Absence[];
 }) => {
   const currentUser = useUserContext();

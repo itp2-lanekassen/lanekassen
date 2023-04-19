@@ -1,24 +1,24 @@
-import { useGlobalContext } from '@/context/GlobalContext';
+import { deleteAbsence } from '@/API/AbsenceAPI';
 import { useUserContext } from '@/context/UserContext';
+import { Absence } from '@/types/types';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { darken } from '@mui/material/styles';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
-import { deleteAbsence } from '../API/AbsenceAPI';
-import { Absence } from '../types/types';
+import { Dispatch, SetStateAction, useState } from 'react';
 import ConfirmationBox from './ConfirmationBox';
-
 /**
  * Renders a component that shows a users absence instance
  */
-export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
+export const AbsencePeriod = (props: {
+  setAbsence: Dispatch<SetStateAction<Absence | null>>;
+  absence: Absence;
+}) => {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
   const [arrowRotation, setArrowRotation] = useState('rotate(0deg)');
   const [hover, setHover] = useState(false);
   const queryClient = useQueryClient();
-  const { absenceTypes } = useGlobalContext();
   const currentUser = useUserContext();
 
   //Expand/collapse component to show more/less information on click
@@ -66,7 +66,7 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
 
   return (
     <div className="md:w-[300px] w-full px-[50px] md:px-0 md:mx-6 min-h-[fit-content] text-grey-lightest font-Rubik ">
-      <div
+      <button
         style={{
           borderRadius: expandStatus[1],
           backgroundColor: hover
@@ -76,7 +76,7 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
         onClick={() => expandCollapse()}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        className="flex flex-row justify-between leading-[30px] body-tight"
+        className="flex flex-row justify-between leading-[30px] w-full body-tight"
       >
         <p className="ml-[20px]">{absencePeriod}</p>
         <ExpandMoreIcon
@@ -87,7 +87,7 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
             transform: arrowRotation
           }}
         ></ExpandMoreIcon>
-      </div>
+      </button>
       <section
         style={{ display: expandStatus[0] }}
         className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter rounded-b-[20px] overflow-hidden"
@@ -95,43 +95,57 @@ export const AbsencePeriod = (props: { setAbsence: any; absence: Absence }) => {
         <p className="mx-[20px] text-[18px]">
           Fraværstype <strong className="body-bold text-[12px]">{props.absence.type.name}</strong>
         </p>
+        {props.absence.isApproved ? (
+          <p className="mx-[20px] text-[18px]">
+            <strong className="body-bold text-[12px]">Godkjent fravær</strong>
+          </p>
+        ) : (
+          <p className="mx-[20px] text-[18px]">
+            <strong className="body-bold text-[12px]">Ikke godkjent</strong>
+          </p>
+        )}
         {notice}
         <div className="flex flex-row float-right">
-          <EditOutlinedIcon
+          <button
+            className="mr-[10px]"
             onClick={() => {
               props.setAbsence(props.absence);
+              window.scrollTo(9999, 9999);
             }}
-            sx={{
-              color: '#410464',
-              height: '30px',
-              mr: '10px',
-              '&:hover': {
-                color: '#26023B'
-              }
-            }}
-          ></EditOutlinedIcon>
-          <DeleteOutlineIcon
-            onClick={() => setOpenDialog(true)}
-            className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
-            sx={{
-              color: '#410464',
-              height: '30px',
-              mr: '10px',
-              '&:hover': {
-                color: '#26023B',
-                scale: '1.1'
-              }
-            }}
-          ></DeleteOutlineIcon>
-          {openDialog && (
-            <div className="flex justify-between items-center">
-              <ConfirmationBox
-                confirmationText="Er du sikker på at du vil slette fraværet?"
-                isOpen={openDialog}
-                onConfirm={handleDeleteClick}
-              />
-            </div>
-          )}
+          >
+            <EditOutlinedIcon
+              sx={{
+                color: '#410464',
+                height: '30px',
+                width: '30px',
+                '&:hover': {
+                  color: '#26023B'
+                }
+              }}
+            ></EditOutlinedIcon>
+          </button>
+          <button onClick={() => setOpenDialog(true)} className="mr-[10px]">
+            <DeleteOutlineIcon
+              sx={{
+                color: '#410464',
+                height: '30px',
+                width: '30px',
+                '&:hover': {
+                  color: '#26023B',
+                  scale: '1.1'
+                }
+              }}
+            ></DeleteOutlineIcon>
+            {openDialog && (
+              <div className="flex justify-between items-center">
+                <ConfirmationBox
+                  confirmationText="Er du sikker på at du vil slette fraværet?"
+                  isOpen={openDialog}
+                  onConfirm={handleDeleteClick}
+                />
+              </div>
+            )}
+          </button>
         </div>
       </section>
     </div>

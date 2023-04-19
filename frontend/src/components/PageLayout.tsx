@@ -73,7 +73,7 @@ const PageLayout = ({ title, children }: PageLayoutProps) => {
 
   return (
     <main className="min-h-screen w-full max-w-screen-xl mx-auto pb-6">
-      <div className="flex justify-center relative h-1/4-screen">
+      <div className="flex justify-center relative h-1/8 md:h-1/4-screen">
         <img className="w-[85vw] h-[16vw] md:h-[10vw]" src={ellipse} alt="" />
         <h1 className="absolute top-[4vw] -translate-y-1/3 sm:text-3xl text-2xl">{title}</h1>
       </div>
@@ -94,7 +94,7 @@ const PageLayout = ({ title, children }: PageLayoutProps) => {
       >
         <div
           style={{ right: sideMenuVisibility }}
-          className={`bg-primary flex flex-col items-center gap-[2vh] h-full pt-[15vh] text-xs sm:hidden fixed top-0 w-[40vw] duration-300 z-10 overflow-hidden`}
+          className={`bg-primary flex flex-col items-center gap-[2vh] h-full pt-[15vh] text-xs sm:hidden fixed top-0 w-[40vw] duration-300 z-50 overflow-hidden`}
         >
           <button
             onClick={() => toggleSideMenu()}

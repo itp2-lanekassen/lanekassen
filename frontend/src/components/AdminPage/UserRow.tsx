@@ -72,10 +72,10 @@ export default function UserRow(props: {
     <>
       <p className="flex-1">{formatFirstName(props.user.firstName)}</p>
       <p className="flex-1">{props.user.lastName}</p>
-      <p className="flex-1">{email}</p>
-      <p className="flex-1">{employmentType}</p>
+      <p className="flex-1 hidden md:block">{email}</p>
+      <p className="flex-1 hidden md:block">{employmentType}</p>
       <p className="flex-1">{department?.name}</p>
-      <p className="flex-1">{section?.name}</p>
+      <p className="flex-1 hidden md:block">{section?.name}</p>
       <div className="w-[24px] h-[24px]">
         <EditButton onClick={handleEdit} />
       </div>
