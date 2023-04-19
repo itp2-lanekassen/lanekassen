@@ -26,7 +26,7 @@ const SectionList = ({ setEdit }: SectionListProps) => {
   const { mutate: deleteExistingSection } = useMutation({
     mutationFn: deleteSection,
     onSuccess: () => queryClient.invalidateQueries(['sections']),
-    onError: (error: Error) => {
+    onError: () => {
       setErrorAlertMessage('En seksjon kan ikke være i bruk før den slettes!');
       setErrorAlertOpen(true);
     }

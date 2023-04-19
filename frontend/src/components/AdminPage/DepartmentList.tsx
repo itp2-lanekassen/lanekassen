@@ -26,7 +26,7 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
   const { mutate: deleteExistingDepartment } = useMutation({
     mutationFn: deleteDepartment,
     onSuccess: () => queryClient.invalidateQueries(['departments']),
-    onError: (error: Error) => {
+    onError: () => {
       setErrorAlertMessage('En avdeling kan ikke være i bruk før den slettes!');
       setErrorAlertOpen(true);
     }

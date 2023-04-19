@@ -9,7 +9,7 @@ import PageLayout from './PageLayout';
  * Renders a view that shows a users absence and lets a user edit, delete and add new absences
  */
 export const AbsenceView = () => {
-  const [selectedAbsence, setAbsence] = useState<Absence | null>(null);
+  const [selectedAbsence, setAbsence] = useState<Absence>();
   const [absences, setAbsences] = useState<Absence[]>([]);
 
   //Show AddAbsenceView if no absence has been seleced, show EditAbsenceView if an absence has been selected

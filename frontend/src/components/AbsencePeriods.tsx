@@ -10,7 +10,7 @@ import { Dispatch, SetStateAction } from 'react';
  * Renders a scroll window that shows all absence periods for a user
  */
 export const AbsencePeriods = (props: {
-  setAbsence: Dispatch<SetStateAction<Absence | null>>;
+  setAbsence: Dispatch<SetStateAction<Absence | undefined>>;
   selectedAbsence: Absence | null;
   setAbsences: Dispatch<SetStateAction<Absence[]>>;
   absences: Absence[];
