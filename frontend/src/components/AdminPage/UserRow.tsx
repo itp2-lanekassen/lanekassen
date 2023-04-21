@@ -17,11 +17,11 @@ export default function UserRow(props: {
 }) {
   const queryClient = useQueryClient();
   const { data: dep } = useQuery(
-    [`sec-${props.user.departmentId}`],
+    [`dep-${props.user.userId}`],
     async () => (await getDepartmentById(props.user.departmentId)).data
   );
   const { data: sec } = useQuery(
-    [`sec-${props.user.sectionId}`],
+    [`sec-${props.user.userId}`],
     async () => (await getSectionById(props.user.sectionId)).data
   );
 
