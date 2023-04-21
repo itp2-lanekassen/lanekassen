@@ -1,5 +1,5 @@
-import m from 'moment';
-import 'moment/dist/locale/nb';
+import { isAfter, isWeekend, format, add } from 'date-fns';
+import { nb } from 'date-fns/locale';
 
 export type Columns = {
   months: Record<string, number>;
@@ -9,8 +9,8 @@ export type Columns = {
 
 export default function calculateColumns(fromDate: string, toDate: string) {
   // make copies of current from and to date
-  const currentDay = m(fromDate).locale('nb');
-  const lastDay = m(toDate);
+  let currentDay = new Date(fromDate);
+  const lastDay = new Date(toDate);
 
   // columns is an object where key is 'Uke xx' and value is an array of days
   const cols: Columns = {
@@ -19,30 +19,30 @@ export default function calculateColumns(fromDate: string, toDate: string) {
     days: []
   };
 
-  while (currentDay.isSameOrBefore(lastDay)) {
-    // exclude saturdays and sundays
-    if (!currentDay.format('d').match(/6|0/)) {
+  while (!isAfter(currentDay, lastDay)) {
+    // exclude weekends
+    if (!isWeekend(currentDay)) {
       // add the name of the month and increment its count to determine colSpan
-      const month = currentDay.format('MMMM');
+      const month = format(currentDay, 'MMMM', { locale: nb });
       if (!cols.months[month]) cols.months[month] = 0;
       cols.months[month]++;
 
       // format date to isoWeek with the text 'Uke' in front
       // increment is count to determine colSpan
-      const week = currentDay.format('[Uke] W');
+      const week = `Uke ${format(currentDay, 'I')}`;
       if (!cols.weeks[week]) cols.weeks[week] = 0;
       cols.weeks[week]++;
 
-      // push the date in locale format (DD.MM or MM/DD) to the current week
+      // push the day to the days array
       cols.days.push({
         value: currentDay.toISOString(),
-        display: currentDay.format('D'),
-        week: Number(currentDay.format('W'))
+        display: format(currentDay, 'd'),
+        week: Number(format(currentDay, 'I'))
       });
     }
 
     // advance day by one
-    currentDay.add(1, 'd');
+    currentDay = add(currentDay, { days: 1 });
   }
 
   return cols;

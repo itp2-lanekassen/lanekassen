@@ -10,7 +10,6 @@ import 'react-datepicker/dist/react-datepicker.min.css';
 import classNames from 'classnames';
 import { Tune } from '@mui/icons-material';
 import FilterDescription from './FilterDescription';
-import moment from 'moment';
 
 interface CalendarFilterItemProps {
   name?: string;
@@ -117,7 +116,7 @@ export default function FilterComponents() {
               dateFormat="P"
               className={classNames(
                 'border-1 border-primary-light rounded-full text-primary-light',
-                'py-1.5 pl-3 focus:outline-primary-light flex w-full mr-3'
+                'py-1.5 px-3 focus:outline-primary-light flex w-full'
               )}
             />
           </div>
@@ -199,8 +198,19 @@ export default function FilterComponents() {
         <CalendarFilterItem
           className="lg:hidden"
           hideButton
-          // TODO: locale overridden in calculateColumns. use date-fns instead?
-          name={moment(dates.from).format('D.M.YY') + ' - ' + moment(dates.to).format('D.M.YY')}
+          name={
+            new Date(dates.from).toLocaleDateString(navigator.language, {
+              day: 'numeric',
+              month: 'numeric',
+              year: '2-digit'
+            }) +
+            ' - ' +
+            new Date(dates.from).toLocaleDateString(navigator.language, {
+              day: 'numeric',
+              month: 'numeric',
+              year: '2-digit'
+            })
+          }
         />
 
         {filter.departments.length > 0 && (

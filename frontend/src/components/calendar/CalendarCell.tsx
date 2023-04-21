@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import moment from 'moment';
 import { useUserContext } from '@/context/UserContext';
 import { useModalContext } from '@/context/ModalContext';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { Absence, User } from '@/types/types';
 import classNames from 'classnames';
+import { isSameDay } from 'date-fns';
 
 interface CalendarCellProps {
   date: string;
@@ -48,18 +48,17 @@ const CalendarCell: FC<CalendarCellProps> = ({
 
   const totalRows = queryResult.data?.pages.reduce((tot, page) => (tot += page.data.length), 1);
 
-  const holiday = holidays?.find((h) => moment(date).isSame(h.date, 'd'));
+  const holiday = holidays?.find((h) => isSameDay(new Date(date), new Date(h.date)));
 
-  //TODO: bruk moment(date) til å sjekke om den datoen har fravær fra før
   const handleCellClick = () => {
     if (!(isCurrentUser || currentUser.admin)) return;
     if (holiday) return;
 
     //open editing version of form if an absence was clicked, otherwise open add version
     if (absence) {
-      openAbsenceForm(user, moment(date).format('yyyy-MM-DD'), 'edit', absence);
+      openAbsenceForm(user, date, 'edit', absence);
     } else {
-      openAbsenceForm(user, moment(date).format('yyyy-MM-DD'));
+      openAbsenceForm(user, date);
     }
   };
 

@@ -1,4 +1,3 @@
-import m from 'moment';
 import { Fragment } from 'react';
 import { useInView } from 'react-intersection-observer';
 import FilterComponents from '@/components/calendar/CalendarFilter';
@@ -8,6 +7,7 @@ import PageLayout from '@/components/PageLayout';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { useModalContext } from '@/context/ModalContext';
 import { useUserContext } from '@/context/UserContext';
+import { startOfWeek } from 'date-fns';
 
 const CalendarPage = () => {
   const currentUser = useUserContext();
@@ -30,13 +30,13 @@ const CalendarPage = () => {
       <div className="w-full grid grid-cols-calendar-columns place-items-center gap-0.5 overflow-x-auto">
         <div className="row-start-1 row-span-3 flex flex-col gap-1 w-11/12 self-start pt-1">
           <button
-            onClick={() => openAbsenceForm(currentUser, m().format('yyyy-MM-DD'))}
+            onClick={() => openAbsenceForm(currentUser, new Date().toISOString())}
             className="rounded-full w-11/12 bg-primary-light px-3 py-1 text-sm text-grey-lightest whitespace-nowrap text-center hover:text-primary-light hover:bg-grey-lightest border-solid border-1 mx-auto"
           >
             Legg til fravær
           </button>
           <button
-            onClick={() => updateFromDate(m().startOf('isoWeek').toISOString())}
+            onClick={() => updateFromDate(startOfWeek(new Date()).toISOString())}
             className="rounded-full w-11/12 bg-primary-light px-3 py-1 text-sm text-grey-lightest whitespace-nowrap text-center hover:text-primary-light hover:bg-grey-lightest border-solid border-1 mx-auto"
           >
             Denne uken

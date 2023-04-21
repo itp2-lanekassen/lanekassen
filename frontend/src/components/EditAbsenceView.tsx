@@ -7,7 +7,6 @@ import { useUserContext } from '../context/UserContext';
 import { Absence } from '../types/types';
 import * as React from 'react';
 import { FormValues } from './AbsenceForm';
-import moment from 'moment';
 import { useEffect } from 'react';
 import {
   getDatePickerMaxForAbsence,
@@ -64,8 +63,8 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
 
   //initialize form values with current values for the absence selected for editing
   const [formValues, setFormValues] = React.useState<FormValues>({
-    startDate: new Date(moment(props.absence.startDate).format('YYYY-MM-DD')),
-    endDate: new Date(moment(props.absence.endDate).format('YYYY-MM-DD')),
+    startDate: new Date(props.absence.startDate),
+    endDate: new Date(props.absence.endDate),
     comment: props.absence.comment,
     absenceType: props.absence.absenceTypeId
   });
@@ -73,8 +72,8 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
   //update form values when another absence is selected
   useEffect(() => {
     setFormValues({
-      startDate: new Date(moment(props.absence.startDate).format('YYYY-MM-DD')),
-      endDate: new Date(moment(props.absence.endDate).format('YYYY-MM-DD')),
+      startDate: new Date(props.absence.startDate),
+      endDate: new Date(props.absence.endDate),
       comment: props.absence.comment,
       absenceType: props.absence.absenceTypeId
     });
@@ -116,6 +115,9 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
   //Update absence in database
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!formValues.startDate || !formValues.endDate) return;
+
     //get the updated absence type from database
     const updatedAbsenceType = (await getAbsenceTypeById(formValues.absenceType)).data;
 
@@ -128,9 +130,10 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
     }
     editAbsence({
       absenceId: props.absence.absenceId,
-      startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
-      endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
+      startDate: formValues.startDate.toISOString(),
+      endDate: formValues.endDate.toISOString(),
       absenceTypeId: formValues.absenceType,
+      // TODO: should only need id
       type: updatedAbsenceType,
       userId: currentUser.userId,
       user: currentUser,
