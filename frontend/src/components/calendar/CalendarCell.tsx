@@ -53,6 +53,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
   //TODO: bruk moment(date) til å sjekke om den datoen har fravær fra før
   const handleCellClick = () => {
     if (!(isCurrentUser || currentUser.admin)) return;
+    if (holiday) return;
 
     //open editing version of form if an absence was clicked, otherwise open add version
     if (absence) {
@@ -69,7 +70,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
     <button
       className={classNames(
         holiday
-          ? 'bg-error-light hover:bg-error text-2xs'
+          ? 'bg-error-light cursor-auto text-2xs'
           : `${defaultColor} hover:${hoverColor} text-sm`,
         isCurrentUser || currentUser.admin ? 'cursor-pointer' : 'cursor-default',
         'w-full h-full px-1 py-0.5',
@@ -78,9 +79,10 @@ const CalendarCell: FC<CalendarCellProps> = ({
       )}
       // make holiday cell span all rows
       style={holiday ? { gridRow: `span ${totalRows} / span ${totalRows}` } : getStyle(absence)}
+      title={holiday?.description}
       onClick={handleCellClick}
     >
-      {holiday ? isCurrentUser && holiday.description : absence && absence.type.code}
+      {holiday ? isCurrentUser && '' : absence && absence.type.code}
     </button>
   );
 };
