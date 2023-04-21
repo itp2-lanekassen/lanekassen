@@ -7,11 +7,13 @@ import { Absence } from '../types/types';
 import { darken } from '@mui/material/styles';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserContext } from '@/context/UserContext';
+import classNames from 'classnames';
 /**
  * Renders a component that shows a users absence instance
  */
 export const AbsencePeriod = (props: {
-  setAbsence: Dispatch<SetStateAction<Absence | null>>;
+  isSelected?: boolean;
+  setAbsence: Dispatch<SetStateAction<Absence | undefined>>;
   absence: Absence;
 }) => {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
@@ -56,10 +58,16 @@ export const AbsencePeriod = (props: {
   });
 
   return (
-    <div className="md:w-[300px] w-full px-[50px] md:px-0 md:mx-6 min-h-[fit-content] text-grey-lightest font-Rubik ">
+    <div
+      className={classNames(
+        'md:w-[300px] w-full px-[50px] md:px-0 md:mx-6',
+        'text-grey-lightest font-Rubik rounded-2xl overflow-hidden',
+        'outline-primary outline-2',
+        props.isSelected && 'outline'
+      )}
+    >
       <button
         style={{
-          borderRadius: expandStatus[1],
           backgroundColor: hover
             ? darken(props.absence.type.colorCode, 0.2)
             : props.absence.type.colorCode
@@ -77,11 +85,11 @@ export const AbsencePeriod = (props: {
             mr: '10px',
             transform: arrowRotation
           }}
-        ></ExpandMoreIcon>
+        />
       </button>
       <section
         style={{ display: expandStatus[0] }}
-        className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter rounded-b-[20px] overflow-hidden"
+        className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter overflow-hidden"
       >
         <p className="mx-[20px] text-[18px]">
           Fraværstype <strong className="body-bold text-[12px]">{props.absence.type.name}</strong>
@@ -113,7 +121,7 @@ export const AbsencePeriod = (props: {
                   color: '#26023B'
                 }
               }}
-            ></EditOutlinedIcon>
+            />
           </button>
           <button
             onClick={() => {

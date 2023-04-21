@@ -44,7 +44,7 @@ export default function UserView() {
           className="mt-3 flex modal-input w-4/12 border-2 rounded-[20px] p-2 border-primary bg-primary-contrast"
           type="text"
           placeholder="Søk"
-          onChange={searchForUsers}
+          onChange={(e) => searchForUsers(e)}
         ></input>
       </div>
       <div className=" mt-5 flex flex-col items-center">

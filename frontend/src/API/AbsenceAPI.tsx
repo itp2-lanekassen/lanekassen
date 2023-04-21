@@ -86,12 +86,9 @@ export async function getAbsencesByUserIdandDate(
 }
 
 //return the first startDate of an absence after a specific date, return undefined if there is none
-export async function getDatePickerMaxForAbsence(
-  userId: number,
-  date: Date
-): Promise<Date | undefined> {
+export async function getDatePickerMaxForAbsence(userId: number, date: Date) {
   const absences = await getAbsencesByUserId(userId).then((response) => response.data);
-  let returnDate = undefined;
+  let returnDate: Date | undefined = undefined;
   let earliestDate = date;
   let diff = Infinity;
   absences.map((a) => {
@@ -110,12 +107,9 @@ export async function getDatePickerMaxForAbsence(
 }
 
 //return the first endDate of an absence before a specific date, return undefined if there is none
-export async function getDatePickerMinForAbsence(
-  userId: number,
-  date: Date
-): Promise<string | undefined> {
+export async function getDatePickerMinForAbsence(userId: number, date: Date) {
   const absences = await getAbsencesByUserId(userId).then((response) => response.data);
-  let returnDate = undefined;
+  let returnDate: Date | undefined = undefined;
   let earliestDate = date;
   let diff = Infinity;
   absences.map((a) => {

@@ -13,7 +13,7 @@ export const DateField = (props: {
   customClass?: string;
   handleInputChange: (
     date: Date | null,
-    event: React.SyntheticEvent<any, Event> | undefined,
+    event: React.SyntheticEvent | undefined,
     name: string
   ) => void;
   placeholder?: string;
