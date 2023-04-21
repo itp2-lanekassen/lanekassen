@@ -21,6 +21,7 @@ export default function FirstTimeRegisterForm() {
   const queryClient = useQueryClient();
 
   const azureUser = useAzureAdContext();
+  console.log(azureUser);
   const { departments, sections: allSections } = useGlobalContext();
 
   // Set default values for dropdowns based on Azure AD data
