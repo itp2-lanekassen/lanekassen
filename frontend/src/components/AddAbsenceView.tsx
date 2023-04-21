@@ -181,7 +181,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
                   checked={isApproved}
                   onChange={handleIsApprovedChange}
                   // eslint-disable-next-line react/no-unknown-property
-                  className="space-x-5 h-5 w-5 accent-primary "
+                  className="space-x-5 h-5 w-5 accent-primary cursor-pointer"
                 />
               </div>
             )}
