@@ -145,13 +145,11 @@ export const AbsencePeriod = (props: {
               }}
             ></DeleteOutlineIcon>
             {openDialog && (
-              <div className="flex justify-between items-center">
-                <ConfirmationBox
-                  confirmationText="Er du sikker på at du vil slette fraværet?"
-                  isOpen={openDialog}
-                  onConfirm={handleDeleteClick}
-                />
-              </div>
+              <ConfirmationBox
+                confirmationText="Er du sikker på at du vil slette fraværet?"
+                isOpen={openDialog}
+                onConfirm={handleDeleteClick}
+              />
             )}
           </button>
         </div>

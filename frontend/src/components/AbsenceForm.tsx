@@ -20,6 +20,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
 import ConfirmationBox from './ConfirmationBox';
 import { DateField } from './DateField';
+import MessageBox from './MessageBox';
 
 type ModalProps = {
   startDate?: Date;
@@ -96,23 +97,24 @@ const AbsenceForm: React.FC<ModalProps> = ({
   }
 
   const currentUser = useUserContext();
+  const [openMessageBox, setOpenMessageBox] = React.useState(false);
 
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
-    onError: () => alert('Kunne ikke legge til fravær')
+    onError: () => setOpenMessageBox(true)
   });
 
   const { mutate: editAbsence } = useMutation({
     mutationFn: updateAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
-    onError: () => alert('Kunne ikke endre fravær')
+    onError: () => setOpenMessageBox(true)
   });
 
   const { mutate: deleteAbsenceMutation } = useMutation({
     mutationFn: deleteAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
-    onError: () => alert('Kunne ikke slette fravær')
+    onError: () => setOpenMessageBox(true)
   });
 
   const [formValues, setFormValues] = React.useState<FormValues>({
@@ -245,6 +247,20 @@ const AbsenceForm: React.FC<ModalProps> = ({
 
   return (
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50">
+      {openDialog && (
+        <ConfirmationBox
+          confirmationText="Er du sikker på at du vil slette fraværet?"
+          isOpen={openDialog}
+          onConfirm={handleDeleteClick}
+        />
+      )}
+      {openMessageBox && (
+        <MessageBox
+          confirmationText={'Noe gikk galt. Prøv igjen.'}
+          isOpen={openMessageBox}
+          onConfirm={() => setOpenMessageBox(false)}
+        />
+      )}
       <div className="modal-overlay pointer-events-none" onClick={onClose} />
       <div className="relative w-auto my-6 mx-auto max-w-3xl bg-primary-contrast px-10 pt-10 pb-5 rounded-[40px] border-primary border-2">
         <button
@@ -257,16 +273,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
         <h2 className="modal-title text-center ">
           {user.firstName} {user.lastName}
         </h2>
-        {/* Dialog box. Opens when OpenDialog = true */}
-        {openDialog && (
-          <div className="flex justify-between items-center">
-            <ConfirmationBox
-              confirmationText="Er du sikker på at du vil slette fraværet?"
-              isOpen={openDialog}
-              onConfirm={handleDeleteClick}
-            />
-          </div>
-        )}
+
         <form className="modal-form" onSubmit={handleSubmit}>
           <DateField
             handleInputChange={handleInputChange}
