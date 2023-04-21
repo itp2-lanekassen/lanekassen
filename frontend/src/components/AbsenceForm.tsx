@@ -15,10 +15,11 @@ import { useGlobalContext } from '../context/GlobalContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
 
+import { useUserContext } from '@/context/UserContext';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
+import ConfirmationBox from './ConfirmationBox';
 import { DateField } from './DateField';
-import { useUserContext } from '@/context/UserContext';
 
 type ModalProps = {
   startDate?: Date;
@@ -26,6 +27,7 @@ type ModalProps = {
   type?: string;
   clickedAbsence?: Absence;
   onClose: () => void;
+  handleClickOpen?: (event: MouseEvent) => void;
 };
 
 export type FormValues = {
@@ -180,6 +182,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
     });
   };
 
+  //TODO: Why is this function needed? Why not use deleteAbsenceMutation directly?
   const handleDeleteAbsence = async () => {
     if (absenceId) {
       deleteAbsenceMutation(absenceId);
@@ -231,6 +234,15 @@ const AbsenceForm: React.FC<ModalProps> = ({
     onClose();
   };
 
+  // Function to open ConfirmationBox. Takes the result from it as a parameter
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
+  const handleDeleteClick = (result: boolean) => {
+    if (result) {
+      handleDeleteAbsence();
+    }
+    setOpenDialog(false);
+  };
+
   return (
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50">
       <div className="modal-overlay pointer-events-none" onClick={onClose} />
@@ -243,9 +255,18 @@ const AbsenceForm: React.FC<ModalProps> = ({
           <CloseIcon />
         </button>
         <h2 className="modal-title text-center ">
-          {' '}
-          {user.firstName} {user.lastName}{' '}
+          {user.firstName} {user.lastName}
         </h2>
+        {/* Dialog box. Opens when OpenDialog = true */}
+        {openDialog && (
+          <div className="flex justify-between items-center">
+            <ConfirmationBox
+              confirmationText="Er du sikker på at du vil slette fraværet?"
+              isOpen={openDialog}
+              onConfirm={handleDeleteClick}
+            />
+          </div>
+        )}
         <form className="modal-form" onSubmit={handleSubmit}>
           <DateField
             handleInputChange={handleInputChange}
@@ -254,6 +275,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
             value={formValues.startDate}
             name="startDate"
             label="Fra"
+            title=""
           ></DateField>
           <DateField
             handleInputChange={handleInputChange}
@@ -262,6 +284,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
             value={formValues.endDate}
             name="endDate"
             label="Til"
+            title=""
           ></DateField>
           <AbsenceRadioField
             formValues={formValues}
@@ -294,13 +317,17 @@ const AbsenceForm: React.FC<ModalProps> = ({
             </Button>
             {absenceId && (
               <DeleteOutlineIcon
-                onClick={() => {
-                  const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
-                  if (confirmDelete) {
-                    handleDeleteAbsence();
+                onClick={() => setOpenDialog(true)}
+                className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
+                sx={{
+                  color: '#410464',
+                  height: '30px',
+                  mr: '10px',
+                  '&:hover': {
+                    color: '#26023B',
+                    scale: '1.1'
                   }
                 }}
-                className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
               ></DeleteOutlineIcon>
             )}
           </div>

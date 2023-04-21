@@ -3,10 +3,11 @@ import { Team } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
+import ErrorAlert from '../Alert';
 import SubmitButton from '../SubmitButton';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
-import ErrorAlert from '../Alert';
+import ConfirmationBox from '../ConfirmationBox';
 
 interface TeamListProps {
   setEdit: (val: boolean, team?: Team) => void;
@@ -32,6 +33,15 @@ const TeamList = ({ setEdit }: TeamListProps) => {
     }
   });
 
+  const [id, setId] = useState<number>(0);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const handleDeleteClick = (result: boolean) => {
+    if (result) {
+      deleteExistingTeam(id);
+    }
+    setOpenDialog(false);
+  };
+
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
 
@@ -54,10 +64,19 @@ const TeamList = ({ setEdit }: TeamListProps) => {
             <EditButton onClick={() => setEdit(true, team)} />
             <DeleteButton
               onClick={() => {
-                const confirmDelete = confirm('Er du sikker på at du vil slette dette teamet?');
-                if (confirmDelete) deleteExistingTeam(team.teamId);
+                setId(team.teamId);
+                setOpenDialog(true);
               }}
             />
+            {openDialog && (
+              <div className="flex justify-between items-center">
+                <ConfirmationBox
+                  confirmationText="Er du sikker på at du vil slette teamet?"
+                  isOpen={openDialog}
+                  onConfirm={handleDeleteClick}
+                />
+              </div>
+            )}
           </Fragment>
         ))}
       </div>

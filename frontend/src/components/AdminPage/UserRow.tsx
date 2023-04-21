@@ -4,6 +4,7 @@ import { deleteUser } from '@/API/UserAPI';
 import { Department, EmploymentType, Section, User } from '@/types/types';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import ConfirmationBox from '../ConfirmationBox';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 import UserSelectedView from './UserSelectedView';
@@ -40,12 +41,12 @@ export default function UserRow(props: {
       })
       .join(' ');
   };
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   // When a user is deleted, the list of users reloads
-  const handleDeleteProfileClick = () => {
-    const confirmDelete = confirm('Er du sikker på at du vil slette denne profilen?');
-    if (confirmDelete) {
-      deleteUser(props.user.userId).then(async () => {
+  const handleDeleteProfileClick = (result: boolean) => {
+    if (result) {
+      deleteUser(props.user?.userId).then(async () => {
         queryClient.invalidateQueries(['users']);
       });
     }
@@ -79,7 +80,16 @@ export default function UserRow(props: {
         <EditButton onClick={handleEdit} />
       </div>
       <div className="w-[24px] h-[24px]">
-        <DeleteButton onClick={handleDeleteProfileClick} />
+        <DeleteButton onClick={() => setOpenDialog(true)} />
+        {openDialog && (
+          <div className="flex justify-between items-center">
+            <ConfirmationBox
+              confirmationText="Er du sikker på at du vil slette brukeren?"
+              isOpen={openDialog}
+              onConfirm={handleDeleteProfileClick}
+            />
+          </div>
+        )}
       </div>
     </>
   );
