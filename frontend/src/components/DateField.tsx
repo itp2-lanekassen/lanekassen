@@ -28,17 +28,6 @@ export const DateField = (props: {
   ) => {
     props.handleInputChange(date, e, props.name);
   };
-  //set max to null if it is undefined
-  let max = null;
-  if (props.max) {
-    max = props.max;
-  }
-
-  //set min to null if it is undefined
-  let min = null;
-  if (props.min) {
-    min = props.min;
-  }
 
   return (
     <div className="modal-field">
@@ -51,19 +40,19 @@ export const DateField = (props: {
         id="datePicker"
         excludeDates={props.disableArray}
         name={props.name}
-        minDate={min}
-        maxDate={max}
-        calendarStartDay={1}
-        /*value={props.value?.toLocaleDateString()} */
+        minDate={props.min}
+        maxDate={props.max}
         onChange={handleInputChange}
         showWeekNumbers
-        dateFormat="MM/dd/yyyy"
+        dateFormat="dd/MM/yyyy"
         className={`modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center bg-primary-contrast disabled:bg-primary-contrast-lighter disabled:cursor-not-allowed disabled:opacity-50 disabled:text-primary-contrast-lighter ${
           props.customClass ? props.customClass : ''
         }`}
         required
         disabled={props.disabled}
         title={props.disabled === false ? props.title : props.title}
+        weekLabel="Uke"
+        startOpen={false}
       />
     </div>
   );
