@@ -1,7 +1,7 @@
 import { getAllUsers } from '@/API/UserAPI';
 import { User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import UserRow from './UserRow';
 
 const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon', ''];
@@ -10,17 +10,16 @@ const tableHeadersSmall = ['Fornavn', 'Etternavn', 'Avdeling', ''];
 export default function UserView() {
   const [matchingUsers, setMatchingUsers] = useState<User[]>();
   const [view, setView] = useState<JSX.Element>(<></>);
-
-  const { data: users } = useQuery(['users'], async () => (await getAllUsers()).data);
+  const { isLoading, data: users } = useQuery(['users'], async () => (await getAllUsers()).data);
 
   // Add matching users to new list to avoid having to load data again
   // when the query changes
-  const searchForUsers = (input: string) => {
+  const searchForUsers = (event: ChangeEvent<HTMLInputElement>) => {
     const matches: User[] = [];
     users?.forEach((user) => {
       if (
-        user.firstName.toLowerCase().startsWith(input.toLowerCase()) ||
-        user.lastName.toLowerCase().startsWith(input.toLowerCase())
+        user.firstName.toLowerCase().startsWith(event.target.value.toLowerCase()) ||
+        user.lastName.toLowerCase().startsWith(event.target.value.toLowerCase())
       ) {
         matches.push(user);
       }
@@ -45,7 +44,7 @@ export default function UserView() {
           className="mt-3 flex modal-input w-4/12 border-2 rounded-[20px] p-2 border-primary bg-primary-contrast"
           type="text"
           placeholder="Søk"
-          onChange={(e) => searchForUsers(e.target.value)}
+          onChange={(e) => searchForUsers(e)}
         ></input>
       </div>
       <div className=" mt-5 flex flex-col items-center">
@@ -71,5 +70,5 @@ export default function UserView() {
     </div>
   );
 
-  return view;
+  return isLoading ? <p>Laster inn brukere...</p> : view;
 }
