@@ -1,7 +1,15 @@
+import { getAllTeams } from '@/API/TeamAPI';
+import ErrorAlert from '@/components/Alert';
+import ConfirmationBox from '@/components/ConfirmationBox';
 import PageLayout from '@/components/PageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  getRolesByDepartmentId,
+  getSectionsByDepartmentId,
+  getSubjectFieldsByDepartmentId
+} from '../API/DepartmentAPI';
 import { deleteUser, updateUser } from '../API/UserAPI';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
@@ -9,13 +17,7 @@ import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
 import { EmploymentType, Role, SubjectField, Team } from '../types/types';
-import {
-  getRolesByDepartmentId,
-  getSectionsByDepartmentId,
-  getSubjectFieldsByDepartmentId
-} from '../API/DepartmentAPI';
-import { getAllTeams } from '@/API/TeamAPI';
-import ErrorAlert from '@/components/Alert';
+
 /**
  *
  * @returns component that is the personal profile of the user, where the user can edit their information and delete their account
@@ -119,12 +121,9 @@ export default function MyPage() {
   }, [isDisabled]);
 
   const handleDeleteProfileClick = () => {
-    const confirmDelete = confirm('Er du sikker på at du vil slette profilen din?');
-    if (confirmDelete) {
-      deleteUser(currentUser.userId).then(() => {
-        navigate('/registrer-bruker');
-      });
-    }
+    deleteUser(currentUser.userId).then(() => {
+      navigate('/registrer-bruker');
+    });
   };
 
   const handleCancelEdit = () => {
@@ -149,8 +148,37 @@ export default function MyPage() {
     }
   }, [selectedDepartment, currentUser.departmentId]);
 
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const handleDeleteClick = (result: boolean) => {
+    if (result) {
+      handleDeleteProfileClick;
+    }
+    setOpenDialog(false);
+  };
+
   return (
     <PageLayout title="Profil">
+      <div className="absolute bottom-10 right-10 flex justify-end">
+        <SubmitButton
+          rounded={'4px rounded'}
+          disabled={false}
+          disabledTitle={'Slett bruker'}
+          buttonText={'Slett bruker'}
+          handleClick={() => setOpenDialog(true)}
+          hover={'hover:scale-110'}
+        />
+      </div>
+      <div>
+        {openDialog && (
+          <div className="flex justify-between items-center">
+            <ConfirmationBox
+              confirmationText="Er du sikker på at du vil slette brukeren din?"
+              isOpen={openDialog}
+              onConfirm={handleDeleteClick}
+            />
+          </div>
+        )}
+      </div>
       <div className="grid grid-cols-my-page-2 grid-rows-my-page-3 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
         <p className="font-bold"> Navn: </p>
         <p className="w-full text-primary">
@@ -338,16 +366,6 @@ export default function MyPage() {
             />
           </>
         )}
-      </div>
-      <div className="absolute bottom-10 right-10 flex justify-end">
-        <SubmitButton
-          rounded={'4px rounded'}
-          disabled={false}
-          disabledTitle={'Slett bruker'}
-          buttonText={'Slett bruker'}
-          handleClick={handleDeleteProfileClick}
-          hover={'hover:scale-110'}
-        />
       </div>
     </PageLayout>
   );

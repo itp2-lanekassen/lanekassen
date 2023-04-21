@@ -3,10 +3,11 @@ import { Role } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
+import ErrorAlert from '../Alert';
+import ConfirmationBox from '../ConfirmationBox';
 import SubmitButton from '../SubmitButton';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
-import ErrorAlert from '../Alert';
 
 interface RoleListProps {
   setEdit: (val: boolean, role?: Role) => void;
@@ -32,6 +33,15 @@ const RoleList = ({ setEdit }: RoleListProps) => {
     }
   });
 
+  const [id, setId] = useState<number>(0);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const handleDeleteClick = (result: boolean) => {
+    if (result) {
+      deleteExistingRole(id);
+    }
+    setOpenDialog(false);
+  };
+
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
 
@@ -56,10 +66,19 @@ const RoleList = ({ setEdit }: RoleListProps) => {
             <EditButton onClick={() => setEdit(true, role)} />
             <DeleteButton
               onClick={() => {
-                const confirmDelete = confirm('Er du sikker på at du vil slette denne rollen?');
-                if (confirmDelete) deleteExistingRole(role.roleId);
+                setId(role.roleId);
+                setOpenDialog(true);
               }}
             />
+            {openDialog && (
+              <div className="flex justify-between items-center">
+                <ConfirmationBox
+                  confirmationText="Er du sikker på at du vil slette rollen?"
+                  isOpen={openDialog}
+                  onConfirm={handleDeleteClick}
+                />
+              </div>
+            )}
           </Fragment>
         ))}
       </div>

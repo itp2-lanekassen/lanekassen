@@ -1,11 +1,12 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { deleteAbsence } from '@/API/AbsenceAPI';
+import { Absence } from '@/types/types';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { deleteAbsence } from '../API/AbsenceAPI';
-import { Absence } from '../types/types';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { darken } from '@mui/material/styles';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Dispatch, SetStateAction, useState } from 'react';
+import ConfirmationBox from './ConfirmationBox';
 import { useUserContext } from '@/context/UserContext';
 import classNames from 'classnames';
 /**
@@ -56,6 +57,14 @@ export const AbsencePeriod = (props: {
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
     onError: () => alert('Fraværet kunne ikke slettes.')
   });
+
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const handleDeleteClick = (result: boolean) => {
+    if (result && props.absence) {
+      deleteExistingAbsence(props.absence.absenceId);
+    }
+    setOpenDialog(false);
+  };
 
   return (
     <div
@@ -123,25 +132,27 @@ export const AbsencePeriod = (props: {
               }}
             />
           </button>
-          <button
-            onClick={() => {
-              const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
-              if (confirmDelete) {
-                deleteExistingAbsence(props.absence.absenceId);
-              }
-            }}
-            className="mr-[10px]"
-          >
+          <button onClick={() => setOpenDialog(true)} className="mr-[10px]">
             <DeleteOutlineIcon
               sx={{
                 color: '#410464',
                 height: '30px',
                 width: '30px',
                 '&:hover': {
-                  color: '#26023B'
+                  color: '#26023B',
+                  scale: '1.1'
                 }
               }}
             ></DeleteOutlineIcon>
+            {openDialog && (
+              <div className="flex justify-between items-center">
+                <ConfirmationBox
+                  confirmationText="Er du sikker på at du vil slette fraværet?"
+                  isOpen={openDialog}
+                  onConfirm={handleDeleteClick}
+                />
+              </div>
+            )}
           </button>
         </div>
       </section>

@@ -3,10 +3,11 @@ import { NewDepartment } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
+import ErrorAlert from '../Alert';
 import SubmitButton from '../SubmitButton';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
-import ErrorAlert from '../Alert';
+import ConfirmationBox from '../ConfirmationBox';
 
 interface DepartmentListProps {
   setEdit: (val: boolean, department?: NewDepartment) => void;
@@ -32,6 +33,15 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
     }
   });
 
+  const [id, setId] = useState<number>(0);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const handleDeleteClick = (result: boolean) => {
+    if (result) {
+      deleteExistingDepartment(id);
+    }
+    setOpenDialog(false);
+  };
+
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
 
@@ -56,10 +66,19 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
             <EditButton onClick={() => setEdit(true, department)} />
             <DeleteButton
               onClick={() => {
-                const confirmDelete = confirm('Er du sikker på at du vil slette denne avdelingen?');
-                if (confirmDelete) deleteExistingDepartment(department.departmentId);
+                setId(department.departmentId);
+                setOpenDialog(true);
               }}
             />
+            {openDialog && (
+              <div className="flex justify-between items-center">
+                <ConfirmationBox
+                  confirmationText="Er du sikker på at du vil slette seksjonen?"
+                  isOpen={openDialog}
+                  onConfirm={handleDeleteClick}
+                />
+              </div>
+            )}
           </Fragment>
         ))}
       </div>
