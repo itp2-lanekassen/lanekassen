@@ -2,7 +2,6 @@ import { Team, TeamDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateTeam, postTeam } from '@/API/TeamAPI';
-import DropdownMultiSelect from '../DropdownMultiSelect';
 
 interface TeamEditProps {
   setEdit: (val: boolean, Team?: Team) => void;

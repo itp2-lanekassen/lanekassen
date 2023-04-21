@@ -17,29 +17,42 @@ import {
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
 
 //set max on datepicker state based on when the next absence starts
-async function setMax(currentUser: any, clickedAbsence: Absence, setNextAbsenceStartDate: any) {
+async function setMax(
+  userId: number,
+  clickedAbsence: Absence,
+  setNextAbsenceStartDate: React.Dispatch<React.SetStateAction<Date | undefined>>
+) {
   setNextAbsenceStartDate(
-    await getDatePickerMaxForAbsence(currentUser.userId, new Date(clickedAbsence.endDate))
+    await getDatePickerMaxForAbsence(userId, new Date(clickedAbsence.endDate))
   );
 }
 
 //set min on datepicker state based when the previous absence ends
-async function setMin(currentUser: any, clickedAbsence: Absence, setPreviousAbsenceEndDate: any) {
+async function setMin(
+  userId: number,
+  clickedAbsence: Absence,
+  setPreviousAbsenceEndDate: React.Dispatch<React.SetStateAction<Date | undefined>>
+) {
   setPreviousAbsenceEndDate(
-    await getDatePickerMinForAbsence(currentUser.userId, new Date(clickedAbsence.startDate))
+    await getDatePickerMinForAbsence(userId, new Date(clickedAbsence.startDate))
   );
+}
+
+interface EditAbsenceViewProps {
+  setAbsence: React.Dispatch<React.SetStateAction<Absence | undefined>>;
+  absence: Absence;
 }
 
 /**
  * Renders a view lets a user edit an absence
  */
-export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) => {
+export const EditAbsenceView = (props: EditAbsenceViewProps) => {
   const queryClient = useQueryClient();
 
   const currentUser = useUserContext();
 
-  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>(new Date());
-  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>(new Date());
+  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
+  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
   const [isApproved, setIsApproved] = React.useState<boolean>(props.absence.isApproved);
 
   //initialize mutation for updating an absence
@@ -67,14 +80,14 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
     });
 
     //set min and max for datepicker based on other absences
-    setMax(currentUser, props.absence, setNextAbsenceStartDate);
-    setMin(currentUser, props.absence, setPreviousAbsenceEndDate);
-  }, [props.absence]);
+    setMax(currentUser.userId, props.absence, setNextAbsenceStartDate);
+    setMin(currentUser.userId, props.absence, setPreviousAbsenceEndDate);
+  }, [props.absence, currentUser]);
 
   //update form values on date picker change
   const handleInputChange = (
     date: Date | null,
-    event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement, Event> | undefined,
+    event: React.SyntheticEvent | undefined,
     name: string
   ) => {
     setFormValues({
@@ -125,7 +138,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       comment: updatedComment
     });
     //redirect to AddAbsenceView
-    props.setAbsence(null);
+    props.setAbsence(undefined);
   };
 
   const handleIsApprovedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,7 +170,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
               title=""
             ></DateField>
           </div>
-          <div className="m-auto flex flex-col md:flex-row md:flex-col md:gap-[20px] md:justify-evenly mt-[10px] md:w-[350px]">
+          <div className="m-auto flex flex-col md:gap-[20px] md:justify-evenly mt-[10px] md:w-[350px]">
             <AbsenceRadioField
               formValues={formValues}
               handleRadioChange={handleRadioChange}
@@ -175,7 +188,6 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
                   id="isApproved"
                   checked={isApproved}
                   onChange={handleIsApprovedChange}
-                  // eslint-disable-next-line react/no-unknown-property
                   className="space-x-5 h-5 w-5 accent-primary "
                 />
               </div>
@@ -191,7 +203,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
             <SubmitButton
               disabled={false}
               buttonText={'Avbryt'}
-              handleClick={() => props.setAbsence(null)}
+              handleClick={() => props.setAbsence(undefined)}
             ></SubmitButton>
           </div>
         </form>

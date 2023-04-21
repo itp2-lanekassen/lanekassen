@@ -22,7 +22,7 @@ export const AbsenceRadioField = (props: {
           >
             <input
               type="radio"
-              className="form-radio h-4 w-100 accent"
+              className="form-radio h-4 w-100 accent cursor-pointer"
               value={type.absenceTypeId}
               checked={props.formValues?.absenceType === type.absenceTypeId}
               onChange={props.handleRadioChange}

@@ -27,7 +27,7 @@ const RoleList = ({ setEdit }: RoleListProps) => {
   const { mutate: deleteExistingRole } = useMutation({
     mutationFn: deleteRole,
     onSuccess: () => queryClient.invalidateQueries(['roles']),
-    onError: (error: Error) => {
+    onError: () => {
       setErrorAlertMessage('En rolle kan ikke være i bruk før den slettes!');
       setErrorAlertOpen(true);
     }

@@ -3,6 +3,7 @@ import { AbsenceType } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import ConfirmationBox from '../ConfirmationBox';
+import { Button } from '@mui/material';
 import { CalendarCellDisplay } from './CalendarCellDisplay';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';

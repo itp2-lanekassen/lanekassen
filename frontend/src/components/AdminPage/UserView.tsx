@@ -15,12 +15,12 @@ export default function UserView() {
 
   // Add matching users to new list to avoid having to load data again
   // when the query changes
-  const searchForUsers = (event: any) => {
+  const searchForUsers = (input: string) => {
     const matches: User[] = [];
     users?.forEach((user) => {
       if (
-        user.firstName.toLowerCase().startsWith(event.target.value.toLowerCase()) ||
-        user.lastName.toLowerCase().startsWith(event.target.value.toLowerCase())
+        user.firstName.toLowerCase().startsWith(input.toLowerCase()) ||
+        user.lastName.toLowerCase().startsWith(input.toLowerCase())
       ) {
         matches.push(user);
       }
@@ -45,7 +45,7 @@ export default function UserView() {
           className="mt-3 flex modal-input w-4/12 border-2 rounded-[20px] p-2 border-primary bg-primary-contrast"
           type="text"
           placeholder="Søk"
-          onChange={searchForUsers}
+          onChange={(e) => searchForUsers(e.target.value)}
         ></input>
       </div>
       <div className=" mt-5 flex flex-col items-center">

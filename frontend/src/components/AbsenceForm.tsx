@@ -34,45 +34,41 @@ export type FormValues = {
   startDate: Date | undefined;
   endDate: Date | undefined;
   comment?: string | undefined;
-  absenceType?: number;
+  absenceType: number;
 };
 
 //set max on datepicker state based on when the next absence starts
 export async function setMax(
-  currentUser: any,
+  userId: number,
   clickedAbsence: Absence | undefined,
   startDate: Date | undefined,
-  setNextAbsenceStartDate: any
+  setNextAbsenceStartDate: React.Dispatch<React.SetStateAction<Date | undefined>>
 ) {
   if (clickedAbsence) {
     setNextAbsenceStartDate(
-      await getDatePickerMaxForAbsence(currentUser.userId, new Date(clickedAbsence.endDate))
+      await getDatePickerMaxForAbsence(userId, new Date(clickedAbsence.endDate))
     );
   } else {
     if (startDate) {
-      setNextAbsenceStartDate(
-        await getDatePickerMaxForAbsence(currentUser.userId, new Date(startDate))
-      );
+      setNextAbsenceStartDate(await getDatePickerMaxForAbsence(userId, new Date(startDate)));
     }
   }
 }
 
 //set min on datepicker state based when the previous absence ends
 export async function setMin(
-  currentUser: any,
+  userId: number,
   clickedAbsence: Absence | undefined,
   startDate: Date | undefined,
-  setPreviousAbsenceEndDate: any
+  setPreviousAbsenceEndDate: React.Dispatch<React.SetStateAction<Date | undefined>>
 ) {
   if (clickedAbsence) {
     setPreviousAbsenceEndDate(
-      await getDatePickerMinForAbsence(currentUser.userId, new Date(clickedAbsence.startDate))
+      await getDatePickerMinForAbsence(userId, new Date(clickedAbsence.startDate))
     );
   } else {
     if (startDate) {
-      setPreviousAbsenceEndDate(
-        await getDatePickerMinForAbsence(currentUser.userId, new Date(startDate))
-      );
+      setPreviousAbsenceEndDate(await getDatePickerMinForAbsence(userId, new Date(startDate)));
     }
   }
 }
@@ -137,9 +133,9 @@ const AbsenceForm: React.FC<ModalProps> = ({
       });
     }
     //set min and max for datepicker based on other absences
-    setMax(user, clickedAbsence, startDate, setNextAbsenceStartDate);
-    setMin(user, clickedAbsence, startDate, setPreviousAbsenceEndDate);
-  }, []);
+    setMax(user.userId, clickedAbsence, startDate, setNextAbsenceStartDate);
+    setMin(user.userId, clickedAbsence, startDate, setPreviousAbsenceEndDate);
+  }, [clickedAbsence, startDate, user]);
 
   React.useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -156,7 +152,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
   //update form values on date picker change
   const handleInputChange = (
     date: Date | null,
-    event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement, Event> | undefined,
+    event: React.SyntheticEvent | undefined,
     name: string
   ) => {
     setFormValues({
@@ -307,7 +303,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
                 checked={isApproved}
                 onChange={handleIsApprovedChange}
                 // eslint-disable-next-line react/no-unknown-property
-                className="space-x-5 h-5 w-5 accent-primary "
+                className="space-x-5 h-5 w-5 accent-primary cursor-pointer"
               />
             </div>
           )}
