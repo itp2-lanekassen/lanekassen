@@ -46,8 +46,9 @@ export const AbsencePeriod = (props: {
   let notice;
   if (props.absence.comment && props.absence.comment.length > 0) {
     notice = (
-      <p className="mx-[20px] pt-[10px] text-[18px]">
-        Personlig notis <strong className="body-tight text-[12px]">{props.absence.comment}</strong>
+      <p className="mx-[20px] pt-[10px] text-sm">
+        <strong className="body-bold"> Personlig notis: </strong>
+        {props.absence.comment}
       </p>
     );
   }
@@ -100,19 +101,15 @@ export const AbsencePeriod = (props: {
         style={{ display: expandStatus[0] }}
         className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter overflow-hidden"
       >
-        <p className="mx-[20px] text-[18px]">
-          Fraværstype <strong className="body-bold text-[12px]">{props.absence.type.name}</strong>
+        <p className="mx-[20px] pt-[10px] text-sm">
+          <strong className="body-bold"> Fraværstype: </strong>
+          {props.absence.type.name}
         </p>
-        {props.absence.isApproved ? (
-          <p className="mx-[20px] text-[18px]">
-            <strong className="body-bold text-[12px]">Godkjent fravær</strong>
-          </p>
-        ) : (
-          <p className="mx-[20px] text-[18px]">
-            <strong className="body-bold text-[12px]">Ikke godkjent</strong>
-          </p>
-        )}
         {notice}
+        <p className="mx-[20px] pt-[10px] text-sm">
+          <strong className="body-bold"> Status: </strong>
+          {props.absence.isApproved ? 'Godkjent' : 'Ikke godkjent'}
+        </p>
         <div className="flex flex-row float-right">
           <button
             className="mr-[10px]"

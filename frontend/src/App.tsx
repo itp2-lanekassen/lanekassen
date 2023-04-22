@@ -1,7 +1,7 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
 import { ReactNode } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { AbsenceView } from './components/AbsenceView';
+import { AbsenceView } from './pages/AbsenceView';
 import AzureAdContextProvider from './context/AzureAdContext';
 import CalendarContextProvider from './context/CalendarContext';
 import GlobalContextProvider from './context/GlobalContext';
