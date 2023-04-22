@@ -142,13 +142,14 @@ export default function AddAbsenceTypeComponent(props: {
           </div>
 
           <label className="mt-2" htmlFor="code">
-            Forkortelse:
+            Forkortelse (maks 7 tegn):
           </label>
           <input
             className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
             type="text"
             name="code"
             id="code"
+            maxLength={7}
             onChange={handleInputChange}
           />
           <br />
