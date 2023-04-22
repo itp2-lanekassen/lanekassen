@@ -179,7 +179,7 @@ export default function MyPage() {
           </div>
         )}
       </div>
-      <div className="grid grid-cols-my-page-2 grid-rows-my-page-3 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
+      <div className="grid grid-cols-my-page-2 xl:grid-cols-my-page-4 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
         <p className="font-bold"> Navn: </p>
         <p className="w-full text-primary">
           {currentUser.firstName} {currentUser.lastName}
