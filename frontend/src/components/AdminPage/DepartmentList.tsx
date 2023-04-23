@@ -49,7 +49,7 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
     <>
       {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
       <div className="grid grid-cols-sections gap-x-2 gap-y-3 items-center">
-        <div className="heading-3xs ml-12">Avdelingsnavn</div>
+        <div className="heading-3xs ml-5 md:ml-20">Avdelingsnavn</div>
         <div className="heading-3xs text-center">Forkortelse</div>
         <div className="col-span-2">
           <SubmitButton handleClick={() => setEdit(true)}>
@@ -61,7 +61,7 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
 
         {departments.map((department) => (
           <Fragment key={department.departmentId}>
-            <div className="text-left ml-12">{department.name}</div>
+            <div className="text-left ml-5 md:ml-20">{department.name}</div>
             <div className="text-center">({department.abbreviation})</div>
             <EditButton onClick={() => setEdit(true, department)} />
             <DeleteButton
