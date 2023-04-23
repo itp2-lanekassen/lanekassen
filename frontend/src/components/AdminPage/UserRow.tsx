@@ -67,12 +67,13 @@ export default function UserRow(props: {
 
   return (
     <>
-      <p className="flex-1">{formatFirstName(props.user.firstName)}</p>
-      <p className="flex-1">{props.user.lastName}</p>
-      <p className="flex-1 hidden md:block">{shortenEmail(props.user.email)}</p>
-      <p className="flex-1 hidden md:block">{EmploymentType[props.user.employmentType]}</p>
-      <p className="flex-1">{dep?.name}</p>
-      <p className="flex-1 hidden md:block">{sec?.name}</p>
+      <p className="flex-1 text-left ml-3">{formatFirstName(props.user.firstName)}</p>
+      <p className="flex-1 text-left ml-3">{props.user.lastName}</p>
+      <p className="flex-1 text-left ml-3 hidden md:block">
+        {EmploymentType[props.user.employmentType]}
+      </p>
+      <p className="flex-1 text-left">{dep?.name}</p>
+      <p className="flex-1 text-left ml-3 hidden md:block">{sec?.name}</p>
       <div className="w-[24px] h-[24px]">
         <EditButton onClick={handleEdit} />
       </div>

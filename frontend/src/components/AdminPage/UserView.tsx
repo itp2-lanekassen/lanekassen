@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState, ChangeEvent } from 'react';
 import UserRow from './UserRow';
 
-const tableHeaders = ['Fornavn', 'Etternavn', 'E-post', 'Ansattforhold', 'Avdeling', 'Seksjon', ''];
+const tableHeaders = ['Fornavn', 'Etternavn', 'Ansattforhold', 'Avdeling', 'Seksjon', ''];
 const tableHeadersSmall = ['Fornavn', 'Etternavn', 'Avdeling', ''];
 
 export default function UserView() {
@@ -47,7 +47,7 @@ export default function UserView() {
           onChange={(e) => searchForUsers(e)}
         ></input>
       </div>
-      <div className=" mt-5 flex flex-col items-center">
+      <div className="mt-5 flex flex-col items-center">
         <div className="flex flex-col items-center w-full">
           <div className="grid-cols-users-small md:grid-cols-users grid col-span-3 md:col-span-6 w-full place-item-center text-center gap-x-2 gap-y-3">
             {tableHeadersSmall.map((header) => (
@@ -60,7 +60,7 @@ export default function UserView() {
                 {header}
               </p>
             ))}
-            <div className="col-span-5 md:col-span-8 border-b-2 w-full" />
+            <div className="col-span-5 md:col-span-7 border-b-2 w-full" />
             {matchingUsers?.map((user) => (
               <UserRow key={user.azureId} user={user} setView={setView} />
             ))}

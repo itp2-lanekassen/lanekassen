@@ -48,7 +48,7 @@ const TeamList = ({ setEdit }: TeamListProps) => {
   return (
     <>
       {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
-      <div className="grid grid-cols-teams text-center gap-x-2 gap-y-3 place-items-center">
+      <div className="grid grid-cols-teams gap-x-2 gap-y-3 place-items-center">
         <div className="heading-3xs">Team</div>
         <div className="col-span-1">
           <SubmitButton handleClick={() => setEdit(true)}>
