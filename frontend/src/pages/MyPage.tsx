@@ -4,7 +4,6 @@ import ConfirmationBox from '@/components/ConfirmationBox';
 import PageLayout from '@/components/PageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
@@ -24,7 +23,6 @@ import { EmploymentType, Role, SubjectField, Team } from '../types/types';
  */
 export default function MyPage() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const [errorAlertOpen, setErrorAlertOpen] = useState(false);
   const [errorAlertMessage, setErrorAlertMessage] = useState('');
 
