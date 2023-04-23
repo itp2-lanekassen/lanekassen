@@ -94,6 +94,16 @@ export default function MyPage() {
     }
   });
 
+  const { mutate: deleteUserToBeDeleted } = useMutation({
+    mutationFn: () => deleteUser(currentUser.userId),
+    onSuccess: () => {
+      window.location.reload();
+    },
+    onError: () => {
+      alert('Feil ved sletting av bruker');
+    }
+  });
+
   // Validate that required fields are filled out
   useEffect(() => {
     setIsDisabled(
@@ -121,9 +131,7 @@ export default function MyPage() {
   }, [isDisabled]);
 
   const handleDeleteProfileClick = () => {
-    deleteUser(currentUser.userId).then(() => {
-      navigate('/registrer-bruker');
-    });
+    deleteUserToBeDeleted();
   };
 
   const handleCancelEdit = () => {
@@ -151,7 +159,7 @@ export default function MyPage() {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const handleDeleteClick = (result: boolean) => {
     if (result) {
-      handleDeleteProfileClick;
+      handleDeleteProfileClick();
     }
     setOpenDialog(false);
   };
