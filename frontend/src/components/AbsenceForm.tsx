@@ -254,9 +254,18 @@ const AbsenceForm: React.FC<ModalProps> = ({
         >
           <CloseIcon />
         </button>
-        <h2 className="modal-title text-center ">
-          {user.firstName} {user.lastName}
-        </h2>
+        {user == currentUser ? (
+          <h2 className="modal-title text-center ">
+            {type == 'add' ? 'Legg til fravær' : 'Rediger fravær'}
+          </h2>
+        ) : (
+          // If the user is not the current user, the modal is opened by an admin and should show the user's name
+          <h2 className="modal-title text-center ">
+            {type == 'add'
+              ? 'Legg til fravær for ' + user.firstName
+              : 'Rediger fravær for ' + user.firstName}
+          </h2>
+        )}
         {/* Dialog box. Opens when OpenDialog = true */}
         {openDialog && (
           <div className="flex justify-between items-center">
