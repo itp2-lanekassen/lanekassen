@@ -117,7 +117,7 @@ export default function FilterComponents() {
               dateFormat="P"
               className={classNames(
                 'border-1 border-primary-light rounded-full text-primary-light',
-                'py-1.5 pl-3 focus:outline-primary-light flex w-full'
+                'py-1.5 pl-3 focus:outline-primary-light flex w-full mr-3'
               )}
             />
           </div>
