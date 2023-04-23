@@ -4,7 +4,6 @@ import ConfirmationBox from '@/components/ConfirmationBox';
 import PageLayout from '@/components/PageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
@@ -24,7 +23,6 @@ import { EmploymentType, Role, SubjectField, Team } from '../types/types';
  */
 export default function MyPage() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const [errorAlertOpen, setErrorAlertOpen] = useState(false);
   const [errorAlertMessage, setErrorAlertMessage] = useState('');
 
@@ -94,6 +92,16 @@ export default function MyPage() {
     }
   });
 
+  const { mutate: deleteUserToBeDeleted } = useMutation({
+    mutationFn: () => deleteUser(currentUser.userId),
+    onSuccess: () => {
+      window.location.reload();
+    },
+    onError: () => {
+      alert('Feil ved sletting av bruker');
+    }
+  });
+
   // Validate that required fields are filled out
   useEffect(() => {
     setIsDisabled(
@@ -121,9 +129,7 @@ export default function MyPage() {
   }, [isDisabled]);
 
   const handleDeleteProfileClick = () => {
-    deleteUser(currentUser.userId).then(() => {
-      navigate('/registrer-bruker');
-    });
+    deleteUserToBeDeleted();
   };
 
   const handleCancelEdit = () => {
@@ -151,7 +157,7 @@ export default function MyPage() {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const handleDeleteClick = (result: boolean) => {
     if (result) {
-      handleDeleteProfileClick;
+      handleDeleteProfileClick();
     }
     setOpenDialog(false);
   };
