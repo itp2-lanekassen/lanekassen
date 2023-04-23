@@ -59,7 +59,7 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const updateFromDate = (newDate: string) => {
-    const daysDiff = differenceInDays(new Date(dates.from), new Date(dates.to));
+    const daysDiff = Math.abs(differenceInDays(new Date(dates.from), new Date(dates.to)));
 
     setDates({
       from: newDate,
