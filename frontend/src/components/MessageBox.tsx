@@ -28,7 +28,7 @@ export default function MessageBox({ isOpen, confirmationText }: MessageBoxProps
         {confirmationText}
       </DialogTitle>
       <DialogActions className="bg-primary-contrast">
-        <Button onClick={handleConfirm} autoFocus style={{ color: '#410464' }}>
+        <Button onClick={handleConfirm} autoFocus className="text-primary">
           Ok
         </Button>
       </DialogActions>
