@@ -17,7 +17,7 @@ export default function AbsenceTypeRow(props: {
   const { mutate: deleteAbsenceTypeFromDatabase } = useMutation({
     mutationFn: deleteAbsenceType,
     onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
-    onError: () => openMessageBox(() => null, 'Kan ikke slette fraværstyper som er i bruk')
+    onError: () => openMessageBox('Kan ikke slette fraværstyper som er i bruk')
   });
 
   const handleEdit = async () => {

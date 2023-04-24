@@ -7,15 +7,13 @@ import * as React from 'react';
 interface MessageBoxProps {
   confirmationText: string;
   isOpen: boolean;
-  onConfirm: (result: boolean) => void;
 }
 
-export default function MessageBox({ isOpen, confirmationText, onConfirm }: MessageBoxProps) {
+export default function MessageBox({ isOpen, confirmationText }: MessageBoxProps) {
   const [open, setOpen] = React.useState(isOpen);
 
   const handleConfirm = () => {
     setOpen(false);
-    onConfirm(true);
     return true;
   };
 

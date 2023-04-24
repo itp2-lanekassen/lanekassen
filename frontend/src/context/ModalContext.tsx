@@ -6,7 +6,7 @@ import ConfirmationBox from '@/components/ConfirmationBox';
 
 interface ModalContextType {
   openAbsenceForm: (user: User, date?: string, type?: string, absence?: Absence) => void;
-  openMessageBox: (onConfirmAction: () => void, text?: string) => void;
+  openMessageBox: (text?: string) => void;
   openConfirmationBox: (onConfirmAction: () => void, text?: string) => void;
 }
 
@@ -29,7 +29,6 @@ const ModalContextProvider = ({ children }: { children?: ReactNode }) => {
 
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [confirmErrorAction, setConfirmErrorAction] = useState<() => void>(() => null);
 
   const [showConfirmationBox, setShowConfirmationBox] = useState(false);
   const [confirmText, setConfirmText] = useState('');
@@ -52,10 +51,9 @@ const ModalContextProvider = ({ children }: { children?: ReactNode }) => {
     setShowAbsenceForm(true);
   };
 
-  const openMessageBox = (onConfirmAction: () => void, text = '') => {
+  const openMessageBox = (text = '') => {
     setErrorMessageText(text);
     setShowMessageBox(true);
-    setConfirmErrorAction(onConfirmAction);
   };
 
   const openConfirmationBox = (onConfirmAction: () => void, text = '') => {
@@ -77,13 +75,7 @@ const ModalContextProvider = ({ children }: { children?: ReactNode }) => {
           onClose={() => setShowAbsenceForm(false)}
         />
       )}
-      {showMessageBox && (
-        <MessageBox
-          confirmationText={errorMessageText}
-          isOpen={showMessageBox}
-          onConfirm={confirmErrorAction}
-        />
-      )}
+      {showMessageBox && <MessageBox confirmationText={errorMessageText} isOpen={showMessageBox} />}
       {showConfirmationBox && (
         <ConfirmationBox
           confirmationText={confirmText}
