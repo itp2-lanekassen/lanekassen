@@ -190,7 +190,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
             <SubmitButton
               disabledTitle={'Fyll ut alle feltene'}
               disabled={false}
-              buttonText={'Legg til fravær'}
+              buttonText={'Lagre'}
               type={'submit'}
             ></SubmitButton>
           </div>

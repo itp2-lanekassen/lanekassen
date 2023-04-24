@@ -197,7 +197,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
             <SubmitButton
               disabledTitle={'Fyll ut alle feltene'}
               disabled={false}
-              buttonText={'Rediger fravær'}
+              buttonText={'Lagre'}
               type={'submit'}
             ></SubmitButton>
             <SubmitButton
