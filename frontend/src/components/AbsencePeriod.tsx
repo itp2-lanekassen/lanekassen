@@ -45,7 +45,7 @@ export const AbsencePeriod = (props: {
   // Display that absence comment is longer than what is shown
   const shortenComment = (comment: string) => {
     if (comment.length > 20) {
-      const shorterComment = comment.slice(0, 15) + '...';
+      const shorterComment = comment.slice(0, 25) + '...';
       return shorterComment;
     }
     return comment;
