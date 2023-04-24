@@ -27,15 +27,6 @@ export default function UserRow(props: {
     async () => (await getSectionById(props.user.sectionId)).data
   );
 
-  // Load user data into states
-  const shortenEmail = (inputEmail: string) => {
-    if (inputEmail.length > 20) {
-      const shorterEmail = inputEmail.slice(0, 20) + '...';
-      return shorterEmail;
-    }
-    return inputEmail;
-  };
-
   // To edit a user, change view to the display of a chosen user's information
   const handleEdit = async () => {
     props.setView(<UserSelectedView setView={props.setView} selectedUser={props.user} />);

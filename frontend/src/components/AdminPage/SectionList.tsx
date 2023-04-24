@@ -44,13 +44,13 @@ const SectionList = ({ setEdit }: SectionListProps) => {
 
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
-
+  // 48 44
   return (
     <>
       {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
-      <div className="grid grid-cols-sections text-center gap-x-2 gap-y-3 place-items-center">
-        <div className="heading-3xs">Seksjon</div>
-        <div className="heading-3xs">Avdelinger</div>
+      <div className="grid grid-cols-sections text-center gap-x-2 gap-y-3 items-center">
+        <div className="heading-3xs md:text-center">Seksjon</div>
+        <div className="heading-3xs md:text-center">Avdelinger</div>
         <div className="col-span-2">
           <SubmitButton handleClick={() => setEdit(true)}>
             <Add />
@@ -61,8 +61,12 @@ const SectionList = ({ setEdit }: SectionListProps) => {
 
         {sections.map((section) => (
           <Fragment key={section.sectionId}>
-            <div>{section.name}</div>
-            <div>{section.department?.name}</div>
+            <div className="text-left ml-[20%] xl:ml-48 lg:ml-[40%] md:ml-[30%] sm:ml-[30%]">
+              {section.name}
+            </div>
+            <div className="text-left ml-[20%] xl:ml-44 lg:ml-[35%] md:ml-[30%] sm:ml-[30%]">
+              {section.department?.name}
+            </div>
             <EditButton onClick={() => setEdit(true, section)} />
             <DeleteButton
               onClick={() => {

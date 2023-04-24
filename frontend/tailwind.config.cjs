@@ -29,7 +29,7 @@ module.exports = {
         'my-page-3': 'max-content 50px',
         'my-page-4': 'max-content 624px',
         sections: 'repeat(2, 1fr) repeat(2, min-content)',
-        teams: 'repeat(1, 1fr) repeat(1, min-content)',
+        teams: '1fr repeat(2, min-content)',
         'absence-types': 'repeat(4, 1fr) repeat(2, min-content)',
         'absence-types-small': 'repeat(2, 1fr) repeat(2, min-content)',
         'users': 'repeat(4, min-content) repeat(2, min-content)',
