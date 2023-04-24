@@ -32,7 +32,7 @@ export const useGlobalContext = () => {
 };
 
 const GlobalContextProvider = ({ children }: GlobalContextProps) => {
-  const absenceTypes = useQuery(['absence-types'], async () => (await getAllAbsenceTypes()).data);
+  const absenceTypes = useQuery(['absenceTypes'], async () => (await getAllAbsenceTypes()).data);
   const roles = useQuery(['roles'], async () => (await getAllRoles()).data);
   const teams = useQuery(['teams'], async () => (await getAllTeams()).data);
   const sections = useQuery(['sections'], async () => (await getAllSections()).data);
