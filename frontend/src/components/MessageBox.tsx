@@ -26,9 +26,11 @@ export default function MessageBox({ isOpen, confirmationText, onConfirm }: Mess
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{confirmationText}</DialogTitle>
-      <DialogActions>
-        <Button onClick={handleConfirm} autoFocus>
+      <DialogTitle id="alert-dialog-title" className="bg-primary-contrast">
+        {confirmationText}
+      </DialogTitle>
+      <DialogActions className="bg-primary-contrast">
+        <Button onClick={handleConfirm} autoFocus style={{ color: '#410464' }}>
           Ok
         </Button>
       </DialogActions>

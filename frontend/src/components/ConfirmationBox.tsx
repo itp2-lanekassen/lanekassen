@@ -35,10 +35,14 @@ export default function ConfirmationBox({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{confirmationText}</DialogTitle>
-      <DialogActions>
-        <Button onClick={handleClose}>Avbryt</Button>
-        <Button onClick={handleConfirm} autoFocus>
+      <DialogTitle id="alert-dialog-title" className="bg-primary-contrast">
+        {confirmationText}
+      </DialogTitle>
+      <DialogActions className="bg-primary-contrast">
+        <Button onClick={handleClose} style={{ color: '#410464' }}>
+          Avbryt
+        </Button>
+        <Button onClick={handleConfirm} autoFocus style={{ color: '#410464' }}>
           Ja
         </Button>
       </DialogActions>
