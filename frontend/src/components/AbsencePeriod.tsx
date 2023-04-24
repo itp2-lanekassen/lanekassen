@@ -42,13 +42,22 @@ export const AbsencePeriod = (props: {
     );
   }
 
+  // Display that absence comment is longer than what is shown
+  const shortenComment = (comment: string) => {
+    if (comment.length > 20) {
+      const shorterComment = comment.slice(0, 15) + '...';
+      return shorterComment;
+    }
+    return comment;
+  };
+
   //Check if absence has a comment to display
   let notice;
   if (props.absence.comment && props.absence.comment.length > 0) {
     notice = (
       <p className="mx-[20px] pt-[10px] text-sm">
         <strong className="body-bold"> Personlig notis: </strong>
-        {props.absence.comment}
+        {shortenComment(props.absence.comment)}
       </p>
     );
   }
