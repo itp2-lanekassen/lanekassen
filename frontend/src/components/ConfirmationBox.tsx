@@ -39,10 +39,10 @@ export default function ConfirmationBox({
         {confirmationText}
       </DialogTitle>
       <DialogActions className="bg-primary-contrast">
-        <Button onClick={handleClose} style={{ color: '#410464' }}>
+        <Button onClick={handleClose} className="text-primary">
           Avbryt
         </Button>
-        <Button onClick={handleConfirm} autoFocus style={{ color: '#410464' }}>
+        <Button onClick={handleConfirm} autoFocus className="text-primary">
           Ja
         </Button>
       </DialogActions>
