@@ -3,7 +3,7 @@ import { useGlobalContext } from '@/context/GlobalContext';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { UserFilter } from '@/types/types';
 import Dropdown from '../Dropdown';
-import { startTransition, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 import CustomMultiDropdown from './CustomMultiDropdown';
 import ReactDatepicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.min.css';
@@ -51,6 +51,8 @@ export default function FilterComponents() {
     new Date(dates.from),
     new Date(dates.to)
   ]);
+
+  useEffect(() => setLocalRange([new Date(dates.from), new Date(dates.to)]), [dates]);
 
   const handleDateChange = () => {
     if (!localFrom || !localTo) return setLocalRange([new Date(dates.from), new Date(dates.to)]);
