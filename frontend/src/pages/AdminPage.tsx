@@ -50,6 +50,7 @@ export default function AdminPage() {
                     color: 'black',
                     borderTopLeftRadius: '10px',
                     borderBottomLeftRadius: '10px',
+                    alignItems: 'flex-start',
                     '&:hover': {
                       backgroundColor: '#F6F0F9', // primary-lighter
                       color: '#410464', // primary

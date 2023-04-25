@@ -158,27 +158,6 @@ export default function MyPage() {
 
   return (
     <PageLayout title="Profil">
-      <div className="absolute bottom-10 right-10 flex justify-end">
-        <SubmitButton
-          rounded={'4px rounded'}
-          disabled={false}
-          disabledTitle={'Slett bruker'}
-          buttonText={'Slett bruker'}
-          handleClick={() => setOpenDialog(true)}
-          hover={'hover:scale-110'}
-        />
-      </div>
-      <div>
-        {openDialog && (
-          <div className="flex justify-between items-center">
-            <ConfirmationBox
-              confirmationText="Er du sikker på at du vil slette brukeren din?"
-              isOpen={openDialog}
-              onConfirm={handleDeleteClick}
-            />
-          </div>
-        )}
-      </div>
       <div className="grid grid-cols-my-page-2 xl:grid-cols-my-page-4 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
         <p className="font-bold"> Navn: </p>
         <p className="w-full text-primary">
