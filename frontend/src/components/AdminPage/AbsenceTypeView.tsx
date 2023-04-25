@@ -21,19 +21,19 @@ export default function AbsenceTypeView() {
     <div className="w-full flex flex-col items-center">
       <div className="flex flex-col items-center w-full ">
         <div className="grid-cols-absence-types-small md:grid-cols-absence-types grid col-span-4 w-full place-item-center gap-x-2 gap-y-3 md:col-span-6">
-          <p className="flex-1 text-center font-bold mb-2 border-b-2">Beskrivelse</p>
-          <p className="flex-1 text-center font-bold mb-2 border-b-2 hidden md:block">
-            Forkortelse
-          </p>
-          <p className="flex-1 text-center font-bold mb-2 border-b-2 hidden md:block ">Farge</p>
-          <p className="flex-1 text-center font-bold mb-2 border-b-2 whitespace-nowrap">
+          <p className="flex-1 text-center font-bold">Beskrivelse</p>
+          <p className="flex-1 text-center font-bold hidden md:block">Forkortelse</p>
+          <p className="flex-1 text-center font-bold hidden md:block ">Farge</p>
+          <p className="flex-1 text-center font-bold whitespace-nowrap">
             Visning (Godkjent / Ikke-godkjent)
           </p>
-          <div className="col-span-2 flex w-full justify-end mb-2 border-b-2 ">
+          <div className="col-span-2 flex w-full justify-end">
             <SubmitButton handleClick={handleAdd}>
               <Add />
             </SubmitButton>
           </div>
+
+          <div className="col-span-6 border-b-2 w-full" />
           {absenceTypes?.data.map((absenceType) => (
             <AbsenceTypeRow
               absenceType={absenceType}
