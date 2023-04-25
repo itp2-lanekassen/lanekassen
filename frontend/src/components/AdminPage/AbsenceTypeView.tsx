@@ -20,7 +20,7 @@ export default function AbsenceTypeView() {
   const defaultView = (
     <div className="w-full flex flex-col items-center">
       <div className="flex flex-col items-center w-full ">
-        <div className="grid-cols-absence-types-small md:grid-cols-absence-types grid col-span-4 w-full place-item-center gap-x-2 gap-y-3 md:col-span-6">
+        <div className="grid-cols-absence-types-small md:grid-cols-absence-types grid col-span-4 w-full items-center gap-x-2 gap-y-3 md:col-span-6">
           <p className="flex-1 text-center font-bold">Beskrivelse</p>
           <p className="flex-1 text-center font-bold hidden md:block">Forkortelse</p>
           <p className="flex-1 text-center font-bold hidden md:block ">Farge</p>
@@ -33,7 +33,7 @@ export default function AbsenceTypeView() {
             </SubmitButton>
           </div>
 
-          <div className="col-span-6 border-b-2 w-full" />
+          <div className="col-span-4 md:col-span-6 border-b-2 w-full" />
           {absenceTypes?.data.map((absenceType) => (
             <AbsenceTypeRow
               absenceType={absenceType}

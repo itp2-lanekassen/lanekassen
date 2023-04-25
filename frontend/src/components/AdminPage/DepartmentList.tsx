@@ -61,7 +61,7 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
 
         {departments.map((department) => (
           <Fragment key={department.departmentId}>
-            <div className="text-left ml-5 md:ml-20">{department.name}</div>
+            <div className="text-left md:ml-20">{department.name}</div>
             <div className="text-center">({department.abbreviation})</div>
             <EditButton onClick={() => setEdit(true, department)} />
             <DeleteButton

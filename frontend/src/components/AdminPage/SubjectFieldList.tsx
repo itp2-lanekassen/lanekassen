@@ -62,7 +62,7 @@ const SubjectFieldList = ({ setEdit }: SubjectFieldListProps) => {
         {subjectFields.map((subjectField) => (
           <Fragment key={subjectField.subjectFieldId}>
             <div className="md:ml-20">{subjectField.name}</div>
-            <div className="ml-[35%] xl:ml-44 lg:ml-[40%] md:ml-[40%]">
+            <div className="ml-[10%] xl:ml-44 lg:ml-[40%] md:ml-[40%]">
               {subjectField.department?.name}
             </div>
 
