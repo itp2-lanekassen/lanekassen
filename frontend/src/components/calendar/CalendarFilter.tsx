@@ -27,14 +27,14 @@ const CalendarFilterItem = ({
   return (
     <div
       className={classNames(
-        'rounded-full bg-primary-light text-white py-1 px-2 flex justify-center items-center gap-1',
+        'rounded-full bg-primary-light text-white py-1 px-2 flex justify-center items-center gap-1 text-xs lg:text-sm',
         className
       )}
     >
       <p className="max-w-[160px] whitespace-nowrap overflow-hidden overflow-ellipsis">{name}</p>
       {!hideButton && (
-        <button className="text-sm hover:bg-primary rounded-full" onClick={onClick}>
-          <CloseIcon />
+        <button className="text-xs lg:text-sm hover:bg-primary rounded-full" onClick={onClick}>
+          <CloseIcon fontSize="inherit" />
         </button>
       )}
     </div>
@@ -97,9 +97,9 @@ export default function FilterComponents() {
         <div
           className={classNames(
             open ? 'flex' : 'hidden',
-            'h-2/3 z-40 lg:contents shadow-inner',
+            'z-40 lg:contents shadow-inner',
             'flex-col absolute gap-2 p-3',
-            'left-0 right-0 bottom-0 bg-grey-lightest z-50'
+            'left-0 right-0 bottom-0 top-[10%] bg-grey-lightest'
           )}
         >
           <div>
@@ -116,7 +116,8 @@ export default function FilterComponents() {
               dateFormat="P"
               className={classNames(
                 'border-1 border-primary-light rounded-full text-primary-light',
-                'py-1.5 px-3 focus:outline-primary-light flex w-full'
+                'py-1.5 px-3 focus:outline-primary-light flex w-full',
+                'text-sm lg:text-base'
               )}
             />
           </div>

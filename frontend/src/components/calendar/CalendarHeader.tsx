@@ -29,7 +29,8 @@ const CalendarHeader = () => {
           className={classNames(
             'bg-primary-light text-primary-contrast text-center whitespace-nowrap',
             'w-full h-full relative row-start-1 py-0.5',
-            'flex items-center justify-center'
+            'flex items-center justify-center',
+            'text-sm lg:text-base'
           )}
           style={{
             gridColumn: `span ${length} / span ${length}`
@@ -47,7 +48,8 @@ const CalendarHeader = () => {
             `col-span-${length} row-start-2`,
             'bg-primary-light text-primary-contrast text-center whitespace-nowrap',
             'w-full h-full relative py-0.5',
-            'flex items-center justify-center'
+            'flex items-center justify-center',
+            'text-sm lg:text-base'
           )}
         >
           {i === 0 && (
@@ -76,9 +78,9 @@ const CalendarHeader = () => {
           key={date.value}
           className={classNames(
             date.week % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark',
-            'text-primary font-header text-sm text-center',
+            'text-primary font-header text-center',
             'row-start-3 w-full px-0.5 mb-1',
-            'overflow-hidden'
+            'text-xs lg:text-sm'
           )}
         >
           {date.display}
