@@ -96,7 +96,7 @@ export const AbsencePeriod = (props: {
           }}
         />
       </button>
-      <section
+      <div
         style={{ display: expandStatus[0] }}
         className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter overflow-hidden"
       >
@@ -155,7 +155,7 @@ export const AbsencePeriod = (props: {
             )}
           </button>
         </div>
-      </section>
+      </div>
     </div>
   );
 };
