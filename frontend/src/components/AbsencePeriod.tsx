@@ -86,7 +86,7 @@ export const AbsencePeriod = (props: {
         onMouseLeave={() => setHover(false)}
         className="flex flex-row justify-between leading-[30px] w-full body-tight"
       >
-        <p className="ml-[20px]">{absencePeriod}</p>
+        <span className="ml-[20px]">{absencePeriod}</span>
         <ExpandMoreIcon
           sx={{
             color: '#FAFAFA',
