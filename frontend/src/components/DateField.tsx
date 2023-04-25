@@ -44,7 +44,7 @@ export const DateField = (props: {
         maxDate={props.max}
         onChange={handleInputChange}
         showWeekNumbers
-        dateFormat="dd/MM/yyyy"
+        dateFormat="P"
         className={`modal-input heading-2xs py-3 w-full border-2 rounded-[20px] border-primary text-center bg-primary-contrast disabled:bg-primary-contrast-lighter disabled:cursor-not-allowed disabled:opacity-50 disabled:text-primary-contrast-lighter ${
           props.customClass ? props.customClass : ''
         }`}

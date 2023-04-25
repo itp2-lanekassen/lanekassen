@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import moment from 'moment';
 import { getAbsencesByUserId } from '@/API/AbsenceAPI';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { User } from '@/types/types';
 import CalendarCell from './CalendarCell';
 import UserDropdown from './UserDropdown';
+import { isWithinInterval } from 'date-fns';
 
 interface CalendarRowProps {
   user: User;
@@ -20,7 +20,10 @@ const CalendarRow = ({ user, isCurrentUser = false }: CalendarRowProps) => {
 
   const absenceOnDate = (date: string) => {
     return (absences || []).find((absence) =>
-      moment(date).isBetween(absence.startDate, absence.endDate, 'd', '[]')
+      isWithinInterval(new Date(date), {
+        start: new Date(absence.startDate),
+        end: new Date(absence.endDate)
+      })
     );
   };
 
