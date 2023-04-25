@@ -16,6 +16,7 @@ export const CommentField = (props: {
       </label>
       <textarea
         name="comment"
+        id="comment"
         value={props.formValues?.comment || ''}
         onChange={props.handleInputChange}
         className="modal-input w-full border-2 rounded-[20px] p-3 border-primary h-[85px] md:h-full bg-primary-contrast"
