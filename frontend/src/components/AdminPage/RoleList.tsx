@@ -48,9 +48,9 @@ const RoleList = ({ setEdit }: RoleListProps) => {
   return (
     <>
       {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
-      <div className="grid grid-cols-sections text-center gap-x-2 gap-y-3 place-items-center">
-        <div className="heading-3xs">Rolle</div>
-        <div className="heading-3xs">Avdelinger</div>
+      <div className="grid grid-cols-sections gap-x-2 gap-y-3 items-center">
+        <div className="heading-3xs md:ml-20">Rolle</div>
+        <div className="heading-3xs text-center">Avdelinger</div>
         <div className="col-span-2">
           <SubmitButton handleClick={() => setEdit(true)}>
             <Add />
@@ -61,8 +61,10 @@ const RoleList = ({ setEdit }: RoleListProps) => {
 
         {roles.map((role) => (
           <Fragment key={role.roleId}>
-            <div>{role.name}</div>
-            <div>{role.departments?.map((dep) => dep.name).join(', ')}</div>
+            <div className="md:ml-20">{role.name}</div>
+            <div className="ml-[35%] xl:ml-44 lg:ml-[40%] md:ml-[40%]">
+              {role.departments?.map((dep) => dep.name).join(', ')}
+            </div>
             <EditButton onClick={() => setEdit(true, role)} />
             <DeleteButton
               onClick={() => {
