@@ -59,7 +59,7 @@ const ModalContextProvider = ({ children }: { children?: ReactNode }) => {
   const openConfirmationBox = (onConfirmAction: () => void, text = '') => {
     setConfirmText(text);
     setShowConfirmationBox(true);
-    setConfirmAction(onConfirmAction);
+    setConfirmAction(() => onConfirmAction);
   };
 
   return (
@@ -75,12 +75,25 @@ const ModalContextProvider = ({ children }: { children?: ReactNode }) => {
           onClose={() => setShowAbsenceForm(false)}
         />
       )}
-      {showMessageBox && <MessageBox confirmationText={errorMessageText} isOpen={showMessageBox} />}
+
+      {showMessageBox && (
+        <MessageBox
+          confirmationText={errorMessageText}
+          isOpen={showMessageBox}
+          onConfirm={() => setShowMessageBox(false)}
+          onClose={() => setShowMessageBox(false)}
+        />
+      )}
+
       {showConfirmationBox && (
         <ConfirmationBox
           confirmationText={confirmText}
           isOpen={showConfirmationBox}
-          onConfirm={confirmAction}
+          onConfirm={() => {
+            confirmAction();
+            setShowConfirmationBox(false);
+          }}
+          onClose={() => setShowConfirmationBox(false)}
         />
       )}
     </ModalContext.Provider>

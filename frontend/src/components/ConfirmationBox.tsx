@@ -2,36 +2,24 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
-import * as React from 'react';
 
 interface ConfirmationBoxProps {
   confirmationText: string;
   isOpen: boolean;
-  onConfirm: (result: boolean) => void;
+  onConfirm: () => void;
+  onClose: () => void;
 }
 
 export default function ConfirmationBox({
   isOpen,
   confirmationText,
-  onConfirm
+  onConfirm,
+  onClose
 }: ConfirmationBoxProps) {
-  const [open, setOpen] = React.useState(isOpen);
-
-  const handleClose = () => {
-    setOpen(false);
-    onConfirm(false);
-  };
-
-  const handleConfirm = () => {
-    setOpen(false);
-    onConfirm(true);
-    return true;
-  };
-
   return (
     <Dialog
-      open={open}
-      onClose={handleClose}
+      open={isOpen}
+      onClose={onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -39,10 +27,10 @@ export default function ConfirmationBox({
         {confirmationText}
       </DialogTitle>
       <DialogActions className="bg-primary-contrast">
-        <Button onClick={handleClose} className="text-primary">
+        <Button onClick={onClose} className="text-primary">
           Avbryt
         </Button>
-        <Button onClick={handleConfirm} autoFocus className="text-primary">
+        <Button onClick={onConfirm} autoFocus className="text-primary">
           Ja
         </Button>
       </DialogActions>
