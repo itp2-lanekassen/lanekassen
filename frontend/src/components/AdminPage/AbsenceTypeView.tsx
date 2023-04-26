@@ -21,10 +21,10 @@ export default function AbsenceTypeView() {
     <div className="w-full flex flex-col items-center">
       <div className="flex flex-col items-center w-full ">
         <div className="grid-cols-absence-types-small md:grid-cols-absence-types grid col-span-4 w-full items-center gap-x-2 gap-y-3 md:col-span-6">
-          <p className="flex-1 text-center font-bold">Beskrivelse</p>
-          <p className="flex-1 text-center font-bold hidden md:block">Forkortelse</p>
-          <p className="flex-1 text-center font-bold hidden md:block ">Farge</p>
-          <p className="flex-1 text-center font-bold whitespace-nowrap">
+          <p className="flex-1 text-center heading-3xs ">Beskrivelse</p>
+          <p className="flex-1 text-center heading-3xs hidden md:block">Forkortelse</p>
+          <p className="flex-1 text-center heading-3xs hidden md:block ">Farge</p>
+          <p className="flex-1 text-center heading-3xs  whitespace-nowrap">
             Visning (Godkjent / Ikke-godkjent)
           </p>
           <div className="col-span-2 flex w-full justify-end">

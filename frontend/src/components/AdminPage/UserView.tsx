@@ -51,12 +51,12 @@ export default function UserView() {
         <div className="flex flex-col items-center w-full">
           <div className="grid-cols-users-small md:grid-cols-users grid col-span-3 md:col-span-7 w-full place-item-center text-center gap-x-2 gap-y-3">
             {tableHeadersSmall.map((header) => (
-              <p key={header} className={`ml-4 flex-1 font-bold mb-2 mr-10 md:hidden`}>
+              <p key={header} className={`ml-4 flex-1 fheading-3xs mb-2 mr-10 md:hidden`}>
                 {header}
               </p>
             ))}
             {tableHeaders.map((header) => (
-              <p key={header} className={`ml-4 flex-1 font-bold mb-2 mr-10 hidden md:block`}>
+              <p key={header} className={`ml-4 flex-1 heading-3xs mb-2 mr-10 hidden md:block`}>
                 {header}
               </p>
             ))}
