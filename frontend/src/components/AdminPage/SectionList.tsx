@@ -48,8 +48,8 @@ const SectionList = ({ setEdit }: SectionListProps) => {
   return (
     <>
       {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
-      <div className="grid grid-cols-sections text-center gap-x-2 gap-y-3 items-center">
-        <div className="heading-3xs md:text-center">Seksjon</div>
+      <div className="grid grid-cols-sections gap-x-2 gap-y-3 items-center">
+        <div className="heading-3xs md:ml-20">Seksjon</div>
         <div className="heading-3xs md:text-center">Avdelinger</div>
         <div className="col-span-2">
           <SubmitButton handleClick={() => setEdit(true)}>
@@ -61,9 +61,7 @@ const SectionList = ({ setEdit }: SectionListProps) => {
 
         {sections.map((section) => (
           <Fragment key={section.sectionId}>
-            <div className="text-left ml-[20%] xl:ml-48 lg:ml-[40%] md:ml-[30%] sm:ml-[30%]">
-              {section.name}
-            </div>
+            <div className="text-left md:ml-20">{section.name}</div>
             <div className="text-left ml-[20%] xl:ml-44 lg:ml-[35%] md:ml-[30%] sm:ml-[30%]">
               {section.department?.name}
             </div>
