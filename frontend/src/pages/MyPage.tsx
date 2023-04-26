@@ -120,12 +120,6 @@ export default function MyPage() {
     }
   }, [isDisabled]);
 
-  const handleDeleteProfileClick = () => {
-    deleteUser(currentUser.userId).then(() => {
-      navigate('/registrer-bruker');
-    });
-  };
-
   const handleCancelEdit = () => {
     setSelectedBusinessAffiliation(currentUser.businessAffiliation);
     setSelectedDepartment(currentUser.departmentId);
@@ -147,14 +141,6 @@ export default function MyPage() {
       setSelectedRoles([]);
     }
   }, [selectedDepartment, currentUser.departmentId]);
-
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const handleDeleteClick = (result: boolean) => {
-    if (result) {
-      handleDeleteProfileClick;
-    }
-    setOpenDialog(false);
-  };
 
   return (
     <PageLayout title="Profil">

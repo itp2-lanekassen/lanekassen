@@ -59,8 +59,8 @@ export default function UserRow(props: {
   return (
     <>
       <p className="flex-1 text-left ml-3 xl:ml-12">{formatFirstName(props.user.firstName)}</p>
-      <p className="flex-1 text-left ml-3 xl:ml-12">{props.user.lastName}</p>
-      <p className="flex-1 text-left ml-3 xl:ml-8 hidden md:block">
+      <p className="flex-1 text-left ml-3 xl:ml-10">{props.user.lastName}</p>
+      <p className="flex-1 text-left ml-3 xl:ml-6 hidden md:block">
         {EmploymentType[props.user.employmentType]}
       </p>
       <p className="flex-1 text-left  xl:ml-12">{department?.name}</p>
