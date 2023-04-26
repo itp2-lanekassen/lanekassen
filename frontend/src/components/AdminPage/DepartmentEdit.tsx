@@ -2,6 +2,7 @@ import { NewDepartment } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { updateDepartment, postDepartment } from '@/API/DepartmentAPI';
+import { useModalContext } from '@/context/ModalContext';
 
 interface DepartmentEditProps {
   setEdit: (val: boolean, department?: NewDepartment) => void;
@@ -14,6 +15,7 @@ const DepartmentEdit = ({ department, setEdit }: DepartmentEditProps) => {
   const [departmentName, setDepartmentName] = useState('');
   const [departmentAbbreviation, setDepartmentAbbrevation] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
+  const { openMessageBox } = useModalContext();
 
   useEffect(() => {
     if (department) {
@@ -34,7 +36,7 @@ const DepartmentEdit = ({ department, setEdit }: DepartmentEditProps) => {
       queryClient.invalidateQueries(['departments']);
       setEdit(false);
     },
-    onError: () => alert('Avdelingen eksisterer allerede')
+    onError: () => openMessageBox('Avdelingen eksisterer allerede')
   });
 
   const { mutate: createDepartment } = useMutation({
@@ -43,7 +45,7 @@ const DepartmentEdit = ({ department, setEdit }: DepartmentEditProps) => {
       queryClient.invalidateQueries(['departments']);
       setEdit(false);
     },
-    onError: () => alert('Avdelingen eksisterer allerede')
+    onError: () => openMessageBox('Avdelingen eksisterer allerede')
   });
 
   const handleSave = () => {

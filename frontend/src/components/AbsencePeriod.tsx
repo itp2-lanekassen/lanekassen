@@ -6,9 +6,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { darken } from '@mui/material/styles';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useState } from 'react';
-import ConfirmationBox from './ConfirmationBox';
 import { useUserContext } from '@/context/UserContext';
 import classNames from 'classnames';
+import { useModalContext } from '@/context/ModalContext';
+
 /**
  * Renders a component that shows a users absence instance
  */
@@ -22,6 +23,7 @@ export const AbsencePeriod = (props: {
   const [hover, setHover] = useState(false);
   const queryClient = useQueryClient();
   const currentUser = useUserContext();
+  const { openConfirmationBox, openMessageBox } = useModalContext();
 
   //Expand/collapse component to show more/less information on click
   const expandCollapse = () => {
@@ -55,16 +57,8 @@ export const AbsencePeriod = (props: {
   const { mutate: deleteExistingAbsence } = useMutation({
     mutationFn: deleteAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
-    onError: () => alert('Fraværet kunne ikke slettes.')
+    onError: () => openMessageBox('Fraværet kunne ikke slettes.')
   });
-
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const handleDeleteClick = (result: boolean) => {
-    if (result && props.absence) {
-      deleteExistingAbsence(props.absence.absenceId);
-    }
-    setOpenDialog(false);
-  };
 
   return (
     <div
@@ -132,7 +126,15 @@ export const AbsencePeriod = (props: {
               }}
             />
           </button>
-          <button onClick={() => setOpenDialog(true)} className="mr-[10px]">
+          <button
+            onClick={() =>
+              openConfirmationBox(
+                () => deleteExistingAbsence(props.absence.absenceId),
+                'Er du sikker på at du vil slette fraværet?'
+              )
+            }
+            className="mr-[10px]"
+          >
             <DeleteOutlineIcon
               sx={{
                 color: '#410464',
@@ -144,15 +146,6 @@ export const AbsencePeriod = (props: {
                 }
               }}
             ></DeleteOutlineIcon>
-            {openDialog && (
-              <div className="flex justify-between items-center">
-                <ConfirmationBox
-                  confirmationText="Er du sikker på at du vil slette fraværet?"
-                  isOpen={openDialog}
-                  onConfirm={handleDeleteClick}
-                />
-              </div>
-            )}
           </button>
         </div>
       </div>

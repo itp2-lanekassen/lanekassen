@@ -1,6 +1,5 @@
 import { getAllTeams } from '@/API/TeamAPI';
 import ErrorAlert from '@/components/Alert';
-import ConfirmationBox from '@/components/ConfirmationBox';
 import PageLayout from '@/components/PageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -9,13 +8,14 @@ import {
   getSectionsByDepartmentId,
   getSubjectFieldsByDepartmentId
 } from '../API/DepartmentAPI';
-import { deleteUser, updateUser } from '../API/UserAPI';
+import { updateUser } from '../API/UserAPI';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
 import { EmploymentType, Role, SubjectField, Team } from '../types/types';
+import { useModalContext } from '@/context/ModalContext';
 
 /**
  *
@@ -25,6 +25,7 @@ export default function MyPage() {
   const queryClient = useQueryClient();
   const [errorAlertOpen, setErrorAlertOpen] = useState(false);
   const [errorAlertMessage, setErrorAlertMessage] = useState('');
+  const { openMessageBox } = useModalContext();
 
   const currentUser = useUserContext();
   const { departments } = useGlobalContext();
@@ -87,19 +88,7 @@ export default function MyPage() {
       queryClient.invalidateQueries(['current-user']);
       setIsDropdownDisabled(true);
     },
-    onError: () => {
-      alert('Feil ved oppdatering av bruker');
-    }
-  });
-
-  const { mutate: deleteUserToBeDeleted } = useMutation({
-    mutationFn: () => deleteUser(currentUser.userId),
-    onSuccess: () => {
-      window.location.reload();
-    },
-    onError: () => {
-      alert('Feil ved sletting av bruker');
-    }
+    onError: () => openMessageBox('Feil ved oppdatering av bruker')
   });
 
   // Validate that required fields are filled out
@@ -128,10 +117,6 @@ export default function MyPage() {
     }
   }, [isDisabled]);
 
-  const handleDeleteProfileClick = () => {
-    deleteUserToBeDeleted();
-  };
-
   const handleCancelEdit = () => {
     setSelectedBusinessAffiliation(currentUser.businessAffiliation);
     setSelectedDepartment(currentUser.departmentId);
@@ -154,37 +139,8 @@ export default function MyPage() {
     }
   }, [selectedDepartment, currentUser.departmentId]);
 
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const handleDeleteClick = (result: boolean) => {
-    if (result) {
-      handleDeleteProfileClick();
-    }
-    setOpenDialog(false);
-  };
-
   return (
     <PageLayout title="Profil">
-      <div className="absolute bottom-10 right-10 flex justify-end">
-        <SubmitButton
-          rounded={'4px rounded'}
-          disabled={false}
-          disabledTitle={'Slett bruker'}
-          buttonText={'Slett bruker'}
-          handleClick={() => setOpenDialog(true)}
-          hover={'hover:scale-110'}
-        />
-      </div>
-      <div>
-        {openDialog && (
-          <div className="flex justify-between items-center">
-            <ConfirmationBox
-              confirmationText="Er du sikker på at du vil slette brukeren din?"
-              isOpen={openDialog}
-              onConfirm={handleDeleteClick}
-            />
-          </div>
-        )}
-      </div>
       <div className="grid grid-cols-my-page-2 grid-rows-my-page-3 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
         <p className="font-bold"> Navn: </p>
         <p className="w-full text-primary">

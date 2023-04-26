@@ -14,6 +14,7 @@ import {
   updateAbsence
 } from '../API/AbsenceAPI';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
+import { useModalContext } from '@/context/ModalContext';
 
 //set max on datepicker state based on when the next absence starts
 async function setMax(
@@ -53,12 +54,13 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
   const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
   const [isApproved, setIsApproved] = React.useState<boolean>(props.absence.isApproved);
+  const { openMessageBox } = useModalContext();
 
   //initialize mutation for updating an absence
   const { mutate: editAbsence } = useMutation({
     mutationFn: (absence: Absence) => updateAbsence(absence),
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
-    onError: () => alert('Fravær kunne ikke oppdateres')
+    onError: () => openMessageBox('Fravær kunne ikke oppdateres')
   });
 
   //initialize form values with current values for the absence selected for editing

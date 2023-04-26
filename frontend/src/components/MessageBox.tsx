@@ -3,19 +3,19 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 
-interface ConfirmationBoxProps {
+interface MessageBoxProps {
   confirmationText: string;
   isOpen: boolean;
   onConfirm: () => void;
   onClose: () => void;
 }
 
-export default function ConfirmationBox({
+export default function MessageBox({
   isOpen,
   confirmationText,
   onConfirm,
   onClose
-}: ConfirmationBoxProps) {
+}: MessageBoxProps) {
   return (
     <Dialog
       open={isOpen}
@@ -27,11 +27,8 @@ export default function ConfirmationBox({
         {confirmationText}
       </DialogTitle>
       <DialogActions className="bg-primary-contrast">
-        <Button onClick={onClose} className="text-primary">
-          Avbryt
-        </Button>
         <Button onClick={onConfirm} autoFocus className="text-primary">
-          Ja
+          Ok
         </Button>
       </DialogActions>
     </Dialog>

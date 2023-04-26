@@ -13,6 +13,7 @@ import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import SubmitButton from '../SubmitButton';
 import UserView from './UserView';
+import { useModalContext } from '@/context/ModalContext';
 
 /**
  *
@@ -24,6 +25,7 @@ export default function UserSelectedView(props: {
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
   const queryClient = useQueryClient();
+  const { openMessageBox } = useModalContext();
 
   const { departments } = useGlobalContext();
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
@@ -100,7 +102,7 @@ export default function UserSelectedView(props: {
       }),
     onSuccess: async () => {
       queryClient.invalidateQueries(['current-user']);
-      alert('Brukeren ble oppdatert!');
+      openMessageBox('Brukeren ble oppdatert!');
       props.setView(<UserView />);
     }
   });

@@ -17,8 +17,8 @@ import { CommentField } from './CommentField';
 import { useUserContext } from '@/context/UserContext';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
-import ConfirmationBox from './ConfirmationBox';
 import { DateField } from './DateField';
+import { useModalContext } from '@/context/ModalContext';
 
 type ModalProps = {
   startDate?: Date;
@@ -81,6 +81,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
 }) => {
   const queryClient = useQueryClient();
   const { absenceTypes } = useGlobalContext();
+  const { openConfirmationBox, openMessageBox } = useModalContext();
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
   const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
 
@@ -99,19 +100,21 @@ const AbsenceForm: React.FC<ModalProps> = ({
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
-    onError: () => alert('Kunne ikke legge til fravær')
+    onError: () => openMessageBox('Noe gikk galt. Prøv igjen senere.')
   });
 
   const { mutate: editAbsence } = useMutation({
     mutationFn: updateAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
-    onError: () => alert('Kunne ikke endre fravær')
+    onError: () => openMessageBox('Noe gikk galt. Prøv igjen senere.')
   });
 
   const { mutate: deleteAbsenceMutation } = useMutation({
     mutationFn: deleteAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
-    onError: () => alert('Kunne ikke slette fravær')
+    onSuccess: () => {
+      queryClient.invalidateQueries(['absences', { userId: user.userId }]), onClose();
+    },
+    onError: () => openMessageBox('Noe gikk galt. Prøv igjen senere.')
   });
 
   const [formValues, setFormValues] = React.useState<FormValues>({
@@ -181,14 +184,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
     });
   };
 
-  //TODO: Why is this function needed? Why not use deleteAbsenceMutation directly?
-  const handleDeleteAbsence = async () => {
-    if (absenceId) {
-      deleteAbsenceMutation(absenceId);
-      onClose();
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -236,15 +231,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
     onClose();
   };
 
-  // Function to open ConfirmationBox. Takes the result from it as a parameter
-  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
-  const handleDeleteClick = (result: boolean) => {
-    if (result) {
-      handleDeleteAbsence();
-    }
-    setOpenDialog(false);
-  };
-
   return (
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50">
       <div className="modal-overlay pointer-events-none" onClick={onClose} />
@@ -267,16 +253,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
               ? 'Legg til fravær for ' + user.firstName
               : 'Rediger fravær for ' + user.firstName}
           </h2>
-        )}
-        {/* Dialog box. Opens when OpenDialog = true */}
-        {openDialog && (
-          <div className="flex justify-between items-center">
-            <ConfirmationBox
-              confirmationText="Er du sikker på at du vil slette fraværet?"
-              isOpen={openDialog}
-              onConfirm={handleDeleteClick}
-            />
-          </div>
         )}
         <form className="modal-form" onSubmit={handleSubmit}>
           <DateField
@@ -327,7 +303,12 @@ const AbsenceForm: React.FC<ModalProps> = ({
             </Button>
             {absenceId && (
               <DeleteOutlineIcon
-                onClick={() => setOpenDialog(true)}
+                onClick={() =>
+                  openConfirmationBox(
+                    () => deleteAbsenceMutation(absenceId),
+                    'Er du sikker på at du vil slette fraværet?'
+                  )
+                }
                 className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
                 sx={{
                   color: '#410464',
