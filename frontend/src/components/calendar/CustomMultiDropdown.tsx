@@ -50,7 +50,7 @@ const CustomMultiDropdown = <T extends number | string>({
   };
 
   return (
-    <div ref={wrapper} className="relative text-primary-light">
+    <div ref={wrapper} className="relative text-primary-light text-sm lg:text-base">
       <div
         role="button"
         tabIndex={0}

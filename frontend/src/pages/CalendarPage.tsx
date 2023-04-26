@@ -28,16 +28,16 @@ const CalendarPage = () => {
       <FilterComponents />
 
       <div className="w-full grid grid-cols-calendar-columns place-items-center gap-0.5 overflow-x-auto">
-        <div className="row-start-1 row-span-3 flex flex-col gap-1 w-11/12 self-start pt-1">
+        <div className="row-start-1 row-span-3 flex flex-col gap-1 w-full self-start pt-1">
           <button
             onClick={() => openAbsenceForm(currentUser, new Date().toISOString())}
-            className="rounded-full w-11/12 bg-primary-light px-3 py-1 text-sm text-grey-lightest whitespace-nowrap text-center hover:text-primary-light hover:bg-grey-lightest border-solid border-1 mx-auto"
+            className="rounded-full w-full lg:w-11/12 bg-primary-light px-3 py-1 text-xs lg:text-sm text-grey-lightest whitespace-nowrap text-center hover:text-primary-light hover:bg-grey-lightest border-solid border-1 mx-auto"
           >
             Legg til fravær
           </button>
           <button
             onClick={() => updateFromDate(startOfWeek(new Date()).toISOString())}
-            className="rounded-full w-11/12 bg-primary-light px-3 py-1 text-sm text-grey-lightest whitespace-nowrap text-center hover:text-primary-light hover:bg-grey-lightest border-solid border-1 mx-auto"
+            className="rounded-full w-full lg:w-11/12 bg-primary-light px-3 py-1 text-xs lg:text-sm text-grey-lightest whitespace-nowrap text-center hover:text-primary-light hover:bg-grey-lightest border-solid border-1 mx-auto"
           >
             Denne uken
           </button>

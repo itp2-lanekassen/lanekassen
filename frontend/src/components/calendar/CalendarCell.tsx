@@ -70,7 +70,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
       className={classNames(
         holiday
           ? 'bg-error-light cursor-auto text-2xs'
-          : `${defaultColor} hover:${hoverColor} text-sm`,
+          : `${defaultColor} hover:${hoverColor} text-xs lg:text-sm`,
         isCurrentUser || currentUser.admin ? 'cursor-pointer' : 'cursor-default',
         'w-full h-full px-1 py-0.5',
         'text-center text-grey-lightest font-bold',
