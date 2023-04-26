@@ -77,7 +77,7 @@ export default function UserRow(props: {
         <DeleteButton
           onClick={() =>
             openConfirmationBox(
-              () => deleteExistingUser(props.user?.userId),
+              () => deleteExistingUser(props.user.userId),
               'Er du sikker på at du vil sletter brukeren?'
             )
           }

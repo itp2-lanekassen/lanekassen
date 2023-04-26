@@ -52,7 +52,7 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
             <DeleteButton
               onClick={() =>
                 openConfirmationBox(
-                  () => () => deleteExistingDepartment(department.departmentId),
+                  () => deleteExistingDepartment(department.departmentId),
                   'Er du sikker på at du vil slette denne avdelingen?'
                 )
               }

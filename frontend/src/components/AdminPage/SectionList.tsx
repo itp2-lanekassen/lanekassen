@@ -52,7 +52,7 @@ const SectionList = ({ setEdit }: SectionListProps) => {
             <DeleteButton
               onClick={() =>
                 openConfirmationBox(
-                  () => () => deleteExistingSection(section.sectionId),
+                  () => deleteExistingSection(section.sectionId),
                   'Er du sikker på at du vil slette denne seksjonen?'
                 )
               }
