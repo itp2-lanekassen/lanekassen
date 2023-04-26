@@ -80,7 +80,7 @@ export const AbsencePeriod = (props: {
     <div
       className={classNames(
         'md:w-[300px] w-full px-[50px] md:px-0 md:mx-6',
-        'text-grey-lightest font-Rubik rounded-2xl overflow-hidden',
+        'text-grey-lightest font-Rubik overflow-hidden',
         'outline-primary outline-2 mb-2',
         props.isSelected && 'outline'
       )}
@@ -94,7 +94,7 @@ export const AbsencePeriod = (props: {
         onClick={() => expandCollapse()}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        className="flex flex-row justify-between leading-[30px] w-full body-tight min-h-[fit-content]"
+        className="flex flex-row justify-between rounded-2xl leading-[30px] w-full body-tight min-h-[fit-content]"
       >
         <p className="ml-[20px]">{absencePeriod}</p>
         <ExpandMoreIcon
