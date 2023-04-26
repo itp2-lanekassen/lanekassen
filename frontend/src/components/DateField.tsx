@@ -37,7 +37,7 @@ export const DateField = (props: {
       <DatePicker
         selected={props.value}
         autoComplete="off"
-        id="datePicker"
+        id={props.name}
         excludeDates={props.disableArray}
         name={props.name}
         minDate={props.min}
