@@ -1,22 +1,22 @@
-import m from 'moment';
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
 import { useCalendarContext } from '@/context/CalendarContext';
 import classNames from 'classnames';
+import { add, sub } from 'date-fns';
 
 const CalendarHeader = () => {
   const { setDates, columns } = useCalendarContext();
 
-  const handleWeek = (add = false) => {
-    if (add) {
+  const handleWeek = (addWeek = false) => {
+    if (addWeek) {
       return setDates((dates) => ({
-        from: m(dates.from).add(1, 'w').toISOString(),
-        to: m(dates.to).add(1, 'w').toISOString()
+        from: add(new Date(dates.from), { weeks: 1 }).toISOString(),
+        to: add(new Date(dates.to), { weeks: 1 }).toISOString()
       }));
     }
 
     setDates((dates) => ({
-      from: m(dates.from).subtract(1, 'w').toISOString(),
-      to: m(dates.to).subtract(1, 'w').toISOString()
+      from: sub(new Date(dates.from), { weeks: 1 }).toISOString(),
+      to: sub(new Date(dates.to), { weeks: 1 }).toISOString()
     }));
   };
 

@@ -10,7 +10,6 @@ import {
   postAbsence
 } from '../API/AbsenceAPI';
 import { useUserContext } from '../context/UserContext';
-import moment from 'moment';
 import { useGlobalContext } from '../context/GlobalContext';
 import { FormValues } from './AbsenceForm';
 import * as React from 'react';
@@ -115,9 +114,12 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   //Post absence to database
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!formValues.startDate || !formValues.endDate) return;
+
     addAbsence({
-      startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
-      endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
+      startDate: formValues.startDate.toISOString(),
+      endDate: formValues.endDate.toISOString(),
       comment: formValues.comment,
       isApproved: isApproved,
       absenceTypeId: formValues.absenceType,
@@ -194,7 +196,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               disabled={false}
               buttonText={'Lagre'}
               type={'submit'}
-            ></SubmitButton>
+            />
           </div>
         </form>
       </div>

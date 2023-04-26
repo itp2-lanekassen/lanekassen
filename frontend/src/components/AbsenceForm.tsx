@@ -2,7 +2,6 @@ import { Absence, User } from '@/types/types';
 import { Button } from '@material-tailwind/react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import moment from 'moment';
 import * as React from 'react';
 import {
   deleteAbsence,
@@ -129,8 +128,8 @@ const AbsenceForm: React.FC<ModalProps> = ({
     //When editing an absence, put all the current values in the fields of the AbsenceForm
     if (clickedAbsence) {
       setFormValues({
-        startDate: new Date(moment(clickedAbsence.startDate).format('YYYY-MM-DD')),
-        endDate: new Date(moment(clickedAbsence.endDate).format('YYYY-MM-DD')),
+        startDate: new Date(clickedAbsence.startDate),
+        endDate: new Date(clickedAbsence.endDate),
         comment: clickedAbsence.comment,
         absenceType: clickedAbsence.absenceTypeId
       });
@@ -187,11 +186,14 @@ const AbsenceForm: React.FC<ModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!formValues.startDate || !formValues.endDate) return;
+
     //add absence if type is 'add'
     if (type == 'add') {
       addAbsence({
-        startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
-        endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
+        startDate: formValues.startDate.toISOString(),
+        endDate: formValues.endDate.toISOString(),
         comment: formValues.comment,
         isApproved: currentUser.admin ? isApproved : false,
         absenceTypeId: formValues.absenceType,
@@ -214,8 +216,8 @@ const AbsenceForm: React.FC<ModalProps> = ({
       if (clickedAbsence) {
         await editAbsence({
           absenceId: clickedAbsence.absenceId,
-          startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
-          endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
+          startDate: formValues.startDate.toISOString(),
+          endDate: formValues.endDate.toISOString(),
           absenceTypeId: formValues.absenceType,
           type: updatedAbsenceType,
           userId: user.userId,
@@ -287,7 +289,6 @@ const AbsenceForm: React.FC<ModalProps> = ({
                 id="isApproved"
                 checked={isApproved}
                 onChange={handleIsApprovedChange}
-                // eslint-disable-next-line react/no-unknown-property
                 className="space-x-5 h-5 w-5 accent-primary cursor-pointer"
               />
             </div>
@@ -318,7 +319,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
                     scale: '1.1'
                   }
                 }}
-              ></DeleteOutlineIcon>
+              />
             )}
           </div>
         </form>

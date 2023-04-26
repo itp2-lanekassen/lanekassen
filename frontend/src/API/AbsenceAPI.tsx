@@ -1,6 +1,6 @@
 import { Absence, NewAbsence } from '../types/types';
 import axios, { AxiosResponse } from 'axios';
-import moment from 'moment';
+import { add, sub } from 'date-fns';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -96,9 +96,7 @@ export async function getDatePickerMaxForAbsence(userId: number, date: Date) {
       date.valueOf() < new Date(a.startDate).valueOf() &&
       new Date(a.startDate).valueOf() - date.valueOf() < diff
     ) {
-      earliestDate = new Date(
-        moment(a.startDate).add(-1, 'days').toISOString(true).split('+')[0] + 'Z'
-      );
+      earliestDate = sub(new Date(a.startDate), { days: 1 });
       returnDate = earliestDate;
       diff = new Date(a.startDate).valueOf() - new Date(date).valueOf();
     }
@@ -117,9 +115,7 @@ export async function getDatePickerMinForAbsence(userId: number, date: Date) {
       date.valueOf() > new Date(a.endDate).valueOf() &&
       date.valueOf() - new Date(a.endDate).valueOf() < diff
     ) {
-      earliestDate = new Date(
-        moment(a.endDate).add(1, 'days').toISOString(true).split('+')[0] + 'Z'
-      );
+      earliestDate = add(new Date(a.endDate), { days: 1 });
       returnDate = earliestDate;
       diff = new Date(date).valueOf() - new Date(a.endDate).valueOf();
     }
@@ -137,7 +133,7 @@ export async function getDisableDates(userId: number): Promise<Date[]> {
     while (
       tempDate.toISOString().split('T')[0] !== new Date(a.endDate).toISOString().split('T')[0]
     ) {
-      tempDate = new Date(moment(tempDate).add(1, 'days').toISOString(true).split('+')[0] + 'Z');
+      tempDate = add(tempDate, { days: 1 });
       dateArray.push(tempDate);
     }
   });
