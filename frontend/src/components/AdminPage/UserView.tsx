@@ -5,7 +5,7 @@ import { useEffect, useState, ChangeEvent } from 'react';
 import UserRow from './UserRow';
 
 const tableHeaders = ['Fornavn', 'Etternavn', 'Ansattforhold', 'Avdeling', 'Seksjon'];
-const tableHeadersSmall = ['Fornavn', 'Etternavn', 'Avdeling', ''];
+const tableHeadersSmall = ['Fornavn', 'Etternavn', 'Avdeling'];
 
 export default function UserView() {
   const [matchingUsers, setMatchingUsers] = useState<User[]>();
