@@ -50,7 +50,7 @@ const SectionList = ({ setEdit }: SectionListProps) => {
       {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
       <div className="grid grid-cols-sections gap-x-2 gap-y-3 items-center">
         <div className="heading-3xs md:ml-20">Seksjon</div>
-        <div className="heading-3xs md:text-center">Avdelinger</div>
+        <div className="heading-3xs md:text-center">Avdeling</div>
         <div className="col-span-2">
           <SubmitButton handleClick={() => setEdit(true)}>
             <Add />

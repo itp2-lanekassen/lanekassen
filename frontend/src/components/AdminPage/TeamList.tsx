@@ -49,7 +49,7 @@ const TeamList = ({ setEdit }: TeamListProps) => {
     <>
       {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
       <div className="grid grid-cols-teams gap-x-2 gap-y-3 items-center">
-        <div className="heading-3xs ml-40">Team</div>
+        <div className="heading-3xs lg:ml-40 md:ml-20">Team</div>
         <div className="col-span-2">
           <SubmitButton handleClick={() => setEdit(true)}>
             <Add />
@@ -60,7 +60,7 @@ const TeamList = ({ setEdit }: TeamListProps) => {
 
         {teams.map((team) => (
           <Fragment key={team.teamId}>
-            <div className="ml-40">{team.name}</div>
+            <div className="lg:ml-40 md:ml-20">{team.name}</div>
             <EditButton onClick={() => setEdit(true, team)} />
             <DeleteButton
               onClick={() => {
