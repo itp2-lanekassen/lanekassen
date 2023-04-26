@@ -15,6 +15,7 @@ import { useGlobalContext } from '../context/GlobalContext';
 import { FormValues } from './AbsenceForm';
 import * as React from 'react';
 import { Absence } from '../types/types';
+import { useModalContext } from '@/context/ModalContext';
 
 //get all absence dates in array
 async function setDates(
@@ -58,12 +59,13 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
   const [disableDates, setDisableDates] = React.useState<Date[]>();
   const [isApproved, setIsApproved] = React.useState<boolean>(false);
+  const { openMessageBox } = useModalContext();
 
   //initialize postAbsence mutation
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
-    onError: () => alert('Fraværet eksisterer allerede')
+    onError: () => openMessageBox('Fraværet eksisterer allerede')
   });
 
   //initialize form values

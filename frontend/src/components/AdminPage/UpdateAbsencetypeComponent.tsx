@@ -9,6 +9,7 @@ import ColorPickerComponent from './ColorPicker';
 import InputAdornment from '@mui/material/InputAdornment';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import { IconButton, Input } from '@mui/material';
+import { useModalContext } from '@/context/ModalContext';
 
 type FormValues = {
   name: string;
@@ -26,7 +27,7 @@ export default function UpdateAbsenceTypeComponent(props: {
     code: props.absenceType.code,
     colorCode: props.absenceType.colorCode
   });
-
+  const { openMessageBox } = useModalContext();
   const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = React.useState(false);
@@ -45,7 +46,7 @@ export default function UpdateAbsenceTypeComponent(props: {
   const { mutate: updateAbsenceTypeToDatabase } = useMutation({
     mutationFn: (options: AbsenceType) => updateAbsenceType(options.absenceTypeId, options),
     onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
-    onError: () => alert('Fraværstypen eksisterer allerede')
+    onError: () => openMessageBox('Fraværstypen eksisterer allerede')
   });
 
   //Post absence to database

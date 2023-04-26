@@ -2,12 +2,11 @@ import { deleteDepartment, getAllDepartments } from '@/API/DepartmentAPI';
 import { NewDepartment } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Fragment, useState } from 'react';
-import ErrorAlert from '../Alert';
+import { Fragment } from 'react';
 import SubmitButton from '../SubmitButton';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
-import ConfirmationBox from '../ConfirmationBox';
+import { useModalContext } from '@/context/ModalContext';
 
 interface DepartmentListProps {
   setEdit: (val: boolean, department?: NewDepartment) => void;
@@ -15,8 +14,7 @@ interface DepartmentListProps {
 
 const DepartmentList = ({ setEdit }: DepartmentListProps) => {
   const queryClient = useQueryClient();
-  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
-  const [errorAlertMessage, setErrorAlertMessage] = useState('');
+  const { openConfirmationBox, openMessageBox } = useModalContext();
 
   const {
     isLoading,
@@ -27,27 +25,14 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
   const { mutate: deleteExistingDepartment } = useMutation({
     mutationFn: deleteDepartment,
     onSuccess: () => queryClient.invalidateQueries(['departments']),
-    onError: () => {
-      setErrorAlertMessage('En avdeling kan ikke være i bruk før den slettes!');
-      setErrorAlertOpen(true);
-    }
+    onError: () => openMessageBox('En avdeling kan ikke være i bruk før den slettes!')
   });
-
-  const [id, setId] = useState<number>(0);
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const handleDeleteClick = (result: boolean) => {
-    if (result) {
-      deleteExistingDepartment(id);
-    }
-    setOpenDialog(false);
-  };
 
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
 
   return (
     <>
-      {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
       <div className="grid grid-cols-sections text-center gap-x-2 gap-y-3 place-items-center">
         <div className="heading-3xs">Avdelingsnavn</div>
         <div className="heading-3xs">Forkortelse</div>
@@ -65,18 +50,13 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
             <div>({department.abbreviation})</div>
             <EditButton onClick={() => setEdit(true, department)} />
             <DeleteButton
-              onClick={() => {
-                setId(department.departmentId);
-                setOpenDialog(true);
-              }}
+              onClick={() =>
+                openConfirmationBox(
+                  () => () => deleteExistingDepartment(department.departmentId),
+                  'Er du sikker på at du vil slette denne avdelingen?'
+                )
+              }
             />
-            {openDialog && (
-              <ConfirmationBox
-                confirmationText="Er du sikker på at du vil slette seksjonen?"
-                isOpen={openDialog}
-                onConfirm={handleDeleteClick}
-              />
-            )}
           </Fragment>
         ))}
       </div>
