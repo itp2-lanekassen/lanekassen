@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState, ChangeEvent } from 'react';
 import UserRow from './UserRow';
 
-const tableHeaders = ['Fornavn', 'Etternavn', 'Ansattforhold', 'Avdeling', 'Seksjon', ''];
+const tableHeaders = ['Fornavn', 'Etternavn', 'Ansattforhold', 'Avdeling', 'Seksjon'];
 const tableHeadersSmall = ['Fornavn', 'Etternavn', 'Avdeling', ''];
 
 export default function UserView() {
@@ -49,7 +49,7 @@ export default function UserView() {
       </div>
       <div className="mt-5 flex flex-col items-center">
         <div className="flex flex-col items-center w-full">
-          <div className="grid-cols-users-small md:grid-cols-users grid col-span-3 md:col-span-6 w-full place-item-center text-center gap-x-2 gap-y-3">
+          <div className="grid-cols-users-small md:grid-cols-users grid col-span-3 md:col-span-7 w-full place-item-center text-center gap-x-2 gap-y-3">
             {tableHeadersSmall.map((header) => (
               <p key={header} className={`ml-4 flex-1 font-bold mb-2 mr-10 md:hidden`}>
                 {header}

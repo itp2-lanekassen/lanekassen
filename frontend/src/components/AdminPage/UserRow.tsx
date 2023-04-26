@@ -18,11 +18,11 @@ export default function UserRow(props: {
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
   const queryClient = useQueryClient();
-  const { data: dep } = useQuery(
+  const { data: department } = useQuery(
     [`dep-${props.user.userId}`],
     async () => (await getDepartmentById(props.user.departmentId)).data
   );
-  const { data: sec } = useQuery(
+  const { data: section } = useQuery(
     [`sec-${props.user.userId}`],
     async () => (await getSectionById(props.user.sectionId)).data
   );
@@ -58,28 +58,24 @@ export default function UserRow(props: {
 
   return (
     <>
-      <p className="flex-1 text-left ml-3">{formatFirstName(props.user.firstName)}</p>
-      <p className="flex-1 text-left ml-3">{props.user.lastName}</p>
-      <p className="flex-1 text-left ml-3 hidden md:block">
+      <p className="flex-1 text-left ml-3 xl:ml-12">{formatFirstName(props.user.firstName)}</p>
+      <p className="flex-1 text-left ml-3 xl:ml-12">{props.user.lastName}</p>
+      <p className="flex-1 text-left ml-3 xl:ml-8 hidden md:block">
         {EmploymentType[props.user.employmentType]}
       </p>
-      <p className="flex-1 text-left">{dep?.name}</p>
-      <p className="flex-1 text-left ml-3 hidden md:block">{sec?.name}</p>
-      <div className="w-[24px] h-[24px]">
-        <EditButton onClick={handleEdit} />
-      </div>
-      <div className="w-[24px] h-[24px]">
-        <DeleteButton onClick={() => setOpenDialog(true)} />
-        {openDialog && (
-          <div className="flex justify-between items-center">
-            <ConfirmationBox
-              confirmationText="Er du sikker på at du vil slette brukeren?"
-              isOpen={openDialog}
-              onConfirm={handleDeleteProfileClick}
-            />
-          </div>
-        )}
-      </div>
+      <p className="flex-1 text-left  xl:ml-12">{department?.name}</p>
+      <p className="flex-1 text-left ml-3 hidden md:block">{section?.name}</p>
+      <EditButton onClick={handleEdit} />
+      <DeleteButton onClick={() => setOpenDialog(true)} />
+      {openDialog && (
+        <div className="flex justify-between items-center">
+          <ConfirmationBox
+            confirmationText="Er du sikker på at du vil slette brukeren?"
+            isOpen={openDialog}
+            onConfirm={handleDeleteProfileClick}
+          />
+        </div>
+      )}
     </>
   );
 }
