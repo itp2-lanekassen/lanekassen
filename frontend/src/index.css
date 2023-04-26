@@ -54,7 +54,7 @@
     @apply font-header text-primary;
     font-size: 1.25rem;
     line-height: 1.5;
-    letter-spacing: 0.0075;
+    letter-spacing: 0.0075em;
   }
 
   .heading-xs-medium {
@@ -70,7 +70,7 @@
 
   .heading-2xs-tight {
     @apply heading-2xs;
-    letter-spacing: 1;
+    letter-spacing: 1em;
   }
 
   .heading-3xs {
@@ -149,6 +149,6 @@
 
   .button-medium {
     @apply button font-medium;
-    letter-spacing: 0.005;
+    letter-spacing: 0.005em;
   }
 }

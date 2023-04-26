@@ -3,6 +3,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Department, EmploymentType, Section, User } from '@/types/types';
 import { getDepartmentById } from '@/API/DepartmentAPI';
 import { getSectionById } from '@/API/SectionAPI';
+import useViewport from '@/context/calendarContextHelpers/useViewport';
 
 export default function UserDropdown(props: { user: User; isCurrentUser: boolean }) {
   const [isSet, setIsSet] = useState<boolean>(false);
@@ -15,12 +16,16 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
   const [businessAffiliation, setBusinessAffiliation] = useState<string>('');
   const [roles, setRoles] = useState<string[]>();
 
+  const { width } = useViewport();
+
   const formatName = (name: string) => {
     return name
       .split(' ')
       .map((n, i, arr) => {
-        // if first or last name, return whole name
-        if (i === 0 || i === arr.length - 1) return n;
+        // if last name, return whole name
+        if (i === arr.length - 1) return n;
+        // if first name, return whole name if screen is bigger than 425px
+        if (i === 0 && width > 425) return n;
 
         // return first character in uppercase with . after
         return n[0].toUpperCase() + '.';
@@ -56,7 +61,7 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
   };
 
   return (
-    <div className="col-start-1 w-full font-header rounded-xl overflow-hidden">
+    <div className="col-start-1 w-full font-header rounded-xl overflow-hidden text-sm lg:text-base">
       <button
         className={`${
           props.isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
@@ -66,7 +71,7 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
         <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
           {formatName(`${props.user.firstName} ${props.user.lastName}`)}
         </span>
-        <ExpandMoreIcon className={isSet ? 'rotate-180' : 'rotate-0'} />
+        <ExpandMoreIcon fontSize="inherit" className={isSet ? 'rotate-180' : 'rotate-0'} />
       </button>
 
       <div

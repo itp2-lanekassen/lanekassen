@@ -80,17 +80,17 @@ export const AbsencePeriod = (props: {
         onMouseLeave={() => setHover(false)}
         className="flex flex-row justify-between leading-[30px] w-full body-tight"
       >
-        <p className="ml-[20px]">{absencePeriod}</p>
+        <span className="ml-[20px]">{absencePeriod}</span>
         <ExpandMoreIcon
           sx={{
-            color: 'primary-contrast',
+            color: '#FAFAFA',
             height: '30px',
             mr: '10px',
             transform: arrowRotation
           }}
         />
       </button>
-      <section
+      <div
         style={{ display: expandStatus[0] }}
         className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter overflow-hidden"
       >
@@ -148,7 +148,7 @@ export const AbsencePeriod = (props: {
             ></DeleteOutlineIcon>
           </button>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

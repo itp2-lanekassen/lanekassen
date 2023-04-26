@@ -16,7 +16,7 @@ import { useUserContext } from './UserContext';
 import calculateColumns, { Columns } from './calendarContextHelpers/calculateColumns';
 import useViewport from './calendarContextHelpers/useViewport';
 import getNumberOfWeeks from './calendarContextHelpers/getNumberOfWeeks';
-import { startOfWeek, add, differenceInDays } from 'date-fns';
+import { startOfWeek, add } from 'date-fns';
 
 interface Dates {
   from: string;
@@ -59,11 +59,9 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const updateFromDate = (newDate: string) => {
-    const daysDiff = Math.abs(differenceInDays(new Date(dates.from), new Date(dates.to)));
-
     setDates({
       from: newDate,
-      to: add(new Date(newDate), { days: daysDiff }).toISOString()
+      to: add(new Date(newDate), { days: -1, weeks: numberOfWeeks }).toISOString()
     });
   };
 

@@ -152,33 +152,33 @@ const PageLayout = ({ title, children }: PageLayoutProps) => {
           onClick={() => navigate('/')}
           className="group block w-[35px] relative duration-300 hover:w-[180px] h-[35px] rounded-full bg-primary overflow-hidden"
         >
-          <div
+          <span
             className={`bg-${indicator[0][0]} w-[35px] h-[35px] border-solid border-primary border-[3px] rounded-full absolute top-[0px] right-[0px] pt-[3px]`}
           >
             <CalendarMonthIcon className={`text-${indicator[0][1]}`}></CalendarMonthIcon>
-          </div>
+          </span>
           <span className="group-hover:block hidden text-primary-contrast">Kalender</span>
         </button>
         <button
           onClick={() => navigate('/profil')}
           className="group block w-[35px] relative duration-300 hover:w-[180px] h-[35px] rounded-full bg-primary overflow-hidden"
         >
-          <div
+          <span
             className={`bg-${indicator[1][0]} w-[35px] h-[35px] border-solid border-primary border-[3px] rounded-full absolute top-[0px] right-[0px] pt-[3px]`}
           >
             <PersonIcon className={`text-${indicator[1][1]}`}></PersonIcon>
-          </div>
+          </span>
           <span className="group-hover:block hidden text-primary-contrast">Profil</span>
         </button>
         <button
           onClick={() => navigate('/fravaersside')}
           className="group block w-[35px] relative duration-300 hover:w-[180px] h-[35px] rounded-full bg-primary overflow-hidden"
         >
-          <div
+          <span
             className={`bg-${indicator[2][0]} w-[35px] h-[35px] border-solid border-primary border-[3px] rounded-full absolute top-[0px] right-[0px] pt-[3px]`}
           >
             <EditCalendarIcon className={`text-${indicator[2][1]}`}></EditCalendarIcon>
-          </div>
+          </span>
           <span className="group-hover:block hidden text-primary-contrast whitespace-nowrap">
             Mine fravær
           </span>
@@ -190,13 +190,13 @@ const PageLayout = ({ title, children }: PageLayoutProps) => {
             }}
             className="group block w-[35px] relative duration-300 hover:w-[180px] h-[35px] rounded-full bg-primary overflow-hidden"
           >
-            <div
+            <span
               className={`bg-${indicator[3][0]} border-solid border-primary border-[3px] w-[35px] h-[35px] rounded-full absolute top-[0px] right-[0px] pt-[3px] pl-[3px]`}
             >
               <AdminPanelSettingsIcon
                 className={`text-${indicator[3][1]}`}
               ></AdminPanelSettingsIcon>
-            </div>
+            </span>
             <span className="group-hover:block hidden text-primary-contrast">Admin</span>
           </button>
         )}
