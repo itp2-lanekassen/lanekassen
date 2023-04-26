@@ -43,7 +43,7 @@ export const AbsencePeriods = (props: {
   return (
     <div className="h-full md:h-[500px] w-full md:w-[350px] mx-auto">
       <h3 className="md:ml-[25px] md:text-left text-center md:text-2xl">Dine fravær</h3>
-      <div className="overflow-y-auto md:h-[460px] flex flex-col items-center gap-2 scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded py-0.5">
+      <div className="md:h-[460px] overflow-y-auto items-center gap-2 scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary-lighter hover:scrollbar-thumb-primary-dark scrollbar-thumb-rounded scrollbar-track-rounded py-0.5">
         {absencePeriods}
       </div>
     </div>
