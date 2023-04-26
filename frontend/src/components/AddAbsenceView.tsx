@@ -92,6 +92,20 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
       ...formValues,
       [name]: date
     });
+    if (name === 'startDate') {
+      setFormValues({
+        ...formValues,
+        [name]: date,
+        endDate: undefined // reset endDate if startDate changes
+      });
+      setMin(currentUser.userId, date, setPreviousAbsenceEndDate);
+      setMax(currentUser.userId, date, setNextAbsenceStartDate);
+    } else {
+      setFormValues({
+        ...formValues,
+        [name]: date
+      });
+    }
   };
 
   //update form values on comment change
@@ -148,8 +162,8 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
             <DateField
               handleInputChange={handleInputChange}
               name="startDate"
-              min={previousAbsenceEndDate}
-              max={formValues.endDate}
+              // min={previousAbsenceEndDate}
+              // max={formValues.endDate}
               value={formValues.startDate}
               label="Fra"
               disableArray={disableDates}
