@@ -1,9 +1,9 @@
 import { Absence } from '../types/types';
 import { useState } from 'react';
-import { AbsencePeriods } from './AbsencePeriods';
-import { EditAbsenceView } from './EditAbsenceView';
-import { AddAbsenceView } from './AddAbsenceView';
-import PageLayout from './PageLayout';
+import { AbsencePeriods } from '../components/AbsencePeriods';
+import { EditAbsenceView } from '../components/EditAbsenceView';
+import { AddAbsenceView } from '../components/AddAbsenceView';
+import PageLayout from '../components/PageLayout';
 
 /**
  * Renders a view that shows a users absence and lets a user edit, delete and add new absences

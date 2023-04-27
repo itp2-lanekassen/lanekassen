@@ -33,9 +33,9 @@ const TeamList = ({ setEdit }: TeamListProps) => {
 
   return (
     <>
-      <div className="grid grid-cols-teams text-center gap-x-2 gap-y-3 place-items-center">
-        <div className="heading-3xs">Team</div>
-        <div className="col-span-1">
+      <div className="grid grid-cols-teams gap-x-2 gap-y-3 items-center">
+        <div className="heading-3xs lg:ml-40 md:ml-20">Team</div>
+        <div className="col-span-2">
           <SubmitButton handleClick={() => setEdit(true)}>
             <Add />
           </SubmitButton>
@@ -45,7 +45,7 @@ const TeamList = ({ setEdit }: TeamListProps) => {
 
         {teams.map((team) => (
           <Fragment key={team.teamId}>
-            <div>{team.name}</div>
+            <div className="lg:ml-40 md:ml-20">{team.name}</div>
             <EditButton onClick={() => setEdit(true, team)} />
             <DeleteButton
               onClick={() =>

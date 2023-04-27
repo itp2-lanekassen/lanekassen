@@ -132,13 +132,14 @@ export default function UpdateAbsenceTypeComponent(props: {
             )}
           </div>
           <label className="mt-2" htmlFor="code">
-            Kode:
+            Kode (maks 7 tegn):
           </label>
           <input
             className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
             type="text"
             name="code"
             id="code"
+            maxLength={7}
             value={formValues.code}
             onChange={handleInputChange}
           />

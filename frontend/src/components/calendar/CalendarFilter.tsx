@@ -82,7 +82,6 @@ export default function FilterComponents() {
   return (
     <div className="grid gap-2 py-2 w-11/12 mx-auto">
       <FilterDescription className="mb-2" />
-
       <div className="flex gap-2 items-center">
         <button
           className={classNames(

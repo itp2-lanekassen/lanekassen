@@ -307,7 +307,7 @@ export default function MyPage() {
       <div className="flex items-center gap-2 w-full justify-center pt-4">
         {isDropdownDisabled ? (
           <SubmitButton
-            buttonText="Rediger bruker"
+            buttonText="Rediger"
             handleClick={() => setIsDropdownDisabled(false)}
             disabled={!isDropdownDisabled}
             disabledTitle={'Disabled'}
@@ -315,13 +315,13 @@ export default function MyPage() {
         ) : (
           <>
             <SubmitButton
-              buttonText="Avbryt redigering"
+              buttonText="Avbryt"
               handleClick={handleCancelEdit}
               disabled={isDropdownDisabled}
               disabledTitle={'Disabled'}
             />
             <SubmitButton
-              buttonText="Oppdater bruker"
+              buttonText="Lagre"
               handleClick={userToBeUpdated}
               disabled={isDisabled}
               disabledTitle={'Fyll ut virksomhet, avdeling, seksjon og fagområde'}

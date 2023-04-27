@@ -17,25 +17,14 @@ export default function UserRow(props: {
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
   const queryClient = useQueryClient();
-  const { openConfirmationBox, openMessageBox } = useModalContext();
-
-  const { data: dep } = useQuery(
+  const { data: department } = useQuery(
     [`dep-${props.user.userId}`],
     async () => (await getDepartmentById(props.user.departmentId)).data
   );
-  const { data: sec } = useQuery(
+  const { data: section } = useQuery(
     [`sec-${props.user.userId}`],
     async () => (await getSectionById(props.user.sectionId)).data
   );
-
-  // Load user data into states
-  const shortenEmail = (inputEmail: string) => {
-    if (inputEmail.length > 20) {
-      const shorterEmail = inputEmail.slice(0, 20) + '...';
-      return shorterEmail;
-    }
-    return inputEmail;
-  };
 
   // To edit a user, change view to the display of a chosen user's information
   const handleEdit = async () => {
@@ -64,25 +53,22 @@ export default function UserRow(props: {
 
   return (
     <>
-      <p className="flex-1">{formatFirstName(props.user.firstName)}</p>
-      <p className="flex-1">{props.user.lastName}</p>
-      <p className="flex-1 hidden md:block">{shortenEmail(props.user.email)}</p>
-      <p className="flex-1 hidden md:block">{EmploymentType[props.user.employmentType]}</p>
-      <p className="flex-1">{dep?.name}</p>
-      <p className="flex-1 hidden md:block">{sec?.name}</p>
-      <div className="w-[24px] h-[24px]">
-        <EditButton onClick={handleEdit} />
-      </div>
-      <div className="w-[24px] h-[24px]">
-        <DeleteButton
-          onClick={() =>
-            openConfirmationBox(
-              () => deleteExistingUser(props.user.userId),
-              'Er du sikker på at du vil sletter brukeren?'
-            )
-          }
-        />
-      </div>
+      <p className="flex-1 text-left ml-3 xl:ml-12">{formatFirstName(props.user.firstName)}</p>
+      <p className="flex-1 text-left ml-3 xl:ml-10">{props.user.lastName}</p>
+      <p className="flex-1 text-left ml-3 xl:ml-6 hidden md:block">
+        {EmploymentType[props.user.employmentType]}
+      </p>
+      <p className="flex-1 text-left  xl:ml-12">{department?.name}</p>
+      <p className="flex-1 text-left ml-3 hidden md:block">{section?.name}</p>
+      <EditButton onClick={handleEdit} />
+      <DeleteButton
+        onClick={() =>
+          openConfirmationBox(
+            () => deleteExistingUser(props.user.userId),
+            'Er du sikker på at du vil sletter brukeren?'
+          )
+        }
+      />
     </>
   );
 }

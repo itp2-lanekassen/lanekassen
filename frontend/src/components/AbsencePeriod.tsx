@@ -44,12 +44,22 @@ export const AbsencePeriod = (props: {
     );
   }
 
+  // Display that absence comment is longer than what is shown
+  const shortenComment = (comment: string) => {
+    if (comment.length > 20 && !comment.includes(' ')) {
+      const shorterComment = comment.slice(0, 35) + '...';
+      return shorterComment;
+    }
+    return comment;
+  };
+
   //Check if absence has a comment to display
   let notice;
   if (props.absence.comment && props.absence.comment.length > 0) {
     notice = (
-      <p className="mx-[20px] pt-[10px] text-[18px]">
-        Personlig notis <strong className="body-tight text-[12px]">{props.absence.comment}</strong>
+      <p className="mx-[20px] pt-[10px] text-sm">
+        <strong className="body-bold"> Personlig notis: </strong>
+        {shortenComment(props.absence.comment)}
       </p>
     );
   }
@@ -64,8 +74,8 @@ export const AbsencePeriod = (props: {
     <div
       className={classNames(
         'md:w-[300px] w-full px-[50px] md:px-0 md:mx-6',
-        'text-grey-lightest font-Rubik rounded-2xl overflow-hidden',
-        'outline-primary outline-2',
+        'text-grey-lightest font-Rubik overflow-hidden',
+        'outline-primary outline-2 mb-2',
         props.isSelected && 'outline'
       )}
     >
@@ -78,7 +88,7 @@ export const AbsencePeriod = (props: {
         onClick={() => expandCollapse()}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        className="flex flex-row justify-between leading-[30px] w-full body-tight"
+        className="flex flex-row justify-between rounded-2xl leading-[30px] w-full body-tight min-h-[fit-content]"
       >
         <span className="ml-[20px]">{absencePeriod}</span>
         <ExpandMoreIcon
@@ -94,19 +104,15 @@ export const AbsencePeriod = (props: {
         style={{ display: expandStatus[0] }}
         className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter overflow-hidden"
       >
-        <p className="mx-[20px] text-[18px]">
-          Fraværstype <strong className="body-bold text-[12px]">{props.absence.type.name}</strong>
+        <p className="mx-[20px] pt-[10px] text-sm">
+          <strong className="body-bold"> Fraværstype: </strong>
+          {props.absence.type.name}
         </p>
-        {props.absence.isApproved ? (
-          <p className="mx-[20px] text-[18px]">
-            <strong className="body-bold text-[12px]">Godkjent fravær</strong>
-          </p>
-        ) : (
-          <p className="mx-[20px] text-[18px]">
-            <strong className="body-bold text-[12px]">Ikke godkjent</strong>
-          </p>
-        )}
         {notice}
+        <p className="mx-[20px] pt-[10px] text-sm">
+          <strong className="body-bold"> Status: </strong>
+          {props.absence.isApproved ? 'Godkjent' : 'Ikke godkjent'}
+        </p>
         <div className="flex flex-row float-right">
           <button
             className="mr-[10px]"

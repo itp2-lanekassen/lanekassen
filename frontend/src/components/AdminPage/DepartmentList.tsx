@@ -33,9 +33,9 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
 
   return (
     <>
-      <div className="grid grid-cols-sections text-center gap-x-2 gap-y-3 place-items-center">
-        <div className="heading-3xs">Avdelingsnavn</div>
-        <div className="heading-3xs">Forkortelse</div>
+      <div className="grid grid-cols-sections gap-x-2 gap-y-3 items-center">
+        <div className="heading-3xs ml-5 md:ml-20">Avdelingsnavn</div>
+        <div className="heading-3xs text-center">Forkortelse</div>
         <div className="col-span-2">
           <SubmitButton handleClick={() => setEdit(true)}>
             <Add />
@@ -46,8 +46,10 @@ const DepartmentList = ({ setEdit }: DepartmentListProps) => {
 
         {departments.map((department) => (
           <Fragment key={department.departmentId}>
-            <div>{department.name}</div>
-            <div>({department.abbreviation})</div>
+            <div className="text-left md:ml-20">{department.name}</div>
+            <div className="text-left ml-[25%] xl:ml-44 lg:ml-[40%] md:ml-[30%] sm:ml-[30%]">
+              ({department.abbreviation})
+            </div>
             <EditButton onClick={() => setEdit(true, department)} />
             <DeleteButton
               onClick={() =>
