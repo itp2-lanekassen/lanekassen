@@ -44,7 +44,7 @@ export default function UserRow(props: {
       })
       .join(' ');
   };
-
+  const { openConfirmationBox, openMessageBox } = useModalContext();
   const { mutate: deleteExistingUser } = useMutation({
     mutationFn: deleteUser,
     onSuccess: () => queryClient.invalidateQueries(['users']),
