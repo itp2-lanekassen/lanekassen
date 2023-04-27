@@ -80,7 +80,7 @@ export default function FilterComponents() {
 
   return (
     <div className="grid gap-2 py-2 w-11/12 mx-auto">
-      <FilterDescription className="block sm:block md:hidden" />
+      <FilterDescription className="mb-2" />
       <div className="flex gap-2 items-center">
         <button
           className={classNames(
@@ -187,7 +187,6 @@ export default function FilterComponents() {
           >
             Tøm filter
           </button>
-          <FilterDescription className="hidden sm:hidden md:block ml-52" />
         </div>
       </div>
 
