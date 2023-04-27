@@ -139,6 +139,38 @@ export async function getDisableDates(userId: number): Promise<Date[]> {
   });
   return dateArray;
 }
+// Martin's code to try to fix it
+
+// export async function getDisableDates(userId: number, editDate: Absence[]): Promise<Date[]> {
+//   const absences = await getAbsencesByUserId(userId).then((response) => response.data);
+//   const dateArray: Date[] = [];
+//   absences.map((a) => {
+//     let tempDate = new Date(a.startDate);
+//     dateArray.push(tempDate);
+//     while (
+//       tempDate.toISOString().split('T')[0] !== new Date(a.endDate).toISOString().split('T')[0]
+//     ) {
+//       tempDate = add(tempDate, { days: 1 });
+//       dateArray.push(tempDate);
+//     }
+//   });
+//   editDate.map((p) => {
+//     let tempDate2 = new Date(p.startDate);
+//     const dateArray2: Date[] = [];
+//     dateArray2.push(tempDate2);
+
+//     while (
+//       tempDate2.toISOString().split('T')[0] !== new Date(p.endDate).toISOString().split('T')[0]
+//     ) {
+//       tempDate2 = add(tempDate2, { days: 1 });
+//       dateArray2.push(tempDate2);
+//     }
+//     if (dateArray.includes(dateArray2[-1])) {
+//       dateArray.pop();
+//     }
+//   });
+//   return dateArray;
+// }
 
 export default {
   getAllAbsences,

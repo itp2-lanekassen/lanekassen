@@ -37,6 +37,7 @@ export type FormValues = {
   absenceType: number;
 };
 
+// get all absence dates in arary
 async function setDates(
   userId: number,
   setDisableDates: React.Dispatch<React.SetStateAction<Date[] | undefined>>
@@ -142,12 +143,10 @@ const AbsenceForm: React.FC<ModalProps> = ({
         comment: clickedAbsence.comment,
         absenceType: clickedAbsence.absenceTypeId
       });
+      //set min and max for datepicker based on other absences
+      setMax(currentUser.userId, clickedAbsence, formValues.startDate, setNextAbsenceStartDate);
+      setMin(currentUser.userId, clickedAbsence, formValues.startDate, setPreviousAbsenceEndDate);
     }
-    setMax(currentUser.userId, clickedAbsence, formValues.startDate, setNextAbsenceStartDate);
-    setMin(currentUser.userId, clickedAbsence, formValues.startDate, setPreviousAbsenceEndDate);
-    //set min and max for datepicker based on other absences
-    // setMax(user.userId, clickedAbsence, startDate, setNextAbsenceStartDate);
-    // setMin(user.userId, clickedAbsence, startDate, setPreviousAbsenceEndDate);
   }, [clickedAbsence, startDate, user]);
 
   React.useEffect(() => {
