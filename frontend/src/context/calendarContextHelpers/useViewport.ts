@@ -5,7 +5,7 @@ interface UseViewPortArgs {
   onHeightChange?: (w: number) => void;
 }
 
-export default function useViewport({ onWidthChange, onHeightChange }: UseViewPortArgs) {
+export default function useViewport({ onWidthChange, onHeightChange }: UseViewPortArgs = {}) {
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
 

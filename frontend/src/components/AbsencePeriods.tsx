@@ -2,7 +2,6 @@ import { AbsencePeriod } from './AbsencePeriod';
 import { Absence } from '../types/types';
 import { getAbsencesByUserId } from '../API/AbsenceAPI';
 import { useUserContext } from '../context/UserContext';
-import moment from 'moment';
 import { useQuery } from '@tanstack/react-query';
 import { Dispatch, SetStateAction } from 'react';
 
@@ -28,7 +27,7 @@ export const AbsencePeriods = (props: {
   );
 
   const absencePeriods = absences
-    ?.sort((a, b) => moment(b.startDate).unix() - moment(a.startDate).unix())
+    ?.sort((a, b) => new Date(b.startDate).valueOf() - new Date(a.startDate).valueOf())
     .map((absence) => {
       return (
         <AbsencePeriod

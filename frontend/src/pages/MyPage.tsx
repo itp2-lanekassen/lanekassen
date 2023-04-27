@@ -1,22 +1,21 @@
 import { getAllTeams } from '@/API/TeamAPI';
 import ErrorAlert from '@/components/Alert';
-import ConfirmationBox from '@/components/ConfirmationBox';
 import PageLayout from '@/components/PageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
   getSubjectFieldsByDepartmentId
 } from '../API/DepartmentAPI';
-import { deleteUser, updateUser } from '../API/UserAPI';
+import { updateUser } from '../API/UserAPI';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
 import { EmploymentType, Role, SubjectField, Team } from '../types/types';
+import { useModalContext } from '@/context/ModalContext';
 
 /**
  *
@@ -24,9 +23,9 @@ import { EmploymentType, Role, SubjectField, Team } from '../types/types';
  */
 export default function MyPage() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const [errorAlertOpen, setErrorAlertOpen] = useState(false);
   const [errorAlertMessage, setErrorAlertMessage] = useState('');
+  const { openMessageBox } = useModalContext();
 
   const currentUser = useUserContext();
   const { departments } = useGlobalContext();
@@ -89,9 +88,7 @@ export default function MyPage() {
       queryClient.invalidateQueries(['current-user']);
       setIsDropdownDisabled(true);
     },
-    onError: () => {
-      alert('Feil ved oppdatering av bruker');
-    }
+    onError: () => openMessageBox('Feil ved oppdatering av bruker')
   });
 
   // Validate that required fields are filled out
@@ -144,7 +141,7 @@ export default function MyPage() {
 
   return (
     <PageLayout title="Profil">
-      <div className="grid grid-cols-my-page-2 xl:grid-cols-my-page-4 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
+      <div className="grid grid-cols-my-page-2 grid-rows-my-page-3 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
         <p className="font-bold"> Navn: </p>
         <p className="w-full text-primary">
           {currentUser.firstName} {currentUser.lastName}

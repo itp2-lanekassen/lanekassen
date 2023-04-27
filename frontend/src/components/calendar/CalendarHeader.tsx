@@ -1,22 +1,22 @@
-import m from 'moment';
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
 import { useCalendarContext } from '@/context/CalendarContext';
 import classNames from 'classnames';
+import { add, sub } from 'date-fns';
 
 const CalendarHeader = () => {
   const { setDates, columns } = useCalendarContext();
 
-  const handleWeek = (add = false) => {
-    if (add) {
+  const handleWeek = (addWeek = false) => {
+    if (addWeek) {
       return setDates((dates) => ({
-        from: m(dates.from).add(1, 'w').toISOString(),
-        to: m(dates.to).add(1, 'w').toISOString()
+        from: add(new Date(dates.from), { weeks: 1 }).toISOString(),
+        to: add(new Date(dates.to), { weeks: 1 }).toISOString()
       }));
     }
 
     setDates((dates) => ({
-      from: m(dates.from).subtract(1, 'w').toISOString(),
-      to: m(dates.to).subtract(1, 'w').toISOString()
+      from: sub(new Date(dates.from), { weeks: 1 }).toISOString(),
+      to: sub(new Date(dates.to), { weeks: 1 }).toISOString()
     }));
   };
 
@@ -29,7 +29,8 @@ const CalendarHeader = () => {
           className={classNames(
             'bg-primary-light text-primary-contrast text-center whitespace-nowrap',
             'w-full h-full relative row-start-1 py-0.5',
-            'flex items-center justify-center'
+            'flex items-center justify-center',
+            'text-sm lg:text-base'
           )}
           style={{
             gridColumn: `span ${length} / span ${length}`
@@ -47,7 +48,8 @@ const CalendarHeader = () => {
             `col-span-${length} row-start-2`,
             'bg-primary-light text-primary-contrast text-center whitespace-nowrap',
             'w-full h-full relative py-0.5',
-            'flex items-center justify-center'
+            'flex items-center justify-center',
+            'text-sm lg:text-base'
           )}
         >
           {i === 0 && (
@@ -76,9 +78,9 @@ const CalendarHeader = () => {
           key={date.value}
           className={classNames(
             date.week % 2 ? 'bg-card-two-dark' : 'bg-card-one-dark',
-            'text-primary font-header text-sm text-center',
+            'text-primary font-header text-center',
             'row-start-3 w-full px-0.5 mb-1',
-            'overflow-hidden'
+            'text-xs lg:text-sm'
           )}
         >
           {date.display}

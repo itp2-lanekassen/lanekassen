@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateRole, postRole } from '@/API/RoleAPI';
 import DropdownMultiSelect from '../DropdownMultiSelect';
+import { useModalContext } from '@/context/ModalContext';
 
 interface RoleEditProps {
   setEdit: (val: boolean, Role?: Role) => void;
@@ -12,7 +13,7 @@ interface RoleEditProps {
 
 const RoleEdit = ({ role, setEdit }: RoleEditProps) => {
   const queryClient = useQueryClient();
-
+  const { openMessageBox } = useModalContext();
   const { departments } = useGlobalContext();
 
   const [roleName, setRoleName] = useState(role?.name || '');
@@ -26,7 +27,7 @@ const RoleEdit = ({ role, setEdit }: RoleEditProps) => {
       queryClient.invalidateQueries(['roles']);
       setEdit(false);
     },
-    onError: () => alert('Rollen eksisterer allerede')
+    onError: () => openMessageBox('Rollen eksisterer allerede')
   });
 
   const { mutate: createRole } = useMutation({
@@ -35,7 +36,7 @@ const RoleEdit = ({ role, setEdit }: RoleEditProps) => {
       queryClient.invalidateQueries(['roles']);
       setEdit(false);
     },
-    onError: () => alert('Rollen eksisterer allerede')
+    onError: () => openMessageBox('Rollen eksisterer allerede')
   });
 
   const handleSave = () => {

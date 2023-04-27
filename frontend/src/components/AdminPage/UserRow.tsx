@@ -2,12 +2,11 @@ import { getDepartmentById } from '@/API/DepartmentAPI';
 import { getSectionById } from '@/API/SectionAPI';
 import { deleteUser } from '@/API/UserAPI';
 import { EmploymentType, User } from '@/types/types';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import ConfirmationBox from '../ConfirmationBox';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 import UserSelectedView from './UserSelectedView';
-import { useState } from 'react';
+import { useModalContext } from '@/context/ModalContext';
 
 /**
  * @param props takes in a user passed down from user tab on admin page
@@ -45,16 +44,12 @@ export default function UserRow(props: {
       })
       .join(' ');
   };
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
-  // When a user is deleted, the list of users reloads
-  const handleDeleteProfileClick = (result: boolean) => {
-    if (result) {
-      deleteUser(props.user?.userId).then(async () => {
-        queryClient.invalidateQueries(['users']);
-      });
-    }
-  };
+  const { mutate: deleteExistingUser } = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => queryClient.invalidateQueries(['users']),
+    onError: () => openMessageBox('Brukeren kunne ikke slettes. Prøv igjen senere.')
+  });
 
   return (
     <>
@@ -66,16 +61,14 @@ export default function UserRow(props: {
       <p className="flex-1 text-left  xl:ml-12">{department?.name}</p>
       <p className="flex-1 text-left ml-3 hidden md:block">{section?.name}</p>
       <EditButton onClick={handleEdit} />
-      <DeleteButton onClick={() => setOpenDialog(true)} />
-      {openDialog && (
-        <div className="flex justify-between items-center">
-          <ConfirmationBox
-            confirmationText="Er du sikker på at du vil slette brukeren?"
-            isOpen={openDialog}
-            onConfirm={handleDeleteProfileClick}
-          />
-        </div>
-      )}
+      <DeleteButton
+        onClick={() =>
+          openConfirmationBox(
+            () => deleteExistingUser(props.user.userId),
+            'Er du sikker på at du vil sletter brukeren?'
+          )
+        }
+      />
     </>
   );
 }

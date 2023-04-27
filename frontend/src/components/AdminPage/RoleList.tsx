@@ -2,12 +2,11 @@ import { deleteRole, getAllRoles } from '@/API/RoleAPI';
 import { Role } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Fragment, useState } from 'react';
-import ErrorAlert from '../Alert';
-import ConfirmationBox from '../ConfirmationBox';
+import { Fragment } from 'react';
 import SubmitButton from '../SubmitButton';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
+import { useModalContext } from '@/context/ModalContext';
 
 interface RoleListProps {
   setEdit: (val: boolean, role?: Role) => void;
@@ -15,8 +14,7 @@ interface RoleListProps {
 
 const RoleList = ({ setEdit }: RoleListProps) => {
   const queryClient = useQueryClient();
-  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
-  const [errorAlertMessage, setErrorAlertMessage] = useState('');
+  const { openConfirmationBox, openMessageBox } = useModalContext();
 
   const {
     isLoading,
@@ -27,27 +25,14 @@ const RoleList = ({ setEdit }: RoleListProps) => {
   const { mutate: deleteExistingRole } = useMutation({
     mutationFn: deleteRole,
     onSuccess: () => queryClient.invalidateQueries(['roles']),
-    onError: () => {
-      setErrorAlertMessage('En rolle kan ikke være i bruk før den slettes!');
-      setErrorAlertOpen(true);
-    }
+    onError: () => openMessageBox('En rolle kan ikke være i bruk før den slettes!')
   });
-
-  const [id, setId] = useState<number>(0);
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const handleDeleteClick = (result: boolean) => {
-    if (result) {
-      deleteExistingRole(id);
-    }
-    setOpenDialog(false);
-  };
 
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
 
   return (
     <>
-      {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
       <div className="grid grid-cols-sections gap-x-2 gap-y-3 items-center">
         <div className="heading-3xs md:ml-20">Rolle</div>
         <div className="heading-3xs text-center">Avdeling</div>
@@ -67,20 +52,13 @@ const RoleList = ({ setEdit }: RoleListProps) => {
             </div>
             <EditButton onClick={() => setEdit(true, role)} />
             <DeleteButton
-              onClick={() => {
-                setId(role.roleId);
-                setOpenDialog(true);
-              }}
+              onClick={() =>
+                openConfirmationBox(
+                  () => deleteExistingRole(role.roleId),
+                  'Er du sikker på at du vil slette denne rollen?'
+                )
+              }
             />
-            {openDialog && (
-              <div className="flex justify-between items-center">
-                <ConfirmationBox
-                  confirmationText="Er du sikker på at du vil slette rollen?"
-                  isOpen={openDialog}
-                  onConfirm={handleDeleteClick}
-                />
-              </div>
-            )}
           </Fragment>
         ))}
       </div>

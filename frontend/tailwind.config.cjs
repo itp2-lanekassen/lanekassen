@@ -23,7 +23,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         'calendar-filters': 'minmax(150px, 15%) auto',
-        'calendar-columns': 'minmax(150px, 15%) repeat(auto-fit, minmax(45px, 1fr))',
+        'calendar-columns': 'minmax(120px, 15%) repeat(auto-fit, minmax(40px, 1fr))',
         'my-page': 'max-content auto',
         'my-page-2': 'max-content calc(50vw - 24px)',
         'my-page-3': 'max-content 50px',

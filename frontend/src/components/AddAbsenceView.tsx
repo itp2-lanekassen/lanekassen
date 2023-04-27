@@ -10,11 +10,11 @@ import {
   postAbsence
 } from '../API/AbsenceAPI';
 import { useUserContext } from '../context/UserContext';
-import moment from 'moment';
 import { useGlobalContext } from '../context/GlobalContext';
 import { FormValues } from './AbsenceForm';
 import * as React from 'react';
 import { Absence } from '../types/types';
+import { useModalContext } from '@/context/ModalContext';
 
 //get all absence dates in array
 async function setDates(
@@ -58,12 +58,13 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
   const [disableDates, setDisableDates] = React.useState<Date[]>();
   const [isApproved, setIsApproved] = React.useState<boolean>(false);
+  const { openMessageBox } = useModalContext();
 
   //initialize postAbsence mutation
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
-    onError: () => alert('Fraværet eksisterer allerede')
+    onError: () => openMessageBox('Fraværet eksisterer allerede')
   });
 
   //initialize form values
@@ -113,9 +114,12 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   //Post absence to database
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!formValues.startDate || !formValues.endDate) return;
+
     addAbsence({
-      startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
-      endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
+      startDate: formValues.startDate.toISOString(),
+      endDate: formValues.endDate.toISOString(),
       comment: formValues.comment,
       isApproved: isApproved,
       absenceTypeId: formValues.absenceType,
@@ -190,9 +194,9 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
             <SubmitButton
               disabledTitle={'Fyll ut alle feltene'}
               disabled={false}
-              buttonText={'Legg til fravær'}
+              buttonText={'Lagre'}
               type={'submit'}
-            ></SubmitButton>
+            />
           </div>
         </form>
       </div>

@@ -9,7 +9,7 @@ import { Add } from '@mui/icons-material';
 export default function AbsenceTypeView() {
   const { data: absenceTypes } = useQuery({
     queryKey: ['absenceTypes'],
-    queryFn: getAllAbsenceTypes
+    queryFn: async () => (await getAllAbsenceTypes()).data
   });
   const [view, setView] = useState<JSX.Element>(<></>);
 
@@ -34,7 +34,7 @@ export default function AbsenceTypeView() {
           </div>
 
           <div className="col-span-4 md:col-span-6 border-b-2 w-full" />
-          {absenceTypes?.data.map((absenceType) => (
+          {absenceTypes?.map((absenceType) => (
             <AbsenceTypeRow
               absenceType={absenceType}
               key={absenceType.absenceTypeId}

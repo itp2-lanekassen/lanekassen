@@ -46,7 +46,7 @@ export default function AdminPage() {
                   key={index}
                   label={label}
                   sx={{
-                    backgroundColor: 'primary-contrast',
+                    backgroundColor: '#FAFAFA',
                     color: 'black',
                     borderTopLeftRadius: '10px',
                     borderBottomLeftRadius: '10px',
@@ -70,10 +70,11 @@ export default function AdminPage() {
           </div>
           <div className="block md:hidden mb-5 flex justify-center">
             <div className="w-4/5">
-              <label htmlFor="fromDate" className="body-bold text-sm text-primary">
+              <label htmlFor="tabPicker" className="body-bold text-sm text-primary">
                 Velg en fane:
               </label>
               <Dropdown
+                id="tabPicker"
                 options={dropdownOptions}
                 value={value}
                 onChange={handleDropdownChange}

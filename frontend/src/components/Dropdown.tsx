@@ -7,6 +7,7 @@ export interface DropdownProps<T> {
   placeholder: string;
   className?: string;
   isDisabled?: boolean;
+  id?: string;
 }
 
 const Dropdown = <T extends number | string>({
@@ -15,11 +16,13 @@ const Dropdown = <T extends number | string>({
   onChange,
   placeholder,
   className = '',
-  isDisabled = false
+  isDisabled = false,
+  id
 }: DropdownProps<T>) => {
   return (
     <ReactSelect
       className={className}
+      id={id}
       isDisabled={isDisabled}
       menuPlacement="auto" // auto menu on top code
       placeholder={placeholder}
