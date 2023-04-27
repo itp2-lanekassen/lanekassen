@@ -7,6 +7,7 @@ import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 import UserSelectedView from './UserSelectedView';
 import { useModalContext } from '@/context/ModalContext';
+import { useUserContext } from '@/context/UserContext';
 
 /**
  * @param props takes in a user passed down from user tab on admin page
@@ -17,6 +18,7 @@ export default function UserRow(props: {
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
   const queryClient = useQueryClient();
+  const currentUser = useUserContext();
   const { data: department } = useQuery(
     [`dep-${props.user.userId}`],
     async () => (await getDepartmentById(props.user.departmentId)).data
@@ -47,7 +49,10 @@ export default function UserRow(props: {
   const { openConfirmationBox, openMessageBox } = useModalContext();
   const { mutate: deleteExistingUser } = useMutation({
     mutationFn: deleteUser,
-    onSuccess: () => queryClient.invalidateQueries(['users']),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['users']),
+        props.user.userId == currentUser.userId ? window.location.reload() : null;
+    },
     onError: () => openMessageBox('Brukeren kunne ikke slettes. Prøv igjen senere.')
   });
 
