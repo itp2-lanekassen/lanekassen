@@ -2,7 +2,6 @@ import { Absence, User } from '@/types/types';
 import { Button } from '@material-tailwind/react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import moment from 'moment';
 import * as React from 'react';
 import {
   deleteAbsence,
@@ -15,10 +14,11 @@ import { useGlobalContext } from '../context/GlobalContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
 
+import { useUserContext } from '@/context/UserContext';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
 import { DateField } from './DateField';
-import { useUserContext } from '@/context/UserContext';
+import { useModalContext } from '@/context/ModalContext';
 
 type ModalProps = {
   startDate?: Date;
@@ -26,51 +26,48 @@ type ModalProps = {
   type?: string;
   clickedAbsence?: Absence;
   onClose: () => void;
+  handleClickOpen?: (event: MouseEvent) => void;
 };
 
 export type FormValues = {
   startDate: Date | undefined;
   endDate: Date | undefined;
   comment?: string | undefined;
-  absenceType?: number;
+  absenceType: number;
 };
 
 //set max on datepicker state based on when the next absence starts
 export async function setMax(
-  currentUser: any,
+  userId: number,
   clickedAbsence: Absence | undefined,
   startDate: Date | undefined,
-  setNextAbsenceStartDate: any
+  setNextAbsenceStartDate: React.Dispatch<React.SetStateAction<Date | undefined>>
 ) {
   if (clickedAbsence) {
     setNextAbsenceStartDate(
-      await getDatePickerMaxForAbsence(currentUser.userId, new Date(clickedAbsence.endDate))
+      await getDatePickerMaxForAbsence(userId, new Date(clickedAbsence.endDate))
     );
   } else {
     if (startDate) {
-      setNextAbsenceStartDate(
-        await getDatePickerMaxForAbsence(currentUser.userId, new Date(startDate))
-      );
+      setNextAbsenceStartDate(await getDatePickerMaxForAbsence(userId, new Date(startDate)));
     }
   }
 }
 
 //set min on datepicker state based when the previous absence ends
 export async function setMin(
-  currentUser: any,
+  userId: number,
   clickedAbsence: Absence | undefined,
   startDate: Date | undefined,
-  setPreviousAbsenceEndDate: any
+  setPreviousAbsenceEndDate: React.Dispatch<React.SetStateAction<Date | undefined>>
 ) {
   if (clickedAbsence) {
     setPreviousAbsenceEndDate(
-      await getDatePickerMinForAbsence(currentUser.userId, new Date(clickedAbsence.startDate))
+      await getDatePickerMinForAbsence(userId, new Date(clickedAbsence.startDate))
     );
   } else {
     if (startDate) {
-      setPreviousAbsenceEndDate(
-        await getDatePickerMinForAbsence(currentUser.userId, new Date(startDate))
-      );
+      setPreviousAbsenceEndDate(await getDatePickerMinForAbsence(userId, new Date(startDate)));
     }
   }
 }
@@ -84,6 +81,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
 }) => {
   const queryClient = useQueryClient();
   const { absenceTypes } = useGlobalContext();
+  const { openConfirmationBox, openMessageBox } = useModalContext();
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
   const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
 
@@ -102,19 +100,21 @@ const AbsenceForm: React.FC<ModalProps> = ({
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
-    onError: () => alert('Kunne ikke legge til fravær')
+    onError: () => openMessageBox('Noe gikk galt. Prøv igjen senere.')
   });
 
   const { mutate: editAbsence } = useMutation({
     mutationFn: updateAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
-    onError: () => alert('Kunne ikke endre fravær')
+    onError: () => openMessageBox('Noe gikk galt. Prøv igjen senere.')
   });
 
   const { mutate: deleteAbsenceMutation } = useMutation({
     mutationFn: deleteAbsence,
-    onSuccess: () => queryClient.invalidateQueries(['absences', { userId: user.userId }]),
-    onError: () => alert('Kunne ikke slette fravær')
+    onSuccess: () => {
+      queryClient.invalidateQueries(['absences', { userId: user.userId }]), onClose();
+    },
+    onError: () => openMessageBox('Noe gikk galt. Prøv igjen senere.')
   });
 
   const [formValues, setFormValues] = React.useState<FormValues>({
@@ -128,16 +128,16 @@ const AbsenceForm: React.FC<ModalProps> = ({
     //When editing an absence, put all the current values in the fields of the AbsenceForm
     if (clickedAbsence) {
       setFormValues({
-        startDate: new Date(moment(clickedAbsence.startDate).format('YYYY-MM-DD')),
-        endDate: new Date(moment(clickedAbsence.endDate).format('YYYY-MM-DD')),
+        startDate: new Date(clickedAbsence.startDate),
+        endDate: new Date(clickedAbsence.endDate),
         comment: clickedAbsence.comment,
         absenceType: clickedAbsence.absenceTypeId
       });
     }
     //set min and max for datepicker based on other absences
-    setMax(user, clickedAbsence, startDate, setNextAbsenceStartDate);
-    setMin(user, clickedAbsence, startDate, setPreviousAbsenceEndDate);
-  }, []);
+    setMax(user.userId, clickedAbsence, startDate, setNextAbsenceStartDate);
+    setMin(user.userId, clickedAbsence, startDate, setPreviousAbsenceEndDate);
+  }, [clickedAbsence, startDate, user]);
 
   React.useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -154,7 +154,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
   //update form values on date picker change
   const handleInputChange = (
     date: Date | null,
-    event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement, Event> | undefined,
+    event: React.SyntheticEvent | undefined,
     name: string
   ) => {
     setFormValues({
@@ -184,20 +184,16 @@ const AbsenceForm: React.FC<ModalProps> = ({
     });
   };
 
-  const handleDeleteAbsence = async () => {
-    if (absenceId) {
-      deleteAbsenceMutation(absenceId);
-      onClose();
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!formValues.startDate || !formValues.endDate) return;
+
     //add absence if type is 'add'
     if (type == 'add') {
       addAbsence({
-        startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
-        endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
+        startDate: formValues.startDate.toISOString(),
+        endDate: formValues.endDate.toISOString(),
         comment: formValues.comment,
         isApproved: currentUser.admin ? isApproved : false,
         absenceTypeId: formValues.absenceType,
@@ -220,8 +216,8 @@ const AbsenceForm: React.FC<ModalProps> = ({
       if (clickedAbsence) {
         await editAbsence({
           absenceId: clickedAbsence.absenceId,
-          startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
-          endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
+          startDate: formValues.startDate.toISOString(),
+          endDate: formValues.endDate.toISOString(),
           absenceTypeId: formValues.absenceType,
           type: updatedAbsenceType,
           userId: user.userId,
@@ -246,10 +242,18 @@ const AbsenceForm: React.FC<ModalProps> = ({
         >
           <CloseIcon />
         </button>
-        <h2 className="modal-title text-center ">
-          {' '}
-          {user.firstName} {user.lastName}{' '}
-        </h2>
+        {user == currentUser ? (
+          <h2 className="modal-title text-center ">
+            {type == 'add' ? 'Legg til fravær' : 'Rediger fravær'}
+          </h2>
+        ) : (
+          // If the user is not the current user, the modal is opened by an admin and should show the user's name
+          <h2 className="modal-title text-center ">
+            {type == 'add'
+              ? 'Legg til fravær for ' + user.firstName
+              : 'Rediger fravær for ' + user.firstName}
+          </h2>
+        )}
         <form className="modal-form" onSubmit={handleSubmit}>
           <DateField
             handleInputChange={handleInputChange}
@@ -258,6 +262,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
             value={formValues.startDate}
             name="startDate"
             label="Fra"
+            title=""
           ></DateField>
           <DateField
             handleInputChange={handleInputChange}
@@ -266,6 +271,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
             value={formValues.endDate}
             name="endDate"
             label="Til"
+            title=""
           ></DateField>
           <AbsenceRadioField
             formValues={formValues}
@@ -283,8 +289,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
                 id="isApproved"
                 checked={isApproved}
                 onChange={handleIsApprovedChange}
-                // eslint-disable-next-line react/no-unknown-property
-                className="space-x-5 h-5 w-5 accent-primary "
+                className="space-x-5 h-5 w-5 accent-primary cursor-pointer"
               />
             </div>
           )}
@@ -298,14 +303,23 @@ const AbsenceForm: React.FC<ModalProps> = ({
             </Button>
             {absenceId && (
               <DeleteOutlineIcon
-                onClick={() => {
-                  const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
-                  if (confirmDelete) {
-                    handleDeleteAbsence();
+                onClick={() =>
+                  openConfirmationBox(
+                    () => deleteAbsenceMutation(absenceId),
+                    'Er du sikker på at du vil slette fraværet?'
+                  )
+                }
+                className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
+                sx={{
+                  color: '#410464',
+                  height: '30px',
+                  mr: '10px',
+                  '&:hover': {
+                    color: '#26023B',
+                    scale: '1.1'
                   }
                 }}
-                className="flex flex-child hover:text-primary-dark cursor-pointer text-primary scale-110 hover:scale-125"
-              ></DeleteOutlineIcon>
+              />
             )}
           </div>
         </form>

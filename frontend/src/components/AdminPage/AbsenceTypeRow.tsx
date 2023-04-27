@@ -1,31 +1,24 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteAbsenceType } from '@/API/AbsenceTypeAPI';
-import { Button } from '@mui/material';
-import { CalendarCellDisplay } from './CalendarCellDisplay';
 import { AbsenceType } from '@/types/types';
-import UpdateAbsenceTypeComponent from './UpdateAbsencetypeComponent';
-import EditButton from './EditButton';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { CalendarCellDisplay } from './CalendarCellDisplay';
 import DeleteButton from './DeleteButton';
+import EditButton from './EditButton';
+import UpdateAbsenceTypeComponent from './UpdateAbsencetypeComponent';
+import { useModalContext } from '@/context/ModalContext';
 
 export default function AbsenceTypeRow(props: {
   absenceType: AbsenceType;
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
   const queryClient = useQueryClient();
+  const { openConfirmationBox, openMessageBox } = useModalContext();
 
   const { mutate: deleteAbsenceTypeFromDatabase } = useMutation({
     mutationFn: deleteAbsenceType,
     onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
-    onError: () =>
-      alert('Fraværstypen kunne ikke slettes. Fraværstyper som er i bruk kan ikke slettes.')
+    onError: () => openMessageBox('Kan ikke slette fraværstyper som er i bruk')
   });
-
-  const handleDelete = async () => {
-    const confirmDelete = window.confirm('Er du sikker på at du vil slette denne fraværstypen?');
-    if (confirmDelete) {
-      deleteAbsenceTypeFromDatabase(props.absenceType.absenceTypeId);
-    }
-  };
 
   const handleEdit = async () => {
     props.setView(
@@ -35,12 +28,19 @@ export default function AbsenceTypeRow(props: {
 
   return (
     <>
-      <p className="flex-1 text-center">{props.absenceType.name}</p>
-      <p className="flex-1 text-center hidden md:block">{props.absenceType.code}</p>
+      <p className="flex-1 xl:ml-8 lg:ml-6">{props.absenceType.name}</p>
+      <p className="flex-1 hidden md:block xl:ml-16 lg:ml-10">{props.absenceType.code}</p>
       <p className="flex-1 text-center hidden md:block">{props.absenceType.colorCode}</p>
       <CalendarCellDisplay code={props.absenceType.code} colorCode={props.absenceType.colorCode} />
       <EditButton onClick={handleEdit} />
-      <DeleteButton onClick={handleDelete} />
+      <DeleteButton
+        onClick={() =>
+          openConfirmationBox(
+            () => deleteAbsenceTypeFromDatabase(props.absenceType.absenceTypeId),
+            'Er du sikker på at du vil slette fraværstypen?'
+          )
+        }
+      />
     </>
   );
 }

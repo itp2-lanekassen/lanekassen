@@ -2,7 +2,7 @@ import { Team, TeamDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateTeam, postTeam } from '@/API/TeamAPI';
-import DropdownMultiSelect from '../DropdownMultiSelect';
+import { useModalContext } from '@/context/ModalContext';
 
 interface TeamEditProps {
   setEdit: (val: boolean, Team?: Team) => void;
@@ -11,6 +11,7 @@ interface TeamEditProps {
 
 const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
   const queryClient = useQueryClient();
+  const { openMessageBox } = useModalContext();
 
   const [teamName, setTeamName] = useState(team?.name || '');
 
@@ -20,7 +21,7 @@ const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
       queryClient.invalidateQueries(['teams']);
       setEdit(false);
     },
-    onError: () => alert('Teamet eksisterer allerede')
+    onError: () => openMessageBox('Teamet eksisterer allerede')
   });
 
   const { mutate: createTeam } = useMutation({
@@ -29,7 +30,7 @@ const TeamEdit = ({ team, setEdit }: TeamEditProps) => {
       queryClient.invalidateQueries(['teams']);
       setEdit(false);
     },
-    onError: () => alert('Teamet eksisterer allerede')
+    onError: () => openMessageBox('Teamet eksisterer allerede')
   });
 
   const handleSave = () => {

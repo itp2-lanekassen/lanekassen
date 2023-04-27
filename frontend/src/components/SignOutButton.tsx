@@ -20,9 +20,9 @@ export const SignOutButton = () => {
       onClick={() => handleLogout('redirect')}
       className="group block w-[35px] relative duration-300 hover:w-[180px] h-[35px] rounded-full bg-primary overflow-hidden"
     >
-      <div className="bg-primary w-[35px] h-[35px] rounded-full absolute top-[0px] right-[0px] pt-[5.5px]">
+      <span className="bg-primary w-[35px] h-[35px] rounded-full absolute top-[0px] right-[0px] pt-[5.5px]">
         <LogoutIcon className="text-white"></LogoutIcon>
-      </div>
+      </span>
       <span className="group-hover:block hidden text-white">Logg ut</span>
     </button>
   );

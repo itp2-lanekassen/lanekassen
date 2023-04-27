@@ -23,15 +23,16 @@ module.exports = {
       },
       gridTemplateColumns: {
         'calendar-filters': 'minmax(150px, 15%) auto',
-        'calendar-columns': 'minmax(150px, 15%) repeat(auto-fit, minmax(45px, 1fr))',
+        'calendar-columns': 'minmax(120px, 15%) repeat(auto-fit, minmax(40px, 1fr))',
         'my-page': 'max-content auto',
         'my-page-2': 'max-content calc(50vw - 24px)',
         'my-page-3': 'max-content 50px',
+        'my-page-4': 'max-content 624px',
         sections: 'repeat(2, 1fr) repeat(2, min-content)',
-        teams: 'repeat(1, 1fr) repeat(1, min-content)',
+        teams: '1fr repeat(2, min-content)',
         'absence-types': 'repeat(4, 1fr) repeat(2, min-content)',
         'absence-types-small': 'repeat(2, 1fr) repeat(2, min-content)',
-        'users': 'repeat(2, min-content) repeat(4, 1fr) repeat(1, min-content)',
+        'users': 'repeat(4, 1fr) repeat(2, min-content)',
         'users-small': 'repeat(2, min-content) repeat(1, 1fr) repeat(1, min-content)'
       },
       screens: {

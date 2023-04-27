@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import moment from 'moment';
 import { useUserContext } from '@/context/UserContext';
 import { useModalContext } from '@/context/ModalContext';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { Absence, User } from '@/types/types';
 import classNames from 'classnames';
+import { isSameDay } from 'date-fns';
 
 interface CalendarCellProps {
   date: string;
@@ -48,17 +48,17 @@ const CalendarCell: FC<CalendarCellProps> = ({
 
   const totalRows = queryResult.data?.pages.reduce((tot, page) => (tot += page.data.length), 1);
 
-  const holiday = holidays?.find((h) => moment(date).isSame(h.date, 'd'));
+  const holiday = holidays?.find((h) => isSameDay(new Date(date), new Date(h.date)));
 
-  //TODO: bruk moment(date) til å sjekke om den datoen har fravær fra før
   const handleCellClick = () => {
     if (!(isCurrentUser || currentUser.admin)) return;
+    if (holiday) return;
 
     //open editing version of form if an absence was clicked, otherwise open add version
     if (absence) {
-      openAbsenceForm(user, moment(date).format('yyyy-MM-DD'), 'edit', absence);
+      openAbsenceForm(user, date, 'edit', absence);
     } else {
-      openAbsenceForm(user, moment(date).format('yyyy-MM-DD'));
+      openAbsenceForm(user, date);
     }
   };
 
@@ -69,8 +69,8 @@ const CalendarCell: FC<CalendarCellProps> = ({
     <button
       className={classNames(
         holiday
-          ? 'bg-error-light hover:bg-error text-2xs'
-          : `${defaultColor} hover:${hoverColor} text-sm`,
+          ? 'bg-error-light cursor-auto text-2xs'
+          : `${defaultColor} hover:${hoverColor} text-xs lg:text-sm`,
         isCurrentUser || currentUser.admin ? 'cursor-pointer' : 'cursor-default',
         'w-full h-full px-1 py-0.5',
         'text-center text-grey-lightest font-bold',
@@ -78,9 +78,10 @@ const CalendarCell: FC<CalendarCellProps> = ({
       )}
       // make holiday cell span all rows
       style={holiday ? { gridRow: `span ${totalRows} / span ${totalRows}` } : getStyle(absence)}
+      title={holiday?.description}
       onClick={handleCellClick}
     >
-      {holiday ? isCurrentUser && holiday.description : absence && absence.type.code}
+      {holiday ? isCurrentUser && '' : absence && absence.type.code}
     </button>
   );
 };

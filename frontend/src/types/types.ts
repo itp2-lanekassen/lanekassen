@@ -1,3 +1,4 @@
+import ConfirmationBox from '../components/ConfirmationBox';
 export const backendUrl = 'https://localhost:7184';
 
 export interface Role {
@@ -156,4 +157,8 @@ export interface NewUser {
 export interface Holiday {
   date: string;
   description: string;
+}
+
+export interface ConfirmationBox {
+  confirmationText: string;
 }

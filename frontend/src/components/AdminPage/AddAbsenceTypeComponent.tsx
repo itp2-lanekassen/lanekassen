@@ -8,6 +8,7 @@ import ColorPickerComponent from './ColorPicker';
 import InputAdornment from '@mui/material/InputAdornment';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import { IconButton, Input } from '@mui/material';
+import { useModalContext } from '@/context/ModalContext';
 
 type FormValues = {
   name: string;
@@ -22,12 +23,13 @@ export default function AddAbsenceTypeComponent(props: {
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = React.useState(false);
   const [color, setColor] = useState('#000000');
+  const { openMessageBox } = useModalContext();
 
   //initialize postAbsence mutation
   const { mutate: addAbsenceType } = useMutation({
     mutationFn: postAbsenceType,
     onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
-    onError: () => alert('Fraværstypen eksisterer allerede')
+    onError: () => openMessageBox('Fraværstypen eksisterer allerede')
   });
 
   //initialize form values
@@ -142,13 +144,14 @@ export default function AddAbsenceTypeComponent(props: {
           </div>
 
           <label className="mt-2" htmlFor="code">
-            Forkortelse:
+            Forkortelse (maks 7 tegn):
           </label>
           <input
             className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
             type="text"
             name="code"
             id="code"
+            maxLength={7}
             onChange={handleInputChange}
           />
           <br />

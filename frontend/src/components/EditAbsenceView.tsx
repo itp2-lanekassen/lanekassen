@@ -7,7 +7,6 @@ import { useUserContext } from '../context/UserContext';
 import { Absence } from '../types/types';
 import * as React from 'react';
 import { FormValues } from './AbsenceForm';
-import moment from 'moment';
 import { useEffect } from 'react';
 import {
   getDatePickerMaxForAbsence,
@@ -15,44 +14,59 @@ import {
   updateAbsence
 } from '../API/AbsenceAPI';
 import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
+import { useModalContext } from '@/context/ModalContext';
 
 //set max on datepicker state based on when the next absence starts
-async function setMax(currentUser: any, clickedAbsence: Absence, setNextAbsenceStartDate: any) {
+async function setMax(
+  userId: number,
+  clickedAbsence: Absence,
+  setNextAbsenceStartDate: React.Dispatch<React.SetStateAction<Date | undefined>>
+) {
   setNextAbsenceStartDate(
-    await getDatePickerMaxForAbsence(currentUser.userId, new Date(clickedAbsence.endDate))
+    await getDatePickerMaxForAbsence(userId, new Date(clickedAbsence.endDate))
   );
 }
 
 //set min on datepicker state based when the previous absence ends
-async function setMin(currentUser: any, clickedAbsence: Absence, setPreviousAbsenceEndDate: any) {
+async function setMin(
+  userId: number,
+  clickedAbsence: Absence,
+  setPreviousAbsenceEndDate: React.Dispatch<React.SetStateAction<Date | undefined>>
+) {
   setPreviousAbsenceEndDate(
-    await getDatePickerMinForAbsence(currentUser.userId, new Date(clickedAbsence.startDate))
+    await getDatePickerMinForAbsence(userId, new Date(clickedAbsence.startDate))
   );
+}
+
+interface EditAbsenceViewProps {
+  setAbsence: React.Dispatch<React.SetStateAction<Absence | undefined>>;
+  absence: Absence;
 }
 
 /**
  * Renders a view lets a user edit an absence
  */
-export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) => {
+export const EditAbsenceView = (props: EditAbsenceViewProps) => {
   const queryClient = useQueryClient();
 
   const currentUser = useUserContext();
 
-  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>(new Date());
-  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>(new Date());
+  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
+  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
   const [isApproved, setIsApproved] = React.useState<boolean>(props.absence.isApproved);
+  const { openMessageBox } = useModalContext();
 
   //initialize mutation for updating an absence
   const { mutate: editAbsence } = useMutation({
     mutationFn: (absence: Absence) => updateAbsence(absence),
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
-    onError: () => alert('Fravær kunne ikke oppdateres')
+    onError: () => openMessageBox('Fravær kunne ikke oppdateres')
   });
 
   //initialize form values with current values for the absence selected for editing
   const [formValues, setFormValues] = React.useState<FormValues>({
-    startDate: new Date(moment(props.absence.startDate).format('YYYY-MM-DD')),
-    endDate: new Date(moment(props.absence.endDate).format('YYYY-MM-DD')),
+    startDate: new Date(props.absence.startDate),
+    endDate: new Date(props.absence.endDate),
     comment: props.absence.comment,
     absenceType: props.absence.absenceTypeId
   });
@@ -60,21 +74,21 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
   //update form values when another absence is selected
   useEffect(() => {
     setFormValues({
-      startDate: new Date(moment(props.absence.startDate).format('YYYY-MM-DD')),
-      endDate: new Date(moment(props.absence.endDate).format('YYYY-MM-DD')),
+      startDate: new Date(props.absence.startDate),
+      endDate: new Date(props.absence.endDate),
       comment: props.absence.comment,
       absenceType: props.absence.absenceTypeId
     });
 
     //set min and max for datepicker based on other absences
-    setMax(currentUser, props.absence, setNextAbsenceStartDate);
-    setMin(currentUser, props.absence, setPreviousAbsenceEndDate);
-  }, [props.absence]);
+    setMax(currentUser.userId, props.absence, setNextAbsenceStartDate);
+    setMin(currentUser.userId, props.absence, setPreviousAbsenceEndDate);
+  }, [props.absence, currentUser]);
 
   //update form values on date picker change
   const handleInputChange = (
     date: Date | null,
-    event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement, Event> | undefined,
+    event: React.SyntheticEvent | undefined,
     name: string
   ) => {
     setFormValues({
@@ -103,6 +117,9 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
   //Update absence in database
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!formValues.startDate || !formValues.endDate) return;
+
     //get the updated absence type from database
     const updatedAbsenceType = (await getAbsenceTypeById(formValues.absenceType)).data;
 
@@ -115,9 +132,10 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
     }
     editAbsence({
       absenceId: props.absence.absenceId,
-      startDate: moment(formValues.startDate).toISOString(true).split('+')[0] + 'Z',
-      endDate: moment(formValues.endDate).toISOString(true).split('+')[0] + 'Z',
+      startDate: formValues.startDate.toISOString(),
+      endDate: formValues.endDate.toISOString(),
       absenceTypeId: formValues.absenceType,
+      // TODO: should only need id
       type: updatedAbsenceType,
       userId: currentUser.userId,
       user: currentUser,
@@ -125,7 +143,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
       comment: updatedComment
     });
     //redirect to AddAbsenceView
-    props.setAbsence(null);
+    props.setAbsence(undefined);
   };
 
   const handleIsApprovedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,7 +175,7 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
               title=""
             ></DateField>
           </div>
-          <div className="m-auto flex flex-col md:flex-row md:flex-col md:gap-[20px] md:justify-evenly mt-[10px] md:w-[350px]">
+          <div className="m-auto flex flex-col md:gap-[20px] md:justify-evenly mt-[10px] md:w-[350px]">
             <AbsenceRadioField
               formValues={formValues}
               handleRadioChange={handleRadioChange}
@@ -175,7 +193,6 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
                   id="isApproved"
                   checked={isApproved}
                   onChange={handleIsApprovedChange}
-                  // eslint-disable-next-line react/no-unknown-property
                   className="space-x-5 h-5 w-5 accent-primary "
                 />
               </div>
@@ -185,13 +202,13 @@ export const EditAbsenceView = (props: { setAbsence: any; absence: Absence }) =>
             <SubmitButton
               disabledTitle={'Fyll ut alle feltene'}
               disabled={false}
-              buttonText={'Rediger fravær'}
+              buttonText={'Lagre'}
               type={'submit'}
             ></SubmitButton>
             <SubmitButton
               disabled={false}
               buttonText={'Avbryt'}
-              handleClick={() => props.setAbsence(null)}
+              handleClick={() => props.setAbsence(undefined)}
             ></SubmitButton>
           </div>
         </form>

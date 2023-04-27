@@ -1,4 +1,3 @@
-import m from 'moment';
 import { UseInfiniteQueryResult, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
   ReactNode,
@@ -17,6 +16,7 @@ import { useUserContext } from './UserContext';
 import calculateColumns, { Columns } from './calendarContextHelpers/calculateColumns';
 import useViewport from './calendarContextHelpers/useViewport';
 import getNumberOfWeeks from './calendarContextHelpers/getNumberOfWeeks';
+import { startOfWeek, add } from 'date-fns';
 
 interface Dates {
   from: string;
@@ -54,16 +54,14 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const [dates, setDates] = useState({
-    from: m().startOf('isoWeek').toISOString(),
-    to: m().startOf('isoWeek').add(numberOfWeeks, 'w').subtract(1, 'd').toISOString()
+    from: startOfWeek(new Date()).toISOString(),
+    to: add(startOfWeek(new Date()), { days: -1, weeks: numberOfWeeks }).toISOString()
   });
 
   const updateFromDate = (newDate: string) => {
-    const daysDiff = Math.abs(m(dates.from).diff(m(dates.to), 'd'));
-
     setDates({
       from: newDate,
-      to: m(newDate).add(daysDiff, 'd').toISOString()
+      to: add(new Date(newDate), { days: -1, weeks: numberOfWeeks }).toISOString()
     });
   };
 
@@ -71,14 +69,14 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
     startTransition(() => {
       setDates((d) => ({
         ...d,
-        to: m(d.from).add(numberOfWeeks, 'w').subtract(1, 'd').toISOString()
+        to: add(new Date(d.from), { days: -1, weeks: numberOfWeeks }).toISOString()
       }));
     });
   }, [numberOfWeeks]);
 
   const { data: holidays } = useQuery(
-    ['holidays', { year: m(dates.from).year() }],
-    async () => (await getHolidaysByYear(m(dates.from).year())).data.data
+    ['holidays', { year: new Date(dates.from).getFullYear() }],
+    async () => (await getHolidaysByYear(new Date(dates.from).getFullYear())).data.data
   );
 
   const [columns, setColumns] = useState<Columns>({ weeks: {}, months: {}, days: [] });

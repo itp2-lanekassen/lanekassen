@@ -1,12 +1,12 @@
 import { getDepartmentById } from '@/API/DepartmentAPI';
 import { getSectionById } from '@/API/SectionAPI';
 import { deleteUser } from '@/API/UserAPI';
-import { Department, EmploymentType, Section, User } from '@/types/types';
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { EmploymentType, User } from '@/types/types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
 import UserSelectedView from './UserSelectedView';
+import { useModalContext } from '@/context/ModalContext';
 
 /**
  * @param props takes in a user passed down from user tab on admin page
@@ -16,23 +16,15 @@ export default function UserRow(props: {
   user: User;
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
-  const [department, setDepartment] = useState<Department>();
-  const [section, setSection] = useState<Section>();
-  const [employmentType, setEmploymentType] = useState<string>('');
-  const [email, setEmail] = useState<string>(props.user!.email);
   const queryClient = useQueryClient();
-
-  // Load user data into states
-  async function loadUserData() {
-    setDepartment((await getDepartmentById(props.user.departmentId)).data);
-    setSection((await getSectionById(props.user.sectionId)).data);
-    setEmploymentType(EmploymentType[props.user.employmentType]);
-
-    if (email.length > 20) {
-      const shorterEmail = email.slice(0, 20) + '...';
-      setEmail(shorterEmail);
-    }
-  }
+  const { data: department } = useQuery(
+    [`dep-${props.user.userId}`],
+    async () => (await getDepartmentById(props.user.departmentId)).data
+  );
+  const { data: section } = useQuery(
+    [`sec-${props.user.userId}`],
+    async () => (await getSectionById(props.user.sectionId)).data
+  );
 
   // To edit a user, change view to the display of a chosen user's information
   const handleEdit = async () => {
@@ -53,34 +45,30 @@ export default function UserRow(props: {
       .join(' ');
   };
 
-  // When a user is deleted, the list of users reloads
-  const handleDeleteProfileClick = () => {
-    const confirmDelete = confirm('Er du sikker på at du vil slette denne profilen?');
-    if (confirmDelete) {
-      deleteUser(props.user!.userId).then(async () => {
-        queryClient.invalidateQueries(['users']);
-      });
-    }
-  };
-
-  useEffect(() => {
-    loadUserData();
-  }, []);
+  const { mutate: deleteExistingUser } = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => queryClient.invalidateQueries(['users']),
+    onError: () => openMessageBox('Brukeren kunne ikke slettes. Prøv igjen senere.')
+  });
 
   return (
     <>
-      <p className="flex-1">{formatFirstName(props.user.firstName)}</p>
-      <p className="flex-1">{props.user.lastName}</p>
-      <p className="flex-1 hidden md:block">{email}</p>
-      <p className="flex-1 hidden md:block">{employmentType}</p>
-      <p className="flex-1">{department?.name}</p>
-      <p className="flex-1 hidden md:block">{section?.name}</p>
-      <div className="w-[24px] h-[24px]">
-        <EditButton onClick={handleEdit} />
-      </div>
-      <div className="w-[24px] h-[24px]">
-        <DeleteButton onClick={handleDeleteProfileClick} />
-      </div>
+      <p className="flex-1 text-left ml-3 xl:ml-12">{formatFirstName(props.user.firstName)}</p>
+      <p className="flex-1 text-left ml-3 xl:ml-10">{props.user.lastName}</p>
+      <p className="flex-1 text-left ml-3 xl:ml-6 hidden md:block">
+        {EmploymentType[props.user.employmentType]}
+      </p>
+      <p className="flex-1 text-left  xl:ml-12">{department?.name}</p>
+      <p className="flex-1 text-left ml-3 hidden md:block">{section?.name}</p>
+      <EditButton onClick={handleEdit} />
+      <DeleteButton
+        onClick={() =>
+          openConfirmationBox(
+            () => deleteExistingUser(props.user.userId),
+            'Er du sikker på at du vil sletter brukeren?'
+          )
+        }
+      />
     </>
   );
 }

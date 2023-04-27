@@ -15,10 +15,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAzureAdContext } from '../context/AzureAdContext';
 import { getAllTeams } from '../API/TeamAPI';
 import RegisterPageLayout from '../components/RegisterPageLayout';
+import { useModalContext } from '@/context/ModalContext';
 
 export default function FirstTimeRegisterForm() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { openMessageBox } = useModalContext();
 
   const azureUser = useAzureAdContext();
   console.log(azureUser);
@@ -96,7 +98,7 @@ export default function FirstTimeRegisterForm() {
       navigate('/');
     },
     onError: (error) => {
-      alert(error);
+      openMessageBox(`Kunne ikke registrere bruker: ${error}`);
     }
   });
 

@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateSection, postSection } from '@/API/SectionAPI';
 import Dropdown from '../Dropdown';
+import { useModalContext } from '@/context/ModalContext';
 
 interface SectionEditProps {
   setEdit: (val: boolean, section?: Section) => void;
@@ -12,7 +13,7 @@ interface SectionEditProps {
 
 const SectionEdit = ({ section, setEdit }: SectionEditProps) => {
   const queryClient = useQueryClient();
-
+  const { openMessageBox } = useModalContext();
   const { departments } = useGlobalContext();
 
   const [sectionName, setSectionName] = useState(section?.name || '');
@@ -25,7 +26,7 @@ const SectionEdit = ({ section, setEdit }: SectionEditProps) => {
       queryClient.invalidateQueries(['sections']);
       setEdit(false);
     },
-    onError: () => alert('Seksjonen eksisterer allerede')
+    onError: () => openMessageBox('Seksjonen eksisterer allerede')
   });
 
   const { mutate: createSection } = useMutation({
@@ -34,7 +35,7 @@ const SectionEdit = ({ section, setEdit }: SectionEditProps) => {
       queryClient.invalidateQueries(['sections']);
       setEdit(false);
     },
-    onError: () => alert('Seksjonen eksisterer allerede')
+    onError: () => openMessageBox('Seksjonen eksisterer allerede')
   });
 
   const handleSave = () => {

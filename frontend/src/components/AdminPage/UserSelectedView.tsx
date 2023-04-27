@@ -13,6 +13,7 @@ import Dropdown from '../Dropdown';
 import DropdownMultiSelect from '../DropdownMultiSelect';
 import SubmitButton from '../SubmitButton';
 import UserView from './UserView';
+import { useModalContext } from '@/context/ModalContext';
 
 /**
  *
@@ -20,49 +21,46 @@ import UserView from './UserView';
  * @returns
  */
 export default function UserSelectedView(props: {
-  selectedUser: User | undefined;
+  selectedUser: User;
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
   const queryClient = useQueryClient();
+  const { openMessageBox } = useModalContext();
 
   const { departments } = useGlobalContext();
   const [selectedEmploymentType, setSelectedEmploymentType] = useState<number>(
-    props.selectedUser!.employmentType
+    props.selectedUser.employmentType
   );
   const [selectedDepartment, setSelectedDepartment] = useState<number>(
-    props.selectedUser!.departmentId
+    props.selectedUser.departmentId
   );
-  const [selectedSection, setSelectedSection] = useState<number>(props.selectedUser!.sectionId);
+  const [selectedSection, setSelectedSection] = useState<number>(props.selectedUser.sectionId);
   const [selectedSubjectFields, setSelectedSubjectFields] = useState<number[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
   const [selectedBusinessAffiliation, setSelectedBusinessAffiliation] = useState<string>(
-    props.selectedUser!.businessAffiliation
+    props.selectedUser.businessAffiliation
   );
-  const [isAdminChecked, setIsAdminChecked] = useState<boolean>(props.selectedUser!.admin);
+  const [isAdminChecked, setIsAdminChecked] = useState<boolean>(props.selectedUser.admin);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
-  // Set fields where data isn't directly available on load
-  async function setUserData() {
+  useEffect(() => {
+    // Set fields where data isn't directly available on load
     const listTeam: number[] = [];
     const listSubjectField: number[] = [];
     const listRole: number[] = [];
 
-    props.selectedUser!.teams?.forEach((team) => listTeam.push(team.teamId));
+    props.selectedUser.teams?.forEach((team) => listTeam.push(team.teamId));
     setSelectedTeams(listTeam);
 
-    props.selectedUser!.subjectFields?.forEach((subjectField) =>
+    props.selectedUser.subjectFields?.forEach((subjectField) =>
       listSubjectField.push(subjectField.subjectFieldId)
     );
     setSelectedSubjectFields(listSubjectField);
 
-    props.selectedUser!.roles?.forEach((role) => listRole.push(role.roleId));
+    props.selectedUser.roles?.forEach((role) => listRole.push(role.roleId));
     setSelectedRoles(listRole);
-  }
-
-  useEffect(() => {
-    setUserData();
-  }, []);
+  }, [props.selectedUser]);
 
   // Get all available roles, teams, sections, and subject fields to set dropdown options
   const { data: roles } = useQuery(
@@ -88,11 +86,11 @@ export default function UserSelectedView(props: {
   // Update user to have the data that is set in the input fields. On success, return to the list of all users.
   const { mutate: userToBeUpdated } = useMutation({
     mutationFn: () =>
-      updateUser(props.selectedUser!.userId, {
-        azureId: props.selectedUser!.azureId,
-        firstName: props.selectedUser!.firstName,
-        lastName: props.selectedUser!.lastName,
-        email: props.selectedUser!.email,
+      updateUser(props.selectedUser.userId, {
+        azureId: props.selectedUser.azureId,
+        firstName: props.selectedUser.firstName,
+        lastName: props.selectedUser.lastName,
+        email: props.selectedUser.email,
         admin: isAdminChecked,
         employmentType: selectedEmploymentType,
         sectionId: selectedSection,
@@ -104,7 +102,7 @@ export default function UserSelectedView(props: {
       }),
     onSuccess: async () => {
       queryClient.invalidateQueries(['current-user']);
-      alert('Brukeren ble oppdatert!');
+      openMessageBox('Brukeren ble oppdatert!');
       props.setView(<UserView />);
     }
   });

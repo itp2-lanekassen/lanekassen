@@ -1,5 +1,3 @@
-import { Alert } from '@material-tailwind/react';
-
 interface ErrorAlertProps {
   message: string;
 }

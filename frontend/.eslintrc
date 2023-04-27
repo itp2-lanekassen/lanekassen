@@ -44,6 +44,10 @@
     "no-unused-vars": "off",
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": "error",
+
+    "no-duplicate-imports": "error",
+    "import/no-duplicates": "off",
+
     "prettier/prettier": "error"
   }
 }

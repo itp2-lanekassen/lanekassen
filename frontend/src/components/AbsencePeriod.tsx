@@ -1,17 +1,21 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { deleteAbsence } from '@/API/AbsenceAPI';
+import { Absence } from '@/types/types';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { deleteAbsence } from '../API/AbsenceAPI';
-import { Absence } from '../types/types';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { darken } from '@mui/material/styles';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { useUserContext } from '@/context/UserContext';
+import classNames from 'classnames';
+import { useModalContext } from '@/context/ModalContext';
+
 /**
  * Renders a component that shows a users absence instance
  */
 export const AbsencePeriod = (props: {
-  setAbsence: Dispatch<SetStateAction<Absence | null>>;
+  isSelected?: boolean;
+  setAbsence: Dispatch<SetStateAction<Absence | undefined>>;
   absence: Absence;
 }) => {
   const [expandStatus, setExpandStatus] = useState<string[]>(['none', '20px']);
@@ -19,6 +23,7 @@ export const AbsencePeriod = (props: {
   const [hover, setHover] = useState(false);
   const queryClient = useQueryClient();
   const currentUser = useUserContext();
+  const { openConfirmationBox, openMessageBox } = useModalContext();
 
   //Expand/collapse component to show more/less information on click
   const expandCollapse = () => {
@@ -39,12 +44,22 @@ export const AbsencePeriod = (props: {
     );
   }
 
+  // Display that absence comment is longer than what is shown
+  const shortenComment = (comment: string) => {
+    if (comment.length > 20 && !comment.includes(' ')) {
+      const shorterComment = comment.slice(0, 35) + '...';
+      return shorterComment;
+    }
+    return comment;
+  };
+
   //Check if absence has a comment to display
   let notice;
   if (props.absence.comment && props.absence.comment.length > 0) {
     notice = (
-      <p className="mx-[20px] pt-[10px] text-[18px]">
-        Personlig notis <strong className="body-tight text-[12px]">{props.absence.comment}</strong>
+      <p className="mx-[20px] pt-[10px] text-sm">
+        <strong className="body-bold"> Personlig notis: </strong>
+        {shortenComment(props.absence.comment)}
       </p>
     );
   }
@@ -52,14 +67,20 @@ export const AbsencePeriod = (props: {
   const { mutate: deleteExistingAbsence } = useMutation({
     mutationFn: deleteAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
-    onError: () => alert('Fraværet kunne ikke slettes.')
+    onError: () => openMessageBox('Fraværet kunne ikke slettes.')
   });
 
   return (
-    <div className="md:w-[300px] w-full px-[50px] md:px-0 md:mx-6 min-h-[fit-content] text-grey-lightest font-Rubik ">
+    <div
+      className={classNames(
+        'md:w-[300px] w-full px-[50px] md:px-0 md:mx-6',
+        'text-grey-lightest font-Rubik overflow-hidden',
+        'outline-primary outline-2 mb-2',
+        props.isSelected && 'outline'
+      )}
+    >
       <button
         style={{
-          borderRadius: expandStatus[1],
           backgroundColor: hover
             ? darken(props.absence.type.colorCode, 0.2)
             : props.absence.type.colorCode
@@ -67,35 +88,31 @@ export const AbsencePeriod = (props: {
         onClick={() => expandCollapse()}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        className="flex flex-row justify-between leading-[30px] w-full body-tight"
+        className="flex flex-row justify-between rounded-2xl leading-[30px] w-full body-tight min-h-[fit-content]"
       >
-        <p className="ml-[20px]">{absencePeriod}</p>
+        <span className="ml-[20px]">{absencePeriod}</span>
         <ExpandMoreIcon
           sx={{
-            color: 'primary-contrast',
+            color: '#FAFAFA',
             height: '30px',
             mr: '10px',
             transform: arrowRotation
           }}
-        ></ExpandMoreIcon>
+        />
       </button>
-      <section
+      <div
         style={{ display: expandStatus[0] }}
-        className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter rounded-b-[20px] overflow-hidden"
+        className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter overflow-hidden"
       >
-        <p className="mx-[20px] text-[18px]">
-          Fraværstype <strong className="body-bold text-[12px]">{props.absence.type.name}</strong>
+        <p className="mx-[20px] pt-[10px] text-sm">
+          <strong className="body-bold"> Fraværstype: </strong>
+          {props.absence.type.name}
         </p>
-        {props.absence.isApproved ? (
-          <p className="mx-[20px] text-[18px]">
-            <strong className="body-bold text-[12px]">Godkjent fravær</strong>
-          </p>
-        ) : (
-          <p className="mx-[20px] text-[18px]">
-            <strong className="body-bold text-[12px]">Ikke godkjent</strong>
-          </p>
-        )}
         {notice}
+        <p className="mx-[20px] pt-[10px] text-sm">
+          <strong className="body-bold"> Status: </strong>
+          {props.absence.isApproved ? 'Godkjent' : 'Ikke godkjent'}
+        </p>
         <div className="flex flex-row float-right">
           <button
             className="mr-[10px]"
@@ -113,15 +130,15 @@ export const AbsencePeriod = (props: {
                   color: '#26023B'
                 }
               }}
-            ></EditOutlinedIcon>
+            />
           </button>
           <button
-            onClick={() => {
-              const confirmDelete = confirm('Er du sikker på at du vil slette dette fraværet?');
-              if (confirmDelete) {
-                deleteExistingAbsence(props.absence.absenceId);
-              }
-            }}
+            onClick={() =>
+              openConfirmationBox(
+                () => deleteExistingAbsence(props.absence.absenceId),
+                'Er du sikker på at du vil slette fraværet?'
+              )
+            }
             className="mr-[10px]"
           >
             <DeleteOutlineIcon
@@ -130,13 +147,14 @@ export const AbsencePeriod = (props: {
                 height: '30px',
                 width: '30px',
                 '&:hover': {
-                  color: '#26023B'
+                  color: '#26023B',
+                  scale: '1.1'
                 }
               }}
             ></DeleteOutlineIcon>
           </button>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

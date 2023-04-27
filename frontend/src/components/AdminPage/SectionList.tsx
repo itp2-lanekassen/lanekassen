@@ -2,11 +2,11 @@ import { deleteSection, getAllSections } from '@/API/SectionAPI';
 import { Section } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import SubmitButton from '../SubmitButton';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
-import ErrorAlert from '../Alert';
+import { useModalContext } from '@/context/ModalContext';
 
 interface SectionListProps {
   setEdit: (val: boolean, section?: Section) => void;
@@ -14,8 +14,7 @@ interface SectionListProps {
 
 const SectionList = ({ setEdit }: SectionListProps) => {
   const queryClient = useQueryClient();
-  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
-  const [errorAlertMessage, setErrorAlertMessage] = useState('');
+  const { openConfirmationBox, openMessageBox } = useModalContext();
 
   const {
     isLoading,
@@ -26,21 +25,17 @@ const SectionList = ({ setEdit }: SectionListProps) => {
   const { mutate: deleteExistingSection } = useMutation({
     mutationFn: deleteSection,
     onSuccess: () => queryClient.invalidateQueries(['sections']),
-    onError: (error: Error) => {
-      setErrorAlertMessage('En seksjon kan ikke være i bruk før den slettes!');
-      setErrorAlertOpen(true);
-    }
+    onError: () => openMessageBox('En seksjon kan ikke være i bruk før den slettes!')
   });
 
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
-
+  // 48 44
   return (
     <>
-      {errorAlertOpen && <ErrorAlert message={errorAlertMessage} />}
-      <div className="grid grid-cols-sections text-center gap-x-2 gap-y-3 place-items-center">
-        <div className="heading-3xs">Seksjon</div>
-        <div className="heading-3xs">Avdelinger</div>
+      <div className="grid grid-cols-sections gap-x-2 gap-y-3 items-center">
+        <div className="heading-3xs md:ml-20">Seksjon</div>
+        <div className="heading-3xs md:text-center">Avdeling</div>
         <div className="col-span-2">
           <SubmitButton handleClick={() => setEdit(true)}>
             <Add />
@@ -51,14 +46,18 @@ const SectionList = ({ setEdit }: SectionListProps) => {
 
         {sections.map((section) => (
           <Fragment key={section.sectionId}>
-            <div>{section.name}</div>
-            <div>{section.department?.name}</div>
+            <div className="text-left md:ml-20">{section.name}</div>
+            <div className="text-left ml-[20%] xl:ml-44 lg:ml-[35%] md:ml-[30%] sm:ml-[30%]">
+              {section.department?.name}
+            </div>
             <EditButton onClick={() => setEdit(true, section)} />
             <DeleteButton
-              onClick={() => {
-                const confirmDelete = confirm('Er du sikker på at du vil slette denne seksjonen?');
-                if (confirmDelete) deleteExistingSection(section.sectionId);
-              }}
+              onClick={() =>
+                openConfirmationBox(
+                  () => deleteExistingSection(section.sectionId),
+                  'Er du sikker på at du vil slette denne seksjonen?'
+                )
+              }
             />
           </Fragment>
         ))}

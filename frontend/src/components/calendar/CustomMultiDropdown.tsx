@@ -50,7 +50,7 @@ const CustomMultiDropdown = <T extends number | string>({
   };
 
   return (
-    <div ref={wrapper} className="relative text-primary-light">
+    <div ref={wrapper} className="relative text-primary-light text-sm lg:text-base">
       <div
         role="button"
         tabIndex={0}
@@ -80,7 +80,7 @@ const CustomMultiDropdown = <T extends number | string>({
           {options.map((option) => (
             <li key={option.value}>
               <label
-                htmlFor={option.label}
+                htmlFor={option.label.replace(/\s/g, '')}
                 className={classNames(
                   value.includes(option.value) ? 'bg-primary-lighter' : 'bg-grey-lightest',
                   'flex gap-2 py-2 px-3 cursor-pointer check',
@@ -90,7 +90,7 @@ const CustomMultiDropdown = <T extends number | string>({
                 <input
                   type="checkbox"
                   className="accent-primary-light"
-                  id={option.label}
+                  id={option.label.replace(/\s/g, '')}
                   checked={value.includes(option.value)}
                   onChange={(e) => toggleSelected(option.value, e.target.checked)}
                 />

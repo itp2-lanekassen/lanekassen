@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateSubjectField, postSubjectField } from '@/API/SubjectFieldAPI';
 import Dropdown from '../Dropdown';
+import { useModalContext } from '@/context/ModalContext';
 
 interface SubjectFieldEditProps {
   setEdit: (val: boolean, subjectField?: SubjectField) => void;
@@ -12,6 +13,7 @@ interface SubjectFieldEditProps {
 
 const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
   const queryClient = useQueryClient();
+  const { openMessageBox } = useModalContext();
 
   const { departments } = useGlobalContext();
 
@@ -25,7 +27,7 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
       queryClient.invalidateQueries(['subjectField']);
       setEdit(false);
     },
-    onError: () => alert('Fagområdet eksisterer allerede')
+    onError: () => openMessageBox('Fagområdet eksisterer allerede')
   });
 
   const { mutate: createSubjectField } = useMutation({
@@ -34,7 +36,7 @@ const SubjectFieldEdit = ({ subjectField, setEdit }: SubjectFieldEditProps) => {
       queryClient.invalidateQueries(['subjectField']);
       setEdit(false);
     },
-    onError: () => alert('Fagområdet eksisterer allerede')
+    onError: () => openMessageBox('Fagområdet eksisterer allerede')
   });
 
   const handleSave = () => {
