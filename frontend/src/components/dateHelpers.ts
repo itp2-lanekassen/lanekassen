@@ -19,24 +19,6 @@ export function getDatePickerMaxForAbsence(date: Date, absences: Absence[]) {
   return returnDate;
 }
 
-//return the first endDate of an absence before a specific date, return undefined if there is none
-export function getDatePickerMinForAbsence(date: Date, absences: Absence[]) {
-  let returnDate: Date | undefined = undefined;
-  let earliestDate = date;
-  let diff = Infinity;
-  absences.map((a) => {
-    if (
-      date.valueOf() > new Date(a.endDate).valueOf() &&
-      date.valueOf() - new Date(a.endDate).valueOf() < diff
-    ) {
-      earliestDate = add(new Date(a.endDate), { days: 1 });
-      returnDate = earliestDate;
-      diff = new Date(date).valueOf() - new Date(a.endDate).valueOf();
-    }
-  });
-  return returnDate;
-}
-
 //Return array with all dates that a user has registered an absence
 export function getDisableDates(absences: Absence[], activeAbsenceId?: number) {
   const dateArray: Date[] = [];

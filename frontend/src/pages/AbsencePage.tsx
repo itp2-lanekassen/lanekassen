@@ -24,7 +24,11 @@ const AbsencePage = () => {
           />
           {/* Show AddAbsenceView if no absence has been seleced, show EditAbsenceView if an absence has been selected */}
           {selectedAbsence ? (
-            <EditAbsenceView absence={selectedAbsence} setAbsence={setAbsence} />
+            <EditAbsenceView
+              absences={absences}
+              selectedAbsence={selectedAbsence}
+              setAbsence={setAbsence}
+            />
           ) : (
             <AddAbsenceView absences={absences} />
           )}
