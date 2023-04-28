@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useUserContext } from '@/context/UserContext';
 import { useModalContext } from '@/context/ModalContext';
 import { useCalendarContext } from '@/context/CalendarContext';
-import { Absence, User } from '@/types/types';
+import { Absence, User } from '@/types/interfaces';
 import classNames from 'classnames';
 import { isSameDay } from 'date-fns';
 

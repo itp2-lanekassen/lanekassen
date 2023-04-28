@@ -1,20 +1,20 @@
-import { getAllTeams } from '@/API/TeamAPI';
+import { getAllTeams } from '@/api/team';
 import ErrorAlert from '@/components/Alert';
-import PageLayout from '@/components/PageLayout';
+import PageLayout from '@/pages/PageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
   getSubjectFieldsByDepartmentId
-} from '../API/DepartmentAPI';
-import { updateUser } from '../API/UserAPI';
+} from '../api/department';
+import { updateUser } from '../api/user';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
-import { EmploymentType, Role, SubjectField, Team } from '../types/types';
+import { EmploymentType, Role, SubjectField, Team } from '../types/interfaces';
 import { useModalContext } from '@/context/ModalContext';
 
 /**

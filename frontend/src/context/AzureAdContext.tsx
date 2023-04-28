@@ -1,6 +1,6 @@
-import { getAzureAdUser } from '../API/AzureAdAPI';
-import { loginRequest } from '../authConfig';
-import { AzureAdUser } from '../types/azureAd';
+import { getAzureAdUser } from '@/api/azureAd';
+import { loginRequest } from '@/authConfig';
+import { AzureAdUser } from '@/types/azureAd';
 import { useMsal } from '@azure/msal-react';
 import { useQuery } from '@tanstack/react-query';
 import { createContext, FC, ReactNode, useContext } from 'react';

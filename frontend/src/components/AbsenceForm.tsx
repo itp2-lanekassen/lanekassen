@@ -1,4 +1,4 @@
-import { Absence, User } from '@/types/types';
+import { Absence, User } from '@/types/interfaces';
 import { Button } from '@material-tailwind/react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -10,14 +10,14 @@ import {
   getDisableDates,
   postAbsence,
   updateAbsence
-} from '../API/AbsenceAPI';
+} from '../api/absence';
 import { useGlobalContext } from '../context/GlobalContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
 
 import { useUserContext } from '@/context/UserContext';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
+import { getAbsenceTypeById } from '../api/absenceType';
 import { DateField } from './DateField';
 import { useModalContext } from '@/context/ModalContext';
 

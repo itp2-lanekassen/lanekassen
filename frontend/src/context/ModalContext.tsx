@@ -1,4 +1,4 @@
-import { Absence, User } from '@/types/types';
+import { Absence, User } from '@/types/interfaces';
 import { createContext, ReactNode, useContext, useState } from 'react';
 import AbsenceForm from '../components/AbsenceForm';
 import MessageBox from '@/components/MessageBox';
