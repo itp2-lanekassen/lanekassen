@@ -118,7 +118,7 @@ export default function CalendarFilter() {
               className={classNames(
                 'border-1 border-primary-light rounded-full text-primary-light',
                 'py-1.5 px-3 focus:outline-primary-light flex w-full',
-                'text-sm lg:text-base'
+                'text-sm lg:text-base mr-1'
               )}
             />
           </div>
