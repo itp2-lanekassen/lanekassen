@@ -86,11 +86,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
   }, [props.absence, currentUser]);
 
   //update form values on date picker change
-  const handleInputChange = (
-    date: Date | null,
-    event: React.SyntheticEvent | undefined,
-    name: string
-  ) => {
+  const handleInputChange = (name: string, date?: Date) => {
     setFormValues({
       ...formValues,
       [name]: date
@@ -163,8 +159,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
               max={formValues.endDate}
               value={formValues.startDate}
               label="Fra"
-              title=""
-            ></DateField>
+            />
             <DateField
               handleInputChange={handleInputChange}
               name="endDate"
@@ -172,19 +167,15 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
               max={nextAbsenceStartDate}
               value={formValues.endDate}
               label="Til"
-              title=""
-            ></DateField>
+            />
           </div>
           <div className="m-auto flex flex-col md:gap-[20px] md:justify-evenly mt-[10px] md:w-[350px]">
-            <AbsenceRadioField
-              formValues={formValues}
-              handleRadioChange={handleRadioChange}
-            ></AbsenceRadioField>
+            <AbsenceRadioField formValues={formValues} handleRadioChange={handleRadioChange} />
             <CommentField
               handleInputChange={handleTextAreaChange}
               placeholder={props.absence.comment}
               formValues={formValues}
-            ></CommentField>
+            />
             {currentUser.admin && (
               <div className="flex items-center heading-xs space-x-5">
                 <p onClick={() => setIsApproved(!isApproved)}>Godkjenn fravær</p>
@@ -204,12 +195,12 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
               disabled={false}
               buttonText={'Lagre'}
               type={'submit'}
-            ></SubmitButton>
+            />
             <SubmitButton
               disabled={false}
               buttonText={'Avbryt'}
               handleClick={() => props.setAbsence(undefined)}
-            ></SubmitButton>
+            />
           </div>
         </form>
       </div>

@@ -156,7 +156,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
       setMin(currentUser.userId, clickedAbsence, formValues.startDate, setPreviousAbsenceEndDate);
     }
     setMax(currentUser.userId, clickedAbsence, formValues.startDate, setNextAbsenceStartDateTo);
-  }, [clickedAbsence, startDate, user]);
+  }, [currentUser.userId, formValues.startDate, clickedAbsence, startDate, user]);
 
   React.useEffect(() => {
     setDates(currentUser.userId, clickedAbsence, setDisableDates);
@@ -170,14 +170,10 @@ const AbsenceForm: React.FC<ModalProps> = ({
     return () => {
       window.removeEventListener('keydown', handler);
     };
-  }, [onClose]);
+  }, [clickedAbsence, currentUser.userId, onClose]);
 
   //update form values on date picker change
-  const handleInputChange = (
-    date: Date | null,
-    event: React.SyntheticEvent | undefined,
-    name: string
-  ) => {
+  const handleInputChange = (name: string, date?: Date) => {
     setFormValues({
       ...formValues,
       [name]: date
@@ -300,7 +296,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
             label="Fra"
             disableArray={disableDates}
             title=""
-          ></DateField>
+          />
           <DateField
             handleInputChange={handleInputChange}
             min={formValues.startDate}
@@ -308,17 +304,11 @@ const AbsenceForm: React.FC<ModalProps> = ({
             value={formValues.endDate}
             name="endDate"
             label="Til"
-            disabled={formValues.startDate === undefined ? true : false}
+            disabled={formValues.startDate === undefined}
             title={'Fyll ut startdato først'}
-          ></DateField>
-          <AbsenceRadioField
-            formValues={formValues}
-            handleRadioChange={handleRadioChange}
-          ></AbsenceRadioField>
-          <CommentField
-            formValues={formValues}
-            handleInputChange={handleTextAreaChange}
-          ></CommentField>
+          />
+          <AbsenceRadioField formValues={formValues} handleRadioChange={handleRadioChange} />
+          <CommentField formValues={formValues} handleInputChange={handleTextAreaChange} />
           {currentUser.admin && (
             <div className="flex items-center heading-xs space-x-5">
               <p onClick={() => setIsApproved(!isApproved)}>Godkjenn fravær</p>
