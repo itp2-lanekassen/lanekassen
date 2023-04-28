@@ -50,8 +50,11 @@ export default function UserRow(props: {
   const { mutate: deleteExistingUser } = useMutation({
     mutationFn: deleteUser,
     onSuccess: () => {
-      queryClient.invalidateQueries(['users']),
-        props.user.userId == currentUser.userId ? window.location.reload() : null;
+      queryClient.invalidateQueries(['users']);
+
+      if (props.user.userId === currentUser.userId) {
+        queryClient.invalidateQueries(['current-user']);
+      }
     },
     onError: () => openMessageBox('Brukeren kunne ikke slettes. Prøv igjen senere.')
   });
