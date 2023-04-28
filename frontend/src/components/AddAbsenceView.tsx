@@ -147,7 +147,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               </div>
             )}
           </div>
-          <div className="m-auto flex justify-center gap-[20px] mt-2">
+          <div className="flex justify-center mt-2">
             <SubmitButton
               disabledTitle={'Fyll ut alle feltene'}
               disabled={false}
