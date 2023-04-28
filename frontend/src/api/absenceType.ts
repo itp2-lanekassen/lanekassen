@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const url = `${backendUrl}/AbsenceType`;
+const url = `${backendUrl}/absenceType`;
 
 export function getAllAbsenceTypes(): Promise<AxiosResponse<AbsenceType[]>> {
   return axios.get(url);

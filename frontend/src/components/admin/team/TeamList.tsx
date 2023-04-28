@@ -1,4 +1,4 @@
-import { deleteTeam, getAllTeams } from '@/API/TeamAPI';
+import { deleteTeam, getAllTeams } from '@/api/team';
 import { Team } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

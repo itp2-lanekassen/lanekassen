@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAbsencesByUserId } from '@/API/AbsenceAPI';
+import { getAbsencesByUserId } from '@/api/absence';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { User } from '@/types/types';
 import CalendarCell from './CalendarCell';

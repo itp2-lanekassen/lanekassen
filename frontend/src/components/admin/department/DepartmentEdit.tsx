@@ -1,7 +1,7 @@
 import { NewDepartment } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-import { updateDepartment, postDepartment } from '@/API/DepartmentAPI';
+import { updateDepartment, postDepartment } from '@/api/department';
 import { useModalContext } from '@/context/ModalContext';
 
 interface DepartmentEditProps {

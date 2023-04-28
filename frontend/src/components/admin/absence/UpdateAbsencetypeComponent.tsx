@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
-import { updateAbsenceType } from '@/API/AbsenceTypeAPI';
+import { updateAbsenceType } from '@/api/absenceType';
 import { useEffect, useState } from 'react';
 import { CalendarCellDisplay } from '../../CalendarCellDisplay';
 import { AbsenceType } from '@/types/types';

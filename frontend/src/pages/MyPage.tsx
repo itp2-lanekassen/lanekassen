@@ -1,4 +1,4 @@
-import { getAllTeams } from '@/API/TeamAPI';
+import { getAllTeams } from '@/api/team';
 import ErrorAlert from '@/components/Alert';
 import PageLayout from '@/components/PageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -7,8 +7,8 @@ import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
   getSubjectFieldsByDepartmentId
-} from '../API/DepartmentAPI';
-import { updateUser } from '../API/UserAPI';
+} from '../api/department';
+import { updateUser } from '../api/user';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';

@@ -1,4 +1,4 @@
-import { getAllUsers } from '@/API/UserAPI';
+import { getAllUsers } from '@/api/user';
 import { User } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState, ChangeEvent } from 'react';

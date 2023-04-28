@@ -1,4 +1,4 @@
-import { deleteRole, getAllRoles } from '@/API/RoleAPI';
+import { deleteRole, getAllRoles } from '@/api/role';
 import { Role } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

@@ -2,9 +2,9 @@ import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
   getSubjectFieldsByDepartmentId
-} from '@/API/DepartmentAPI';
-import { getAllTeams } from '@/API/TeamAPI';
-import { updateUser } from '@/API/UserAPI';
+} from '@/api/department';
+import { getAllTeams } from '@/api/team';
+import { updateUser } from '@/api/user';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { EmploymentType, Team, User } from '@/types/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

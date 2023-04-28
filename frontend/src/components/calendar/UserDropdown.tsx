@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Department, EmploymentType, Section, User } from '@/types/types';
-import { getDepartmentById } from '@/API/DepartmentAPI';
-import { getSectionById } from '@/API/SectionAPI';
+import { getDepartmentById } from '@/api/department';
+import { getSectionById } from '@/api/section';
 import useViewport from '@/context/calendarContextHelpers/useViewport';
 
 export default function UserDropdown(props: { user: User; isCurrentUser: boolean }) {

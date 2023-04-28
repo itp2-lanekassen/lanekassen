@@ -1,4 +1,4 @@
-import { deleteSubjectField, getAllSubjectFields } from '@/API/SubjectFieldAPI';
+import { deleteSubjectField, getAllSubjectFields } from '@/api/subjectField';
 import { SubjectField } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

@@ -1,12 +1,12 @@
 import { createContext, ReactNode, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { AbsenceType, Department, Role, Section, SubjectField, Team } from '@/types/types';
-import { getAllAbsenceTypes } from '@/API/AbsenceTypeAPI';
-import { getAllDepartments } from '@/API/DepartmentAPI';
-import { getAllRoles } from '@/API/RoleAPI';
-import { getAllSections } from '@/API/SectionAPI';
-import { getAllSubjectFields } from '@/API/SubjectFieldAPI';
-import { getAllTeams } from '@/API/TeamAPI';
+import { getAllAbsenceTypes } from '@/api/absenceType';
+import { getAllDepartments } from '@/api/department';
+import { getAllRoles } from '@/api/role';
+import { getAllSections } from '@/api/section';
+import { getAllSubjectFields } from '@/api/subjectField';
+import { getAllTeams } from '@/api/team';
 
 interface GlobalContextProps {
   children?: ReactNode;

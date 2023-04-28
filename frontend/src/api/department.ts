@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const url = `${backendUrl}/Department`;
+const url = `${backendUrl}/department`;
 
 export function getAllDepartments(): Promise<AxiosResponse<Department[]>> {
   return axios.get(url);

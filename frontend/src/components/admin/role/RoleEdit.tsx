@@ -2,7 +2,7 @@ import { useGlobalContext } from '@/context/GlobalContext';
 import { Role, RoleDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { updateRole, postRole } from '@/API/RoleAPI';
+import { updateRole, postRole } from '@/api/role';
 import DropdownMultiSelect from '@/components/DropdownMultiSelect';
 import { useModalContext } from '@/context/ModalContext';
 

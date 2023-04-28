@@ -1,6 +1,6 @@
 import SubmitButton from '../../SubmitButton';
 import { useQuery } from '@tanstack/react-query';
-import { getAllAbsenceTypes } from '@/API/AbsenceTypeAPI';
+import { getAllAbsenceTypes } from '@/api/absenceType';
 import AddAbsenceTypeComponent from './AddAbsenceTypeComponent';
 import { useEffect, useState } from 'react';
 import AbsenceTypeRow from './AbsenceTypeRow';

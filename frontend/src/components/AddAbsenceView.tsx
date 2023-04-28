@@ -3,7 +3,7 @@ import { DateField } from './DateField';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import SubmitButton from './SubmitButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { getDisableDates, postAbsence } from '../API/AbsenceAPI';
+import { getDisableDates, postAbsence } from '../api/absence';
 import { useUserContext } from '../context/UserContext';
 import { useGlobalContext } from '../context/GlobalContext';
 import { FormValues } from './AbsenceForm';

@@ -9,9 +9,9 @@ import {
   useEffect,
   startTransition
 } from 'react';
-import { filterUsers } from '@/API/UserAPI';
+import { filterUsers } from '@/api/user';
 import { Holiday, PageResponse, User, UserFilter } from '@/types/types';
-import { getHolidaysByYear } from '@/API/HolidaysAPI';
+import { getHolidaysByYear } from '@/api/holidays';
 import { useUserContext } from './UserContext';
 import calculateColumns, { Columns } from './calendarContextHelpers/calculateColumns';
 import useViewport from './calendarContextHelpers/useViewport';

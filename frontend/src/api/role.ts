@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const url = `${backendUrl}/Role`;
+const url = `${backendUrl}/role`;
 
 export function getAllRoles(): Promise<AxiosResponse<Role[]>> {
   return axios.get(url);

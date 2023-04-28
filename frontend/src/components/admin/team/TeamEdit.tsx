@@ -1,7 +1,7 @@
 import { Team, TeamDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { updateTeam, postTeam } from '@/API/TeamAPI';
+import { updateTeam, postTeam } from '@/api/team';
 import { useModalContext } from '@/context/ModalContext';
 
 interface TeamEditProps {

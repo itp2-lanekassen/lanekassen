@@ -1,4 +1,4 @@
-import { deleteSection, getAllSections } from '@/API/SectionAPI';
+import { deleteSection, getAllSections } from '@/api/section';
 import { Section } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

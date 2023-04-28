@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const url = `${backendUrl}/Team`;
+const url = `${backendUrl}/team`;
 
 export function getAllTeams(): Promise<AxiosResponse<Team[]>> {
   return axios.get(url);

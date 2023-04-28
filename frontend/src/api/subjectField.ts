@@ -1,9 +1,9 @@
-import { SubjectField, SubjectFieldDTO } from '../types/types';
+import { SubjectField, SubjectFieldDTO } from '@/types/types';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const url = `${backendUrl}/SubjectFields`;
+const url = `${backendUrl}/subjectfields`;
 
 export function getAllSubjectFields(): Promise<AxiosResponse<SubjectField[]>> {
   return axios.get(url);

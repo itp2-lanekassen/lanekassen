@@ -2,7 +2,7 @@ import { useGlobalContext } from '@/context/GlobalContext';
 import { SubjectField, SubjectFieldDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { updateSubjectField, postSubjectField } from '@/API/SubjectFieldAPI';
+import { updateSubjectField, postSubjectField } from '@/api/subjectField';
 import Dropdown from '@/components/Dropdown';
 import { useModalContext } from '@/context/ModalContext';
 

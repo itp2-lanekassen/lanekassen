@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const url = `${backendUrl}/User`;
+const url = `${backendUrl}/user`;
 
 export function getAllUsers(): Promise<AxiosResponse<User[]>> {
   return axios.get(url);

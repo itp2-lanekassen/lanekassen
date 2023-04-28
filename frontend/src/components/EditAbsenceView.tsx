@@ -12,8 +12,8 @@ import {
   getDatePickerMaxForAbsence,
   getDatePickerMinForAbsence,
   updateAbsence
-} from '../API/AbsenceAPI';
-import { getAbsenceTypeById } from '../API/AbsenceTypeAPI';
+} from '../api/absence';
+import { getAbsenceTypeById } from '../api/absenceType';
 import { useModalContext } from '@/context/ModalContext';
 
 //set max on datepicker state based on when the next absence starts

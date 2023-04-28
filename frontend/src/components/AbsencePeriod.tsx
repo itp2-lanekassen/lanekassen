@@ -1,4 +1,4 @@
-import { deleteAbsence } from '@/API/AbsenceAPI';
+import { deleteAbsence } from '@/api/absence';
 import { Absence } from '@/types/types';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';

@@ -4,7 +4,7 @@ import { add, sub } from 'date-fns';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const url = `${backendUrl}/Absence`;
+const url = `${backendUrl}/absence`;
 
 export function getAllAbsences(
   fromDate?: string,
