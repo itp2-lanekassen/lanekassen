@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createContext, FC, ReactNode, useContext } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { getUserByAzureId } from '../api/user';
-import { User } from '../types/types';
+import { User } from '../types/interfaces';
 import { useAzureAdContext } from './AzureAdContext';
 import NotFoundPage from '@/pages/NotFoundPage';
 

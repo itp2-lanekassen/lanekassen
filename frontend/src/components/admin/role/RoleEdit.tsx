@@ -1,5 +1,5 @@
 import { useGlobalContext } from '@/context/GlobalContext';
-import { Role, RoleDTO } from '@/types/types';
+import { Role, RoleDTO } from '@/types/interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateRole, postRole } from '@/api/role';

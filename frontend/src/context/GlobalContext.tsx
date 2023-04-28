@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { AbsenceType, Department, Role, Section, SubjectField, Team } from '@/types/types';
+import { AbsenceType, Department, Role, Section, SubjectField, Team } from '@/types/interfaces';
 import { getAllAbsenceTypes } from '@/api/absenceType';
 import { getAllDepartments } from '@/api/department';
 import { getAllRoles } from '@/api/role';

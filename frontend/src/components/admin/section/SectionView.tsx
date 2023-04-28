@@ -1,4 +1,4 @@
-import { Section } from '@/types/types';
+import { Section } from '@/types/interfaces';
 import { useState } from 'react';
 import SectionEdit from './SectionEdit';
 import SectionList from './SectionList';

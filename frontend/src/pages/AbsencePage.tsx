@@ -1,4 +1,4 @@
-import { Absence } from '@/types/types';
+import { Absence } from '@/types/interfaces';
 import { useState } from 'react';
 import { AbsencePeriods } from '@/components/absence/AbsencePeriods';
 import { EditAbsenceView } from '@/components/absence/EditAbsenceView';

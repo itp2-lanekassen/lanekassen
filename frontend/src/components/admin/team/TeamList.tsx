@@ -1,5 +1,5 @@
 import { deleteTeam, getAllTeams } from '@/api/team';
-import { Team } from '@/types/types';
+import { Team } from '@/types/interfaces';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Fragment } from 'react';

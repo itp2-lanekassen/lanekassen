@@ -1,4 +1,4 @@
-import { Team, TeamDTO } from '../types/types';
+import { Team, TeamDTO } from '../types/interfaces';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Department, EmploymentType, Section, User } from '@/types/types';
+import { Department, EmploymentType, Section, User } from '@/types/interfaces';
 import { getDepartmentById } from '@/api/department';
 import { getSectionById } from '@/api/section';
 import useViewport from '@/context/calendarContextHelpers/useViewport';

@@ -1,4 +1,4 @@
-import { Absence, NewAbsence } from '../types/types';
+import { Absence, NewAbsence } from '../types/interfaces';
 import axios, { AxiosResponse } from 'axios';
 import { add, sub } from 'date-fns';
 

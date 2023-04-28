@@ -1,4 +1,4 @@
-import { Department, NewDepartment, Role, Section, SubjectField } from '../types/types';
+import { Department, NewDepartment, Role, Section, SubjectField } from '../types/interfaces';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;

@@ -6,7 +6,7 @@ import {
 import { getAllTeams } from '@/api/team';
 import { updateUser } from '@/api/user';
 import { useGlobalContext } from '@/context/GlobalContext';
-import { EmploymentType, Team, User } from '@/types/types';
+import { EmploymentType, Team, User } from '@/types/interfaces';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import Dropdown from '@/components/Dropdown';

@@ -1,4 +1,4 @@
-import { NewDepartment } from '@/types/types';
+import { NewDepartment } from '@/types/interfaces';
 import { useState } from 'react';
 import DepartmentEdit from './DepartmentEdit';
 import DepartmentList from './DepartmentList';

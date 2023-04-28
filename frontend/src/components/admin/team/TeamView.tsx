@@ -1,4 +1,4 @@
-import { Team } from '@/types/types';
+import { Team } from '@/types/interfaces';
 import { useState } from 'react';
 import TeamEdit from './TeamEdit';
 import TeamList from './TeamList';

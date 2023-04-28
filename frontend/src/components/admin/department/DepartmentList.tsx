@@ -1,5 +1,5 @@
 import { deleteDepartment, getAllDepartments } from '@/api/department';
-import { NewDepartment } from '@/types/types';
+import { NewDepartment } from '@/types/interfaces';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Fragment } from 'react';

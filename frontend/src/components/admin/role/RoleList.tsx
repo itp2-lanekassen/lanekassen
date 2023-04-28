@@ -1,5 +1,5 @@
 import { deleteRole, getAllRoles } from '@/api/role';
-import { Role } from '@/types/types';
+import { Role } from '@/types/interfaces';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Fragment } from 'react';

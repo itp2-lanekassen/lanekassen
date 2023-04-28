@@ -1,4 +1,4 @@
-import { SubjectField, SubjectFieldDTO } from '@/types/types';
+import { SubjectField, SubjectFieldDTO } from '@/types/interfaces';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;

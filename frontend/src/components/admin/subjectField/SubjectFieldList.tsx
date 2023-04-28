@@ -1,5 +1,5 @@
 import { deleteSubjectField, getAllSubjectFields } from '@/api/subjectField';
-import { SubjectField } from '@/types/types';
+import { SubjectField } from '@/types/interfaces';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Fragment } from 'react';

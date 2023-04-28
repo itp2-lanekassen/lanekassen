@@ -10,7 +10,7 @@ import { postUser } from '../api/user';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
-import { EmploymentType } from '../types/types';
+import { EmploymentType } from '../types/interfaces';
 import { useNavigate } from 'react-router-dom';
 import { useAzureAdContext } from '../context/AzureAdContext';
 import { getAllTeams } from '../api/team';

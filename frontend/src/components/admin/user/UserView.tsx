@@ -1,5 +1,5 @@
 import { getAllUsers } from '@/api/user';
-import { User } from '@/types/types';
+import { User } from '@/types/interfaces';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState, ChangeEvent } from 'react';
 import UserRow from './UserRow';

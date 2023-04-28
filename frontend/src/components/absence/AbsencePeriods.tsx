@@ -1,5 +1,5 @@
 import { AbsencePeriod } from './AbsencePeriod';
-import { Absence } from '@/types/types';
+import { Absence } from '@/types/interfaces';
 import { getAbsencesByUserId } from '@/api/absence';
 import { useUserContext } from '@/context/UserContext';
 import { useQuery } from '@tanstack/react-query';

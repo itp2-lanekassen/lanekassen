@@ -1,4 +1,4 @@
-import { Holiday } from '@/types/types';
+import { Holiday } from '@/types/interfaces';
 import axios, { AxiosResponse } from 'axios';
 
 const url = 'https://webapi.no/api/v1/holidays/';

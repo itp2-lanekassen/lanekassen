@@ -1,4 +1,4 @@
-import { User, NewUser, PageResponse, UserFilter } from '../types/types';
+import { User, NewUser, PageResponse, UserFilter } from '../types/interfaces';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;

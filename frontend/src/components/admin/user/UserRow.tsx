@@ -1,7 +1,7 @@
 import { getDepartmentById } from '@/api/department';
 import { getSectionById } from '@/api/section';
 import { deleteUser } from '@/api/user';
-import { EmploymentType, User } from '@/types/types';
+import { EmploymentType, User } from '@/types/interfaces';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import DeleteButton from '../DeleteButton';
 import EditButton from '../EditButton';

@@ -1,4 +1,4 @@
-import { Absence, User } from '@/types/types';
+import { Absence, User } from '@/types/interfaces';
 import { Button } from '@material-tailwind/react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

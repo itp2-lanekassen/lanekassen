@@ -4,7 +4,7 @@ import { AbsenceRadioField } from '../AbsenceRadioField';
 import SubmitButton from '../SubmitButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserContext } from '@/context/UserContext';
-import { Absence } from '@/types/types';
+import { Absence } from '@/types/interfaces';
 import * as React from 'react';
 import { FormValues } from '../AbsenceForm';
 import { useEffect } from 'react';

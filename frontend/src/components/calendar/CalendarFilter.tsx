@@ -1,7 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useCalendarContext } from '@/context/CalendarContext';
-import { UserFilter } from '@/types/types';
+import { UserFilter } from '@/types/interfaces';
 import Dropdown from '../Dropdown';
 import { startTransition, useEffect, useState } from 'react';
 import CustomMultiDropdown from './CustomMultiDropdown';

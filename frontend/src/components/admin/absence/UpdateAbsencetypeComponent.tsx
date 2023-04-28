@@ -3,7 +3,7 @@ import * as React from 'react';
 import { updateAbsenceType } from '@/api/absenceType';
 import { useEffect, useState } from 'react';
 import { CalendarCellDisplay } from '../../CalendarCellDisplay';
-import { AbsenceType } from '@/types/types';
+import { AbsenceType } from '@/types/interfaces';
 import AbsenceTypeView from './AbsenceTypeView';
 import ColorPickerComponent from './ColorPicker';
 import InputAdornment from '@mui/material/InputAdornment';

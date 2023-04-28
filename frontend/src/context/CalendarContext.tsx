@@ -10,7 +10,7 @@ import {
   startTransition
 } from 'react';
 import { filterUsers } from '@/api/user';
-import { Holiday, PageResponse, User, UserFilter } from '@/types/types';
+import { Holiday, PageResponse, User, UserFilter } from '@/types/interfaces';
 import { getHolidaysByYear } from '@/api/holidays';
 import { useUserContext } from './UserContext';
 import calculateColumns, { Columns } from './calendarContextHelpers/calculateColumns';

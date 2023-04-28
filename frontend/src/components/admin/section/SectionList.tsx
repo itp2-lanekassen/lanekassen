@@ -1,5 +1,5 @@
 import { deleteSection, getAllSections } from '@/api/section';
-import { Section } from '@/types/types';
+import { Section } from '@/types/interfaces';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Fragment } from 'react';

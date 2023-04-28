@@ -14,7 +14,7 @@ import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
-import { EmploymentType, Role, SubjectField, Team } from '../types/types';
+import { EmploymentType, Role, SubjectField, Team } from '../types/interfaces';
 import { useModalContext } from '@/context/ModalContext';
 
 /**

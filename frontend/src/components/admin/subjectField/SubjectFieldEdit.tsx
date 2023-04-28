@@ -1,5 +1,5 @@
 import { useGlobalContext } from '@/context/GlobalContext';
-import { SubjectField, SubjectFieldDTO } from '@/types/types';
+import { SubjectField, SubjectFieldDTO } from '@/types/interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateSubjectField, postSubjectField } from '@/api/subjectField';

@@ -8,7 +8,7 @@ import { useUserContext } from '@/context/UserContext';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { FormValues } from '../AbsenceForm';
 import * as React from 'react';
-import { Absence } from '@/types/types';
+import { Absence } from '@/types/interfaces';
 import { useModalContext } from '@/context/ModalContext';
 
 //get all absence dates in array

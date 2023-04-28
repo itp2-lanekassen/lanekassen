@@ -1,4 +1,4 @@
-import { Role, RoleDTO } from '../types/types';
+import { Role, RoleDTO } from '../types/interfaces';
 import axios, { AxiosResponse } from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;

@@ -1,4 +1,4 @@
-import { NewDepartment } from '@/types/types';
+import { NewDepartment } from '@/types/interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { updateDepartment, postDepartment } from '@/api/department';

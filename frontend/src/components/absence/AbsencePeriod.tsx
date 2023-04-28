@@ -1,5 +1,5 @@
 import { deleteAbsence } from '@/api/absence';
-import { Absence } from '@/types/types';
+import { Absence } from '@/types/interfaces';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';

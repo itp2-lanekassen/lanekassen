@@ -1,4 +1,4 @@
-import { Role } from '@/types/types';
+import { Role } from '@/types/interfaces';
 import { useState } from 'react';
 import RoleEdit from './RoleEdit';
 import RoleList from './RoleList';

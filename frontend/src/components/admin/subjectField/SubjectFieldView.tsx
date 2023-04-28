@@ -1,4 +1,4 @@
-import { SubjectField } from '@/types/types';
+import { SubjectField } from '@/types/interfaces';
 import { useState } from 'react';
 import SubjectFieldEdit from './SubjectFieldEdit';
 import SubjectFieldList from './SubjectFieldList';

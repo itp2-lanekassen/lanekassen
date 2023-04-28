@@ -1,5 +1,5 @@
 import { useGlobalContext } from '@/context/GlobalContext';
-import { Section, SectionDTO } from '@/types/types';
+import { Section, SectionDTO } from '@/types/interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateSection, postSection } from '@/api/section';
