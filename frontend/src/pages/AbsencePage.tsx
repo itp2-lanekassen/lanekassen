@@ -1,8 +1,8 @@
 import { Absence } from '@/types/types';
 import { useState } from 'react';
-import { AbsencePeriods } from '@/components/AbsencePeriods';
-import { EditAbsenceView } from '@/components/EditAbsenceView';
-import { AddAbsenceView } from '@/components/AddAbsenceView';
+import { AbsencePeriods } from '@/components/absence/AbsencePeriods';
+import { EditAbsenceView } from '@/components/absence/EditAbsenceView';
+import { AddAbsenceView } from '@/components/absence/AddAbsenceView';
 import PageLayout from '@/components/PageLayout';
 
 /**

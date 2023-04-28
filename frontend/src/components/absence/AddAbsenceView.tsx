@@ -1,14 +1,14 @@
-import { CommentField } from './CommentField';
-import { DateField } from './DateField';
-import { AbsenceRadioField } from './AbsenceRadioField';
-import SubmitButton from './SubmitButton';
+import { CommentField } from '../CommentField';
+import { DateField } from '../DateField';
+import { AbsenceRadioField } from '../AbsenceRadioField';
+import SubmitButton from '../SubmitButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { getDisableDates, postAbsence } from '../api/absence';
-import { useUserContext } from '../context/UserContext';
-import { useGlobalContext } from '../context/GlobalContext';
-import { FormValues } from './AbsenceForm';
+import { getDisableDates, postAbsence } from '@/api/absence';
+import { useUserContext } from '@/context/UserContext';
+import { useGlobalContext } from '@/context/GlobalContext';
+import { FormValues } from '../AbsenceForm';
 import * as React from 'react';
-import { Absence } from '../types/types';
+import { Absence } from '@/types/types';
 import { useModalContext } from '@/context/ModalContext';
 
 //get all absence dates in array

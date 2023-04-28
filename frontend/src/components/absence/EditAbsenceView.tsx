@@ -1,19 +1,19 @@
-import { CommentField } from './CommentField';
-import { DateField } from './DateField';
-import { AbsenceRadioField } from './AbsenceRadioField';
-import SubmitButton from './SubmitButton';
+import { CommentField } from '../CommentField';
+import { DateField } from '../DateField';
+import { AbsenceRadioField } from '../AbsenceRadioField';
+import SubmitButton from '../SubmitButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useUserContext } from '../context/UserContext';
-import { Absence } from '../types/types';
+import { useUserContext } from '@/context/UserContext';
+import { Absence } from '@/types/types';
 import * as React from 'react';
-import { FormValues } from './AbsenceForm';
+import { FormValues } from '../AbsenceForm';
 import { useEffect } from 'react';
 import {
   getDatePickerMaxForAbsence,
   getDatePickerMinForAbsence,
   updateAbsence
-} from '../api/absence';
-import { getAbsenceTypeById } from '../api/absenceType';
+} from '@/api/absence';
+import { getAbsenceTypeById } from '@/api/absenceType';
 import { useModalContext } from '@/context/ModalContext';
 
 //set max on datepicker state based on when the next absence starts
