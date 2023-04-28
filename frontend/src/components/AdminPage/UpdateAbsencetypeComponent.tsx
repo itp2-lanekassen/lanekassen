@@ -83,91 +83,93 @@ export default function UpdateAbsenceTypeComponent(props: {
   }
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="flex flex-col items-center">
-        <h3 className="text-xl">Oppdater fraværstype</h3>
-        <form className="flex flex-col items-center" onSubmit={handleSubmit} id="AbsenceTypeForm">
-          <label className="mt-2" htmlFor="name">
-            Navn på fraværstype:
-          </label>
-          <input
-            className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
+    <div className="flex flex-col items-center">
+      <h3 className="text-xl">Oppdater fraværstype</h3>
+      <form
+        className="flex flex-col gap-1 items-center"
+        onSubmit={handleSubmit}
+        id="AbsenceTypeForm"
+      >
+        <label className="mt-2" htmlFor="name">
+          Navn på fraværstype:
+        </label>
+        <input
+          className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
+          type="text"
+          name="name"
+          id="name"
+          value={formValues.name}
+          onChange={handleInputChange}
+        />
+        <label className="mt-2" htmlFor="colorCode">
+          Velg farge:
+        </label>
+        <div className="relative">
+          <Input
             type="text"
-            name="name"
-            id="name"
-            value={formValues.name}
-            onChange={handleInputChange}
+            className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary mr-2"
+            id="colorCode"
+            name="colorCode"
+            value={color}
+            disableUnderline={true}
+            onChange={(e) => {
+              e.preventDefault();
+              handleColorChange(e.target.value);
+            }}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton onClick={() => setOpen(!open)} sx={{ color: '#410464' }}>
+                  <ColorLensIcon />
+                </IconButton>
+              </InputAdornment>
+            }
           />
-          <label className="mt-2" htmlFor="colorCode">
-            Velg farge:
-          </label>
-          <div className="relative">
-            <Input
-              type="text"
-              className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary mr-2"
-              id="colorCode"
-              name="colorCode"
-              value={color}
-              disableUnderline={true}
-              onChange={(e) => {
-                e.preventDefault();
-                handleColorChange(e.target.value);
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setOpen(!open)} sx={{ color: '#410464' }}>
-                    <ColorLensIcon />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-            {open && (
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-center">
-                <ColorPickerComponent
-                  onColorChange={handleColorChange}
-                  setOpen={setOpen}
-                  colorHook={color}
-                />
-              </div>
-            )}
-          </div>
-          <label className="mt-2" htmlFor="code">
-            Kode (maks 7 tegn):
-          </label>
-          <input
-            className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
-            type="text"
-            name="code"
-            id="code"
-            maxLength={7}
-            value={formValues.code}
-            onChange={handleInputChange}
-          />
-          <br />
-          {/* Preview Calendarcell component with and without hash */}
-          <label className="">Forhåndsvisning (Godkjent / ikke-godkjent):</label>
-          <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
+          {open && (
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-center">
+              <ColorPickerComponent
+                onColorChange={handleColorChange}
+                setOpen={setOpen}
+                colorHook={color}
+              />
+            </div>
+          )}
+        </div>
+        <label className="mt-2" htmlFor="code">
+          Kode (maks 7 tegn):
+        </label>
+        <input
+          className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
+          type="text"
+          name="code"
+          id="code"
+          maxLength={7}
+          value={formValues.code}
+          onChange={handleInputChange}
+        />
+        <br />
+        {/* Preview Calendarcell component with and without hash */}
+        <label>Forhåndsvisning (Godkjent / ikke-godkjent):</label>
+        <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
 
-          <br />
-          <div className="flex gap-4">
-            <button
-              type="submit"
-              disabled={isDisabled}
-              className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light disabled:cursor-not-allowed"
-            >
-              Oppdater
-            </button>
-            <button
-              className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light"
-              onClick={() => {
-                props.setView(<AbsenceTypeView />);
-              }}
-            >
-              Avbryt
-            </button>
-          </div>
-        </form>
-      </div>
+        <br />
+        <div className="flex gap-4">
+          <button
+            type="submit"
+            disabled={isDisabled}
+            className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light disabled:cursor-not-allowed"
+          >
+            Oppdater
+          </button>
+          <button
+            className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light"
+            onClick={() => {
+              props.setView(<AbsenceTypeView />);
+            }}
+          >
+            Avbryt
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
