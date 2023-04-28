@@ -1,6 +1,6 @@
 import { getAllTeams } from '@/api/team';
 import ErrorAlert from '@/components/Alert';
-import PageLayout from '@/components/PageLayout';
+import PageLayout from '@/pages/PageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {

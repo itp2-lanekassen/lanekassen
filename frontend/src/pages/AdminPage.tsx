@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
 import { useState } from 'react';
-import PageLayout from '@/components/PageLayout';
+import PageLayout from '@/pages/PageLayout';
 import SectionView from '@/components/admin/section/SectionView';
 import AbsenceTypeView from '@/components/admin/absence/AbsenceTypeView';
 import TeamView from '@/components/admin/team/TeamView';

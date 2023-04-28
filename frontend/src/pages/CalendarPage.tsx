@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import CalendarFilter from '@/components/calendar/CalendarFilter';
 import CalendarHeader from '@/components/calendar/CalendarHeader';
 import CalendarRow from '@/components/calendar/CalendarRow';
-import PageLayout from '@/components/PageLayout';
+import PageLayout from '@/pages/PageLayout';
 import { useCalendarContext } from '@/context/CalendarContext';
 import { useModalContext } from '@/context/ModalContext';
 import { useUserContext } from '@/context/UserContext';

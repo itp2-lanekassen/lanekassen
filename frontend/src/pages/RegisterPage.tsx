@@ -14,7 +14,7 @@ import { EmploymentType } from '../types/types';
 import { useNavigate } from 'react-router-dom';
 import { useAzureAdContext } from '../context/AzureAdContext';
 import { getAllTeams } from '../api/team';
-import RegisterPageLayout from '../components/RegisterPageLayout';
+import RegisterPageLayout from './RegisterPageLayout';
 import { useModalContext } from '@/context/ModalContext';
 
 export default function FirstTimeRegisterForm() {
