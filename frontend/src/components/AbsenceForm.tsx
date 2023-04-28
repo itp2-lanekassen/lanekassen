@@ -7,6 +7,7 @@ import {
   deleteAbsence,
   getDatePickerMaxForAbsence,
   getDatePickerMinForAbsence,
+  getDisableDates,
   postAbsence,
   updateAbsence
 } from '../API/AbsenceAPI';
@@ -35,6 +36,21 @@ export type FormValues = {
   comment?: string | undefined;
   absenceType: number;
 };
+
+// get all absence dates in arary
+async function setDates(
+  userId: number,
+  clickedAbsence: Absence | undefined,
+  setDisableDates: React.Dispatch<React.SetStateAction<Date[] | undefined>>
+) {
+  // setDisableDates(await getDisableDates(userId));
+
+  if (clickedAbsence) {
+    setDisableDates([]);
+  } else {
+    setDisableDates(await getDisableDates(userId));
+  }
+}
 
 //set max on datepicker state based on when the next absence starts
 export async function setMax(
@@ -79,10 +95,12 @@ const AbsenceForm: React.FC<ModalProps> = ({
   type = 'add',
   clickedAbsence
 }) => {
+  const [disableDates, setDisableDates] = React.useState<Date[]>();
   const queryClient = useQueryClient();
   const { absenceTypes } = useGlobalContext();
   const { openConfirmationBox, openMessageBox } = useModalContext();
   const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
+  const [nextAbsenceStartDateTo, setNextAbsenceStartDateTo] = React.useState<Date>();
   const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
 
   const [isApproved, setIsApproved] = React.useState<boolean>(
@@ -133,13 +151,16 @@ const AbsenceForm: React.FC<ModalProps> = ({
         comment: clickedAbsence.comment,
         absenceType: clickedAbsence.absenceTypeId
       });
+      //set min and max for datepicker based on other absences
+      setMax(currentUser.userId, clickedAbsence, formValues.startDate, setNextAbsenceStartDate);
+      setMin(currentUser.userId, clickedAbsence, formValues.startDate, setPreviousAbsenceEndDate);
     }
-    //set min and max for datepicker based on other absences
-    setMax(user.userId, clickedAbsence, startDate, setNextAbsenceStartDate);
-    setMin(user.userId, clickedAbsence, startDate, setPreviousAbsenceEndDate);
-  }, [clickedAbsence, startDate, user]);
+    setMax(currentUser.userId, clickedAbsence, formValues.startDate, setNextAbsenceStartDateTo);
+  }, [currentUser.userId, formValues.startDate, clickedAbsence, startDate, user]);
 
   React.useEffect(() => {
+    setDates(currentUser.userId, clickedAbsence, setDisableDates);
+    // setDates(currentUser.userId, clickedAbsence, setDisableDates);
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
@@ -149,18 +170,29 @@ const AbsenceForm: React.FC<ModalProps> = ({
     return () => {
       window.removeEventListener('keydown', handler);
     };
-  }, [onClose]);
+  }, [clickedAbsence, currentUser.userId, onClose]);
 
   //update form values on date picker change
-  const handleInputChange = (
-    date: Date | null,
-    event: React.SyntheticEvent | undefined,
-    name: string
-  ) => {
+  const handleInputChange = (name: string, date?: Date) => {
     setFormValues({
       ...formValues,
       [name]: date
     });
+    if (name === 'startDate') {
+      setFormValues({
+        ...formValues,
+        [name]: date,
+        endDate: undefined // reset endDate if startDate changes
+      });
+      // setMin(currentUser.userId, clickedAbsence, date, setPreviousAbsenceEndDate);
+      setMax(currentUser.userId, clickedAbsence, date, setNextAbsenceStartDateTo);
+    } else {
+      setFormValues({
+        ...formValues,
+        [name]: date
+      });
+      setMax(currentUser.userId, clickedAbsence, date, setNextAbsenceStartDateTo);
+    }
   };
 
   //update form values on comment change
@@ -258,29 +290,25 @@ const AbsenceForm: React.FC<ModalProps> = ({
           <DateField
             handleInputChange={handleInputChange}
             min={previousAbsenceEndDate}
-            max={formValues.endDate || nextAbsenceStartDate}
+            max={nextAbsenceStartDate}
             value={formValues.startDate}
             name="startDate"
             label="Fra"
+            disableArray={disableDates}
             title=""
-          ></DateField>
+          />
           <DateField
             handleInputChange={handleInputChange}
             min={formValues.startDate}
-            max={nextAbsenceStartDate}
+            max={nextAbsenceStartDateTo}
             value={formValues.endDate}
             name="endDate"
             label="Til"
-            title=""
-          ></DateField>
-          <AbsenceRadioField
-            formValues={formValues}
-            handleRadioChange={handleRadioChange}
-          ></AbsenceRadioField>
-          <CommentField
-            formValues={formValues}
-            handleInputChange={handleTextAreaChange}
-          ></CommentField>
+            disabled={formValues.startDate === undefined}
+            title={'Fyll ut startdato først'}
+          />
+          <AbsenceRadioField formValues={formValues} handleRadioChange={handleRadioChange} />
+          <CommentField formValues={formValues} handleInputChange={handleTextAreaChange} />
           {currentUser.admin && (
             <div className="flex items-center heading-xs space-x-5">
               <p onClick={() => setIsApproved(!isApproved)}>Godkjenn fravær</p>

@@ -3,12 +3,7 @@ import { DateField } from './DateField';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import SubmitButton from './SubmitButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  getDatePickerMaxForAbsence,
-  getDatePickerMinForAbsence,
-  getDisableDates,
-  postAbsence
-} from '../API/AbsenceAPI';
+import { getDisableDates, postAbsence } from '../API/AbsenceAPI';
 import { useUserContext } from '../context/UserContext';
 import { useGlobalContext } from '../context/GlobalContext';
 import { FormValues } from './AbsenceForm';
@@ -24,28 +19,6 @@ async function setDates(
   setDisableDates(await getDisableDates(userId));
 }
 
-//set max on datepicker state based on when the next absence starts
-async function setMax(
-  userId: number,
-  startDate: Date | undefined,
-  setNextAbsenceStartDate: React.Dispatch<React.SetStateAction<Date | undefined>>
-) {
-  if (startDate) {
-    setNextAbsenceStartDate(await getDatePickerMaxForAbsence(userId, new Date(startDate)));
-  }
-}
-
-//set min on datepicker state based when the previous absence ends
-async function setMin(
-  userId: number,
-  startDate: Date | undefined,
-  setPreviousAbsenceEndDate: React.Dispatch<React.SetStateAction<Date | undefined>>
-) {
-  if (startDate) {
-    setPreviousAbsenceEndDate(await getDatePickerMinForAbsence(userId, new Date(startDate)));
-  }
-}
-
 /**
  * Renders a view lets a user add new absences
  */
@@ -54,8 +27,6 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   const currentUser = useUserContext();
   const { absenceTypes } = useGlobalContext();
 
-  const [previousAbsenceEndDate, setPreviousAbsenceEndDate] = React.useState<Date>();
-  const [nextAbsenceStartDate, setNextAbsenceStartDate] = React.useState<Date>();
   const [disableDates, setDisableDates] = React.useState<Date[]>();
   const [isApproved, setIsApproved] = React.useState<boolean>(false);
   const { openMessageBox } = useModalContext();
@@ -78,20 +49,22 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   //get all dates that a user has registered an absence for in an array
   React.useEffect(() => {
     setDates(currentUser.userId, setDisableDates);
-    setMax(currentUser.userId, formValues.startDate, setNextAbsenceStartDate);
-    setMin(currentUser.userId, formValues.startDate, setPreviousAbsenceEndDate);
   }, [props.absences, formValues.startDate, currentUser]);
 
   //update form values on date picker change
-  const handleInputChange = (
-    date: Date | null,
-    event: React.SyntheticEvent | undefined,
-    name: string
-  ) => {
-    setFormValues({
-      ...formValues,
-      [name]: date
-    });
+  const handleInputChange = (name: string, date?: Date) => {
+    if (name === 'startDate') {
+      setFormValues({
+        ...formValues,
+        startDate: date,
+        endDate: undefined // reset endDate if startDate changes
+      });
+    } else {
+      setFormValues({
+        ...formValues,
+        [name]: date
+      });
+    }
   };
 
   //update form values on comment change
@@ -135,10 +108,6 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
     });
   };
 
-  const handleIsApprovedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsApproved(e.target.checked);
-  };
-
   return (
     <div className="md:h-full w-full px-[50px] md:px-0 relative m-auto">
       <h3 className="md:ml-[25px] md:text-left text-center md:text-2xl text-xl">Legg til fravær</h3>
@@ -148,34 +117,23 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
             <DateField
               handleInputChange={handleInputChange}
               name="startDate"
-              min={previousAbsenceEndDate}
-              max={formValues.endDate}
               value={formValues.startDate}
               label="Fra"
               disableArray={disableDates}
-              title={''}
-            ></DateField>
+            />
             <DateField
               handleInputChange={handleInputChange}
               name="endDate"
-              min={formValues.startDate}
-              max={nextAbsenceStartDate}
               value={formValues.endDate}
               label="Til"
               disableArray={disableDates}
-              disabled={formValues.startDate === undefined ? true : false}
+              disabled={formValues.startDate === undefined}
               title={'Fyll ut startdato først'}
-            ></DateField>
+            />
           </div>
           <div className="m-auto flex flex-col md:flex-col md:gap-[20px] md:justify-evenly mt-[10px] md:w-[350px]">
-            <AbsenceRadioField
-              formValues={formValues}
-              handleRadioChange={handleRadioChange}
-            ></AbsenceRadioField>
-            <CommentField
-              formValues={formValues}
-              handleInputChange={handleTextAreaChange}
-            ></CommentField>
+            <AbsenceRadioField formValues={formValues} handleRadioChange={handleRadioChange} />
+            <CommentField formValues={formValues} handleInputChange={handleTextAreaChange} />
             {currentUser.admin && (
               <div className="flex items-center heading-xs space-x-5">
                 <p onClick={() => setIsApproved(!isApproved)}>Godkjenn fravær</p>
@@ -183,8 +141,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
                   type="checkbox"
                   id="isApproved"
                   checked={isApproved}
-                  onChange={handleIsApprovedChange}
-                  // eslint-disable-next-line react/no-unknown-property
+                  onChange={(e) => setIsApproved(e.target.checked)}
                   className="space-x-5 h-5 w-5 accent-primary cursor-pointer"
                 />
               </div>
