@@ -9,6 +9,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useUserContext } from '@/context/UserContext';
 import classNames from 'classnames';
 import { useModalContext } from '@/context/ModalContext';
+import { format } from 'date-fns';
 
 /**
  * Renders a component that shows a users absence instance
@@ -37,11 +38,9 @@ export const AbsencePeriod = (props: {
   };
 
   //Check if absence period lasts for more that one day
-  let absencePeriod = new Date(props.absence.startDate).toLocaleDateString();
+  let absencePeriod = format(new Date(props.absence.startDate), 'P');
   if (props.absence.startDate != props.absence.endDate) {
-    absencePeriod = absencePeriod.concat(
-      ' - ' + new Date(props.absence.endDate).toLocaleDateString()
-    );
+    absencePeriod = absencePeriod.concat(' - ' + format(new Date(props.absence.endDate), 'P'));
   }
 
   // Display that absence comment is longer than what is shown
@@ -73,7 +72,7 @@ export const AbsencePeriod = (props: {
   return (
     <div
       className={classNames(
-        'md:w-[300px] w-full px-[50px] md:px-0 md:mx-6',
+        'md:w-[300px] w-full px-[50px] md:px-0 md:mx-6 rounded-2xl bg-primary-lighter',
         'text-grey-lightest font-Rubik overflow-hidden',
         'outline-primary outline-2 mb-2',
         props.isSelected && 'outline'
@@ -102,7 +101,7 @@ export const AbsencePeriod = (props: {
       </button>
       <div
         style={{ display: expandStatus[0] }}
-        className="flex flex-col text-primary subheading-small py-[10px] bg-primary-lighter overflow-hidden"
+        className="flex flex-col text-primary subheading-small py-[10px] overflow-hidden"
       >
         <p className="mx-[20px] pt-[10px] text-sm">
           <strong className="body-bold"> Fraværstype: </strong>
