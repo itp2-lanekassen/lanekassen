@@ -13,7 +13,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../api/absenceType';
 import { DateField } from './DateField';
 import { useModalContext } from '@/context/ModalContext';
-import { getDatePickerMaxForAbsence, getDisableDates } from './dateHelpers';
+import { getDatePickerMaxForAbsence, getDisableDates } from '../helpers/dateHelpers';
 
 type ModalProps = {
   startDate?: Date;

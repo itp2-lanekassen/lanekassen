@@ -10,7 +10,7 @@ import { FormValues } from '../AbsenceForm';
 import * as React from 'react';
 import { Absence } from '@/types/interfaces';
 import { useModalContext } from '@/context/ModalContext';
-import { getDatePickerMaxForAbsence, getDisableDates } from '../dateHelpers';
+import { getDatePickerMaxForAbsence, getDisableDates } from '../../helpers/dateHelpers';
 
 /**
  * Renders a view lets a user add new absences

@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import { updateAbsence } from '@/api/absence';
 import { getAbsenceTypeById } from '@/api/absenceType';
 import { useModalContext } from '@/context/ModalContext';
-import { getDatePickerMaxForAbsence, getDisableDates } from '../dateHelpers';
+import { getDatePickerMaxForAbsence, getDisableDates } from '../../helpers/dateHelpers';
 
 interface EditAbsenceViewProps {
   setAbsence: React.Dispatch<React.SetStateAction<Absence | undefined>>;
