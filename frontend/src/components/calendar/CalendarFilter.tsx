@@ -41,7 +41,7 @@ const CalendarFilterItem = ({
   );
 };
 
-export default function FilterComponents() {
+export default function CalendarFilter() {
   const { departments, sections, roles, subjectFields, teams } = useGlobalContext();
   const { dates, setDates, filter, setFilter } = useCalendarContext();
 

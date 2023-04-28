@@ -3,7 +3,7 @@ import { Section, SectionDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateSection, postSection } from '@/API/SectionAPI';
-import Dropdown from '../Dropdown';
+import Dropdown from '@/components/Dropdown';
 import { useModalContext } from '@/context/ModalContext';
 
 interface SectionEditProps {

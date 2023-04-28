@@ -3,9 +3,9 @@ import { Section } from '@/types/types';
 import { Add } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Fragment } from 'react';
-import SubmitButton from '../SubmitButton';
-import DeleteButton from './DeleteButton';
-import EditButton from './EditButton';
+import SubmitButton from '@/components/SubmitButton';
+import DeleteButton from '../DeleteButton';
+import EditButton from '../EditButton';
 import { useModalContext } from '@/context/ModalContext';
 
 interface SectionListProps {

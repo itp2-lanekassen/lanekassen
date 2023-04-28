@@ -1,9 +1,9 @@
 import { deleteAbsenceType } from '@/API/AbsenceTypeAPI';
 import { AbsenceType } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CalendarCellDisplay } from './CalendarCellDisplay';
-import DeleteButton from './DeleteButton';
-import EditButton from './EditButton';
+import { CalendarCellDisplay } from '../../CalendarCellDisplay';
+import DeleteButton from '../DeleteButton';
+import EditButton from '../EditButton';
 import UpdateAbsenceTypeComponent from './UpdateAbsencetypeComponent';
 import { useModalContext } from '@/context/ModalContext';
 

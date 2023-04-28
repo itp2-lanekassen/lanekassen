@@ -1,7 +1,7 @@
-import SubmitButton from '../SubmitButton';
+import SubmitButton from '../../SubmitButton';
 import { useQuery } from '@tanstack/react-query';
 import { getAllAbsenceTypes } from '@/API/AbsenceTypeAPI';
-import AddAbsenceTypeComponent from '@/components/AdminPage/AddAbsenceTypeComponent';
+import AddAbsenceTypeComponent from './AddAbsenceTypeComponent';
 import { useEffect, useState } from 'react';
 import AbsenceTypeRow from './AbsenceTypeRow';
 import { Add } from '@mui/icons-material';

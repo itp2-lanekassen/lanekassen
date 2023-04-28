@@ -3,7 +3,7 @@ import { Role, RoleDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateRole, postRole } from '@/API/RoleAPI';
-import DropdownMultiSelect from '../DropdownMultiSelect';
+import DropdownMultiSelect from '@/components/DropdownMultiSelect';
 import { useModalContext } from '@/context/ModalContext';
 
 interface RoleEditProps {

@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { useInView } from 'react-intersection-observer';
-import FilterComponents from '@/components/calendar/CalendarFilter';
+import CalendarFilter from '@/components/calendar/CalendarFilter';
 import CalendarHeader from '@/components/calendar/CalendarHeader';
 import CalendarRow from '@/components/calendar/CalendarRow';
 import PageLayout from '@/components/PageLayout';
@@ -25,7 +25,7 @@ const CalendarPage = () => {
 
   return (
     <PageLayout title="Kalender">
-      <FilterComponents />
+      <CalendarFilter />
 
       <div className="w-full grid grid-cols-calendar-columns place-items-center gap-0.5 overflow-x-auto">
         <div className="row-start-1 row-span-3 flex flex-col gap-1 w-full self-start pt-1">

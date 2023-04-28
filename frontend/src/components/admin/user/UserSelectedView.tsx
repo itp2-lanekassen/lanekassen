@@ -9,9 +9,9 @@ import { useGlobalContext } from '@/context/GlobalContext';
 import { EmploymentType, Team, User } from '@/types/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import Dropdown from '../Dropdown';
-import DropdownMultiSelect from '../DropdownMultiSelect';
-import SubmitButton from '../SubmitButton';
+import Dropdown from '@/components/Dropdown';
+import DropdownMultiSelect from '@/components/DropdownMultiSelect';
+import SubmitButton from '@/components/SubmitButton';
 import UserView from './UserView';
 import { useModalContext } from '@/context/ModalContext';
 

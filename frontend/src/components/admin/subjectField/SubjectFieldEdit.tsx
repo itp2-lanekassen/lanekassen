@@ -3,7 +3,7 @@ import { SubjectField, SubjectFieldDTO } from '@/types/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { updateSubjectField, postSubjectField } from '@/API/SubjectFieldAPI';
-import Dropdown from '../Dropdown';
+import Dropdown from '@/components/Dropdown';
 import { useModalContext } from '@/context/ModalContext';
 
 interface SubjectFieldEditProps {

@@ -4,7 +4,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { getUserByAzureId } from '../API/UserAPI';
 import { User } from '../types/types';
 import { useAzureAdContext } from './AzureAdContext';
-import PageNotFound from '@/pages/PageNotFound';
+import NotFoundPage from '@/pages/NotFoundPage';
 
 interface UserContextProps {
   children?: ReactNode;
@@ -42,7 +42,7 @@ const UserContextProvider: FC<UserContextProps> = ({ children }) => {
     return <Navigate to="/registrer-bruker" />;
   }
   if (location.pathname === '/admin' && !currentUser.admin) {
-    return <PageNotFound />;
+    return <NotFoundPage />;
   }
 
   return <UserContext.Provider value={currentUser}>{children}</UserContext.Provider>;
