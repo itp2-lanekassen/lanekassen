@@ -75,10 +75,18 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
 
   //update form values on date picker change
   const handleInputChange = (name: string, date?: Date) => {
-    setFormValues({
-      ...formValues,
-      [name]: date
-    });
+    if (name === 'startDate') {
+      setFormValues({
+        ...formValues,
+        startDate: date,
+        endDate: undefined
+      });
+    } else {
+      setFormValues({
+        ...formValues,
+        [name]: date
+      });
+    }
   };
 
   //update form values on comment change
@@ -151,6 +159,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
               disableArray={disabledDates}
               value={formValues.endDate}
               label="Til"
+              title={'Fyll ut startdato først'}
             />
           </div>
           <div className="m-auto flex flex-col md:gap-[20px] md:justify-evenly mt-[10px] md:w-[350px]">
