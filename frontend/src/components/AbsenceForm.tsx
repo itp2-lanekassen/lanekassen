@@ -86,16 +86,14 @@ const AbsenceForm: React.FC<ModalProps> = ({
 
   React.useEffect(() => {
     //When editing an absence, put all the current values in the fields of the AbsenceForm
-    if (clickedAbsence) {
-      const date = clickedAbsence?.endDate || formValues.startDate;
+    const date = clickedAbsence?.endDate || formValues.startDate;
 
-      if (!date) return;
-      //set max on datepicker state based on when the next absence starts
+    if (!date) return;
+    //set max on datepicker state based on when the next absence starts
 
-      const datePickerMax = getDatePickerMaxForAbsence(new Date(date), absences || []);
+    const datePickerMax = getDatePickerMaxForAbsence(new Date(date), absences || []);
 
-      setMaxToDate(datePickerMax);
-    }
+    setMaxToDate(datePickerMax);
   }, [clickedAbsence, absences, formValues.startDate]);
 
   React.useEffect(() => {
