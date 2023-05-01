@@ -1,8 +1,6 @@
-import { getDepartmentById } from '@/api/department';
-import { getSectionById } from '@/api/section';
 import { deleteUser } from '@/api/user';
 import { EmploymentType, User } from '@/types/interfaces';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import DeleteButton from '../DeleteButton';
 import EditButton from '../EditButton';
 import UserSelectedView from './UserSelectedView';
@@ -19,14 +17,6 @@ export default function UserRow(props: {
 }) {
   const queryClient = useQueryClient();
   const currentUser = useUserContext();
-  const { data: department } = useQuery(
-    [`dep-${props.user.userId}`],
-    async () => (await getDepartmentById(props.user.departmentId)).data
-  );
-  const { data: section } = useQuery(
-    [`sec-${props.user.userId}`],
-    async () => (await getSectionById(props.user.sectionId)).data
-  );
 
   // To edit a user, change view to the display of a chosen user's information
   const handleEdit = async () => {
@@ -66,8 +56,8 @@ export default function UserRow(props: {
       <p className="flex-1 text-left ml-3 xl:ml-6 hidden md:block">
         {EmploymentType[props.user.employmentType]}
       </p>
-      <p className="flex-1 text-left  xl:ml-12">{department?.name}</p>
-      <p className="flex-1 text-left ml-3 hidden md:block">{section?.name}</p>
+      <p className="flex-1 text-left  xl:ml-12">{props.user.department?.name}</p>
+      <p className="flex-1 text-left ml-3 hidden md:block">{props.user.section?.name}</p>
       <EditButton onClick={handleEdit} />
       <DeleteButton
         onClick={() =>

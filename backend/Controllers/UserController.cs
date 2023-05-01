@@ -78,6 +78,8 @@ public class UserController : ControllerBase {
       .Include(user => user.SubjectFields)
       .Include(user => user.Roles)
       .Include(user => user.Teams)
+      .Include(user => user.Department)
+      .Include(user => user.Section)
       .ToListAsync();
 
     return Ok(users);
@@ -209,7 +211,13 @@ public class UserController : ControllerBase {
     [FromQuery(Name = "subjectFields")] List<int> SubjectFields,
     [FromQuery(Name = "size")] int Size = 20
   ) {
-    IQueryable<User> users = _context.Users.Include(u => u.SubjectFields).Include(u => u.Roles).Include(u => u.Teams);
+    IQueryable<User> users = _context.Users
+      .AsNoTracking()
+      .Include(u => u.SubjectFields)
+      .Include(u => u.Roles)
+      .Include(u => u.Teams)
+      .Include(u => u.Department)
+      .Include(u => u.Section);
 
     if (ExcludeIds.Count > 0) {
       users = users.Where(u => !ExcludeIds.Contains(u.UserId));
