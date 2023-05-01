@@ -22,7 +22,7 @@ const FilterDescription = ({ className }: FilterDescriptionProps) => {
       </button>
       {showDescription && (
         <div
-          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-card-one z-50 px-4 py-2 rounded-lg text-primary border-primary border-2"
+          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-card-one-light z-50 px-4 py-2 rounded-lg text-primary border-primary border-2"
           onMouseEnter={() => setShowDescription(true)}
           onMouseLeave={() => setShowDescription(false)}
         >
