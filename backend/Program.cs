@@ -28,7 +28,7 @@ IConfigurationRoot config =
 builder.Services.AddControllers().AddJsonOptions(opt => {
   opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
   // Uncomment this to remove null values from response
-  // opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+  opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 // Add Swagger Services. Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

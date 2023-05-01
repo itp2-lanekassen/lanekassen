@@ -73,13 +73,13 @@ public class UserController : ControllerBase {
 
   [HttpGet]
   public async Task<IActionResult> GetUsers() {
-    List<User> users = await _context.Users.ToListAsync();
-    foreach (User user in users) {
-      _context.Entry(user).Collection(user => user.SubjectFields).Load();
-      _context.Entry(user).Collection(user => user.Roles).Load();
-      _context.Entry(user).Collection(user => user.Teams).Load();
-      _context.Entry(user).Collection(user => user.Absences).Load();
-    }
+    List<User> users = await _context.Users
+      .AsNoTracking()
+      .Include(user => user.SubjectFields)
+      .Include(user => user.Roles)
+      .Include(user => user.Teams)
+      .ToListAsync();
+
     return Ok(users);
   }
 
