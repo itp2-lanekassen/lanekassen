@@ -1,22 +1,39 @@
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
 import { useCalendarContext } from '@/context/CalendarContext';
 import classNames from 'classnames';
-import { add, sub } from 'date-fns';
+import { add, differenceInDays, isWeekend } from 'date-fns';
 
 const CalendarHeader = () => {
-  const { setDates, columns } = useCalendarContext();
+  const { dates, setDates, columns } = useCalendarContext();
 
   const handleWeek = (addWeek = false) => {
-    if (addWeek) {
-      return setDates((dates) => ({
-        from: add(new Date(dates.from), { weeks: 1 }).toISOString(),
-        to: add(new Date(dates.to), { weeks: 1 }).toISOString()
-      }));
+    const diff = Math.abs(differenceInDays(new Date(dates.from), new Date(dates.to)));
+
+    if (diff < 7) {
+      // workaround to ensure correct date range with weekens
+      // as datepicker does not allow minimun date ranges
+      return setDates((oldDates) => {
+        const newFrom = add(new Date(oldDates.from), { days: diff });
+        let newTo = newFrom;
+
+        for (let i = 0; i < diff; i++) {
+          newTo = add(newTo, { days: 1 });
+
+          while (isWeekend(newTo)) {
+            newTo = add(newTo, { days: 1 });
+          }
+        }
+
+        return {
+          from: newFrom.toISOString(),
+          to: newTo.toISOString()
+        };
+      });
     }
 
-    setDates((dates) => ({
-      from: sub(new Date(dates.from), { weeks: 1 }).toISOString(),
-      to: sub(new Date(dates.to), { weeks: 1 }).toISOString()
+    setDates((oldDates) => ({
+      from: add(new Date(oldDates.from), { weeks: addWeek ? 1 : -1 }).toISOString(),
+      to: add(new Date(oldDates.to), { weeks: addWeek ? 1 : -1 }).toISOString()
     }));
   };
 
@@ -60,7 +77,8 @@ const CalendarHeader = () => {
               <ArrowBack />
             </button>
           )}
-          {length > 2 && week}
+          {/* Show week number if week has more than 2 days or we show less than 3 weeks */}
+          {(length > 2 || arr.length < 3) && week}
           {i === arr.length - 1 && (
             <button
               className="text-sm absolute right-0 hover:bg-primary"
