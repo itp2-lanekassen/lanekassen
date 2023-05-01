@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lanekassen.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230412085540_newRelations2")]
-    partial class newRelations2
+    [Migration("20230501093001_InititalCreate")]
+    partial class InititalCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -432,16 +432,11 @@ namespace Lanekassen.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TeamId"));
 
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("TeamId");
-
-                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Teams");
 
@@ -674,13 +669,6 @@ namespace Lanekassen.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("Lanekassen.Models.Team", b =>
-                {
-                    b.HasOne("Lanekassen.Models.Department", null)
-                        .WithMany("Teams")
-                        .HasForeignKey("DepartmentId");
-                });
-
             modelBuilder.Entity("Lanekassen.Models.User", b =>
                 {
                     b.HasOne("Lanekassen.Models.Department", "Department")
@@ -751,8 +739,6 @@ namespace Lanekassen.Migrations
                     b.Navigation("Sections");
 
                     b.Navigation("SubjectFields");
-
-                    b.Navigation("Teams");
 
                     b.Navigation("Users");
                 });

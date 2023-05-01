@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
-import { updateAbsenceType } from '@/api/absenceType';
+import { postAbsenceType } from '@/api/absenceType';
 import { useEffect, useState } from 'react';
 import { CalendarCellDisplay } from '../../CalendarCellDisplay';
-import { AbsenceType } from '@/types/interfaces';
 import AbsenceTypeView from './AbsenceTypeView';
 import ColorPickerComponent from './ColorPicker';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -17,23 +16,28 @@ type FormValues = {
   colorCode: string;
 };
 
-export default function UpdateAbsenceTypeComponent(props: {
-  absenceType: AbsenceType;
+export default function AddAbsenceTypeComponent(props: {
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
-  //initialize form values
-  const [formValues, setFormValues] = useState<FormValues>({
-    name: props.absenceType.name,
-    code: props.absenceType.code,
-    colorCode: props.absenceType.colorCode
-  });
   const { openMessageBox } = useModalContext();
   const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = React.useState(false);
-  const [color, setColor] = useState(formValues.colorCode);
+  const [color, setColor] = useState('#000000');
 
-  //update form values on input change
+  const { mutate: addAbsenceType } = useMutation({
+    mutationFn: postAbsenceType,
+    onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
+    onError: () => openMessageBox('Fraværstypen eksisterer allerede')
+  });
+
+  const [formValues, setFormValues] = useState<FormValues>({
+    name: '',
+    code: '',
+    colorCode: '#000000'
+  });
+
+  // Update form values on input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormValues({
@@ -42,30 +46,34 @@ export default function UpdateAbsenceTypeComponent(props: {
     });
   };
 
-  //initialize postAbsence mutation
-  const { mutate: updateAbsenceTypeToDatabase } = useMutation({
-    mutationFn: (options: AbsenceType) => updateAbsenceType(options.absenceTypeId, options),
-    onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
-    onError: () => openMessageBox('Fraværstypen eksisterer allerede')
-  });
-
-  //Post absence to database
+  // Post absence to database
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (formValues.name === '' || formValues.code === '' || formValues.colorCode === '#000000') {
       return;
     }
     e.preventDefault();
 
-    updateAbsenceTypeToDatabase({
-      absenceTypeId: props.absenceType.absenceTypeId,
+    addAbsenceType({
       name: formValues.name,
       code: formValues.code,
       colorCode: formValues.colorCode
     });
+
+    // 1Reset form values
+    setFormValues({
+      name: '',
+      code: '',
+      colorCode: '#000000'
+    });
+
+    // Clear form fields
+    const form = document.getElementById('AbsenceTypeForm') as HTMLFormElement;
+    form.reset();
+
     props.setView(<AbsenceTypeView />);
   };
 
-  // disabled button until all fields are filled
+  // Disable submitbutton until all fields are filled
   useEffect(() => {
     if (formValues.name === '' || formValues.code === '' || formValues.colorCode === '#000000') {
       setIsDisabled(true);
@@ -75,7 +83,7 @@ export default function UpdateAbsenceTypeComponent(props: {
   }, [formValues]);
 
   function handleColorChange(selectedColor: string) {
-    setColor(selectedColor); // update state with selected color value
+    setColor(selectedColor); // Update state with selected color value
     setFormValues({
       ...formValues,
       colorCode: selectedColor
@@ -83,8 +91,8 @@ export default function UpdateAbsenceTypeComponent(props: {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <h3 className="text-xl">Oppdater fraværstype</h3>
+    <div className="flex flex-col items-center w-full">
+      <h3 className="text-xl">Legg til ny fraværstype</h3>
       <form
         className="flex flex-col gap-1 items-center"
         onSubmit={handleSubmit}
@@ -98,12 +106,13 @@ export default function UpdateAbsenceTypeComponent(props: {
           type="text"
           name="name"
           id="name"
-          value={formValues.name}
           onChange={handleInputChange}
         />
+
         <label className="mt-2" htmlFor="colorCode">
           Velg farge:
         </label>
+
         <div className="relative">
           <Input
             type="text"
@@ -134,8 +143,9 @@ export default function UpdateAbsenceTypeComponent(props: {
             </div>
           )}
         </div>
+
         <label className="mt-2" htmlFor="code">
-          Kode (maks 7 tegn):
+          Forkortelse (maks 7 tegn):
         </label>
         <input
           className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
@@ -143,12 +153,11 @@ export default function UpdateAbsenceTypeComponent(props: {
           name="code"
           id="code"
           maxLength={7}
-          value={formValues.code}
           onChange={handleInputChange}
         />
         <br />
         {/* Preview Calendarcell component with and without hash */}
-        <label>Forhåndsvisning (Godkjent / ikke-godkjent):</label>
+        <label className="">Forhåndsvisning (Godkjent / ikke-godkjent):</label>
         <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
 
         <br />
@@ -158,7 +167,7 @@ export default function UpdateAbsenceTypeComponent(props: {
             disabled={isDisabled}
             className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light disabled:cursor-not-allowed"
           >
-            Oppdater
+            Legg til
           </button>
           <button
             className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light"

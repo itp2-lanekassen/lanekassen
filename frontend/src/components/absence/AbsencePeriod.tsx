@@ -12,7 +12,7 @@ import { useModalContext } from '@/context/ModalContext';
 import { format } from 'date-fns';
 
 /**
- * Renders a component that shows a users absence instance
+ * Renders a absence period in AbsenceView
  */
 export const AbsencePeriod = (props: {
   isSelected?: boolean;
@@ -26,7 +26,6 @@ export const AbsencePeriod = (props: {
   const currentUser = useUserContext();
   const { openConfirmationBox, openMessageBox } = useModalContext();
 
-  //Expand/collapse component to show more/less information on click
   const expandCollapse = () => {
     if (expandStatus[0] == 'none') {
       setExpandStatus(['block', '20px 20px 0px 0px']);
@@ -37,7 +36,7 @@ export const AbsencePeriod = (props: {
     }
   };
 
-  //Check if absence period lasts for more that one day
+  // Check if absence period lasts for more than one day
   let absencePeriod = format(new Date(props.absence.startDate), 'P');
   if (props.absence.startDate != props.absence.endDate) {
     absencePeriod = absencePeriod.concat(' - ' + format(new Date(props.absence.endDate), 'P'));
@@ -52,7 +51,7 @@ export const AbsencePeriod = (props: {
     return comment;
   };
 
-  //Check if absence has a comment to display
+  // Check if absence has a comment to display
   let notice;
   if (props.absence.comment && props.absence.comment.length > 0) {
     notice = (

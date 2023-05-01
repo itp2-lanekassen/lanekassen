@@ -65,6 +65,7 @@ const CalendarContextProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  // Update to date when number of weeks changes
   useEffect(() => {
     startTransition(() => {
       setDates((d) => ({

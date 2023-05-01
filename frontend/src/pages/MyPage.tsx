@@ -23,10 +23,8 @@ import { useModalContext } from '@/context/ModalContext';
  */
 export default function MyPage() {
   const queryClient = useQueryClient();
-  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
-  const [errorAlertMessage, setErrorAlertMessage] = useState('');
-  const { openMessageBox } = useModalContext();
 
+  const { openMessageBox } = useModalContext();
   const currentUser = useUserContext();
   const { departments } = useGlobalContext();
 
@@ -47,7 +45,8 @@ export default function MyPage() {
   const [selectedRoles, setSelectedRoles] = useState<number[]>(
     currentUser.roles.map((r: Role) => r.roleId)
   );
-
+  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
+  const [errorAlertMessage, setErrorAlertMessage] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
   const [isDropdownDisabled, setIsDropdownDisabled] = useState(true);
 

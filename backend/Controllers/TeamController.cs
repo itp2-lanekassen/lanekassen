@@ -23,7 +23,6 @@ public class TeamController : ControllerBase {
       return BadRequest(ModelState);
     }
 
-    // Check if team already exists
     if (await _context.Teams.AnyAsync(t => t.Name == team.Name)) {
       return BadRequest("Team already exists");
     }
@@ -59,7 +58,6 @@ public class TeamController : ControllerBase {
       return BadRequest("Invalid team id");
     }
 
-    // Check if team already exists
     if (await _context.Teams.AnyAsync(t => t.Name == team.Name && t.TeamId != id)) {
       return BadRequest("Team already exists");
     }

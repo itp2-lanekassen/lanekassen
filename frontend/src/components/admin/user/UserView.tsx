@@ -12,8 +12,7 @@ export default function UserView() {
   const [view, setView] = useState<JSX.Element>(<></>);
   const { isLoading, data: users } = useQuery(['users'], async () => (await getAllUsers()).data);
 
-  // Add matching users to new list to avoid having to load data again
-  // when the query changes
+  // Add matching users to a new list to avoid having to load data again when the query changes
   const searchForUsers = (event: ChangeEvent<HTMLInputElement>) => {
     const matches: User[] = [];
     users?.forEach((user) => {

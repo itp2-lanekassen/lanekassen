@@ -28,7 +28,6 @@ public class RoleController : ControllerBase {
       return BadRequest("Invalid department id");
     }
 
-    // Check if role already exists
     if (await _context.Roles.AnyAsync(r => r.Name == role.Name && r.Departments.Contains(department))) {
       return BadRequest("Role already exists");
     }
@@ -71,7 +70,6 @@ public class RoleController : ControllerBase {
       return BadRequest("Invalid department id");
     }
 
-    // Check if role already exists
     if (await _context.Roles.AnyAsync(r => r.Name == role.Name && r.Departments.Contains(department) && r.RoleId != id)) {
       return BadRequest("Role already exists");
     }

@@ -13,6 +13,7 @@ export function getUserById(userId: number): Promise<AxiosResponse<User>> {
   return axios.get(`${url}/${userId}`);
 }
 
+// Used to check if a user exists in the database. If not, the user will be redirected to the registration page.
 export function getUserByAzureId(azureId: string): Promise<AxiosResponse<User>> {
   return axios.get(`${url}/azure/${azureId}`);
 }
@@ -57,30 +58,3 @@ export default {
   updateUser,
   deleteUser
 };
-
-/* export const getUser = async () => {
-  try {
-    const fakeId = 'This-is-a-fake-azure-id'; // John Doe has this AzureId in the database
-    axios
-      .get(`${backendUrl}/User/azure/${fakeId}`)
-      .then((response) => {
-        const data = response.data;
-        if (data != null || data != undefined) {
-          console.log('User exists');
-          console.log(data);
-          // TODO: navigate to home page
-        } else {
-          console.error('Data is null or undefined');
-        }
-      })
-      .catch((error) => {
-        console.log('User not found');
-        console.error(error);
-        // TODO: navigate to registration page
-      });
-  } catch (error) {
-    console.log('Error logging in');
-    console.error(error);
-    // TODO: handle error
-  }
-}; */

@@ -7,7 +7,6 @@ import { deleteAbsence, postAbsence, updateAbsence, getAbsencesByUserId } from '
 import { useGlobalContext } from '../context/GlobalContext';
 import { AbsenceRadioField } from './AbsenceRadioField';
 import { CommentField } from './CommentField';
-
 import { useUserContext } from '@/context/UserContext';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../api/absenceType';

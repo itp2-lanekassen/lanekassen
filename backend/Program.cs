@@ -34,16 +34,11 @@ builder.Services.AddControllers().AddJsonOptions(opt => {
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add Database context
 builder.Services.AddDbContext<ApiDbContext>(
-/*   opt => opt
-  .UseNpgsql(builder.Configuration.GetConnectionString("LanekassenDB"))
-  .EnableSensitiveDataLogging(true) */ // gammel måte å gjøre det på. Fra appsettings.json og ikke .env
   opt => opt
   .UseNpgsql(connectionString)
 );
 
-// Add CORS
 builder.Services.AddCors(options => {
   options.AddPolicy("AllowLocalhost",
       builder => {

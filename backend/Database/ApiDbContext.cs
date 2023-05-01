@@ -75,6 +75,7 @@ public class ApiDbContext : DbContext {
       new SubjectField { SubjectFieldId = 9, Name = "Rekruttering og kompetanse", DepartmentId = department1.DepartmentId }
     );
 
+    // Todo: Delete testuser before production
     _ = modelBuilder.Entity<User>(e => {
       _ = e.HasData(
         new {

@@ -8,15 +8,15 @@ Open postgres cli and enter:
 
 ```sql
 -- Create the database
-create database lanekassen;
+create database <database>;
 -- Create the user
-create user lanekassen_admin with password 'lanekassen-2023';
+create user <user> with password <password>;
 -- Add user to database
-grant all privileges on database lanekassen to lanekassen_admin;
+grant all privileges on database <database> to <user>;
 -- Change to new database 
-\c lanekassen
+\c <database>
 -- Grant rights
-grant all on schema public to lanekassen_admin;
+grant all on schema public to <user>;
 ```
 
 Installing entity framework:

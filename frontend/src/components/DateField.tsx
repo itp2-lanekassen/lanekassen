@@ -17,7 +17,7 @@ export const DateField = (props: {
   disabled?: boolean;
   title?: string;
 }) => {
-  //update form values on input change
+  // Update form values on input change
   const handleInputChange = (date: Date | null) =>
     props.handleInputChange(props.name, date ?? undefined);
 

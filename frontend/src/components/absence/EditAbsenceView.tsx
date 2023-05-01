@@ -20,24 +20,22 @@ interface EditAbsenceViewProps {
 }
 
 /**
- * Renders a view lets a user edit an absence
+ * Renders a view that lets a user edit an absence in AbsenceView
  */
 export const EditAbsenceView = (props: EditAbsenceViewProps) => {
   const queryClient = useQueryClient();
-
   const currentUser = useUserContext();
-
-  const [isApproved, setIsApproved] = React.useState<boolean>(props.selectedAbsence.isApproved);
   const { openMessageBox } = useModalContext();
 
-  //initialize mutation for updating an absence
+  const [isApproved, setIsApproved] = React.useState<boolean>(props.selectedAbsence.isApproved);
+
   const { mutate: editAbsence } = useMutation({
     mutationFn: (absence: Absence) => updateAbsence(absence),
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
     onError: () => openMessageBox('Fravær kunne ikke oppdateres')
   });
 
-  //initialize form values with current values for the absence selected for editing
+  // Initialize form values with current values for the absence selected for editing
   const [formValues, setFormValues] = React.useState<FormValues>({
     startDate: new Date(props.selectedAbsence.startDate),
     endDate: new Date(props.selectedAbsence.endDate),
@@ -51,7 +49,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
     props.selectedAbsence
   );
 
-  //update form values when another absence is selected
+  // Update form values when another absence is selected
   useEffect(() => {
     setFormValues({
       startDate: new Date(props.selectedAbsence.startDate),
@@ -61,7 +59,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
     });
   }, [props.selectedAbsence]);
 
-  //update form values on date picker change
+  // Update form values on date picker change
   const handleInputChange = (name: string, date?: Date) => {
     if (name === 'startDate') {
       setFormValues({
@@ -77,7 +75,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
     }
   };
 
-  //update form values on comment change
+  // Update form values on comment change
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormValues({
@@ -86,7 +84,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
     });
   };
 
-  //update form values on radio change
+  // Update form values on radio change
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -94,7 +92,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
     });
   };
 
-  //Update absence in database
+  // Update absence in database
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -103,7 +101,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
     //get the updated absence type from database
     const updatedAbsenceType = (await getAbsenceTypeById(formValues.absenceType)).data;
 
-    //Make comment undefined if it is an empty string
+    // Make comment undefined if it is an empty string
     let updatedComment;
     if (formValues.comment === '') {
       updatedComment = undefined;
@@ -122,7 +120,7 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
       isApproved: currentUser.admin ? isApproved : false,
       comment: updatedComment
     });
-    //redirect to AddAbsenceView
+    // Redirect to AddAbsenceView
     props.setAbsence(undefined);
   };
 
