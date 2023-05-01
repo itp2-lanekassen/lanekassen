@@ -33,7 +33,6 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
       .join(' ');
   };
 
-  // Expand/collapse component to show more/less information on click
   // Add data to fields in dropdown if clicked for the first time
   const expandCollapse = async () => {
     if (isSet) return setIsSet(false);

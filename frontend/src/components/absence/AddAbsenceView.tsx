@@ -13,24 +13,23 @@ import { useModalContext } from '@/context/ModalContext';
 import useAbsenceMaxDate from '@/helpers/useAbsenceMaxDate';
 
 /**
- * Renders a view lets a user add new absences
+ * Renders a view that lets a user add new absences
  */
 export const AddAbsenceView = (props: { absences: Absence[] }) => {
   const queryClient = useQueryClient();
   const currentUser = useUserContext();
   const { absenceTypes } = useGlobalContext();
-
-  const [isApproved, setIsApproved] = React.useState<boolean>(false);
   const { openMessageBox } = useModalContext();
 
-  //initialize postAbsence mutation
+  const [isApproved, setIsApproved] = React.useState<boolean>(false);
+
   const { mutate: addAbsence } = useMutation({
     mutationFn: postAbsence,
     onSuccess: () => queryClient.invalidateQueries(['absences', { userId: currentUser.userId }]),
     onError: () => openMessageBox('Fraværet eksisterer allerede')
   });
 
-  //initialize form values
+  // Initialize form values
   const [formValues, setFormValues] = React.useState<FormValues>({
     startDate: undefined,
     endDate: undefined,
@@ -40,7 +39,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
 
   const { disabledDates, maxToDate } = useAbsenceMaxDate(formValues.startDate, props.absences);
 
-  //update form values on date picker change
+  // Update form values on date picker change
   const handleInputChange = (name: string, date?: Date) => {
     if (name === 'startDate') {
       setFormValues({
@@ -56,7 +55,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
     }
   };
 
-  //update form values on comment change
+  // Update form values on comment change
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormValues({
@@ -65,7 +64,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
     });
   };
 
-  //update form values on radio change
+  // Update form values on radio change
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -73,7 +72,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
     });
   };
 
-  //Post absence to database
+  // Post absence to database
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -88,7 +87,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
       userId: currentUser.userId
     });
 
-    //reset values on submit
+    // Reset values on submit
     setFormValues({
       startDate: undefined,
       endDate: undefined,

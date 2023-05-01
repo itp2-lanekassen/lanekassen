@@ -5,7 +5,7 @@ import TabContext from '@mui/lab/TabContext';
 import { useState } from 'react';
 import PageLayout from '@/pages/PageLayout';
 import SectionView from '@/components/admin/section/SectionView';
-import AbsenceTypeView from '@/components/admin/absence/AbsenceTypeView';
+import AbsenceTypeView from '@/components/admin/absenceType/AbsenceTypeView';
 import TeamView from '@/components/admin/team/TeamView';
 import SubjectFieldView from '@/components/admin/subjectField/SubjectFieldView';
 import DepartmentView from '@/components/admin/department/DepartmentView';
@@ -18,7 +18,6 @@ const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagområd
 export default function AdminPage() {
   const [value, setValue] = useState(0);
 
-  //options for dropdown
   const dropdownOptions = tabLabels.map((label, index) => ({
     label,
     value: index
@@ -86,11 +85,7 @@ export default function AdminPage() {
           <div className="w-full border-1 border-primary-light rounded-r-xl rounded-l-xl md:rounded-l-none overflow-y-auto h-3/5-screen">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
-                {label === 'Brukere' && (
-                  <div>
-                    <UserTab />
-                  </div>
-                )}
+                {label === 'Brukere' && <UserTab />}
                 {label === 'Fraværstyper' && <AbsenceTypeView />}
                 {label === 'Avdeling' && <DepartmentView />}
                 {label === 'Seksjon' && <SectionView />}

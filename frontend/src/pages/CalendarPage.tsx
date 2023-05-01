@@ -11,9 +11,7 @@ import { startOfWeek } from 'date-fns';
 
 const CalendarPage = () => {
   const currentUser = useUserContext();
-
   const { queryResult, updateFromDate } = useCalendarContext();
-
   const { openAbsenceForm } = useModalContext();
 
   const { ref } = useInView({

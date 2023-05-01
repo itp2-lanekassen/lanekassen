@@ -19,6 +19,7 @@ export default function UserRow(props: {
 }) {
   const queryClient = useQueryClient();
   const currentUser = useUserContext();
+  const { openConfirmationBox, openMessageBox } = useModalContext();
   const { data: department } = useQuery(
     [`dep-${props.user.userId}`],
     async () => (await getDepartmentById(props.user.departmentId)).data
@@ -46,7 +47,6 @@ export default function UserRow(props: {
       })
       .join(' ');
   };
-  const { openConfirmationBox, openMessageBox } = useModalContext();
   const { mutate: deleteExistingUser } = useMutation({
     mutationFn: deleteUser,
     onSuccess: () => {

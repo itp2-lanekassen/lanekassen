@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Dispatch, SetStateAction } from 'react';
 
 /**
- * Renders a scroll window that shows all absence periods for a user
+ * Renders a scroll window that shows all absence periods for a user in AbsenceView
  */
 export const AbsencePeriods = (props: {
   setAbsence: Dispatch<SetStateAction<Absence | undefined>>;

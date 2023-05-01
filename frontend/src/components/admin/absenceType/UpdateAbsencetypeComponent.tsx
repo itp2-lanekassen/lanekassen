@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
-import { postAbsenceType } from '@/api/absenceType';
+import { updateAbsenceType } from '@/api/absenceType';
 import { useEffect, useState } from 'react';
 import { CalendarCellDisplay } from '../../CalendarCellDisplay';
+import { AbsenceType } from '@/types/interfaces';
 import AbsenceTypeView from './AbsenceTypeView';
 import ColorPickerComponent from './ColorPicker';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -16,30 +17,24 @@ type FormValues = {
   colorCode: string;
 };
 
-export default function AddAbsenceTypeComponent(props: {
+export default function UpdateAbsenceTypeComponent(props: {
+  absenceType: AbsenceType;
   setView: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }) {
+  const { openMessageBox } = useModalContext();
   const queryClient = useQueryClient();
+
+  const [formValues, setFormValues] = useState<FormValues>({
+    name: props.absenceType.name,
+    code: props.absenceType.code,
+    colorCode: props.absenceType.colorCode
+  });
+
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = React.useState(false);
-  const [color, setColor] = useState('#000000');
-  const { openMessageBox } = useModalContext();
+  const [color, setColor] = useState(formValues.colorCode);
 
-  //initialize postAbsence mutation
-  const { mutate: addAbsenceType } = useMutation({
-    mutationFn: postAbsenceType,
-    onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
-    onError: () => openMessageBox('Fraværstypen eksisterer allerede')
-  });
-
-  //initialize form values
-  const [formValues, setFormValues] = useState<FormValues>({
-    name: '',
-    code: '',
-    colorCode: '#000000'
-  });
-
-  //update form values on input change
+  // Update form values on input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormValues({
@@ -48,34 +43,30 @@ export default function AddAbsenceTypeComponent(props: {
     });
   };
 
-  //Post absence to database
+  // Initialize postAbsence mutation
+  const { mutate: updateAbsenceTypeToDatabase } = useMutation({
+    mutationFn: (options: AbsenceType) => updateAbsenceType(options.absenceTypeId, options),
+    onSuccess: () => queryClient.invalidateQueries(['absenceTypes']),
+    onError: () => openMessageBox('Fraværstypen eksisterer allerede')
+  });
+
+  // Post absence to database
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (formValues.name === '' || formValues.code === '' || formValues.colorCode === '#000000') {
       return;
     }
     e.preventDefault();
 
-    addAbsenceType({
+    updateAbsenceTypeToDatabase({
+      absenceTypeId: props.absenceType.absenceTypeId,
       name: formValues.name,
       code: formValues.code,
       colorCode: formValues.colorCode
     });
-
-    //reset form values
-    setFormValues({
-      name: '',
-      code: '',
-      colorCode: '#000000'
-    });
-
-    // clear form fields
-    const form = document.getElementById('AbsenceTypeForm') as HTMLFormElement;
-    form.reset();
-
     props.setView(<AbsenceTypeView />);
   };
 
-  // disabled button until all fields are filled
+  // Disable submitbutton until all fields are filled
   useEffect(() => {
     if (formValues.name === '' || formValues.code === '' || formValues.colorCode === '#000000') {
       setIsDisabled(true);
@@ -93,8 +84,8 @@ export default function AddAbsenceTypeComponent(props: {
   }
 
   return (
-    <div className="flex flex-col items-center w-full">
-      <h3 className="text-xl">Legg til ny fraværstype</h3>
+    <div className="flex flex-col items-center">
+      <h3 className="text-xl">Oppdater fraværstype</h3>
       <form
         className="flex flex-col gap-1 items-center"
         onSubmit={handleSubmit}
@@ -108,13 +99,12 @@ export default function AddAbsenceTypeComponent(props: {
           type="text"
           name="name"
           id="name"
+          value={formValues.name}
           onChange={handleInputChange}
         />
-
         <label className="mt-2" htmlFor="colorCode">
           Velg farge:
         </label>
-
         <div className="relative">
           <Input
             type="text"
@@ -145,9 +135,8 @@ export default function AddAbsenceTypeComponent(props: {
             </div>
           )}
         </div>
-
         <label className="mt-2" htmlFor="code">
-          Forkortelse (maks 7 tegn):
+          Kode (maks 7 tegn):
         </label>
         <input
           className="modal-input w-full border-2 rounded-[20px] p-1 px-3 border-primary"
@@ -155,11 +144,12 @@ export default function AddAbsenceTypeComponent(props: {
           name="code"
           id="code"
           maxLength={7}
+          value={formValues.code}
           onChange={handleInputChange}
         />
         <br />
         {/* Preview Calendarcell component with and without hash */}
-        <label className="">Forhåndsvisning (Godkjent / ikke-godkjent):</label>
+        <label>Forhåndsvisning (Godkjent / ikke-godkjent):</label>
         <CalendarCellDisplay colorCode={formValues.colorCode} code={formValues.code} />
 
         <br />
@@ -169,7 +159,7 @@ export default function AddAbsenceTypeComponent(props: {
             disabled={isDisabled}
             className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light disabled:cursor-not-allowed"
           >
-            Legg til
+            Oppdater
           </button>
           <button
             className="px-4 py-2 rounded-full bg-primary-light text-grey-lightest hover:bg-grey-lightest hover:text-primary-light hover:outline outline-1 outline-primary-light"

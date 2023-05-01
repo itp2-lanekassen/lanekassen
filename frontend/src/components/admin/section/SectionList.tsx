@@ -30,7 +30,7 @@ const SectionList = ({ setEdit }: SectionListProps) => {
 
   if (isLoading) return <div>Laster...</div>;
   if (isError) return <div>Noe gikk galt</div>;
-  // 48 44
+
   return (
     <>
       <div className="grid grid-cols-sections gap-x-2 gap-y-3 items-center">

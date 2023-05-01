@@ -11,11 +11,11 @@ interface DepartmentEditProps {
 
 const DepartmentEdit = ({ department, setEdit }: DepartmentEditProps) => {
   const queryClient = useQueryClient();
+  const { openMessageBox } = useModalContext();
 
   const [departmentName, setDepartmentName] = useState('');
   const [departmentAbbreviation, setDepartmentAbbrevation] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState<number>(-1);
-  const { openMessageBox } = useModalContext();
 
   useEffect(() => {
     if (department) {
