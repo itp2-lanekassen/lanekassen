@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import { updateAbsence } from '@/api/absence';
 import { getAbsenceTypeById } from '@/api/absenceType';
 import { useModalContext } from '@/context/ModalContext';
-import { getDatePickerMaxForAbsence, getDisableDates } from '../../helpers/dateHelpers';
+import useAbsenceMaxDate from '@/helpers/useAbsenceMaxDate';
 
 interface EditAbsenceViewProps {
   setAbsence: React.Dispatch<React.SetStateAction<Absence | undefined>>;
@@ -27,8 +27,6 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
 
   const currentUser = useUserContext();
 
-  const [disabledDates, setDisabledDates] = React.useState<Date[]>();
-  const [maxToDate, setMaxToDate] = React.useState<Date>();
   const [isApproved, setIsApproved] = React.useState<boolean>(props.selectedAbsence.isApproved);
   const { openMessageBox } = useModalContext();
 
@@ -47,21 +45,11 @@ export const EditAbsenceView = (props: EditAbsenceViewProps) => {
     absenceType: props.selectedAbsence.absenceTypeId
   });
 
-  useEffect(() => {
-    if (!formValues.startDate) return;
-
-    const datePickerMax = getDatePickerMaxForAbsence(
-      new Date(formValues.startDate),
-      props.absences
-    );
-
-    setMaxToDate(datePickerMax);
-  }, [formValues.startDate, props.absences]);
-
-  useEffect(() => {
-    // get all absence dates in array
-    setDisabledDates(getDisableDates(props.absences, props.selectedAbsence.absenceId));
-  }, [props.absences, props.selectedAbsence]);
+  const { disabledDates, maxToDate } = useAbsenceMaxDate(
+    formValues.startDate,
+    props.absences,
+    props.selectedAbsence
+  );
 
   //update form values when another absence is selected
   useEffect(() => {

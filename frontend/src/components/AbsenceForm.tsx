@@ -13,7 +13,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { getAbsenceTypeById } from '../api/absenceType';
 import { DateField } from './DateField';
 import { useModalContext } from '@/context/ModalContext';
-import { getDatePickerMaxForAbsence, getDisableDates } from '../helpers/dateHelpers';
+import useAbsenceMaxDate from '@/helpers/useAbsenceMaxDate';
 
 type ModalProps = {
   startDate?: Date;
@@ -38,11 +38,9 @@ const AbsenceForm: React.FC<ModalProps> = ({
   type = 'add',
   clickedAbsence
 }) => {
-  const [disableDates, setDisableDates] = React.useState<Date[]>();
   const queryClient = useQueryClient();
   const { absenceTypes } = useGlobalContext();
   const { openConfirmationBox, openMessageBox } = useModalContext();
-  const [maxToDate, setMaxToDate] = React.useState<Date>();
   const [isApproved, setIsApproved] = React.useState<boolean>(
     type === 'edit' && clickedAbsence ? clickedAbsence.isApproved : false
   );
@@ -84,22 +82,11 @@ const AbsenceForm: React.FC<ModalProps> = ({
     absenceType: clickedAbsence?.absenceTypeId || absenceTypes[0].absenceTypeId
   });
 
-  React.useEffect(() => {
-    //When editing an absence, put all the current values in the fields of the AbsenceForm
-    const date = clickedAbsence?.endDate || formValues.startDate;
-
-    if (!date) return;
-    //set max on datepicker state based on when the next absence starts
-
-    const datePickerMax = getDatePickerMaxForAbsence(new Date(date), absences || []);
-
-    setMaxToDate(datePickerMax);
-  }, [clickedAbsence, absences, formValues.startDate]);
-
-  React.useEffect(() => {
-    // get all absence dates in array
-    setDisableDates(getDisableDates(absences || [], clickedAbsence?.absenceId));
-  }, [absences, clickedAbsence]);
+  const { disabledDates, maxToDate } = useAbsenceMaxDate(
+    formValues.startDate,
+    absences,
+    clickedAbsence
+  );
 
   React.useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -230,7 +217,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
             value={formValues.startDate}
             name="startDate"
             label="Fra"
-            disableArray={disableDates}
+            disableArray={disabledDates}
           />
           <DateField
             handleInputChange={handleInputChange}
@@ -239,7 +226,7 @@ const AbsenceForm: React.FC<ModalProps> = ({
             value={formValues.endDate}
             name="endDate"
             label="Til"
-            disableArray={disableDates}
+            disableArray={disabledDates}
             disabled={formValues.startDate === undefined}
             title={'Fyll ut startdato først'}
           />

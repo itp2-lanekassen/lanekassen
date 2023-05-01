@@ -10,7 +10,7 @@ import { FormValues } from '../AbsenceForm';
 import * as React from 'react';
 import { Absence } from '@/types/interfaces';
 import { useModalContext } from '@/context/ModalContext';
-import { getDatePickerMaxForAbsence, getDisableDates } from '../../helpers/dateHelpers';
+import useAbsenceMaxDate from '@/helpers/useAbsenceMaxDate';
 
 /**
  * Renders a view lets a user add new absences
@@ -19,9 +19,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   const queryClient = useQueryClient();
   const currentUser = useUserContext();
   const { absenceTypes } = useGlobalContext();
-  const [maxToDate, setMaxToDate] = React.useState<Date>();
 
-  const [disableDates, setDisabledDates] = React.useState<Date[]>();
   const [isApproved, setIsApproved] = React.useState<boolean>(false);
   const { openMessageBox } = useModalContext();
 
@@ -40,21 +38,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
     absenceType: absenceTypes[0].absenceTypeId
   });
 
-  React.useEffect(() => {
-    if (!formValues.startDate) return;
-
-    const datePickerMax = getDatePickerMaxForAbsence(
-      new Date(formValues.startDate),
-      props.absences
-    );
-
-    setMaxToDate(datePickerMax);
-  }, [formValues.startDate, props.absences]);
-
-  //get all dates that a user has registered an absence for in an array
-  React.useEffect(() => {
-    setDisabledDates(getDisableDates(props.absences));
-  }, [props.absences]);
+  const { disabledDates, maxToDate } = useAbsenceMaxDate(formValues.startDate, props.absences);
 
   //update form values on date picker change
   const handleInputChange = (name: string, date?: Date) => {
@@ -124,7 +108,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               name="startDate"
               value={formValues.startDate}
               label="Fra"
-              disableArray={disableDates}
+              disableArray={disabledDates}
             />
             <DateField
               handleInputChange={handleInputChange}
@@ -133,7 +117,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               label="Til"
               min={formValues.startDate}
               max={maxToDate}
-              disableArray={disableDates}
+              disableArray={disabledDates}
               disabled={formValues.startDate === undefined}
               title={'Fyll ut startdato først'}
             />
