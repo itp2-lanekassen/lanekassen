@@ -72,13 +72,15 @@ public class UserController : ControllerBase {
 
   [HttpGet]
   public async Task<IActionResult> GetUsers() {
-    List<User> users = await _context.Users.ToListAsync();
-    foreach (User user in users) {
-      _context.Entry(user).Collection(user => user.SubjectFields).Load();
-      _context.Entry(user).Collection(user => user.Roles).Load();
-      _context.Entry(user).Collection(user => user.Teams).Load();
-      _context.Entry(user).Collection(user => user.Absences).Load();
-    }
+    List<User> users = await _context.Users
+      .AsNoTracking()
+      .Include(user => user.SubjectFields)
+      .Include(user => user.Roles)
+      .Include(user => user.Teams)
+      .Include(user => user.Department)
+      .Include(user => user.Section)
+      .ToListAsync();
+
     return Ok(users);
   }
 
@@ -203,7 +205,13 @@ public class UserController : ControllerBase {
     [FromQuery(Name = "subjectFields")] List<int> SubjectFields,
     [FromQuery(Name = "size")] int Size = 20
   ) {
-    IQueryable<User> users = _context.Users.Include(u => u.SubjectFields).Include(u => u.Roles).Include(u => u.Teams);
+    IQueryable<User> users = _context.Users
+      .AsNoTracking()
+      .Include(u => u.SubjectFields)
+      .Include(u => u.Roles)
+      .Include(u => u.Teams)
+      .Include(u => u.Department)
+      .Include(u => u.Section);
 
     if (ExcludeIds.Count > 0) {
       users = users.Where(u => !ExcludeIds.Contains(u.UserId));

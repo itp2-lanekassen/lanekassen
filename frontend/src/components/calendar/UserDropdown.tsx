@@ -1,20 +1,10 @@
 import { useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Department, EmploymentType, Section, User } from '@/types/interfaces';
-import { getDepartmentById } from '@/api/department';
-import { getSectionById } from '@/api/section';
+import { EmploymentType, User } from '@/types/interfaces';
 import useViewport from '@/context/calendarContextHelpers/useViewport';
 
 export default function UserDropdown(props: { user: User; isCurrentUser: boolean }) {
-  const [isSet, setIsSet] = useState<boolean>(false);
-
-  const [department, setDepartment] = useState<Department>();
-  const [section, setSection] = useState<Section>();
-  const [teams, setTeams] = useState<string[]>();
-  const [subjectFields, setSubjectFields] = useState<string[]>();
-  const [employmentType, setEmploymentType] = useState<string>('');
-  const [businessAffiliation, setBusinessAffiliation] = useState<string>('');
-  const [roles, setRoles] = useState<string[]>();
+  const [open, setOpen] = useState(false);
 
   const { width } = useViewport();
 
@@ -33,78 +23,52 @@ export default function UserDropdown(props: { user: User; isCurrentUser: boolean
       .join(' ');
   };
 
-  // Add data to fields in dropdown if clicked for the first time
-  const expandCollapse = async () => {
-    if (isSet) return setIsSet(false);
-
-    const listTeam: string[] = [];
-    const listSubjectField: string[] = [];
-    const listRole: string[] = [];
-
-    setDepartment((await getDepartmentById(props.user.departmentId)).data);
-    setSection((await getSectionById(props.user.sectionId)).data);
-    setBusinessAffiliation(props.user.businessAffiliation);
-
-    props.user.teams?.forEach((team) => listTeam.push(team.name));
-    setTeams(listTeam);
-
-    props.user.subjectFields?.forEach((subjectField) => listSubjectField.push(subjectField.name));
-    setSubjectFields(listSubjectField);
-
-    props.user.roles?.forEach((role) => listRole.push(role.name));
-    setRoles(listRole);
-
-    setEmploymentType(EmploymentType[props.user.employmentType]);
-
-    setIsSet(true);
-  };
-
   return (
     <div className="col-start-1 w-full font-header rounded-xl overflow-hidden text-sm lg:text-base">
       <button
         className={`${
           props.isCurrentUser ? 'bg-secondary-light' : 'bg-primary-light'
         } flex justify-between items-center text-grey-lightest px-2 cursor-pointer w-full`}
-        onClick={() => expandCollapse()}
+        onClick={() => setOpen(!open)}
       >
         <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
           {formatName(`${props.user.firstName} ${props.user.lastName}`)}
         </span>
-        <ExpandMoreIcon fontSize="inherit" className={isSet ? 'rotate-180' : 'rotate-0'} />
+        <ExpandMoreIcon fontSize="inherit" className={open ? 'rotate-180' : 'rotate-0'} />
       </button>
 
       <div
         className={`${props.isCurrentUser ? 'bg-card-two-light' : 'bg-primary-lighter'} ${
-          isSet ? 'flex' : 'hidden'
+          open ? 'flex' : 'hidden'
         } text-primary subheading-small p-2 flex flex-col gap-1`}
       >
         <p className="text-sm flex flex-col">
           <strong className="body-bold text-xs">Virksomhet:</strong>
-          {businessAffiliation}
+          {props.user.businessAffiliation}
         </p>
         <p className="text-sm flex flex-col">
           <strong className="body-bold text-xs">Ansattforhold:</strong>
-          {employmentType}
+          {EmploymentType[props.user.employmentType]}
         </p>
         <p className="text-sm flex flex-col">
           <strong className="body-bold text-xs">Avdeling:</strong>
-          {department?.name}
+          {props.user.department?.name}
         </p>
         <p className="text-sm flex flex-col">
           <strong className="body-bold text-xs">Seksjon:</strong>
-          {section?.name}
+          {props.user.section?.name}
         </p>
         <p className="text-sm flex flex-col">
           <strong className="body-bold text-xs">Fagområde:</strong>
-          {subjectFields?.join(', ')}
+          {props.user.subjectFields?.map((subjectField) => subjectField.name)}
         </p>
         <p className="text-sm flex flex-col">
           <strong className="body-bold text-xs">Team:</strong>
-          {teams?.join(', ')}
+          {props.user.teams?.map((team) => team.name).join(', ')}
         </p>
         <p className="text-sm flex flex-col">
           <strong className="body-bold text-xs">Rolle:</strong>
-          {roles?.join(', ')}
+          {props.user.roles?.map((role) => role.name)}
         </p>
       </div>
     </div>
