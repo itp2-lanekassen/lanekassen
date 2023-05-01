@@ -14,7 +14,11 @@ const useAbsenceMaxDate = (
     if (!date) return;
 
     //set max on datepicker state based on when the next absence starts
-    const datePickerMax = getDatePickerMaxForAbsence(date, absences || []);
+    const datePickerMax = getDatePickerMaxForAbsence(
+      date,
+      absences || [],
+      activeAbsence?.absenceId
+    );
 
     setMaxToDate(datePickerMax);
   }, [activeAbsence, absences, date]);
