@@ -27,7 +27,7 @@ public class SectionController : ControllerBase {
     if (department == null) {
       return BadRequest("Invalid department id");
     }
-    // Check if section already exists
+
     if (await _context.Sections.AnyAsync(s => s.Name == section.Name && s.DepartmentId == section.DepartmentId)) {
       return BadRequest("Section already exists");
     }
@@ -70,7 +70,6 @@ public class SectionController : ControllerBase {
       return BadRequest("Invalid department id");
     }
 
-    // Check if section already exists
     if (await _context.Sections.AnyAsync(s => s.Name == section.Name && s.SectionId != id && s.DepartmentId == section.DepartmentId)) {
       return BadRequest("Section already exists");
     }

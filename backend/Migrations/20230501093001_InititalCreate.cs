@@ -57,19 +57,6 @@ namespace Lanekassen.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sections",
-                columns: table => new
-                {
-                    SectionId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sections", x => x.SectionId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Teams",
                 columns: table => new
                 {
@@ -80,6 +67,26 @@ namespace Lanekassen.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Teams", x => x.TeamId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sections",
+                columns: table => new
+                {
+                    SectionId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sections", x => x.SectionId);
+                    table.ForeignKey(
+                        name: "FK_Sections_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -127,30 +134,6 @@ namespace Lanekassen.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DepartmentSection",
-                columns: table => new
-                {
-                    DepartmentsDepartmentId = table.Column<int>(type: "integer", nullable: false),
-                    SectionsSectionId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DepartmentSection", x => new { x.DepartmentsDepartmentId, x.SectionsSectionId });
-                    table.ForeignKey(
-                        name: "FK_DepartmentSection_Departments_DepartmentsDepartmentId",
-                        column: x => x.DepartmentsDepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DepartmentSection_Sections_SectionsSectionId",
-                        column: x => x.SectionsSectionId,
-                        principalTable: "Sections",
-                        principalColumn: "SectionId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -162,6 +145,7 @@ namespace Lanekassen.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     EmploymentType = table.Column<int>(type: "integer", nullable: false),
                     Admin = table.Column<bool>(type: "boolean", nullable: false),
+                    BusinessAffiliation = table.Column<string>(type: "text", nullable: false),
                     SectionId = table.Column<int>(type: "integer", nullable: true),
                     DepartmentId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -181,30 +165,6 @@ namespace Lanekassen.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DepartmentTeam",
-                columns: table => new
-                {
-                    DepartmentsDepartmentId = table.Column<int>(type: "integer", nullable: false),
-                    TeamsTeamId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DepartmentTeam", x => new { x.DepartmentsDepartmentId, x.TeamsTeamId });
-                    table.ForeignKey(
-                        name: "FK_DepartmentTeam_Departments_DepartmentsDepartmentId",
-                        column: x => x.DepartmentsDepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DepartmentTeam_Teams_TeamsTeamId",
-                        column: x => x.TeamsTeamId,
-                        principalTable: "Teams",
-                        principalColumn: "TeamId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Absences",
                 columns: table => new
                 {
@@ -212,6 +172,7 @@ namespace Lanekassen.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsApproved = table.Column<bool>(type: "boolean", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     AbsenceTypeId = table.Column<int>(type: "integer", nullable: true)
@@ -309,9 +270,9 @@ namespace Lanekassen.Migrations
                 columns: new[] { "AbsenceTypeId", "Code", "ColorCode", "Name" },
                 values: new object[,]
                 {
-                    { 1, "T", "#00b500", "Tilgjengelig fravær" },
-                    { 2, "F", "#d90404", "Utilgjengelig fravær" },
-                    { 3, "P/S", "#0700cf", "Permisjon/Sykmelding" }
+                    { 1, "T", "#00b500", "Tilgjengelig" },
+                    { 2, "F", "#d90404", "Utilgjengelig" },
+                    { 3, "P/S", "#eb9900", "Permisjon/Sykmelding" }
                 });
 
             migrationBuilder.InsertData(
@@ -341,16 +302,6 @@ namespace Lanekassen.Migrations
                     { 7, "Designer" },
                     { 8, "Controller" },
                     { 9, "Leder" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Sections",
-                columns: new[] { "SectionId", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Trondheim" },
-                    { 2, "Oslo" },
-                    { 3, "Hjemmekollega" }
                 });
 
             migrationBuilder.InsertData(
@@ -385,28 +336,13 @@ namespace Lanekassen.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "DepartmentSection",
-                columns: new[] { "DepartmentsDepartmentId", "SectionsSectionId" },
+                table: "Sections",
+                columns: new[] { "SectionId", "DepartmentId", "Name" },
                 values: new object[,]
                 {
-                    { 1, 1 },
-                    { 1, 2 },
-                    { 1, 3 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "DepartmentTeam",
-                columns: new[] { "DepartmentsDepartmentId", "TeamsTeamId" },
-                values: new object[,]
-                {
-                    { 1, 1 },
-                    { 1, 2 },
-                    { 1, 3 },
-                    { 1, 4 },
-                    { 1, 5 },
-                    { 1, 6 },
-                    { 1, 7 },
-                    { 1, 8 }
+                    { 1, 1, "Trondheim" },
+                    { 2, 1, "Oslo" },
+                    { 3, 1, "Hjemmekollega" }
                 });
 
             migrationBuilder.InsertData(
@@ -427,13 +363,13 @@ namespace Lanekassen.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "UserId", "Admin", "AzureId", "DepartmentId", "Email", "EmploymentType", "FirstName", "LastName", "SectionId" },
-                values: new object[] { 1, false, "Falsk-azure-id", 1, "ola@nordmann.no", 0, "Ola", "Nordmann", 1 });
+                columns: new[] { "UserId", "Admin", "AzureId", "BusinessAffiliation", "DepartmentId", "Email", "EmploymentType", "FirstName", "LastName", "SectionId" },
+                values: new object[] { 1, false, "Falsk-azure-id", "Lånekassen", 1, "ola@nordmann.no", 0, "Ola", "Nordmann", 1 });
 
             migrationBuilder.InsertData(
                 table: "Absences",
-                columns: new[] { "AbsenceId", "AbsenceTypeId", "Comment", "EndDate", "StartDate", "UserId" },
-                values: new object[] { 1, 1, null, new DateTime(1, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1 });
+                columns: new[] { "AbsenceId", "AbsenceTypeId", "Comment", "EndDate", "IsApproved", "StartDate", "UserId" },
+                values: new object[] { 1, 1, null, new DateTime(1, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1 });
 
             migrationBuilder.InsertData(
                 table: "RoleUser",
@@ -466,19 +402,14 @@ namespace Lanekassen.Migrations
                 column: "RolesRoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DepartmentSection_SectionsSectionId",
-                table: "DepartmentSection",
-                column: "SectionsSectionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DepartmentTeam_TeamsTeamId",
-                table: "DepartmentTeam",
-                column: "TeamsTeamId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RoleUser_UsersUserId",
                 table: "RoleUser",
                 column: "UsersUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sections_DepartmentId",
+                table: "Sections",
+                column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubjectFields_DepartmentId",
@@ -516,12 +447,6 @@ namespace Lanekassen.Migrations
                 name: "DepartmentRole");
 
             migrationBuilder.DropTable(
-                name: "DepartmentSection");
-
-            migrationBuilder.DropTable(
-                name: "DepartmentTeam");
-
-            migrationBuilder.DropTable(
                 name: "RoleUser");
 
             migrationBuilder.DropTable(
@@ -546,10 +471,10 @@ namespace Lanekassen.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "Sections");
 
             migrationBuilder.DropTable(
-                name: "Sections");
+                name: "Departments");
         }
     }
 }

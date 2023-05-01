@@ -28,7 +28,6 @@ public class SubjectFieldsController : ControllerBase {
       return BadRequest("Invalid department id");
     }
 
-    // Check if subject field already exists
     if (await _context.SubjectFields.AnyAsync(s => s.Name == subjectField.Name && s.DepartmentId == subjectField.DepartmentId)) {
       return BadRequest("Subject field already exists");
     }
@@ -71,7 +70,6 @@ public class SubjectFieldsController : ControllerBase {
       return BadRequest("Invalid department id");
     }
 
-    // Check if subject field already exists
     if (await _context.SubjectFields.AnyAsync(s => s.Name == subjectField.Name && s.DepartmentId == subjectField.DepartmentId && s.SubjectFieldId != id)) {
       return BadRequest("Subject field already exists");
     }
@@ -102,7 +100,6 @@ public class SubjectFieldsController : ControllerBase {
       return BadRequest("Invalid subject field id");
     }
 
-    // Check if subject field is in use
     if (await _context.Users.AnyAsync(u => u.SubjectFields.Contains(subjectField))) {
       return BadRequest("Subject field is in use and cannot be deleted.");
     }

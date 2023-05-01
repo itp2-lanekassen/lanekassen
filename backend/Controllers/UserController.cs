@@ -23,7 +23,6 @@ public class UserController : ControllerBase {
       return BadRequest(ModelState);
     }
 
-    // Check if user already exists
     User? existingUser = await _context.Users.FirstOrDefaultAsync(u => u.AzureId == user.AzureId);
     if (existingUser != null) {
       return BadRequest("User already exists");
@@ -83,7 +82,6 @@ public class UserController : ControllerBase {
     return Ok(users);
   }
 
-  //update user
   [HttpPut("{id}")]
   public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO user) {
     if (!ModelState.IsValid) {
@@ -119,7 +117,6 @@ public class UserController : ControllerBase {
     userToUpdate.Section = section;
     userToUpdate.Department = department;
 
-    // Clear existing roles, teams and subject fields
     userToUpdate.Roles.Clear();
     userToUpdate.Teams.Clear();
     userToUpdate.SubjectFields.Clear();
@@ -160,7 +157,6 @@ public class UserController : ControllerBase {
     return Ok();
   }
 
-  //delete user
   [HttpDelete("{id}")]
   public async Task<IActionResult> DeleteUser(int id) {
     User? userToDelete = await _context.Users.FindAsync(id);
@@ -184,14 +180,12 @@ public class UserController : ControllerBase {
     return Ok();
   }
 
-  //get user by id
   [HttpGet("{id}")]
   public async Task<IActionResult> GetUserById(int id) {
     User? user = await _context.Users.Include(u => u.SubjectFields).Include(u => u.Roles).Include(u => u.Teams).FirstOrDefaultAsync(u => u.UserId == id);
     return user == null ? NotFound() : Ok(user);
   }
 
-  //get user by azure id
   [HttpGet("azure/{azureId}")]
   public async Task<IActionResult> GetUserByAzureId(string azureId) {
     User? user = await _context.Users.Include(u => u.SubjectFields).Include(u => u.Roles).Include(u => u.Teams).FirstOrDefaultAsync(u => u.AzureId == azureId);
