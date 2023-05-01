@@ -12,14 +12,6 @@ const AbsencePage = () => {
   const [selectedAbsence, setAbsence] = useState<Absence>();
   const [absences, setAbsences] = useState<Absence[]>([]);
 
-  //Show AddAbsenceView if no absence has been seleced, show EditAbsenceView if an absence has been selected
-  let view;
-  if (!selectedAbsence) {
-    view = <AddAbsenceView absences={absences}></AddAbsenceView>;
-  } else {
-    view = <EditAbsenceView absence={selectedAbsence} setAbsence={setAbsence}></EditAbsenceView>;
-  }
-
   return (
     <PageLayout title="Mine fravær">
       <div className="relative m-auto h-full md:w-[750px]">
@@ -30,7 +22,16 @@ const AbsencePage = () => {
             selectedAbsence={selectedAbsence}
             setAbsence={setAbsence}
           />
-          {view}
+          {/* Show AddAbsenceView if no absence has been seleced, show EditAbsenceView if an absence has been selected */}
+          {selectedAbsence ? (
+            <EditAbsenceView
+              absences={absences}
+              selectedAbsence={selectedAbsence}
+              setAbsence={setAbsence}
+            />
+          ) : (
+            <AddAbsenceView absences={absences} />
+          )}
         </div>
       </div>
     </PageLayout>

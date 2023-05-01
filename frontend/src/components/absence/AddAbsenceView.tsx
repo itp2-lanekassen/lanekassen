@@ -3,21 +3,14 @@ import { DateField } from '../DateField';
 import { AbsenceRadioField } from '../AbsenceRadioField';
 import SubmitButton from '../SubmitButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { getDisableDates, postAbsence } from '@/api/absence';
+import { postAbsence } from '@/api/absence';
 import { useUserContext } from '@/context/UserContext';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { FormValues } from '../AbsenceForm';
 import * as React from 'react';
 import { Absence } from '@/types/interfaces';
 import { useModalContext } from '@/context/ModalContext';
-
-//get all absence dates in array
-async function setDates(
-  userId: number,
-  setDisableDates: React.Dispatch<React.SetStateAction<Date[] | undefined>>
-) {
-  setDisableDates(await getDisableDates(userId));
-}
+import useAbsenceMaxDate from '@/helpers/useAbsenceMaxDate';
 
 /**
  * Renders a view lets a user add new absences
@@ -27,7 +20,6 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
   const currentUser = useUserContext();
   const { absenceTypes } = useGlobalContext();
 
-  const [disableDates, setDisableDates] = React.useState<Date[]>();
   const [isApproved, setIsApproved] = React.useState<boolean>(false);
   const { openMessageBox } = useModalContext();
 
@@ -46,10 +38,7 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
     absenceType: absenceTypes[0].absenceTypeId
   });
 
-  //get all dates that a user has registered an absence for in an array
-  React.useEffect(() => {
-    setDates(currentUser.userId, setDisableDates);
-  }, [props.absences, formValues.startDate, currentUser]);
+  const { disabledDates, maxToDate } = useAbsenceMaxDate(formValues.startDate, props.absences);
 
   //update form values on date picker change
   const handleInputChange = (name: string, date?: Date) => {
@@ -119,14 +108,16 @@ export const AddAbsenceView = (props: { absences: Absence[] }) => {
               name="startDate"
               value={formValues.startDate}
               label="Fra"
-              disableArray={disableDates}
+              disableArray={disabledDates}
             />
             <DateField
               handleInputChange={handleInputChange}
               name="endDate"
               value={formValues.endDate}
               label="Til"
-              disableArray={disableDates}
+              min={formValues.startDate}
+              max={maxToDate}
+              disableArray={disabledDates}
               disabled={formValues.startDate === undefined}
               title={'Fyll ut startdato først'}
             />
