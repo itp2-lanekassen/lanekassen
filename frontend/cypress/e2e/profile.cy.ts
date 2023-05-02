@@ -9,5 +9,8 @@ describe('Navigate to profile from calendar', () => {
     cy.get('button').contains('Logg inn med Microsoft Azure').click();
     //cy.contains('Profil').invoke('show').click();
     cy.get('h1').contains('Kalender');
+    cy.get('button').contains('Profil').click({ force: true });
+    //cy.get('span').contains('Profil').trigger('mouseover').wait(1000).should('be.visible').click();
+    //cy.get('h1').contains('Kalender');
   });
 });
