@@ -7,27 +7,19 @@ import 'react-datepicker/dist/react-datepicker.css';
 export const DateField = (props: {
   name: string;
   label?: string;
-  max?: Date | undefined;
-  min?: Date | undefined;
-  value: Date | undefined;
+  max?: Date;
+  min?: Date;
+  value?: Date;
   customClass?: string;
-  handleInputChange: (
-    date: Date | null,
-    event: React.SyntheticEvent | undefined,
-    name: string
-  ) => void;
+  handleInputChange: (name: string, date?: Date) => void;
   placeholder?: string;
   disableArray?: Date[];
   disabled?: boolean;
   title?: string;
 }) => {
-  //update form values on input change
-  const handleInputChange = (
-    date: Date | null,
-    e: React.SyntheticEvent<HTMLInputElement> | undefined
-  ) => {
-    props.handleInputChange(date, e, props.name);
-  };
+  // Update form values on input change
+  const handleInputChange = (date: Date | null) =>
+    props.handleInputChange(props.name, date ?? undefined);
 
   return (
     <div className="modal-field">

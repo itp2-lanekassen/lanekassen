@@ -3,22 +3,21 @@ import Tabs from '@mui/material/Tabs';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
 import { useState } from 'react';
-import PageLayout from '@/components/PageLayout';
-import SectionView from '@/components/AdminPage/SectionView';
-import AbsenceTypeView from '@/components/AdminPage/AbsenceTypeView';
-import TeamView from '@/components/AdminPage/TeamView';
-import SubjectFieldView from '@/components/AdminPage/SubjectFieldView';
-import DepartmentView from '@/components/AdminPage/DepartmentView';
-import RoleView from '@/components/AdminPage/RoleView';
-import UserTab from '@/components/AdminPage/UserView';
-import Dropdown from '../components/Dropdown';
+import PageLayout from '@/pages/PageLayout';
+import SectionView from '@/components/admin/section/SectionView';
+import AbsenceTypeView from '@/components/admin/absenceType/AbsenceTypeView';
+import TeamView from '@/components/admin/team/TeamView';
+import SubjectFieldView from '@/components/admin/subjectField/SubjectFieldView';
+import DepartmentView from '@/components/admin/department/DepartmentView';
+import RoleView from '@/components/admin/role/RoleView';
+import UserTab from '@/components/admin/user/UserView';
+import Dropdown from '@/components/Dropdown';
 
 const tabLabels = ['Brukere', 'Fraværstyper', 'Avdeling', 'Seksjon', 'Fagområde', 'Team', 'Rolle'];
 
 export default function AdminPage() {
   const [value, setValue] = useState(0);
 
-  //options for dropdown
   const dropdownOptions = tabLabels.map((label, index) => ({
     label,
     value: index
@@ -68,7 +67,7 @@ export default function AdminPage() {
               ))}
             </Tabs>
           </div>
-          <div className="block md:hidden mb-5 flex justify-center">
+          <div className="md:hidden mb-5 flex justify-center">
             <div className="w-4/5">
               <label htmlFor="tabPicker" className="body-bold text-sm text-primary">
                 Velg en fane:
@@ -86,11 +85,7 @@ export default function AdminPage() {
           <div className="w-full border-1 border-primary-light rounded-r-xl rounded-l-xl md:rounded-l-none overflow-y-auto h-3/5-screen">
             {tabLabels.map((label, index) => (
               <TabPanel key={index} value={index.toString()}>
-                {label === 'Brukere' && (
-                  <div>
-                    <UserTab />
-                  </div>
-                )}
+                {label === 'Brukere' && <UserTab />}
                 {label === 'Fraværstyper' && <AbsenceTypeView />}
                 {label === 'Avdeling' && <DepartmentView />}
                 {label === 'Seksjon' && <SectionView />}

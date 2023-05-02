@@ -1,20 +1,20 @@
-import { getAllTeams } from '@/API/TeamAPI';
+import { getAllTeams } from '@/api/team';
 import ErrorAlert from '@/components/Alert';
-import PageLayout from '@/components/PageLayout';
+import PageLayout from '@/pages/PageLayout';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
   getRolesByDepartmentId,
   getSectionsByDepartmentId,
   getSubjectFieldsByDepartmentId
-} from '../API/DepartmentAPI';
-import { updateUser } from '../API/UserAPI';
+} from '../api/department';
+import { updateUser } from '../api/user';
 import Dropdown from '../components/Dropdown';
 import DropdownMultiSelect from '../components/DropdownMultiSelect';
 import SubmitButton from '../components/SubmitButton';
 import { useGlobalContext } from '../context/GlobalContext';
 import { useUserContext } from '../context/UserContext';
-import { EmploymentType, Role, SubjectField, Team } from '../types/types';
+import { EmploymentType, Role, SubjectField, Team } from '../types/interfaces';
 import { useModalContext } from '@/context/ModalContext';
 
 /**
@@ -23,10 +23,8 @@ import { useModalContext } from '@/context/ModalContext';
  */
 export default function MyPage() {
   const queryClient = useQueryClient();
-  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
-  const [errorAlertMessage, setErrorAlertMessage] = useState('');
-  const { openMessageBox } = useModalContext();
 
+  const { openMessageBox } = useModalContext();
   const currentUser = useUserContext();
   const { departments } = useGlobalContext();
 
@@ -47,7 +45,8 @@ export default function MyPage() {
   const [selectedRoles, setSelectedRoles] = useState<number[]>(
     currentUser.roles.map((r: Role) => r.roleId)
   );
-
+  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
+  const [errorAlertMessage, setErrorAlertMessage] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
   const [isDropdownDisabled, setIsDropdownDisabled] = useState(true);
 
@@ -141,12 +140,11 @@ export default function MyPage() {
 
   return (
     <PageLayout title="Profil">
-      <div className="grid grid-cols-my-page-2 grid-rows-my-page-3 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
+      <div className="grid xl:grid-cols-my-page-5 grid-cols-my-page-2 grid-rows-my-page-3 mx-4 gap-4 [&>*:nth-child(odd)]:text-center [&>*:nth-child(even)]:text-left place-items-baseline float-right">
         <p className="font-bold"> Navn: </p>
         <p className="w-full text-primary">
           {currentUser.firstName} {currentUser.lastName}
         </p>
-
         <p className="font-bold"> E-post: </p>
         <p className="w-full text-primary overflow-hidden whitespace-wrap text-ellipsis">
           {currentUser.email}

@@ -1,24 +1,17 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
-import { ReactNode } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { AbsenceView } from './pages/AbsenceView';
 import AzureAdContextProvider from './context/AzureAdContext';
 import CalendarContextProvider from './context/CalendarContext';
 import GlobalContextProvider from './context/GlobalContext';
 import ModalContextProvider from './context/ModalContext';
 import UserContextProvider from './context/UserContext';
+import AbsencePage from './pages/AbsencePage';
 import AdminPage from './pages/AdminPage';
 import CalendarPage from './pages/CalendarPage';
-import FirstTimeRegisterForm from './pages/FirstTimeRegisterForm';
+import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import MyPage from './pages/MyPage';
-import PageNotFound from './pages/PageNotFound';
-
-const ContextWrapper = ({ children }: { children?: ReactNode }) => (
-  <UserContextProvider>
-    <ModalContextProvider>{children}</ModalContextProvider>
-  </UserContextProvider>
-);
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
@@ -29,23 +22,25 @@ function App() {
       <AuthenticatedTemplate>
         <AzureAdContextProvider>
           <GlobalContextProvider>
-            <ContextWrapper>
-              <Routes>
-                <Route path="/registrer-bruker" element={<FirstTimeRegisterForm />} />
-                <Route
-                  path="/"
-                  element={
-                    <CalendarContextProvider>
-                      <CalendarPage />
-                    </CalendarContextProvider>
-                  }
-                />
-                <Route path="/profil" element={<MyPage />} />
-                <Route path="/fravaersside" element={<AbsenceView />} />
-                <Route path="/admin" element={<AdminPage />} />
-                <Route path="*" element={<PageNotFound />} />
-              </Routes>
-            </ContextWrapper>
+            <UserContextProvider>
+              <ModalContextProvider>
+                <Routes>
+                  <Route path="/registrer-bruker" element={<RegisterPage />} />
+                  <Route
+                    path="/"
+                    element={
+                      <CalendarContextProvider>
+                        <CalendarPage />
+                      </CalendarContextProvider>
+                    }
+                  />
+                  <Route path="/profil" element={<MyPage />} />
+                  <Route path="/fravaersside" element={<AbsencePage />} />
+                  <Route path="/admin" element={<AdminPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </ModalContextProvider>
+            </UserContextProvider>
           </GlobalContextProvider>
         </AzureAdContextProvider>
       </AuthenticatedTemplate>

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useUserContext } from '@/context/UserContext';
 import { useModalContext } from '@/context/ModalContext';
 import { useCalendarContext } from '@/context/CalendarContext';
-import { Absence, User } from '@/types/types';
+import { Absence, User } from '@/types/interfaces';
 import classNames from 'classnames';
 import { isSameDay } from 'date-fns';
 
@@ -54,7 +54,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
     if (!(isCurrentUser || currentUser.admin)) return;
     if (holiday) return;
 
-    //open editing version of form if an absence was clicked, otherwise open add version
+    // Open editing version of form if an absence was clicked, otherwise open add version
     if (absence) {
       openAbsenceForm(user, date, 'edit', absence);
     } else {
@@ -76,7 +76,7 @@ const CalendarCell: FC<CalendarCellProps> = ({
         'text-center text-grey-lightest font-bold',
         'whitespace-nowrap overflow-hidden'
       )}
-      // make holiday cell span all rows
+      // Make holiday cell span all rows
       style={holiday ? { gridRow: `span ${totalRows} / span ${totalRows}` } : getStyle(absence)}
       title={holiday?.description}
       onClick={handleCellClick}

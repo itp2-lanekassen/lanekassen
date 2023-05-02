@@ -1,6 +1,6 @@
-import { getAzureAdUser } from '../API/AzureAdAPI';
-import { loginRequest } from '../authConfig';
-import { AzureAdUser } from '../types/azureAd';
+import { getAzureAdUser } from '@/api/azureAd';
+import { loginRequest } from '@/authConfig';
+import { AzureAdUser } from '@/types/azureAd';
 import { useMsal } from '@azure/msal-react';
 import { useQuery } from '@tanstack/react-query';
 import { createContext, FC, ReactNode, useContext } from 'react';
@@ -25,7 +25,6 @@ const AzureAdContextProvider: FC<AzureAdContextProps> = ({ children }) => {
   const {
     isLoading,
     isError,
-    error,
     data: azureUser
   } = useQuery(
     ['azure-ad-user'],
@@ -43,7 +42,9 @@ const AzureAdContextProvider: FC<AzureAdContextProps> = ({ children }) => {
   );
 
   if (isLoading) return <div>Henter bruker fra Azure AD...</div>;
-  if (isError) return <div>Kunne ikke hente bruker fra Azure AD: {String(error)}</div>;
+  if (isError) {
+    instance.acquireTokenRedirect(loginRequest);
+  }
 
   return <AzureAdContext.Provider value={azureUser}>{children}</AzureAdContext.Provider>;
 };

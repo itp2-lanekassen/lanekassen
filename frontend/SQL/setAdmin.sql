@@ -1,1 +1,0 @@
-update "Users" set "Admin" = true where "FirstName" like 'Simen';

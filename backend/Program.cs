@@ -28,22 +28,17 @@ IConfigurationRoot config =
 builder.Services.AddControllers().AddJsonOptions(opt => {
   opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
   // Uncomment this to remove null values from response
-  // opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+  opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 // Add Swagger Services. Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add Database context
 builder.Services.AddDbContext<ApiDbContext>(
-/*   opt => opt
-  .UseNpgsql(builder.Configuration.GetConnectionString("LanekassenDB"))
-  .EnableSensitiveDataLogging(true) */ // gammel måte å gjøre det på. Fra appsettings.json og ikke .env
   opt => opt
   .UseNpgsql(connectionString)
 );
 
-// Add CORS
 builder.Services.AddCors(options => {
   options.AddPolicy("AllowLocalhost",
       builder => {

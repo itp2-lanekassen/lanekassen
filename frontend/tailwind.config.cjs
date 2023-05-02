@@ -28,6 +28,7 @@ module.exports = {
         'my-page-2': 'max-content calc(50vw - 24px)',
         'my-page-3': 'max-content 50px',
         'my-page-4': 'max-content 624px',
+        'my-page-5': 'max-content 620px',
         sections: 'repeat(2, 1fr) repeat(2, min-content)',
         teams: '1fr repeat(2, min-content)',
         'absence-types': 'repeat(4, 1fr) repeat(2, min-content)',
