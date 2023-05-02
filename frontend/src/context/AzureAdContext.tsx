@@ -34,7 +34,8 @@ const AzureAdContextProvider: FC<AzureAdContextProps> = ({ children }) => {
       const token = (
         await instance.acquireTokenSilent({
           ...loginRequest,
-          account: accounts[0]
+          account: accounts[0],
+          forceRefresh: true
         })
       ).accessToken;
 
