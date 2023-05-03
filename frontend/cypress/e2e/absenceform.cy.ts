@@ -22,5 +22,19 @@ describe('Test absence form', () => {
     cy.visit('http://localhost:3000/fravaersside');
     cy.get('button').contains('Logg inn med Microsoft Azure').click();
     cy.contains('10.10.2023 - 16.10.2023').click();
+    cy.get('svg[data-testid="EditOutlinedIcon"]').click();
+    cy.get('#startDate').clear().type('11.10.2023');
+    cy.get('#endDate').clear().type('17.10.2023');
+    cy.get('#comment').clear().type('Is this edited?');
+    cy.contains('Lagre').click();
+    cy.contains('10.10.2023 - 16.10.2023').should('not.exist');
+    cy.contains('11.10.2023 - 17.10.2023');
+  });
+  it('Delete absence', () => {
+    cy.visit('http://localhost:3000/fravaersside');
+    cy.get('button').contains('Logg inn med Microsoft Azure').click();
+    cy.contains('10.10.2023 - 16.10.2023').click();
+    cy.get('svg[data-testid="DeleteOutlineIcon"]').click();
+    cy.contains('Ja').click();
   });
 });
