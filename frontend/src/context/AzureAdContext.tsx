@@ -1,6 +1,7 @@
 import { getAzureAdUser } from '@/api/azureAd';
 import { loginRequest } from '@/authConfig';
 import { AzureAdUser } from '@/types/azureAd';
+import { InteractionRequiredAuthError } from '@azure/msal-common/dist/error/InteractionRequiredAuthError';
 import { useMsal } from '@azure/msal-react';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -47,12 +48,17 @@ const AzureAdContextProvider: FC<AzureAdContextProps> = ({ children }) => {
   if (isLoading) return <div>Henter bruker fra Azure AD...</div>;
   if (isError) {
     const axiosError = error as AxiosError;
-
+    console.log('AxiosError');
+    console.log(axiosError);
+    console.log('AxiosError.response');
+    console.log(axiosError.response);
+    console.log('AxiosError.response?.status');
+    console.log(axiosError.response?.status);
+    if (axiosError instanceof InteractionRequiredAuthError) {
+      instance.acquireTokenRedirect({ ...loginRequest, account: accounts[0] });
+    }
     if (axiosError.response && axiosError.response.status === 401) {
-      instance.acquireTokenRedirect({
-        ...loginRequest,
-        account: accounts[0]
-      });
+      return <div>Du er ikke logget inn. Logg inn på nytt.</div>;
     } else if (axiosError.response && axiosError.response.status === 400) {
       return <div>Ugyldig forespørsel. Sjekk at alle påkrevde felt er utfylt.</div>;
     } else if (axiosError.response && axiosError.response.status === 403) {
