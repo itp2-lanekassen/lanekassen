@@ -33,11 +33,4 @@ describe('Edit user', () => {
     cy.get('input[placeholder="Virksomhetstilhørighet"]').type('Tester');
     cy.get('input[placeholder="Virksomhetstilhørighet"]').should('have.value', 'Tester');
   });
-  /*
-  it('Test dropdown menus', () => {
-    cy.visit('http://localhost:3000/profil');
-    cy.get('button').contains('Logg inn med Microsoft Azure').click();
-    cy.contains('Rediger').click();
-    cy.get('input[placeholder="Avdeling"]').should('have.value', 'IT-avdelingen')
-  }); */
 });
