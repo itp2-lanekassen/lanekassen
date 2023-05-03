@@ -1,3 +1,5 @@
+export {};
+
 describe('Login', () => {
   it('Logs in', () => {
     cy.visit('http://localhost:3000');

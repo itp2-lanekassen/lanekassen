@@ -1,3 +1,5 @@
+export {};
+
 describe('Navigate to profile from calendar', () => {
   it('Navigate and validate that the page is correct', () => {
     cy.visit('http://localhost:3000/');

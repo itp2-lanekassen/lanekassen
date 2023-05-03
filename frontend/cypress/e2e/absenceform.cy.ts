@@ -1,3 +1,5 @@
+export {};
+
 describe('Navigate to profile from calendar', () => {
   it('Navigate and validate that the page is correct', () => {
     cy.visit('http://localhost:3000/');
@@ -20,6 +22,7 @@ describe('Test absence form', () => {
     cy.contains('Fraværstype: Tilgjengelig');
     cy.contains('Going on vacation');
   });
+
   it('Edit absence', () => {
     cy.visit('http://localhost:3000/fravaersside');
     cy.get('button').contains('Logg inn med Microsoft Azure').click();
@@ -34,6 +37,7 @@ describe('Test absence form', () => {
     cy.contains('11.10.2023 - 17.10.2023').click();
     cy.contains('Is this edited?');
   });
+
   it('Delete absence', () => {
     cy.visit('http://localhost:3000/fravaersside');
     cy.get('button').contains('Logg inn med Microsoft Azure').click();
