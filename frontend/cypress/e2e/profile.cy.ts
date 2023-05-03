@@ -23,7 +23,7 @@ describe('Edit user', () => {
     cy.contains('Lagre');
     cy.get('input');
   });
-  it('Test the normal text input field', () => {
+  it('Test editing user', () => {
     cy.visit('http://localhost:3000/profil');
     cy.get('button').contains('Logg inn med Microsoft Azure').click();
     cy.contains('Rediger').click();
@@ -32,5 +32,19 @@ describe('Edit user', () => {
     cy.get('input[placeholder="Virksomhetstilhørighet"]').should('have.value', '');
     cy.get('input[placeholder="Virksomhetstilhørighet"]').type('Tester');
     cy.get('input[placeholder="Virksomhetstilhørighet"]').should('have.value', 'Tester');
+    cy.contains('Lagre').click();
+    cy.contains('Tester');
+    cy.contains('Lånekassen').should('not.exist');
+  });
+  it('Reset information so that test can run again', () => {
+    cy.visit('http://localhost:3000/profil');
+    cy.get('button').contains('Logg inn med Microsoft Azure').click();
+    cy.contains('Rediger').click();
+    cy.get('input[placeholder="Virksomhetstilhørighet"]').should('have.value', 'Tester');
+    cy.get('input[placeholder="Virksomhetstilhørighet"]').clear();
+    cy.get('input[placeholder="Virksomhetstilhørighet"]').type('Lånekassen');
+    cy.contains('Lagre').click();
+    cy.contains('Lånekassen');
+    cy.contains('Tester').should('not.exist');
   });
 });
