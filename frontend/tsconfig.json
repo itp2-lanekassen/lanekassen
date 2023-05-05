@@ -18,8 +18,10 @@
     "baseUrl": "src",
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "types": ["cypress"]
   },
-  "include": ["src"],
+  "types": ["jest", "node"],
+  "include": ["src", "cypress"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

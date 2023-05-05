@@ -23,6 +23,7 @@ export default function FirstTimeRegisterForm() {
   const { openMessageBox } = useModalContext();
 
   const azureUser = useAzureAdContext();
+  console.log(azureUser);
   const { departments, sections: allSections } = useGlobalContext();
 
   // Set default values for dropdowns based on Azure AD data

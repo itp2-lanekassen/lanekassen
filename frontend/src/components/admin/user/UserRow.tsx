@@ -17,6 +17,7 @@ export default function UserRow(props: {
 }) {
   const queryClient = useQueryClient();
   const currentUser = useUserContext();
+  const { openMessageBox, openConfirmationBox } = useModalContext();
 
   // To edit a user, change view to the display of a chosen user's information
   const handleEdit = async () => {

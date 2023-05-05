@@ -62,7 +62,7 @@ Build files can be fond in the `dist` directory
 
 ## Quality and testing
 
-All files are checked with eslint on commit. *NOT IMPLEMENTED YET:  Tests are ran on push*
+All files are checked with eslint on commit.
 
 Running eslint manually:
 
@@ -82,8 +82,8 @@ Running typecheck:
 npm run typecheck
 ```
 
-*NOT IMPLEMENTED YET: Testing:*
+Running end-to-end tests:
 
 ```bash
-npm test
+npx cypress open
 ```
