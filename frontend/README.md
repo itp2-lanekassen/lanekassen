@@ -82,8 +82,8 @@ Running typecheck:
 npm run typecheck
 ```
 
-*NOT IMPLEMENTED YET: Testing:*
+Running end-to-end tests:
 
 ```bash
-npm test
+npx cypress open
 ```
