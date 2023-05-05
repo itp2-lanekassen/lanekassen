@@ -43,8 +43,7 @@ const AzureAdContextProvider: FC<AzureAdContextProps> = ({ children }) => {
 
   if (isLoading) return <div>Henter bruker fra Azure AD...</div>;
   if (isError) {
-    //instance.acquireTokenRedirect(loginRequest);
-    console.error;
+    instance.acquireTokenRedirect(loginRequest);
   }
 
   return <AzureAdContext.Provider value={azureUser}>{children}</AzureAdContext.Provider>;
