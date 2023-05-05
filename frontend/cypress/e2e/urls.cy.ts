@@ -1,5 +1,6 @@
 export {};
 
+// Because localStorage is emptied between each test, the tests will always visit the login page
 describe('Login', () => {
   it('Logs in', () => {
     cy.visit('http://localhost:3000');
