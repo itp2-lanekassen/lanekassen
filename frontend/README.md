@@ -82,7 +82,7 @@ Running typecheck:
 npm run typecheck
 ```
 
-End-to-end testing:
+Running end-to-end tests:
 
 ```bash
 npx cypress open
